@@ -1,0 +1,90 @@
+{
+  "lesson": "21-computer-use-agents",
+  "title": "Computer Use：Claude、OpenAI CUA、Gemini",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Claude computer use 接收什么 input，并输出什么？",
+      "options": [
+        "Accessibility tree in, keyboard/mouse commands out",
+        "Screenshots in（vision-based）, keyboard/mouse commands out",
+        "DOM XML in, JavaScript out",
+        "JSON in, SQL out"
+      ],
+      "correct": 1,
+      "explanation": "Claude 读取 pixels 并发出 keyboard/mouse actions；不使用 OS accessibility API。"
+    },
+    {
+      "stage": "pre",
+      "question": "Gemini 2.5 Computer Use 的 distinguishing safety feature 是什么？",
+      "options": [
+        "一个 per-step safety service，在执行前评估每个 action 并拒绝 unsafe ones",
+        "Hard-coded WAF rules",
+        "Mandatory CAPTCHAs",
+        "默认 read-only mode"
+      ],
+      "correct": 0,
+      "explanation": "Gemini 2.5 Computer Use 以 per-step safety classifier 作为定义性 feature。"
+    },
+    {
+      "stage": "check",
+      "question": "本课认为三种模型共同的 untrusted input 是什么？",
+      "options": [
+        "只有 HTTPS responses",
+        "Screenshots、DOM text、tool outputs、PDF content、anything retrieved",
+        "只有 PDF content",
+        "没有任何东西；一切都 trusted"
+      ],
+      "correct": 1,
+      "explanation": "只有直接用户指令才算 permission；其他一切都是 untrusted。"
+    },
+    {
+      "stage": "check",
+      "question": "本课引用了 OpenAI CUA launch 时哪些 OSWorld / WebArena 数字？",
+      "options": [
+        "OSWorld 38.1%, WebArena 58.1%, WebVoyager 87%",
+        "OSWorld 0%, WebArena 0%",
+        "OSWorld 99%, WebArena 99%",
+        "Numbers not reported"
+      ],
+      "correct": 0,
+      "explanation": "这些是引用的 launch numbers。"
+    },
+    {
+      "stage": "check",
+      "question": "哪一种 defense pattern 不在 2026 convergence list 中？",
+      "options": [
+        "Per-step safety classifier",
+        "Navigation targets 的 allowlist/blocklist",
+        "Sensitive actions 的 human-in-the-loop",
+        "为了节省时间自动点击 dialogs"
+      ],
+      "correct": 3,
+      "explanation": "自动点击 dialogs 正好与安全相反；本课建议 explicit confirmation。"
+    },
+    {
+      "stage": "post",
+      "question": "本课强调的 computer-use agents 主要攻击是什么？",
+      "options": [
+        "Network outages",
+        "恶意 page 或 PDF 在 retrieved content 中嵌入 instructions，模型把它当作 user intent",
+        "Slow rendering",
+        "OS update lag"
+      ],
+      "correct": 1,
+      "explanation": "把 screenshots 或 DOM text 当作 permission 是 canonical indirect-prompt-injection failure。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候特别推荐 human-in-the-loop confirmation？",
+      "options": [
+        "Read-only navigation 上",
+        "Login、purchase、file delete 等 sensitive actions 上",
+        "只有模型要求时",
+        "从不"
+      ],
+      "correct": 1,
+      "explanation": "Sensitive actions（money、data exposure、new logins）需要显式 human confirmation。"
+    }
+  ]
+}
