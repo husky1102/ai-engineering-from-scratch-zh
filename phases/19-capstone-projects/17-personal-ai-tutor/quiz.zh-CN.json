@@ -1,0 +1,90 @@
+{
+  "lesson": "17-personal-ai-tutor",
+  "title": "综合项目 17 — Personal AI Tutor（自适应、多模态、带记忆）",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "当学习者直接索要答案时，Socratic tutor policy 会怎么做？",
+      "options": [
+        "提出一个 leading question，引导学习者朝答案推进",
+        "记录请求并保持沉默",
+        "立即提供答案并继续",
+        "切换到另一个 concept node"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "Curriculum graph 编码了哪种结构？",
+      "options": [
+        "带 prerequisite edges、并附有 OER content 的 concepts 有向图",
+        "随机打乱的 topics",
+        "互不相关 concepts 的扁平列表",
+        "只有最近学习过的 node"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Learner model 在每次交互后更新什么？",
+      "options": [
+        "base LLM 的 weights",
+        "COPPA retention policy",
+        "curriculum graph schema",
+        "通过 Bayesian knowledge tracing 或类似变体更新 per-concept mastery probability"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Memory 如何拆分为 episodic 和 semantic stores？",
+      "options": [
+        "Episodic 保存每次交互；semantic 保存从 episodic 提升出的压缩 mistakes 和 preferences",
+        "它们是同一数据的副本",
+        "Episodic 面向 parent；semantic 面向 learner",
+        "Episodic 保存 embeddings；semantic 保存 raw audio"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪项约束塑造了 K-12 learners 的 memory retention？",
+      "options": [
+        "基于 model context length 的 retention",
+        "没有删除的永久 retention",
+        "只考虑 GDPR",
+        "COPPA-aware retention，在定义的窗口后自动删除，并提供 parental access"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "用于 gate 交付物的 efficacy study 结构是什么？",
+      "options": [
+        "匿名互联网调查",
+        "30 秒 AB test",
+        "10 名学习者两周内的 pre-test 和 post-test，并与 non-adaptive baseline cohort 对比",
+        "一名学习者的一次一小时 session"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Tutor 向学习者暴露哪些 multimodal input paths？",
+      "options": [
+        "只有 text",
+        "只有通过 custom OCR model 的 photo",
+        "只有 voice，没有 text 或 photo",
+        "typed text、通过 LiveKit + Whisper 的 voice，以及通过 dots.ocr 或 PaliGemma 2 的 photo math"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
