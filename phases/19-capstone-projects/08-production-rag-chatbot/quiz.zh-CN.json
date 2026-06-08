@@ -1,0 +1,90 @@
+{
+  "lesson": "08-production-rag-chatbot",
+  "title": "Capstone 08 — 面向受监管垂直领域的生产级 RAG Chatbot",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 prompt caching 在 regulated-domain RAG chatbot 中如此重要？",
+      "options": [
+        "它移除了对 vector database 的需求",
+        "在 60-80% hit rate 下，它通过折扣 stable prefix tokens 将 per-query cost 降低 3-5x",
+        "它消除了 hallucinations",
+        "它提高了 rerank 阶段的 recall"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "每个 request 中哪些内容进入 cache header，哪些内容作为 uncached suffix？",
+      "options": [
+        "随机 text padding，用来达到 cache size",
+        "只有 retrieved documents",
+        "user question 在前，system prompt 在后",
+        "System prompt 和 static policies 进入 cache header，reranked context 作为 cache extension，user question 作为 uncached suffix"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "retrieval layer 如何尊重 GDPR 或 HIPAA 这类 jurisdiction tags？",
+      "options": [
+        "它为每个 country 运行独立 index",
+        "它只在 generation 之后阻止 response",
+        "它按 region 重写 user question",
+        "Role 和 jurisdiction filters 在 hybrid search merge 之前应用，因此用户 scope 之外的 chunks 永远不会被 rerank"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "synthesis stage 让 output 通过哪种分层 guardrail 组合？",
+      "options": [
+        "只在 input 上运行 Llama Guard 4",
+        "Llama Guard 4、NeMo Guardrails policy rails、Presidio PII scrub，以及 citation enforcement",
+        "只有一个 output PII regex",
+        "单个 LLM-judge faithfulness check"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "drift dashboard 针对什么发出 alert？",
+      "options": [
+        "underlying LLM provider 的变化",
+        "Latency 超过 200ms",
+        "retrieval-quality drop，例如 nDCG 或 citation score week-over-week 下降 5%",
+        "任何新 document 被加入 index"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "用于给交付物 correctness rubric 把关的 golden set 有多大？",
+      "options": [
+        "5 个 demo queries",
+        "200 个带 citations 的 expert-labeled question/answer pairs",
+        "20 个 questions",
+        "2000 个 synthetic questions"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "每轮在线跟踪哪些 RAGAS scores？",
+      "options": [
+        "Throughput、GPU utilization 和 queue depth",
+        "BLEU、ROUGE 和 METEOR",
+        "Faithfulness、answer relevance 和 context precision",
+        "Token count 和 dollar cost"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
