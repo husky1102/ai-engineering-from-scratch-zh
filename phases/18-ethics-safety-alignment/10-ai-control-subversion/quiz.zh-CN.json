@@ -1,0 +1,78 @@
+{
+  "lesson": "10-ai-control-subversion",
+  "title": "AI Control - 在 Subversion 下保持安全",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "以下哪项最好地概括了 alignment 与 AI control 的区别？",
+      "options": [
+        "Alignment 问 U 是否值得信任；control 问我们能否在不信任 U 的情况下安全使用 U",
+        "Control 替换 loss function，而 alignment 改变 optimizer",
+        "它们是同义词",
+        "Control 关乎硬件；alignment 关乎软件"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "AI Control threat model 假设什么？",
+      "options": [
+        "U 是不可信的强模型，T 是可信的弱模型，H 是有界的可信人类劳动",
+        "U 和 T 都是 adversarial",
+        "三种资源（U、T、H）都可信",
+        "只有 U 存在"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Untrusted Monitoring 中有哪些关键风险是 Trusted Editing 避免的？",
+      "options": [
+        "两个 U instances 可能 collude 或共享 priors，因此 protocol 必须在 collusion-resistance 上花预算",
+        "Humans 无法被 audited",
+        "Hardware contention",
+        "T 不能编辑 text"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在 Greenblatt 等人（ICML 2024）的 code-backdoor task 上，Trusted Editing 相对于 Untrusted Monitoring 实现了什么？",
+      "options": [
+        "它严格更差",
+        "它只在零 human budget 时获胜",
+        "二者完全等价",
+        "它严格 Pareto-dominates：在每个 safety level 上都有更高 usefulness"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "以下哪一项不是本课列出的 control 三个根本限制之一？",
+      "options": [
+        "Trusted weak models eventually lag U",
+        "Control 会顺带产生 aligned models",
+        "Humans do not scale",
+        "如果 U 能 manipulate T 或推理出 H 的 audit distribution，control 在更高能力水平上可能失败"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Control Safety Case 论证什么？",
+      "options": [
+        "T 比 U 更有能力",
+        "在关于 U 的 worst-case assumptions 下，deployment protocol 能界定 unacceptable outcome 的概率",
+        "U 值得信任",
+        "模型通过了手动 jailbreak test"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
