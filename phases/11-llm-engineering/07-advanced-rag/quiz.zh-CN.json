@@ -1,0 +1,37 @@
+[
+  {
+    "question": "RAG 中基础 top-k 语义搜索的局限是什么？",
+    "options": ["它太慢", "它会检索与查询语义相似但可能不包含真实答案的 chunk，尤其是在含糊或多跳问题中", "它不能处理长文档", "它需要 GPU"],
+    "correct": 1,
+    "explanation": "基础语义搜索匹配表层含义。'What was revenue last quarter?' 会检索关于 'revenue strategy' 的 chunk（语义相似），而不是写有 '$47.2M in Q3 2025' 的 chunk（它使用的是 'earnings'）。",
+    "stage": "pre"
+  },
+  {
+    "question": "在 RAG 语境中，hybrid search 是什么？",
+    "options": ["使用两个不同的 LLM", "结合 BM25 关键词匹配和语义向量搜索，同时捕捉精确词项和基于含义的相关性", "跨多个数据库搜索", "同时使用 CPU 和 GPU 搜索"],
+    "correct": 1,
+    "explanation": "BM25 捕捉精确关键词匹配（例如 '$47.2M' 或 'Q3'）。语义搜索捕捉含义匹配。用 reranker 结合二者，可以兼得两者优势：对具体词项的精确性，加上对语义变体的召回。",
+    "stage": "pre"
+  },
+  {
+    "question": "cross-encoder reranker 在高级 RAG 流水线中做什么？",
+    "options": ["它生成最终答案", "它接收 (query, document) pair，并以比 embedding similarity 更高的准确度给相关性打分，从而重排初始检索结果", "它把文档编码成向量", "它把文档切成 chunk"],
+    "correct": 1,
+    "explanation": "用于初始检索的 bi-encoder similarity 很快但近似。cross-encoder 用 cross-attention 一起处理完整 query-document pair，为 top candidates 的 reranking 提供更准确的相关性分数。",
+    "stage": "post"
+  },
+  {
+    "question": "HyDE（Hypothetical Document Embedding）查询转换技术是什么？",
+    "options": ["向模型隐藏查询", "使用 LLM 生成一个假想答案，然后把该答案而不是原始问题作为搜索查询来 embedding", "为了隐私加密查询", "扩展查询中的缩写"],
+    "correct": 1,
+    "explanation": "原始查询 'What was Q3 revenue?' 可能不会 embedding 到答案 chunk 附近。HyDE 让 LLM 生成一个假想答案（'Q3 revenue was approximately...'），再把它用作搜索查询，这会 embedding 到更接近真实答案 chunk 的位置。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么 parent-child chunking 比 flat chunking 更能改善 RAG？",
+    "options": ["它的索引速度更快", "小的 child chunk 用于精确检索，但返回更大的 parent chunk 作为上下文，避免 'lost context' 问题", "它减少了 chunk 数量", "它消除了对 embedding 的需求"],
+    "correct": 1,
+    "explanation": "小 chunk（200 tokens）embedding 精确但缺上下文。大 chunk（2000 tokens）有上下文但 embedding 不精确。Parent-child 用小 chunk 保证搜索准确度，同时返回 parent chunk 提供生成上下文。",
+    "stage": "post"
+  }
+]
