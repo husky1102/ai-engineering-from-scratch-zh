@@ -45,16 +45,16 @@
 
 ```mermaid
 graph LR
-    subgraph Before
-        A["Point A"]
-        B["Point B"]
+    subgraph Before["变换前"]
+        A["点 A"]
+        B["点 B"]
     end
-    subgraph Matrix["Matrix Multiplication"]
-        M["M (transformation)"]
+    subgraph Matrix["矩阵乘法"]
+        M["M（变换）"]
     end
-    subgraph After
-        A2["Point A'"]
-        B2["Point B'"]
+    subgraph After["变换后"]
+        A2["点 A'"]
+        B2["点 B'"]
     end
     A --> M
     B --> M
@@ -74,9 +74,9 @@ graph LR
 ```text
 a · b = a₁×b₁ + a₂×b₂ + ... + aₙ×bₙ
 
-Same direction:      a · b > 0  (similar)
-Perpendicular:       a · b = 0  (unrelated)
-Opposite direction:  a · b < 0  (dissimilar)
+方向相同：          a · b > 0  （相似）
+互相垂直：          a · b = 0  （无关）
+方向相反：          a · b < 0  （不相似）
 ```
 
 这正是搜索引擎、推荐系统和 RAG 的工作方式：寻找点积很高的向量。
@@ -134,12 +134,12 @@ proj_b(a) = (a dot b / b dot b) * b
 
 ```mermaid
 graph LR
-    subgraph Projection["Projection of a onto b"]
+    subgraph Projection["把 a 投影到 b 上"]
         direction TB
-        O["Origin"] --> |"b (direction)"| B["b"]
-        O --> |"a (original)"| A["a"]
-        O --> |"proj_b(a)"| P["projection"]
-        A -.-> |"residual (perpendicular)"| P
+        O["原点"] --> |"b（方向）"| B["b"]
+        O --> |"a（原向量）"| A["a"]
+        O --> |"proj_b(a)"| P["投影"]
+        A -.-> |"残差（垂直）"| P
     end
 ```
 
@@ -160,7 +160,7 @@ proj_b(a) = (3*1 + 4*0) / (1*1 + 0*0) * [1, 0] = 3 * [1, 0] = [3, 0]
 4. 对剩余向量重复这个过程
 
 ```text
-Input:  v1, v2, v3, ... (linearly independent)
+输入：v1, v2, v3, ...（线性无关）
 
 u1 = v1 / |v1|
 
@@ -170,7 +170,7 @@ u2 = w2 / |w2|
 w3 = v3 - (v3 dot u1) * u1 - (v3 dot u2) * u2
 u3 = w3 / |w3|
 
-Output: u1, u2, u3, ... (orthonormal basis)
+输出：u1, u2, u3, ...（标准正交基）
 ```
 
 这就是 QR 分解在内部的工作方式。Q 是标准正交基，R 捕获投影系数。QR 分解用于：
