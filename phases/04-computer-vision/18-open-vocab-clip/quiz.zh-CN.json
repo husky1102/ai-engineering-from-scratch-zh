@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "CLIP 的 contrastive loss 是 symmetric（image-to-text + text-to-image）。为什么两个方向都要？",
+      "options": ["Numerical stability", "你希望 inference 时两种 query 都能工作：text-to-image retrieval 和 image-to-text retrieval。只训练一个方向会让另一个方向的 accuracy 显著下降", "因为 loss 必须求和为零", "PyTorch 要求 symmetry"],
+      "correct": 1,
+      "explanation": "embedding space 需要跨 modalities 保持 symmetric，因为 downstream tasks 会双向查询。Zero-shot classification 是 text-to-image（给定 text prompts 来 classify image）。Retrieval 可以双向进行。只用 i2t 或只用 t2i 训练，会让另一个方向很弱。"
+    },
+    {
+      "stage": "pre",
+      "question": "CLIP 的 zero-shot classification 是如何工作的？",
+      "options": ["运行一个在 ImageNet 上训练的 classifier head", "为每个 candidate class encode 类似 'a photo of a dog' 的 prompts，encode test image，然后在 image embedding 与所有 class text embeddings 之间取 cosine similarities 的 argmax", "在该 class 上 fine-tune image encoder", "搜索 labelled examples 数据库"],
+      "correct": 1,
+      "explanation": "Zero-shot 意味着没有 task-specific training：模型 representations 已经允许你比较 images 和任意 text descriptions。每个 class 写一个 prompt，encode 所有 prompts 和 test image，计算 cosine similarity，取 argmax。唯一的“技巧”是 prompt engineering——每个 class 使用多个 templates 并平均 embeddings，可以让 ImageNet top-1 提升 1-3。"
+    },
+    {
+      "stage": "post",
+      "question": "SigLIP 将 CLIP 的 softmax 替换为每对样本的 sigmoid loss。这带来什么好处？",
+      "options": ["更快 GPU kernels", "sigmoid loss 是 per-pair 的，所以不依赖 batch 作为 normalisation denominator。SigLIP 在 CLIP softmax loss 缺少 negatives 的小 batch sizes 下也能训练良好", "更低 memory use", "只在 COCO 上 accuracy 更好"],
+      "correct": 1,
+      "explanation": "CLIP 的 symmetric cross-entropy 是整个 batch 上的 softmax，所以 effective negatives = batch_size - 1。小 batches 会让它缺 negatives。SigLIP 是 per-pair：每个 (image, caption) pair 都有一个 binary decision（match or not）。没有 batch-level normalisation，所以 SigLIP 能在 batch 128 下工作，而 CLIP 需要 8192。在相同规模下，SigLIP 达到或超过 CLIP。"
+    },
+    {
+      "stage": "post",
+      "question": "某实践者报告：使用 CLIP ViT-B/32 在 CIFAR-10 上 zero-shot top-1 为 88%，同一模型每个 class 使用 80 个 prompt templates 后为 90%。为什么 template averaging 有帮助？",
+      "options": ["它让 dataset 翻倍", "不同 templates 会激活 text encoder learned distribution 的不同方面；averaging 会在该 class 的 plausible natural-language descriptions manifold 上平滑 class embedding，产生更 robust centroid", "它降低 logit_scale 的 variance", "80 是 CLIP 的 magic number"],
+      "correct": 1,
+      "explanation": "每个 template 是不同 natural-language cue。'a photo of a dog' 强调一个方面；'a blurry photo of a dog' 另一个；'a sketch of a dog' 又是另一个。平均 text embeddings 会得到更平滑的 concept 'dog' representation，降低对单个 prompt quirks 的敏感性。OpenAI CLIP 论文发布的 80 templates 能让 ImageNet zero-shot 提升约 2 points。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么现代 VLMs（LLaVA、Qwen-VL、InternVL）使用 CLIP-family vision encoder，而不是 supervised ImageNet ResNet？",
+      "options": ["CLIP encoders 更快", "CLIP features 与 natural language 对齐，所以 LLM 能用更少 adaptation 来推理它们；supervised ImageNet features 从未针对 captions 训练，需要 heavy projection layers 才能桥接到 text", "ResNets 看不到 colour", "这是 licensing requirement"],
+      "correct": 1,
+      "explanation": "VLM 将 vision encoder 接到 language model，并训练一个小 projection。CLIP-style encoders 曾针对 text 训练，因此其 outputs 已经位于 LLM 用几层 linear layers 就能适配的空间。Supervised ImageNet encoders 没有 natural-language structure 的概念，需要大得多的 bridging MLPs 才能与 LLM 协作。这就是每个 SOTA VLM 都使用 CLIP-family vision tower 的原因。"
+    }
+  ]
+}
