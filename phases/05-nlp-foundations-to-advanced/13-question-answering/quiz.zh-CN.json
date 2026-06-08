@@ -1,0 +1,102 @@
+{
+  "lesson": "13-question-answering",
+  "title": "问答系统",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Extractive QA 预测什么？",
+      "options": [
+        "生成的 natural-language answer",
+        "只有 confidence score",
+        "给定 passage 内 answer span 的 start 和 end token indices",
+        "retrieved passage ID"
+      ],
+      "correct": 2,
+      "explanation": "Extractive QA 输出 passage 中包含 answer 的 span。"
+    },
+    {
+      "stage": "pre",
+      "question": "basic RAG pipeline 由哪两个组件定义？",
+      "options": [
+        "jointly trained 的 encoder 和 decoder",
+        "reranker 和 translator",
+        "Tokenizer 和 POS tagger",
+        "retriever（寻找 relevant passages）和 reader（extract 或 generate answer）"
+      ],
+      "correct": 3,
+      "explanation": "RAG = retriever（找到 relevant context）加 reader（从中回答）。"
+    },
+    {
+      "stage": "check",
+      "question": "在 SQuAD 上，Exact Match（EM）衡量什么？",
+      "options": [
+        "Edit distance",
+        "Per-word overlap",
+        "prediction 是否在 normalization（lowercase、strip punctuation、remove articles）后与 reference 完全匹配",
+        "Token-level F1"
+      ],
+      "correct": 2,
+      "explanation": "EM 是定义好的 normalization step 后的严格相等；partial matches 得 0。"
+    },
+    {
+      "stage": "check",
+      "question": "相比 SQuAD 1.1 model，deepset/roberta-base-squad2 增加了什么？",
+      "options": [
+        "Multilingual support",
+        "在 unanswerable questions 上训练，因此模型可以预测 null answer",
+        "更大的 context window",
+        "Cross-lingual retrieval"
+      ],
+      "correct": 1,
+      "explanation": "SQuAD 2.0 包含 unanswerable items；在其上训练的模型可以预测 'no answer'。"
+    },
+    {
+      "stage": "check",
+      "question": "哪个 RAGAS dimension 专门针对 hallucinations？",
+      "options": [
+        "Answer relevance",
+        "Context recall",
+        "Faithfulness，通过 answer claims 与 retrieved context 之间的 NLI entailment 衡量",
+        "Context precision"
+      ],
+      "correct": 2,
+      "explanation": "Faithfulness 会通过 NLI entailment 检查每个 answer claim 是否被 retrieved context 支持。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么要在评估 reader accuracy 之前测量 retrieval recall？",
+      "options": [
+        "transformers 要求这样",
+        "Recall 决定 ROUGE",
+        "Reader latency 依赖它",
+        "如果正确 passage 不在 top-k 中，不管 reader 多好都不可能成功"
+      ],
+      "correct": 3,
+      "explanation": "当正确 passage 缺失时，reader 无法回答；retrieval recall 给 reader performance 设定上限。"
+    },
+    {
+      "stage": "post",
+      "question": "RAG generation 中哪种 prompt pattern 会减少 hallucinations？",
+      "options": [
+        "告诉模型只能根据提供的 context 回答，并在 context 不充分时回复 'I don't know'",
+        "包含更多 passages",
+        "要求模型 creative",
+        "移除 question"
+      ],
+      "correct": 0,
+      "explanation": "Grounding + explicit refusal instructions 会显著降低 hallucination rates。"
+    },
+    {
+      "stage": "post",
+      "question": "2026 年什么时候仍应优先使用 extractive QA，而不是 generative RAG？",
+      "options": [
+        "Conversational QA",
+        "regulated domains（legal、medical、audit），其中需要从 authoritative sources literal quotation",
+        "Multilingual support",
+        "Open-domain trivia"
+      ],
+      "correct": 1,
+      "explanation": "Extractive QA 从 authoritative corpus 给出 verbatim quotes，这是 compliance contexts 所要求的。"
+    }
+  ]
+}
