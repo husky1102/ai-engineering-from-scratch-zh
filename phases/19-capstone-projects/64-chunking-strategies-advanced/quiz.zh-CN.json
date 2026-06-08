@@ -1,0 +1,78 @@
+{
+  "lesson": "64-chunking-strategies-advanced",
+  "title": "Chunking Strategies, Compared",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 chunking choice 是 retrieval quality 的上限，而不只是 hyperparameter？",
+      "options": [
+        "因为 LLM 从不读取 chunks",
+        "因为 embedding model 在训练时固定",
+        "因为没有任何下游 embedding、reranker 或 LLM 能恢复被切成不连贯 pieces 的 answer span",
+        "因为 BM25 在现代 RAG 中没有作用"
+      ],
+      "correct": 2,
+      "explanation": "如果承载 answer span 的 chunk 不连贯，embedding 会移动到错误 cluster，下游组件无法修复损伤。"
+    },
+    {
+      "stage": "pre",
+      "question": "当你对 corpus 没有先验知识时，哪种策略是最强的单策略默认值？",
+      "options": [
+        "Fixed-window",
+        "Sentence packer",
+        "Recursive split",
+        "Structural markdown"
+      ],
+      "correct": 2,
+      "explanation": "Recursive split 会先尝试最强 separator 再 fallback，按 region 自适应，因此能经受不一致结构。"
+    },
+    {
+      "stage": "check",
+      "question": "本课中的 recall@k 衡量什么？",
+      "options": [
+        "top-k chunks 是否包含 literal query string",
+        "top-k chunks 中是否有任意一个与 gold answer span 重叠",
+        "query 与 top-k chunks 之间的 cosine similarity",
+        "top-k 中 unique documents 的数量"
+      ],
+      "correct": 1,
+      "explanation": "每个 query 携带 gold offsets；如果任何 top-k chunk 与 gold span 重叠，recall@k 为 1，否则为 0；再对 queries 平均。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 fixed-window chunking 在 code 或 YAML corpora 上失败很严重？",
+      "options": [
+        "它会丢失 Unicode characters",
+        "它会把 identifiers 和 key-value pairs 切成两半，产出 embed 成 noise 的 chunks",
+        "它产出的 chunks 比 embedding model 的 context window 更大",
+        "它无法并行化"
+      ],
+      "correct": 1,
+      "explanation": "symbol 内部的 character-level cuts 会破坏 embedding model 应捕捉的含义。"
+    },
+    {
+      "stage": "check",
+      "question": "semantic chunking 中的 centroid drift termination criterion 是什么？",
+      "options": [
+        "running mean vector 与 next sentence 之间的 cosine similarity 低于 threshold",
+        "character count 超过 max",
+        "sentence count 超过 hardcoded limit",
+        "chunker 已消耗整个 embedding budget"
+      ],
+      "correct": 0,
+      "explanation": "Semantic chunking 会在 running centroid 与 next sentence 的匹配低于配置 similarity threshold 时切开。"
+    },
+    {
+      "stage": "post",
+      "question": "semantic chunking 引入了另外四种策略没有的什么 stale-embedding failure mode？",
+      "options": [
+        "chunks 对 embedding context 来说太小",
+        "每次改变 chunk-model，chunk boundaries 都会改变，需要协调 rebuild",
+        "chunks 不再能被 BM25 index",
+        "chunks 会丢失 start 和 end offsets"
+      ],
+      "correct": 1,
+      "explanation": "Semantic clustering 依赖 embedding model；替换 model 会改变 boundaries，因此 chunk-model 必须单独 pin，或与 retrieval model 一起 rebuild。"
+    }
+  ]
+}
