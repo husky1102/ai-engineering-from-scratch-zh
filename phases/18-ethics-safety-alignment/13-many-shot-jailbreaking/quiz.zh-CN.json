@@ -1,0 +1,78 @@
+{
+  "lesson": "13-many-shot-jailbreaking",
+  "title": "Many-Shot Jailbreaking",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Many-shot jailbreaking（MSJ）利用了哪种 context-window 属性？",
+      "options": [
+        "Position embeddings 在超过 2048 tokens 后旋转",
+        "Sliding-window attention 截断 system prompt",
+        "非常长的 context windows，允许在 target query 前放入数百个伪造的 harmful compliance user-assistant turns",
+        "Unicode 字符上的 tokenizer ambiguities"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "MSJ 中 attack success rate（ASR）如何随 shot count 缩放？",
+      "options": [
+        "负斜率线性变化",
+        "随 shot count 呈 power-law；不会 plateau，而是继续攀升",
+        "100 shots 处的 step function",
+        "Logistic，在 50% 处 plateau"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 MSJ 与良性 in-context learning（ICL）共享机制？",
+      "options": [
+        "二者都依赖模型从 in-context examples 中抽取 task structure，并在 query 上执行",
+        "二者都依赖 RLHF",
+        "二者都绕过 tokenization",
+        "二者都需要 hidden scratchpad"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "MSJ 的核心防御困境是什么？",
+      "options": [
+        "防御必须在 sampling temperature zero 下应用",
+        "防御需要 GPU clusters",
+        "抑制从长 contexts 中抽取 pattern 也会禁用良性 in-context learning；防御必须区分 harmful 与 benign patterns",
+        "防御必须在 response 的每个 token 上运行"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Anthropic 的 classifier-based prompt modification defense 在测试设置中把 MSJ attack success 从多少降到多少？",
+      "options": [
+        "从 99% 到 50%",
+        "从 30% 到 25%",
+        "从 61% 到 2%",
+        "它增加了 ASR"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "MSJ 如何与 PAIR（第 12 课）交互？",
+      "options": [
+        "PAIR 会 neutralize MSJ",
+        "PAIR 只适用于 closed-source models",
+        "MSJ 可以与 PAIR 组合；用 PAIR 找到 attack structure 后再用 many shots 填充，能达到比单独任一方法更高的 ASR",
+        "二者互斥"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
