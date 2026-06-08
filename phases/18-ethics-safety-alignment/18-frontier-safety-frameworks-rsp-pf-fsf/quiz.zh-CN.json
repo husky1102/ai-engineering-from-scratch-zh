@@ -1,0 +1,78 @@
+{
+  "lesson": "18-frontier-safety-frameworks-rsp-pf-fsf",
+  "title": "Frontier Safety Frameworks - RSP、PF、FSF",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Anthropic 的 ASL structure 以什么为模型？",
+      "options": [
+        "ITIL incident severities",
+        "EU AI Act categories",
+        "Internet RFC tiers",
+        "Biosafety levels（BSL）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "OpenAI Preparedness Framework v2 的哪项 criterion 表示 “harm occurs fast or cannot be undone”？",
+      "options": [
+        "Net-new",
+        "Instantaneous-or-irremediable",
+        "Plausible",
+        "Measurable"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "DeepMind FSF v3.0（2025 年 9 月）新增了哪个 Critical Capability Level？",
+      "options": [
+        "Harmful Manipulation",
+        "Cyber Uplift",
+        "Bioweapon Uplift",
+        "ML R&D Acceleration"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "2025+ frontier safety frameworks 中的 “competitor-adjustment clause” 是什么？",
+      "options": [
+        "一项 provision：如果 peer labs 在没有 comparable safeguards 的情况下发布，lab 可降低 safety requirements",
+        "Export-control exemption",
+        "API access 的 pricing rule",
+        "Model-card disclosure requirement"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课描述的 safety case 三个标准支柱是什么？",
+      "options": [
+        "Speed、accuracy、cost",
+        "Monitoring、illegibility、incapability",
+        "Helpful、honest、harmless",
+        "Inner、outer、mesa"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Anthropic 的 “Capability Thresholds”、OpenAI 的 “High Capability thresholds” 和 DeepMind 的 “Critical Capability Levels” 之间存在什么结构性 alignment？",
+      "options": [
+        "结构性 alignment：带 published evaluation criteria 的 tiered frontier-capability thresholds，尽管术语不同",
+        "它们都没有公开文档",
+        "术语和 numeric cutoffs 完全相同",
+        "三者使用完全相同的 evaluations"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
