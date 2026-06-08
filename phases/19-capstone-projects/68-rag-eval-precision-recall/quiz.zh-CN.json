@@ -1,0 +1,78 @@
+{
+  "lesson": "68-rag-eval-precision-recall",
+  "title": "RAG Evaluation: Precision、Recall、MRR、nDCG、Faithfulness、Answer Relevance",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 recall@k 通常是 production RAG 中的 headline retrieval metric？",
+      "options": [
+        "Recall 忽略 ranking",
+        "Generation 可以丢掉 irrelevant chunks，但无法从从未见过的 chunk 中发明答案，所以 miss 正确 chunk 是更昂贵的失败",
+        "Recall 是 OpenAPI spec 要求",
+        "Recall 在 RAG 中与 precision 相同"
+      ],
+      "correct": 1,
+      "explanation": "miss 正确 chunk 的 retriever 无法被下游修复；多余 chunks 会浪费 tokens，但很少污染答案。"
+    },
+    {
+      "stage": "pre",
+      "question": "MRR 计算什么？",
+      "options": [
+        "queries 上 1 / position-of-first-relevant-document 的 mean",
+        "cosine similarity 的 geometric mean",
+        "第二个 relevant document 的 median rank",
+        "answer 的 token count"
+      ],
+      "correct": 0,
+      "explanation": "MRR 被 list 顶部主导：rank 1 贡献 1.0，rank 2 贡献 0.5，rank 10 贡献 0.1。"
+    },
+    {
+      "stage": "check",
+      "question": "什么时候应该选择 nDCG 而不是 recall@k？",
+      "options": [
+        "当 corpus 很小时",
+        "当 gold labels 携带 graded relevance（例如 doc A 是 3，doc B 是 2，doc C 是 1），而 binary metrics 会丢失信息时",
+        "当 retriever 不返回 scores 时",
+        "永远不"
+      ],
+      "correct": 1,
+      "explanation": "nDCG 使用 graded gains 和 position discount；recall 会把一切压平为 binary。"
+    },
+    {
+      "stage": "check",
+      "question": "faithfulness 和 answer relevance 的区别是什么？",
+      "options": [
+        "Faithfulness 问“answer 是否 grounded in retrieved context”；answer relevance 问“answer 是否回应 question”",
+        "Faithfulness 衡量 precision；relevance 衡量 recall",
+        "Faithfulness 是 retrieval metric，relevance 是 chunker metric",
+        "它们是同一个 metric 的两个名字"
+      ],
+      "correct": 0,
+      "explanation": "忠实但跑题的答案 faithfulness 高、relevance 低；相关但不 grounded 的答案 relevance 高、faithfulness 低。"
+    },
+    {
+      "stage": "check",
+      "question": "一个 pipeline 显示 decent recall@5 但 MRR 很低。你应该先调查哪个阶段？",
+      "options": [
+        "chunker",
+        "reranker，因为正确 chunk 在 top-k 中但不在顶部",
+        "generator",
+        "corpus ingestor"
+      ],
+      "correct": 1,
+      "explanation": "Recall@5 表示 gold 在 top-5 中；低 MRR 表示它不在 list 顶部。这是 rerank stage 的工作。"
+    },
+    {
+      "stage": "post",
+      "question": "什么生产风险会让冻结的 qrels file 随时间变得危险？",
+      "options": [
+        "retriever 六个月后停止工作",
+        "Qrels rot：corpus 变化，上个季度还是 gold answer 的 doc 不再是正确答案；metrics 会基于过期 labels 报告",
+        "Embedding vectors 会过期",
+        "eval suite 会占用磁盘空间"
+      ],
+      "correct": 1,
+      "explanation": "安排季度 qrels review，否则随着 corpus 演进，你的 metrics 会衡量错误对象。"
+    }
+  ]
+}
