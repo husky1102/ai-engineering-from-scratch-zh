@@ -1,0 +1,66 @@
+{
+  "lesson": "15-prompt-caching",
+  "title": "Prompt Caching 与 Context Caching",
+  "questions": [
+    {
+      "stage": "post",
+      "question": "相对于基础输入费率，Anthropic 对 cache read 应用什么折扣？",
+      "options": [
+        "25% 折扣",
+        "50% 折扣",
+        "75% 折扣",
+        "90% 折扣"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么动态时间戳必须放在 cache breakpoint 下方，而不是上方？",
+      "options": [
+        "只有当前缀逐字节相同时 cache 才会命中；变化的时间戳会破坏它之后所有内容的匹配",
+        "时间戳会让 tokenizer 困惑",
+        "它们比静态文本花费更多 token",
+        "Anthropic 明确拒绝 cached block 中的时间戳"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "OpenAI 的 prompt caching 如何配置？",
+      "options": [
+        "显式 cache_control marker",
+        "你创建并引用的 CachedContent API",
+        "无需配置的自动前缀匹配",
+        "每个项目切换的系统级 flag"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "对 Anthropic 来说，1 小时 extended TTL 相比 5 分钟默认 TTL 的写入溢价是多少？",
+      "options": [
+        "相同",
+        "2 倍写入溢价（相对 baseline 多 50%）",
+        "4 倍写入溢价",
+        "没有写入溢价"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "要抵消 Anthropic 的 25% 写入溢价，需要复用多少次？",
+      "options": [
+        "1",
+        "2",
+        "5",
+        "10"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
