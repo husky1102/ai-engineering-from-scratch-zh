@@ -1,0 +1,78 @@
+{
+  "lesson": "59-vit-transformer",
+  "title": "Vision Transformer 编码器",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么标准 ViT block 使用 pre-LayerNorm placement，而不是 post-LayerNorm？",
+      "options": [
+        "Post-LN 有专利",
+        "Pre-LN 在深层网络中无需 learning-rate warm-up 也能稳定训练，而 post-LN 超过大约 6 层后会发散",
+        "Pre-LN 运行更快",
+        "Post-LN 使用更多 memory"
+      ],
+      "correct": 1,
+      "explanation": "Pre-LN 会 normalize 每个 sub-layer 的 input，这会在 depth 增长时保持 gradient norms 有界。"
+    },
+    {
+      "stage": "pre",
+      "question": "当 hidden=768 且 heads=12 时，per-head dimension 是多少，为什么它重要？",
+      "options": [
+        "12，因此每个 head 可以在小 GPU 上运行",
+        "64，它控制每个 attention map 的 resolution，并让十二个 heads 独立并行 attend",
+        "768，因为所有 heads 共享 projection",
+        "96，由 ResNet-50 设定"
+      ],
+      "correct": 1,
+      "explanation": "head_dim = hidden / heads = 64。每个 head 都把 token 投影到自己的 64-D q/k/v，并计算自己的 attention map。"
+    },
+    {
+      "stage": "check",
+      "question": "ViT encoder 需要 causal attention mask 吗？",
+      "options": [
+        "需要，像 GPT decoder 一样",
+        "不需要：encoder 是 bidirectional 的，每个 token 都可以 attend to 同一 sequence 中的每个其他 token",
+        "只对 CLS row 需要",
+        "只在 training 期间需要"
+      ],
+      "correct": 1,
+      "explanation": "Vision encoders 是 bidirectional 的。causal masking 会在后面 text decoder 消费 cross-attention output 时出现。"
+    },
+    {
+      "stage": "check",
+      "question": "所有 12 个 blocks 之后，CLS token 的 final hidden state 表示什么？",
+      "options": [
+        "input embedding 的副本",
+        "整张 image 的 learned vector summary，下游 heads 会把它投影为 class logits 或 contrastive embeddings",
+        "random noise",
+        "只有最后一个 patch"
+      ],
+      "correct": 1,
+      "explanation": "CLS token 起初是空的，并通过所有 12 个 blocks 中的 self-attention 从每个 patch 累积信息。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 feed-forward layer 要扩展到 hidden dim 的 4x？",
+      "options": [
+        "PyTorch 要求 4x",
+        "这是自 Original Transformer 以来的经验甜点；更小会 underfit，更大在固定 data budget 下会 overfit",
+        "它让 FLOPs 减半",
+        "它移除了对 attention 的需求"
+      ],
+      "correct": 1,
+      "explanation": "自 2017 年以来，4x factor 在 language 和 vision transformers 中都成立。这里的 per-parameter capacity 达到峰值。"
+    },
+    {
+      "stage": "post",
+      "question": "哪一种 family extension 保持 block math 不变，但添加 prepended learned tokens？",
+      "options": [
+        "Causal masking",
+        "Register tokens (DINOv2)：在 CLS 后 prepend 几个 learned vectors，用于捕获 global statistics 并平滑 attention maps",
+        "Mixture-of-experts",
+        "RoPE rotation"
+      ],
+      "correct": 1,
+      "explanation": "Register tokens 不改变 block 的数学，却能稳定 attention；它们是 sequence 中额外的 slots。"
+    }
+  ]
+}
