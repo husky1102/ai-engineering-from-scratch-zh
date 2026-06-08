@@ -1,0 +1,78 @@
+{
+  "lesson": "52-experiment-runner",
+  "title": "实验运行器",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 runner 要 spawn subprocess，而不是在进程内 import experiment script？",
+      "options": [
+        "因为 Python 不允许嵌套 imports",
+        "因为独立进程让 runner 在 timeout 或 memory limits 时有 kill handle，并且把 crash 与 orchestrator 隔离",
+        "因为 metrics format 要求这样",
+        "因为 subprocess 比 import 更快"
+      ],
+      "correct": 1,
+      "explanation": "独立进程是语言自带的最简单隔离。父进程保留 kill handle 和独立地址空间，因此崩溃的 experiment 不会拖垮 orchestrator。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 memory cap 被描述为 soft？",
+      "options": [
+        "因为它只适用于 heap，不适用于 stack",
+        "因为 poller 有非零 interval，所以 process 可以在两次 poll 之间短暂超过 cap，runner 只能在下一次观测时行动",
+        "因为操作系统总是会覆盖它",
+        "因为 numpy 会忽略 cap"
+      ],
+      "correct": 1,
+      "explanation": "cap 是通过 polling 强制执行的，不是通过内核限制。poller interval 就是 cap 的分辨率，短暂 spike 可能会在下一次观测前超过 cap。"
+    },
+    {
+      "stage": "check",
+      "question": "当 stdout 有 metrics 但 exit code 非零时，runner 返回哪个 terminal label？",
+      "options": [
+        "ok",
+        "timeout",
+        "oom",
+        "crash"
+      ],
+      "correct": 3,
+      "explanation": "只有 exit code 为零且 metrics 解析成功时，terminal 才是 ok。非零 exit code 是 crash，即使失败前捕获到了一些 metrics。"
+    },
+    {
+      "stage": "check",
+      "question": "runner 如何识别 stdout 中的 final metrics blob？",
+      "options": [
+        "它读取第一行 json",
+        "它读取最后一行 keys 覆盖 required metric_keys 的 json；更早的覆盖行会变成 intermediate metrics",
+        "它扫描 stderr 中的 json",
+        "它期望输出恰好一行"
+      ],
+      "correct": 1,
+      "explanation": "final metrics 是最后一行能解析为 json 且包含每个 required key 的内容。更早的覆盖行会作为 intermediate metrics 保留下来，用于 learning curves。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 ablation helper 一次 sweep 一个 knob，而不是 full factorial？",
+      "options": [
+        "因为 runner 不能启动多个 subprocess",
+        "因为一次一个 knob 会产生 evaluator 可以绘图的干净轴，而 full factorial 会指数爆炸并混淆解释",
+        "因为 numpy 不支持 cartesian product",
+        "因为 seed 只沿一个 knob 变化"
+      ],
+      "correct": 1,
+      "explanation": "single knob sweeps 让结果保持可解释。full factorial 的成本会随着 knob 数量指数增长，并且生成的 table 难以阅读。"
+    },
+    {
+      "stage": "check",
+      "question": "把 spec.seed 转发到 config['__seed'] 给 evaluator 什么保证？",
+      "options": [
+        "更快的 wall time",
+        "更低的 memory consumption",
+        "Determinism，因此用相同 seed 重新运行会产生相同 metrics，evaluator 能从随机噪声中识别真实变化",
+        "免费的 significance test"
+      ],
+      "correct": 2,
+      "explanation": "seed 会固定 experiment 中的 random initialisation。相同 seed 的两次运行产生相同 metrics，这让 evaluator 能区分真实 regression 和不同随机抽样。"
+    }
+  ]
+}
