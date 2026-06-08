@@ -1,0 +1,90 @@
+{
+  "lesson": "23-function-call-dispatcher",
+  "title": "Function Call Dispatcher",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 non-idempotent tool timeout 默认不 retry？",
+      "options": [
+        "因为 dispatcher 无法测量 non-idempotent calls",
+        "因为 tool 可能已经部分 commit；retry 可能 duplicate effect",
+        "因为 non-idempotent handlers 运行更快",
+        "因为 idempotency keys 很慢"
+      ],
+      "correct": 1,
+      "explanation": "Retry 一个在 4.9s timed out 的 db.write 可能产生第二次 write。除非 handler 声明 call 可安全重复，否则 dispatcher 会拒绝 retry。"
+    },
+    {
+      "stage": "pre",
+      "question": "Idempotency-key dedupe 防的是什么？",
+      "options": [
+        "慢网络",
+        "Original call 仍在 in flight 时触发的 retry",
+        "Schema validation errors",
+        "Process restarts"
+      ],
+      "correct": 1,
+      "explanation": "没有 dedupe 时，5s 的 retry 会与仍 pending 的慢 original 竞争。Cache 会把二者 collapse 成一次 handler invocation。"
+    },
+    {
+      "stage": "check",
+      "question": "这个 dispatcher 中哪些 error kinds 有资格 retry？",
+      "options": [
+        "schema 和 not_found",
+        "internal 和 budget_exceeded",
+        "timeout（如果 idempotent）和 transient",
+        "全部"
+      ],
+      "correct": 2,
+      "explanation": "Schema 和 not_found 是确定性的。Internal 掩盖未知 handler bug。Budget exceeded 是退出。只有 idempotent 上的 timeout 和显式 TransientError 会 retry。"
+    },
+    {
+      "stage": "check",
+      "question": "_run_with_retries 外面的 semaphore 保护什么？",
+      "options": [
+        "Handler 免受自身影响",
+        "Backend 免受 gather() fan out 出来的过多 simultaneous calls",
+        "Validator",
+        "Retry counter"
+      ],
+      "correct": 1,
+      "explanation": "没有 limit 时，四十个 calls 的 gather 会打开四十个 concurrent dispatches。Semaphore 会 cap 这个 wave。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 idempotency key 由 caller 派生，而不是 dispatcher 派生？",
+      "options": [
+        "因为 Python hashes 不稳定",
+        "因为仅从 args 派生会让两个语义不同但刚好共享 args 的 calls collide",
+        "因为 registry 不会有这个 key",
+        "因为 cache 不能存储 strings"
+      ],
+      "correct": 1,
+      "explanation": "Caller 知道 step id、planner intent 和 user。只有 args 不足以安全 dedupe。"
+    },
+    {
+      "stage": "post",
+      "question": "Dispatch 上的 schema failure 映射到哪个 JSON-RPC error code？",
+      "options": [
+        "-32601",
+        "-32602",
+        "-32603",
+        "-32700"
+      ],
+      "correct": 1,
+      "explanation": "-32602 Invalid params。Dispatcher 在任何 handler 运行前返回它。"
+    },
+    {
+      "stage": "post",
+      "question": "在 idempotent tool 上因 timeouts 达到 max_attempts 后，返回什么？",
+      "options": [
+        "抛出 exception",
+        "没有 result 的 DispatchOk",
+        "DispatchError，kind=timeout 且 attempts==max_attempts",
+        "DispatchError，kind=internal"
+      ],
+      "correct": 2,
+      "explanation": "Dispatcher 返回 typed error envelope。kind 反映最后一种 failure mode，attempts 反映尝试次数。"
+    }
+  ]
+}
