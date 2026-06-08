@@ -1,0 +1,67 @@
+[
+  {
+    "id": "unsupervised-pre-1",
+    "stage": "pre",
+    "question": "无监督学习和监督学习的区别是什么？",
+    "options": [
+      "无监督学习使用更多数据",
+      "无监督学习没有带标签输出，算法会自己寻找结构",
+      "无监督学习只适用于文本数据",
+      "无监督学习总是产生更好的结果"
+    ],
+    "correct": 1,
+    "explanation": "在无监督学习中没有标签。算法会在没有被告知正确输出应该是什么的情况下，发现数据中的模式、分组或结构。"
+  },
+  {
+    "id": "unsupervised-pre-2",
+    "stage": "pre",
+    "question": "K-Means 要求你在训练前指定什么？",
+    "options": [
+      "精确的簇中心",
+      "簇的数量 K",
+      "每个数据点的标签",
+      "要使用的距离度量"
+    ],
+    "correct": 1,
+    "explanation": "K-Means 需要把簇数量 K 作为输入。然后它会迭代地把点分配给最近 centroid，并重新计算 centroids，直到收敛。"
+  },
+  {
+    "id": "unsupervised-post-1",
+    "stage": "post",
+    "question": "K-Means 在两个互锁的半月形上失败，但 DBSCAN 成功。为什么？",
+    "options": [
+      "DBSCAN 使用的数据比 K-Means 更多",
+      "DBSCAN 基于密度寻找簇，因此能发现任意形状，而 K-Means 假设簇是球形的",
+      "DBSCAN 在每个数据集上都优于 K-Means",
+      "K-Means 无法处理 2D 数据"
+    ],
+    "correct": 1,
+    "explanation": "K-Means 会把点分配给最近 centroid，从而产生球形（凸）簇。DBSCAN 从稠密区域扩展簇，只要簇能被密度连接，就能发现任意形状。"
+  },
+  {
+    "id": "unsupervised-post-2",
+    "stage": "post",
+    "question": "silhouette score 衡量的是什么？",
+    "options": [
+      "找到的簇总数",
+      "每个点与自己簇的相似程度，相对于它与最近其他簇的相似程度",
+      "聚类算法的速度",
+      "数据中异常值的百分比"
+    ],
+    "correct": 1,
+    "explanation": "Silhouette score = (b - a) / max(a, b)，其中 a 是平均簇内距离，b 是平均最近簇距离。它的范围从 -1（错误簇）到 +1（聚类良好）。"
+  },
+  {
+    "id": "unsupervised-post-3",
+    "stage": "post",
+    "question": "Gaussian Mixture Model 在簇分配上与 K-Means 有什么不同？",
+    "options": [
+      "GMM 使用硬分配，每个点只属于一个簇",
+      "GMM 给出软（概率）分配，每个点都有属于每个簇的概率",
+      "GMM 完全不使用 centroids",
+      "GMM 只适用于一维数据"
+    ],
+    "correct": 1,
+    "explanation": "K-Means 会把每个点分配给恰好一个簇（硬分配）。GMM 会计算每个点属于每个 Gaussian component 的概率（软分配），并且可以建模椭圆形、重叠的簇。"
+  }
+]
