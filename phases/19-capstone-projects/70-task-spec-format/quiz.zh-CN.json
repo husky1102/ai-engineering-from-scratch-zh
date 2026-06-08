@@ -1,0 +1,78 @@
+{
+  "lesson": "70-task-spec-format",
+  "title": "任务规范格式",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么要在编写评分代码之前冻结 task record schema？",
+      "options": [
+        "它让 JSON parser 运行得更快",
+        "它锁定契约，让 metrics、runners 和 post-processors 在字段名上达成一致",
+        "它消除了对 validator 的需求",
+        "它允许任意新增 metric 名称而不需要进一步修改"
+      ],
+      "correct": 1,
+      "explanation": "schema 是每个下游 consumer 读取的契约。锁定它之后，你可以独立修改组件，而不会破坏其他部分。"
+    },
+    {
+      "stage": "pre",
+      "question": "`metric_name` 字段接受的封闭词表是什么？",
+      "options": [
+        "runner 被配置为能识别的任何内容",
+        "exact_match, f1, bleu_4, rouge_l, accuracy, code_exec",
+        "task author 选择的任意字符串",
+        "只有 exact_match 和 f1"
+      ],
+      "correct": 1,
+      "explanation": "本课把 metric 词表固定为六个名称。添加新名称需要一节新 lesson 和一个新的 validator 条目。"
+    },
+    {
+      "stage": "check",
+      "question": "validator 在 record 上看到未知的 top-level field 时会怎么做？",
+      "options": [
+        "删除它并继续",
+        "记录 warning 但接受该 record",
+        "返回 validation error 并拒绝该 record",
+        "把它重命名为 metadata.unknown"
+      ],
+      "correct": 2,
+      "explanation": "未知字段是 forward-compatibility 风险。validator 会拒绝它们，让 schema 始终是唯一真相来源。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 few-shot examples 要附加到 task record，而不是由 runner 计算？",
+      "options": [
+        "runner 没有 file I/O",
+        "author intent 是 eval 的一部分；把 examples 绑定到 task，可以消除 prompt construction 中的 per-model variance",
+        "它节省 disk space",
+        "few-shot 只在 fine-tuning 期间使用"
+      ],
+      "correct": 1,
+      "explanation": "Few-shot composition 是 eval definition 的一部分，而不是 model interface。把它放进 task，意味着每个模型都会看到同一个 prompt。"
+    },
+    {
+      "stage": "check",
+      "question": "在 validator 规则下，哪一组 category-metric pair 是非法的？",
+      "options": [
+        "summary + rouge_l",
+        "arithmetic + exact_match",
+        "mcq + bleu_4",
+        "code_exec + code_exec"
+      ],
+      "correct": 2,
+      "explanation": "对单个字母使用 BLEU 没有意义。validator 会强制 mcq tasks 只使用 exact_match 或 accuracy。"
+    },
+    {
+      "stage": "post",
+      "question": "当 generation 是 `Answer: C is correct` 时，post_process rule `extract_letter` 返回什么？",
+      "options": [
+        "完整字符串不变",
+        "C",
+        "Answer",
+        "空字符串"
+      ],
+      "correct": 1,
+      "explanation": "extract_letter 返回 generation 中第一个匹配 [A-E] 的字符。该字符串在正文开头有 C。"
+    }
+  ]
+}
