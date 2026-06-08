@@ -1,0 +1,90 @@
+{
+  "lesson": "01-the-agent-loop",
+  "title": "Agent Loop：Observe、Think、Act",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 LLM 本身表现得像 autocomplete，而不是 agent？",
+      "options": [
+        "它不能读取文件、运行查询，或用外部世界验证断言",
+        "它的 context window 太小，放不下一个问题",
+        "没有 system prompt 时它会拒绝回答",
+        "它一次只发出一个 token"
+      ],
+      "correct": 0,
+      "explanation": "没有 loop 和 tools 的 LLM 只能从权重中生成文本；它不能观察状态，也不能对状态采取行动。"
+    },
+    {
+      "stage": "pre",
+      "question": "Yao et al. 2022 的 canonical ReAct trace 中出现哪三个标签？",
+      "options": [
+        "Prompt, Response, Reward",
+        "Thought, Action, Observation",
+        "Plan, Execute, Reflect",
+        "System, User, Assistant"
+      ],
+      "correct": 1,
+      "explanation": "ReAct 在单个 stream 中交错 Thought、Action 和 Observation lines。"
+    },
+    {
+      "stage": "check",
+      "question": "哪一项不是本课列出的 agent loop 五个 ingredients 之一？",
+      "options": [
+        "Message buffer",
+        "Tool registry",
+        "Observation formatter",
+        "Gradient optimizer"
+      ],
+      "correct": 3,
+      "explanation": "五个 ingredients 是 message buffer、tool registry、stop condition、turn budget 和 observation formatter。Gradient optimizers 属于训练，不属于 inference loop。"
+    },
+    {
+      "stage": "check",
+      "question": "Turn budget 在 loop 中的作用是什么？",
+      "options": [
+        "限制每次 response 的 token 数",
+        "硬性限制 loop iterations，防止 agent runaway",
+        "控制 registry 暴露多少 tools",
+        "对 LLM provider 做 rate-limit"
+      ],
+      "correct": 1,
+      "explanation": "Turn budget 是 loop iterations 的上限；2026 agents 常见运行 40-400 步，需要适合任务的 cap。"
+    },
+    {
+      "stage": "check",
+      "question": "与 prompt-based Thought tokens 相比，2025-2026 native-reasoning 转变改变了什么？",
+      "options": [
+        "Loop control flow 被 DAG 取代",
+        "Thought tokens 现在通过一个单独的 reasoning channel 发出，并跨 turns 传递",
+        "Models 停止使用 tool calls，只依赖 chain-of-thought",
+        "Observations 被完全从 prompt 中移除"
+      ],
+      "correct": 1,
+      "explanation": "Reasoning content 移到专用 channel（跨 provider 时通常加密），但 observe-think-act control flow 不变。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课说 tool outputs 是 untrusted input？",
+      "options": [
+        "Tool runtimes 慢且不可靠",
+        "Retrieved content 可能携带 delete-the-repo 之类的 hidden instructions，并且只有直接用户输入才算 permission",
+        "Tool results 总是大于模型 context window",
+        "Provider 默认剥离 tool output bytes"
+      ],
+      "correct": 1,
+      "explanation": "OpenAI CUA docs 明确说明只有直接用户指令才算 permission；tool outputs 可能携带 adversarial instructions，必须视为 untrusted。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课声称每个 2026 framework 底层仍运行 ReAct？",
+      "options": [
+        "因为 providers 要求 prompt 中包含 ReAct keywords",
+        "因为 observe-think-act control flow 是不变量；frameworks 只是在 checkpointing、actors、role templates 和 tracing 等周边不同",
+        "因为 Yao et al. 拥有该 loop 的专利",
+        "因为 LangGraph 强制所有其他 frameworks 继承它"
+      ],
+      "correct": 1,
+      "explanation": "Claude Agent SDK、OpenAI Agents SDK、LangGraph、AutoGen、CrewAI、Agno 和 Mastra 之间的差异在于包裹 loop 的内容，而不是 loop 本身。"
+    }
+  ]
+}
