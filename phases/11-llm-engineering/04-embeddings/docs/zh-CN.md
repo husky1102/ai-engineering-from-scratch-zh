@@ -1,63 +1,63 @@
-# Embeddings 与 Vector Representations
+# 嵌入与向量表示
 
-> 文本是离散的。数学是连续的。每次你让 LLM 查找“相似”文档、比较含义，或超越关键词搜索时，你都在依赖连接这两个世界的一座桥。那座桥就是 embedding。如果你不理解 embeddings，你就不理解现代 AI。你只是在使用它。
+> 文本是离散的，数学是连续的。每次你让 LLM 查找“相似”文档、比较含义，或超越关键词做搜索时，你都在依赖一座连接两者的桥。这座桥就是 embedding。如果你不理解 embedding，就谈不上真正理解现代 AI，只是在调用它。
 
 **类型：** Build
-**语言：** Python
+**语言：** Python, TypeScript
 **先修：** Phase 11, Lesson 01 (Prompt Engineering)
 **时间：** ~75 分钟
-**相关：** Phase 5 · 22 (Embedding Models Deep Dive) 覆盖 dense vs sparse vs multi-vector、Matryoshka truncation，以及 per-axis model selection。本课聚焦生产 pipeline（vector DBs、HNSW、similarity math）。选模型前请先读 Phase 5 · 22。
+**相关：** Phase 5 · 22（Embedding Models Deep Dive）覆盖 dense、sparse、multi-vector、Matryoshka 截断，以及按评估轴选择模型。本课聚焦生产流水线：向量数据库、HNSW 和相似度数学。选模型前，建议先读 Phase 5 · 22。
 
 ## 学习目标
 
-- 使用 API providers 和 open-source models 生成 text embeddings，并计算它们之间的 cosine similarity
-- 解释 embeddings 为什么能解决 keyword search 无法处理的 vocabulary mismatch problem
-- 构建一个 semantic search index，按 meaning 而非 exact keyword match 检索 documents
-- 使用 retrieval benchmarks（precision@k、recall）评估 embedding quality，并为任务选择合适 embedding model
+- 使用 API provider 和开源模型生成文本 embedding，并计算它们之间的余弦相似度
+- 解释 embedding 为什么能解决关键词搜索无法处理的词汇不匹配问题
+- 构建一个语义搜索索引，按含义而不是精确关键词匹配来检索文档
+- 使用检索基准（precision@k、recall）评估 embedding 质量，并为任务选择合适的 embedding 模型
 
 ## 要解决的问题
 
-你有 10,000 条 support tickets。客户写道 “my payment didn't go through”。你需要找到相似的历史 tickets。Keyword search 会找到包含 “payment” 和 “didn't go through” 的 tickets。它会漏掉 “transaction failed”、“charge was declined” 和 “billing error”。这些 tickets 用完全不同的词描述同一个问题。
+你有 10,000 条客服工单。客户写道：“my payment didn't go through”。你需要找到相似的历史工单。关键词搜索会找到包含 “payment” 和 “didn't go through” 的工单，却漏掉 “transaction failed”、“charge was declined” 和 “billing error”。这些工单用完全不同的词描述同一个问题。
 
-这就是 vocabulary mismatch problem。人类语言有几十种方式表达同一件事。Keyword search 把每个词当作没有意义的独立符号。它无法知道 “declined” 和 “didn't go through” 指的是同一个概念。
+这就是词汇不匹配问题。人类语言有几十种方式表达同一件事。关键词搜索把每个词都当成彼此独立、没有含义的符号。它不知道 “declined” 和 “didn't go through” 指的是同一个概念。
 
-你需要一种 text representation，其中 similarity 由 meaning 而不是 spelling 决定。你需要一种方法，把 “my payment didn't go through” 和 “transaction was declined” 放到某个数学空间中的相近位置，同时把 “my payment arrived on time” 推远，尽管它也包含 “payment”。
+你需要一种文本表示，让相似度由“含义”而不是“拼写”决定。你需要把 “my payment didn't go through” 和 “transaction was declined” 放到某个数学空间的相邻位置，同时把 “my payment arrived on time” 推远，哪怕它也包含 “payment”。
 
-这种 representation 就是 embedding。
+这种表示就是 embedding。
 
 ## 核心概念
 
-### What Is an Embedding?
+### 什么是 Embedding？
 
-embedding 是一个 dense vector，由 floating-point numbers 组成，用来表示文本含义。“dense” 很重要——每个 dimension 都携带信息，不像 sparse representations（bag-of-words、TF-IDF）那样大多数 dimensions 都是零。
+embedding 是一个由浮点数组成的稠密向量，用来表示文本含义。“稠密”很重要：每个维度都携带信息，不像 bag-of-words、TF-IDF 这类稀疏表示那样大多数维度都是零。
 
-“The cat sat on the mat” 会变成类似 `[0.023, -0.041, 0.087, ..., 0.012]` 的东西——取决于模型，它可能是 768 到 3072 个数字组成的 list。这些数字编码 meaning。你不会直接 inspect 它们。你会 compare 它们。
+“The cat sat on the mat” 会变成类似 `[0.023, -0.041, 0.087, ..., 0.012]` 的列表。取决于模型，它可能有 768 到 3072 个数字。这些数字编码含义。你不会直接检查每个数字，而是比较向量之间的关系。
 
-### The Word2Vec Breakthrough
+### Word2Vec 的突破
 
-2013 年，Google 的 Tomas Mikolov 和同事发表了 Word2Vec。核心洞察是：训练一个 neural network 根据邻近词预测某个词（或根据某个词预测邻近词），hidden layer weights 会成为有意义的 vector representations。
+2013 年，Google 的 Tomas Mikolov 和同事发表了 Word2Vec。核心洞察是：训练一个神经网络根据邻近词预测某个词（或根据某个词预测邻近词），隐藏层权重会变成有意义的向量表示。
 
-著名结果：
+著名结果是：
 
 ```text
 king - man + woman = queen
 ```
 
-word embeddings 上的 vector arithmetic 能捕捉 semantic relationships。从 “man” 到 “woman” 的方向，大致等于从 “king” 到 “queen” 的方向。那一刻，领域意识到 geometry 可以编码 meaning。
+word embedding 上的向量运算能捕捉语义关系。从 “man” 到 “woman” 的方向，大致等于从 “king” 到 “queen” 的方向。也正是这类结果，让领域意识到几何结构可以编码含义。
 
-Word2Vec 生成 300-dimensional vectors。每个 word 无论 context 如何都只有一个 vector。“Bank” 在 “river bank” 和 “bank account” 中拥有同一个 embedding。这个限制推动了接下来十年的研究。
+Word2Vec 生成 300 维向量。每个词无论上下文如何都只有一个向量。“Bank” 在 “river bank” 和 “bank account” 中拥有同一个 embedding。这个限制推动了之后十年的研究。
 
-### From Words to Sentences
+### 从词到句子
 
-Word embeddings 表示 single tokens。生产系统需要 embed 整个 sentences、paragraphs 或 documents。出现了四种方法：
+word embedding 表示单个 token。生产系统需要 embed 整个句子、段落或文档。四种方法逐渐出现：
 
-**Averaging**：取句子中所有 word vectors 的 mean。便宜、有损，但对短文本出人意料地还不错。完全丢失 word order——“dog bites man” 和 “man bites dog” 会得到相同 embeddings。
+**平均池化**：取句子中所有词向量的平均值。便宜、有损，但对短文本出人意料地还不错。它会完全丢失词序，因此 “dog bites man” 和 “man bites dog” 会得到相同的 embedding。
 
-**CLS token**：transformer models（BERT, 2018）输出一个代表整个输入的特殊 [CLS] token embedding。比 averaging 更好，但 [CLS] token 是为 next-sentence prediction 训练的，不是为 similarity 训练的。
+**CLS token**：Transformer 模型（BERT, 2018）会输出一个代表整个输入的特殊 `[CLS]` token embedding。它比简单平均更好，但 `[CLS]` token 原本是为下一句预测训练的，并不是专门为相似度训练的。
 
-**Contrastive learning**：显式训练模型，把 similar pairs 拉近、dissimilar pairs 推远。Sentence-BERT（Reimers & Gurevych, 2019）使用了这种方法，并成为现代 embedding models 的基础。给定 “How do I reset my password?” 和 “I need to change my password”，模型学到它们应该拥有几乎相同的 vectors。
+**对比学习**：显式训练模型，让相似样本对靠近，让不相似样本对远离。Sentence-BERT（Reimers & Gurevych, 2019）使用这种方法，并成为现代 embedding 模型的基础。给定 “How do I reset my password?” 和 “I need to change my password”，模型会学到它们应该拥有几乎相同的向量。
 
-**Instruction-tuned embeddings**：最新方法。E5 和 GTE 等模型接受 task prefix（“search_query:”、“search_document:”），告诉模型应该生成哪种 embedding。这让一个模型能服务多个任务。
+**指令调优 embedding**：较新的方法。E5 和 GTE 等模型接受任务前缀（`search_query:`、`search_document:`），告诉模型应该生成哪种 embedding。这样一个模型就能服务多种任务。
 
 ```mermaid
 graph LR
@@ -71,18 +71,18 @@ graph LR
         S2["I need to change my password"] --> E2["[0.05, 0.11, ...]"]
     end
 
-    subgraph "2024: Instruction-Tuned"
+    subgraph "2024: 指令调优"
         I1["search_query: password reset"] --> T1["[0.08, 0.09, ...]"]
         I2["search_document: To reset your password, click..."] --> T2["[0.07, 0.10, ...]"]
     end
 ```
 
-### Modern Embedding Models
+### 现代 Embedding 模型
 
-市场已经收敛到少数 production-grade options（截至 2026 年初的 MTEB scores，MTEB v2）：
+市场已经收敛到少数生产级选项（截至 2026 年初的 MTEB v2 分数）：
 
-| Model | Provider | Dimensions | MTEB | Context | Cost / 1M tokens |
-|-------|----------|-----------|------|---------|------------------|
+| 模型 | 提供方 | 维度 | MTEB | 上下文 | 每 100 万 token 成本 |
+|------|--------|------|------|--------|----------------------|
 | Gemini Embedding 2 | Google | 3072 (Matryoshka) | 67.7 (retrieval) | 8192 | $0.15 |
 | embed-v4 | Cohere | 1024 (Matryoshka) | 65.2 | 128K | $0.12 |
 | voyage-4 | Voyage AI | 1024/2048 (Matryoshka) | 66.8 | 32K | $0.12 |
@@ -92,134 +92,134 @@ graph LR
 | Qwen3-Embedding | Alibaba | 4096 (Matryoshka) | 66.9 | 32K | Open-weight |
 | Nomic-embed-v2 | Nomic | 768 (Matryoshka) | 63.1 | 8192 | Open-weight |
 
-MTEB（Massive Text Embedding Benchmark）v2 覆盖 retrieval、classification、clustering、reranking 和 summarization 等 100+ tasks。越高越好。到 2026 年，open-weight models（Qwen3-Embedding、BGE-M3）在多数 axes 上已经匹配或超过 closed hosted models。Gemini Embedding 2 领先 pure retrieval；Voyage/Cohere 领先特定 domains（finance、law、code）。提交之前永远要在你自己的 queries 上 benchmark。
+MTEB（Massive Text Embedding Benchmark）v2 覆盖 retrieval、classification、clustering、reranking、summarization 等 100 多类任务。分数越高越好。到 2026 年，open-weight 模型（Qwen3-Embedding、BGE-M3）在多数评估轴上已经匹配或超过闭源托管模型。Gemini Embedding 2 领先纯检索；Voyage/Cohere 在 finance、law、code 等特定领域领先。提交模型选择之前，一定要在你自己的查询上做 benchmark。
 
-### Similarity Metrics
+### 相似度指标
 
-给定两个 embedding vectors，有三种方式衡量它们相似度：
+给定两个 embedding 向量，常见的相似度衡量方式有三种：
 
-**Cosine similarity**：两个 vectors 夹角的 cosine。范围从 -1（相反）到 1（同向）。忽略 magnitude——如果方向相同，10-word sentence 和 500-word document 也能得到 1.0。90% 用例的默认选择。
+**余弦相似度**：两个向量夹角的余弦。范围从 -1（相反）到 1（同向）。它忽略长度，所以只要方向相同，10 个词的句子和 500 个词的文档也可以得到 1.0。这是 90% 用例的默认选择。
 
 ```text
 cosine_sim(a, b) = dot(a, b) / (||a|| * ||b||)
 ```
 
-**Dot product**：两个 vectors 的 raw inner product。当 vectors 已经 normalized（unit length）时，它与 cosine similarity 等价。计算更快。OpenAI embeddings 是 normalized 的，因此 dot product 和 cosine 给出相同排名。
+**点积**：两个向量的原始内积。当向量已经归一化为单位长度时，它与余弦相似度等价。点积计算更快。OpenAI embeddings 是归一化的，因此点积和余弦会给出相同排序。
 
 ```text
 dot(a, b) = sum(a_i * b_i)
 ```
 
-**Euclidean (L2) distance**：vector space 中的直线距离。越小越相似。对 magnitude differences 敏感。当 space 中 absolute position 很重要，而不只是 direction 很重要时使用。
+**欧氏（L2）距离**：向量空间中的直线距离。越小越相似。它对向量长度差异敏感。只有当空间中的绝对位置重要，而不仅是方向重要时才使用。
 
 ```text
 L2(a, b) = sqrt(sum((a_i - b_i)^2))
 ```
 
-何时使用哪种：
+如何选择：
 
-| Metric | Use when | Avoid when |
-|--------|----------|------------|
-| Cosine similarity | Comparing texts of different lengths; most retrieval tasks | Magnitude carries information |
-| Dot product | Embeddings are already normalized; maximum speed | Vectors have varying magnitudes |
-| Euclidean distance | Clustering; spatial nearest-neighbor problems | Comparing documents of wildly different lengths |
+| 指标 | 适用场景 | 避免场景 |
+|------|----------|----------|
+| 余弦相似度 | 比较不同长度的文本；多数检索任务 | 向量长度本身携带信息 |
+| 点积 | embedding 已经归一化；需要最高速度 | 向量长度差异较大 |
+| 欧氏距离 | 聚类；空间最近邻问题 | 比较长度差异很大的文档 |
 
-### Vector Databases and HNSW
+### 向量数据库与 HNSW
 
-brute-force similarity search 会把 query 与每个 stored vector 比较。100 万个 vectors、每个 1536 dimensions，就是每次 query 15 亿次 multiply-add operations。太慢。
+暴力相似度搜索会把查询向量与每个已存向量比较。100 万个向量、每个 1536 维，就意味着每次查询要做约 15 亿次乘加运算。太慢。
 
-Vector databases 用 Approximate Nearest Neighbor（ANN）algorithms 解决它。主导算法是 HNSW（Hierarchical Navigable Small World）：
+向量数据库用近似最近邻（Approximate Nearest Neighbor, ANN）算法解决这个问题。主导算法是 HNSW（Hierarchical Navigable Small World）：
 
-1. 构建一个 multi-layer graph of vectors
-2. 顶层 sparse——连接 distant clusters 的 long-range connections
-3. 底层 dense——连接 nearby vectors 的 fine-grained connections
-4. search 从 top layer 开始，greedily descending 逐步 refine
-5. 以 O(log n) 而非 O(n) 时间返回 approximate top-k results
+1. 构建一个多层向量图
+2. 顶层稀疏，用长距离连接跨越远处簇
+3. 底层稠密，用细粒度连接连起附近向量
+4. 搜索从顶层开始，贪心下降并逐步细化
+5. 用 O(log n) 而不是 O(n) 的时间返回近似 top-k 结果
 
-HNSW 用很小的 accuracy loss（通常 95-99% recall）换取巨大 speed gains。1000 万 vectors 时，brute force 要几秒。HNSW 要几毫秒。
+HNSW 用很小的准确率损失（通常 95-99% recall）换取巨大的速度提升。1000 万个向量时，暴力搜索要几秒，HNSW 只要几毫秒。
 
 ```mermaid
 graph TD
-    subgraph "HNSW Layers"
-        L2["Layer 2 (sparse)"] -->|"long jumps"| L1["Layer 1 (medium)"]
-        L1 -->|"shorter jumps"| L0["Layer 0 (dense, all vectors)"]
+    subgraph "HNSW 层级"
+        L2["第 2 层（稀疏）"] -->|"长跳转"| L1["第 1 层（中等密度）"]
+        L1 -->|"短跳转"| L0["第 0 层（稠密，全部向量）"]
     end
 
-    Q["Query vector"] -->|"enter at top"| L2
-    L0 -->|"nearest neighbors"| R["Top-k results"]
+    Q["查询向量"] -->|"从顶层进入"| L2
+    L0 -->|"最近邻"| R["Top-k 结果"]
 ```
 
 生产选项：
 
-| Database | Type | Best for | Max scale |
-|----------|------|----------|-----------|
-| Pinecone | Managed SaaS | Zero-ops production | Billions |
-| Weaviate | Open source | Self-hosted, hybrid search | 100M+ |
-| Qdrant | Open source | High performance, filtering | 100M+ |
-| ChromaDB | Embedded | Prototyping, local dev | 1M |
-| pgvector | Postgres extension | Already using Postgres | 10M |
-| FAISS | Library | In-process, research | 1B+ |
+| 数据库 | 类型 | 最适合 | 最大规模 |
+|--------|------|--------|----------|
+| Pinecone | 托管 SaaS | 零运维生产环境 | 数十亿 |
+| Weaviate | 开源 | 自托管、混合搜索 | 100M+ |
+| Qdrant | 开源 | 高性能、过滤 | 100M+ |
+| ChromaDB | 嵌入式 | 原型、本地开发 | 1M |
+| pgvector | Postgres 扩展 | 已经使用 Postgres | 10M |
+| FAISS | 库 | 进程内搜索、研究 | 1B+ |
 
-### Chunking Strategies
+### 分块策略
 
-Documents 太长，不能作为 single vectors embedding。一个 50 页 PDF 覆盖几十个 topics——它的 embedding 变成所有内容的平均，和任何具体内容都不相似。你要把 documents 切成 chunks，并 embed 每个 chunk。
+文档通常太长，不能作为单个向量来 embed。一个 50 页 PDF 覆盖几十个主题，它的 embedding 会变成所有内容的平均，结果对任何具体内容都不够相似。你需要把文档切成 chunk，并分别 embed 每个 chunk。
 
-**Fixed-size chunking**：每 N tokens 切分一次，并保留 M-token overlap。简单且可预测。当 documents 没有清晰结构时效果好。512-token chunk 加 50-token overlap：chunk 1 是 tokens 0-511，chunk 2 是 tokens 462-973。
+**固定大小分块**：每 N 个 token 切一次，并保留 M 个 token 的 overlap。简单且可预测。当文档没有清晰结构时效果好。512-token chunk 加 50-token overlap：第 1 个 chunk 是 token 0-511，第 2 个 chunk 是 token 462-973。
 
-**Sentence-based chunking**：在 sentence boundaries 切分，把 sentences 分组直到 token limit。每个 chunk 至少是一个完整 sentence。比 fixed-size 更好，因为不会把 thought 切成两半。
+**按句子分块**：在句子边界切分，把句子分组直到 token 上限。每个 chunk 至少包含一个完整句子。它比固定大小更好，因为不会把一个想法切成两半。
 
-**Recursive chunking**：先尝试按最大 boundary 切分（section headers）。如果仍然太大，再尝试 paragraph boundaries。然后 sentence boundaries。最后 character limits。这就是 LangChain 的 `RecursiveCharacterTextSplitter`，对 mixed-format corpora 很有效。
+**递归分块**：先尝试按最大的边界切分，例如 section header。如果仍然太大，再尝试段落边界，然后句子边界，最后退到字符上限。这就是 LangChain 的 `RecursiveCharacterTextSplitter`，对混合格式语料很有效。
 
-**Semantic chunking**：embed 每个 sentence，然后把 embeddings 相似的连续 sentences 分到一组。当 embedding similarity 低于 threshold 时，开始新 chunk。昂贵（需要单独 embedding 每个 sentence），但生成最 coherent 的 chunks。
+**语义分块**：embed 每个句子，然后把 embedding 相似的连续句子分到一组。当 embedding 相似度低于阈值时，开始新的 chunk。它很昂贵，因为需要单独 embed 每个句子，但生成的 chunk 最连贯。
 
-| Strategy | Complexity | Quality | Best for |
-|----------|-----------|---------|----------|
-| Fixed-size | Low | Decent | Unstructured text, logs |
-| Sentence-based | Low | Good | Articles, emails |
-| Recursive | Medium | Good | Markdown, HTML, mixed docs |
-| Semantic | High | Best | Critical retrieval quality |
+| 策略 | 复杂度 | 质量 | 最适合 |
+|------|--------|------|--------|
+| 固定大小 | 低 | 尚可 | 非结构化文本、日志 |
+| 按句子 | 低 | 好 | 文章、邮件 |
+| 递归 | 中 | 好 | Markdown、HTML、混合文档 |
+| 语义 | 高 | 最好 | 对检索质量要求很高的场景 |
 
-多数系统的甜蜜点：256-512 token chunks，配 50-token overlap。
+多数系统的甜蜜点：256-512 token chunk，配 50-token overlap。
 
-### Bi-Encoders vs Cross-Encoders
+### Bi-Encoder 与 Cross-Encoder
 
-bi-encoder 会独立 embed query 和 documents，然后比较 vectors。速度快——你只需要 embed query 一次，然后与 pre-computed document embeddings 比较。这是 retrieval 中使用的方式。
+bi-encoder 会分别 embed 查询和文档，然后比较向量。它很快：文档 embedding 可以预先计算，查询只需要 embed 一次，再与文档向量比较。这是检索阶段常用的方式。
 
-cross-encoder 把 query 和一个 document 作为 single input，并输出 relevance score。速度慢——它要让每个 query-document pair 通过完整模型。但准确得多，因为它能同时 attend query 和 document tokens。
+cross-encoder 会把查询和某个文档作为单个输入，并输出相关性分数。它很慢：每个 query-document pair 都要通过完整模型。但它准确得多，因为模型可以同时 attend 查询和文档 token。
 
-生产模式：bi-encoder 检索 top-100 candidates，cross-encoder rerank 到 top-10。这就是 retrieve-then-rerank pipeline。
+生产模式是：bi-encoder 先检索 top-100 候选，cross-encoder 再重排到 top-10。这就是 retrieve-then-rerank 流水线。
 
 ```mermaid
 graph LR
-    Q["Query"] --> BE["Bi-Encoder: embed query"]
-    BE --> VS["Vector search: top 100"]
-    VS --> CE["Cross-Encoder: rerank"]
-    CE --> R["Top 10 results"]
+    Q["查询"] --> BE["Bi-Encoder：embed 查询"]
+    BE --> VS["向量搜索：top 100"]
+    VS --> CE["Cross-Encoder：重排"]
+    CE --> R["Top 10 结果"]
 ```
 
-Reranking models：Cohere Rerank 3.5（$2 per 1000 queries）、BGE-reranker-v2（free, open source）、Jina Reranker v2（free, open source）。
+重排模型包括：Cohere Rerank 3.5（每 1000 个查询 $2）、BGE-reranker-v2（免费、开源）、Jina Reranker v2（免费、开源）。
 
 ### Matryoshka Embeddings
 
-传统 embeddings 是 all-or-nothing。一个 1536-dimensional vector 使用 1536 floats。你不能在不重新训练的情况下截断到 256 dimensions。
+传统 embedding 是 all-or-nothing。一个 1536 维向量使用 1536 个 float。你不能在不重新训练的情况下把它截断到 256 维。
 
-Matryoshka Representation Learning（Kusupati et al., 2022）解决了它。模型训练时让前 N dimensions 捕捉最重要信息，就像俄罗斯套娃。把 1536-d Matryoshka embedding 截断到 256 dimensions 会损失一些准确率，但仍然可用。
+Matryoshka Representation Learning（Kusupati et al., 2022）修复了这一点。模型训练时会让前 N 个维度捕捉最重要的信息，就像俄罗斯套娃。把 1536 维 Matryoshka embedding 截断到 256 维会损失一些准确率，但仍然可用。
 
-OpenAI 的 text-embedding-3-small 和 text-embedding-3-large 通过 `dimensions` 参数支持 Matryoshka truncation。请求 256 dimensions 而不是 1536，可让 storage 降低 6x，在 MTEB benchmarks 上准确率大约损失 3-5%。
+OpenAI 的 text-embedding-3-small 和 text-embedding-3-large 通过 `dimensions` 参数支持 Matryoshka 截断。请求 256 维而不是 1536 维，可以让存储降低 6x，在 MTEB benchmark 上准确率大约损失 3-5%。
 
-### Binary Quantization
+### 二值量化
 
-一个 1536-dimensional embedding 以 float32 存储需要 6,144 bytes。乘以 1000 万 documents：光 vectors 就要 61 GB。
+一个 1536 维 embedding 以 float32 存储需要 6,144 bytes。乘以 1000 万份文档：光向量就要 61 GB。
 
-Binary quantization 把每个 float 转换成 single bit：正值变成 1，负值变成 0。存储从 6,144 bytes 降到 192 bytes——减少 32x。Similarity 使用 Hamming distance（计算不同 bits 数量），CPU 可以用一条 instruction 完成。
+二值量化把每个 float 转换成一个 bit：正值变成 1，负值变成 0。存储从 6,144 bytes 降到 192 bytes，减少 32x。相似度用 Hamming distance 计算，也就是统计不同 bit 的数量，CPU 可以用单条指令完成。
 
-retrieval recall 上的 accuracy hit 大约是 5-10%。常见模式：first-pass search 对数百万 vectors 使用 binary quantization，然后用 full-precision vectors 对 top-1000 rescore。这让你以 32x 更少 memory 获得 95%+ full-precision accuracy。
+检索 recall 的准确率损失大约是 5-10%。常见模式是：第一轮搜索在数百万向量上使用二值量化，然后用 full-precision 向量对 top-1000 重新打分。这样能用 32x 更少的内存获得 95%+ 的 full-precision 准确率。
 
 ## 动手实现
 
-我们从零构建一个 semantic search engine。不用 vector database。不用 external embedding API。只用 Python 和 numpy 做数学。
+我们从零构建一个语义搜索引擎。不用向量数据库，不用外部 embedding API，只用 Python 和 numpy 做数学。
 
-### Step 1: Text Chunking
+### Step 1: 文本分块
 
 ```python
 def chunk_text(text, chunk_size=200, overlap=50):
@@ -253,9 +253,9 @@ def chunk_by_sentences(text, max_chunk_tokens=200):
     return chunks
 ```
 
-### Step 2: Building Embeddings from Scratch
+### Step 2: 从零构建 Embedding
 
-我们用 TF-IDF + L2 normalization 实现一个简单 dense embedding。它不是 neural embedding，但遵循同样 contract：text in、fixed-size vector out、similar texts produce similar vectors。
+我们用 TF-IDF + L2 归一化实现一个简单的稠密 embedding。它不是神经网络 embedding，但遵循同样的契约：输入文本，输出固定大小向量，相似文本产生相似向量。
 
 ```python
 import math
@@ -295,7 +295,7 @@ class SimpleEmbedder:
         return vec
 ```
 
-### Step 3: Similarity Functions
+### Step 3: 相似度函数
 
 ```python
 def cosine_similarity(a, b):
@@ -315,7 +315,7 @@ def euclidean_distance(a, b):
     return float(np.linalg.norm(a - b))
 ```
 
-### Step 4: Vector Index with Brute-Force Search
+### Step 4: 暴力搜索向量索引
 
 ```python
 class VectorIndex:
@@ -356,7 +356,7 @@ class VectorIndex:
         return len(self.vectors)
 ```
 
-### Step 5: The Semantic Search Engine
+### Step 5: 语义搜索引擎
 
 ```python
 class SemanticSearchEngine:
@@ -396,7 +396,7 @@ class SemanticSearchEngine:
         ]
 ```
 
-### Step 6: Comparing Similarity Metrics
+### Step 6: 比较相似度指标
 
 ```python
 def compare_metrics(engine, query, top_k=3):
@@ -412,7 +412,7 @@ def compare_metrics(engine, query, top_k=3):
 
 ## 实际使用
 
-使用 production embedding API 时，architecture 保持不变。只有 embedder 会变：
+使用生产级 embedding API 时，整体架构保持不变，只需要替换 embedder：
 
 ```python
 from openai import OpenAI
@@ -427,16 +427,16 @@ def openai_embed(texts, model="text-embedding-3-small", dimensions=None):
     return [item.embedding for item in response.data]
 ```
 
-OpenAI 的 Matryoshka truncation——同一个 model，更少 dimensions，更低 storage：
+OpenAI 的 Matryoshka 截断：同一个模型，更少维度，更低存储：
 
 ```python
 full = openai_embed(["semantic search query"], dimensions=1536)
 compact = openai_embed(["semantic search query"], dimensions=256)
 ```
 
-256-d vector 使用 6x 更少 storage。对 1000 万 documents，是 10 GB vs 61 GB。标准 benchmarks 上 accuracy loss 大约是 3-5%。
+256 维向量使用 6x 更少存储。对 1000 万份文档来说，是 10 GB vs 61 GB。标准 benchmark 上的准确率损失大约是 3-5%。
 
-使用 Cohere reranking：
+使用 Cohere 做重排：
 
 ```python
 import cohere
@@ -451,7 +451,7 @@ results = co.rerank(
 )
 ```
 
-无 API dependency 的 local embeddings：
+无 API 依赖的本地 embedding：
 
 ```python
 from sentence_transformers import SentenceTransformer
@@ -460,50 +460,50 @@ model = SentenceTransformer("BAAI/bge-small-en-v1.5")
 embeddings = model.encode(["semantic search query", "another document"])
 ```
 
-我们构建的 VectorIndex class 可与任意这些方式配合。替换 embedding function，保留 search logic。
+本课构建的 `VectorIndex` class 可以和上述任意方式配合。替换 embedding function，保留 search logic。
 
 ## 交付成果
 
 本课产出：
-- `outputs/prompt-embedding-advisor.md`——一个 prompt，用于为特定 use cases 选择 embedding models 和 strategies
-- `outputs/skill-embedding-patterns.md`——一个 skill，教 agents 如何在生产环境中有效使用 embeddings
+- `outputs/prompt-embedding-advisor.md`：一个 prompt，用于为特定用例选择 embedding 模型和策略
+- `outputs/skill-embedding-patterns.md`：一个 skill，教 agents 如何在生产环境中有效使用 embeddings
 
 ## 练习
 
-1. **Metric comparison**：用 cosine similarity、dot product 和 euclidean distance，对 sample documents 运行相同 5 个 queries。记录每个 metric 的 top-3 results。哪些 queries 下 metrics 不一致？为什么？
+1. **指标对比**：用 cosine similarity、dot product 和 euclidean distance，对样本文档运行相同 5 个查询。记录每个指标的 top-3 结果。哪些查询下指标结果不一致？为什么？
 
-2. **Chunk size experiment**：用 50、100、200、500 words 的 chunk sizes 索引 sample documents。每个设置下运行 5 个 queries，并记录 top-1 similarity score。绘制 chunk size 与 retrieval quality 的关系。找出 larger chunks 开始伤害效果的点。
+2. **分块大小实验**：用 50、100、200、500 个词的 chunk size 索引样本文档。每个设置下运行 5 个查询，并记录 top-1 相似度分数。绘制 chunk size 与检索质量的关系，找出更大的 chunk 从哪里开始伤害效果。
 
-3. **Matryoshka simulation**：构建一个能产生 500-d vectors 的 SimpleEmbedder。截断到 50、100、200 和 500 dimensions。测量每次 truncation 下 retrieval recall 如何下降。这不需要真实训练技巧，也能模拟 Matryoshka behavior。
+3. **Matryoshka 模拟**：构建一个能产生 500 维向量的 `SimpleEmbedder`。截断到 50、100、200 和 500 维。测量每次截断下 retrieval recall 如何下降。这不需要真实训练技巧，也能模拟 Matryoshka 行为。
 
-4. **Binary quantization**：取 search engine 中的 embeddings，把它们转换为 binary（正值为 1，负值为 0），并实现 Hamming distance search。将 top-10 results 与 full-precision cosine similarity 对比。测量 overlap percentage。
+4. **二值量化**：取搜索引擎中的 embeddings，把它们转换为 binary（正值为 1，负值为 0），并实现 Hamming distance search。将 top-10 结果与 full-precision cosine similarity 对比，测量重叠比例。
 
-5. **Sentence-based chunking**：用 `chunk_by_sentences` 替换 fixed-size chunking。运行相同 queries 并比较 retrieval scores。尊重 sentence boundaries 是否改善结果？
+5. **按句子分块**：用 `chunk_by_sentences` 替换固定大小分块。运行相同查询并比较检索分数。尊重句子边界是否改善结果？
 
 ## 关键术语
 
-| Term | What people say | What it actually means |
-|------|----------------|----------------------|
-| Embedding | “Text to numbers” | 一个 dense vector，其中 geometric proximity 编码 semantic similarity |
-| Word2Vec | “The OG embedding” | 2013 年模型，通过预测 context words 学习 word vectors；证明 vector arithmetic 可以编码 meaning |
-| Cosine similarity | “How similar are two vectors” | 两个 vectors 夹角的 cosine；1 = identical direction，0 = orthogonal，-1 = opposite |
-| HNSW | “Fast vector search” | Hierarchical Navigable Small World graph——multi-layer structure，支持 O(log n) approximate nearest neighbor search |
-| Bi-encoder | “Embed separately, compare fast” | 独立把 query 和 document 编码为 vectors；支持 pre-computation 和快速 retrieval |
-| Cross-encoder | “Slow but accurate reranker” | 把 query-document pair 联合送入完整模型；准确率更高，但无法 pre-computation |
-| Matryoshka embeddings | “Truncatable vectors” | 经过训练使前 N dimensions 捕获最重要信息的 embeddings，支持 variable-size storage |
-| Binary quantization | “1-bit embeddings” | 把 float vectors 转换为 binary（只保留 sign bit），用 Hamming distance search 获得 32x storage reduction |
-| Chunking | “Split docs for embedding” | 把 documents 拆成 256-512 token segments，让每段可独立 embedded 和 retrieved |
-| Vector database | “Search engine for embeddings” | 专为存储 vectors 并大规模执行 approximate nearest neighbor search 优化的数据存储 |
-| Contrastive learning | “Train by comparison” | 一种训练方法，把 similar pair embeddings 拉近，把 dissimilar pair embeddings 推远 |
-| MTEB | “The embedding benchmark” | Massive Text Embedding Benchmark——跨 8 类任务的 56 datasets；比较 embedding models 的标准 |
+| 术语 | 常见说法 | 实际含义 |
+|------|----------|----------|
+| Embedding | “把文本变成数字” | 一个稠密向量，其中几何距离编码语义相似度 |
+| Word2Vec | “最早出圈的 embedding” | 2013 年模型，通过预测上下文词学习词向量；证明向量运算可以编码含义 |
+| Cosine similarity | “两个向量有多像” | 两个向量夹角的余弦；1 = 同向，0 = 正交，-1 = 相反 |
+| HNSW | “快速向量搜索” | Hierarchical Navigable Small World graph，多层结构，支持 O(log n) 近似最近邻搜索 |
+| Bi-encoder | “分开 embed，快速比较” | 独立把查询和文档编码成向量；支持预计算和快速检索 |
+| Cross-encoder | “慢但准确的重排器” | 把 query-document pair 联合送入完整模型；准确率更高，但无法预计算 |
+| Matryoshka embeddings | “可截断向量” | 经过训练让前 N 个维度捕捉最重要信息的 embedding，支持可变大小存储 |
+| Binary quantization | “1-bit embedding” | 把 float 向量转换成 binary（只保留 sign bit），用 Hamming distance search 获得 32x 存储缩减 |
+| Chunking | “把文档切开再 embed” | 把文档拆成 256-512 token 片段，让每段可独立 embedded 和 retrieved |
+| Vector database | “embedding 的搜索引擎” | 专为存储向量并大规模执行近似最近邻搜索优化的数据存储 |
+| Contrastive learning | “通过比较来训练” | 一种训练方法，把相似样本对的 embedding 拉近，把不相似样本对推远 |
+| MTEB | “embedding 基准” | Massive Text Embedding Benchmark，跨 8 类任务的 56 个数据集，是比较 embedding 模型的标准 |
 
 ## 延伸阅读
 
-- Mikolov et al., "Efficient Estimation of Word Representations in Vector Space" (2013)——开启 embedding 革命的 Word2Vec 论文，包含 king-queen analogy
-- Reimers & Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks" (2019)——如何训练 sentence-level similarity 的 bi-encoders，是现代 embedding models 的基础
-- Kusupati et al., "Matryoshka Representation Learning" (2022)——OpenAI text-embedding-3 采用的 variable-dimension embeddings 背后技术
-- Malkov & Yashunin, "Efficient and Robust Approximate Nearest Neighbor using Hierarchical Navigable Small World Graphs" (2018)——HNSW 论文，大多数生产 vector search 背后的算法
-- OpenAI Embeddings Guide (platform.openai.com/docs/guides/embeddings)——text-embedding-3 models 的实践参考，包括 Matryoshka dimension reduction
-- MTEB Leaderboard (huggingface.co/spaces/mteb/leaderboard)——跨任务和语言比较所有 embedding models 的实时 benchmark
-- [Muennighoff et al., "MTEB: Massive Text Embedding Benchmark" (EACL 2023)](https://arxiv.org/abs/2210.07316)——定义 leaderboard 报告的 8 类任务（classification、clustering、pair classification、reranking、retrieval、STS、summarization、bitext mining）的 benchmark；信任单个 MTEB score 前请先阅读
-- [Sentence Transformers documentation](https://www.sbert.net/)——bi-encoder vs cross-encoder、pooling strategies，以及本课实现的 ingest-split-embed-store RAG pipeline 的规范参考
+- Mikolov et al., "Efficient Estimation of Word Representations in Vector Space" (2013)：开启 embedding 革命的 Word2Vec 论文，包含 king-queen 类比
+- Reimers & Gurevych, "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks" (2019)：如何训练句子级相似度 bi-encoder，是现代 embedding 模型的基础
+- Kusupati et al., "Matryoshka Representation Learning" (2022)：OpenAI text-embedding-3 采用的可变维度 embedding 背后的技术
+- Malkov & Yashunin, "Efficient and Robust Approximate Nearest Neighbor using Hierarchical Navigable Small World Graphs" (2018)：HNSW 论文，大多数生产向量搜索背后的算法
+- OpenAI Embeddings Guide (platform.openai.com/docs/guides/embeddings)：text-embedding-3 模型的实践参考，包括 Matryoshka 维度缩减
+- MTEB Leaderboard (huggingface.co/spaces/mteb/leaderboard)：跨任务和语言比较所有 embedding 模型的实时 benchmark
+- [Muennighoff et al., "MTEB: Massive Text Embedding Benchmark" (EACL 2023)](https://arxiv.org/abs/2210.07316)：定义 leaderboard 报告的 8 类任务（classification、clustering、pair classification、reranking、retrieval、STS、summarization、bitext mining）的 benchmark；信任单个 MTEB 分数前请先阅读
+- [Sentence Transformers documentation](https://www.sbert.net/)：bi-encoder vs cross-encoder、pooling strategies，以及本课实现的 ingest-split-embed-store RAG pipeline 的规范参考
