@@ -1,0 +1,90 @@
+{
+  "lesson": "07-memory-virtual-context-memgpt",
+  "title": "记忆：虚拟上下文和 MemGPT",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "MemGPT 建立在哪个 OS analogy 上？",
+      "options": [
+        "Processes and threads",
+        "Virtual memory：main context 是 RAM，external store 是 disk，memory tools 负责 page in 和 page out",
+        "Network sockets",
+        "File descriptors"
+      ],
+      "correct": 1,
+      "explanation": "MemGPT 把 prompt 映射为 RAM，把 external store 映射为 disk，把 memory tools 映射为 page-fault-style transfers。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么更大的 context windows 不能完全解决 memory？",
+      "options": [
+        "Providers 把它们限制在 4k tokens",
+        "即使有 128k windows，overflow、attention dilution 和缺乏 cross-session persistence 仍会造成问题",
+        "Long context 不花成本",
+        "模型拒绝长输入"
+      ],
+      "correct": 1,
+      "explanation": "Mem0 测得 128k-window baselines 仍会漏掉 4k agent 加 external memory 能抓住的事实；overflow、dilution 和 persistence 仍然存在。"
+    },
+    {
+      "stage": "check",
+      "question": "下面哪一个不是 MemGPT 的 canonical memory tools？",
+      "options": [
+        "core_memory_append",
+        "archival_memory_search",
+        "conversation_search",
+        "gradient_memory_update"
+      ],
+      "correct": 3,
+      "explanation": "没有 gradient memory tool；tool surface 是 core/archival/conversation operations。"
+    },
+    {
+      "stage": "check",
+      "question": "MemGPT 中的 interrupt pattern 做什么？",
+      "options": [
+        "它在任何错误上停止整个 agent run",
+        "对话中途 agent 调用 memory tool，runtime 执行它，并把结果拼接进下一 turn",
+        "它完全绕过 context window",
+        "它触发模型 retrain"
+      ],
+      "correct": 1,
+      "explanation": "Memory-as-interrupt：调用 memory tool，runtime 获取结果，结果作为下一 turn 的新 observation 返回（类似 Unix read()）。"
+    },
+    {
+      "stage": "check",
+      "question": "MemGPT 在 2024 年演化成了哪个 production system？",
+      "options": [
+        "Mem0",
+        "Letta",
+        "Zep",
+        "Pinecone"
+      ],
+      "correct": 1,
+      "explanation": "MemGPT 在 2024 年 9 月变成 Letta；research repo cpacker/MemGPT 仍作为源头存在。"
+    },
+    {
+      "stage": "post",
+      "question": "在这个语境中，memory poisoning 是什么？",
+      "options": [
+        "一个损坏 vector indices 的 bug",
+        "攻击者内容被存成 memory note，并在未来 recalls 中被重新摄入",
+        "RAM 可用时却从 disk 读取",
+        "Embedding model version drift"
+      ],
+      "correct": 1,
+      "explanation": "External memory 是被检索出的文本；如果 attacker-reachable content 落入 memory note，agent 会在下一次 session 重新摄入它。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课说 production memory systems 都是 MemGPT variants？",
+      "options": [
+        "它们使用同一个 vector DB",
+        "Letta、Mem0、Assistants threads 和 Claude Agent SDK 都运行 two-tier（或更多层）paged-memory pattern；差异在 operational shape",
+        "MemGPT 拥有商标",
+        "它们共享 weights"
+      ],
+      "correct": 1,
+      "explanation": "按 operational shape 选择，而不是按 pattern；它们都共享 MemGPT 的 page in/out skeleton。"
+    }
+  ]
+}
