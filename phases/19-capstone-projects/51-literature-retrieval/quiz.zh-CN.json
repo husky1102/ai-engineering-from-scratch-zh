@@ -1,0 +1,78 @@
+{
+  "lesson": "51-literature-retrieval",
+  "title": "文献检索",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 retrieval client 同时运行 BM25 pass 和 citation graph pass？",
+      "options": [
+        "因为 BM25 需要 graph 来构建它的 index",
+        "因为 lexical hits 会漏掉使用不同词汇的 foundational papers，而 graph hits 会漏掉与 seed 没有共享 citation 的 paper",
+        "因为 mock APIs 要求这样",
+        "因为 parser 否则会失败"
+      ],
+      "correct": 1,
+      "explanation": "每个 pass 都会捕捉另一个 pass 漏掉的内容。lexical 覆盖共享词汇；graph 覆盖 ancestor 和 descendant papers，而不管词汇是否相同。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 citation graph traversal 被限制在两跳？",
+      "options": [
+        "因为超过两跳后，结果集往往会偏离主题并压垮下游 ranking",
+        "因为 Python recursion limit 禁止三跳",
+        "因为 BM25 只能给两跳远的内容评分",
+        "因为 corpus 只存储两层 citation"
+      ],
+      "correct": 0,
+      "explanation": "两跳是实用上限。三跳在连通 graph 上会让结果集爆炸，而且很少返回更多切题 paper。"
+    },
+    {
+      "stage": "check",
+      "question": "对于出现在每个 document 中的 term，idf 会计算成什么？",
+      "options": [
+        "一个很大的正值",
+        "一个接近零的值",
+        "负无穷",
+        "未定义；BM25 实现会跳过它"
+      ],
+      "correct": 1,
+      "explanation": "当 df 等于 N 时，log 内部的分子和分母接近，而 +1 会让该 term 非负但很小。普遍常见 term 的贡献接近零。"
+    },
+    {
+      "stage": "check",
+      "question": "merge step 使用哪个 key 对两个 pass 的 hits 去重？",
+      "options": [
+        "Title text",
+        "Stable paper id",
+        "Year and first author",
+        "BM25 score bucket"
+      ],
+      "correct": 1,
+      "explanation": "Paper id 是稳定 handle。Title 和 author 会在不同版本中重复，单独 year 有歧义。"
+    },
+    {
+      "stage": "check",
+      "question": "对于距离 seed set 两跳的 paper，graph_score 会返回什么？",
+      "options": [
+        "零",
+        "默认 0.3",
+        "默认 1.0",
+        "BM25 score 除以十"
+      ],
+      "correct": 1,
+      "explanation": "默认 graph score schedule 是零跳 1.0、一跳 0.6、两跳 0.3，超过两跳为零。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 corpus 要加载一次到 RetrievalClient 中，而不是每个 query 重新获取？",
+      "options": [
+        "因为 mock APIs 每次调用都很慢",
+        "因为 BM25 index 和 citation graph 在构造时构建一次，并在多个 query 间复用",
+        "因为 parser 是全局的",
+        "因为 recency score 要求这样"
+      ],
+      "correct": 1,
+      "explanation": "index 构建是昂贵步骤。复用 index 会把这项成本摊销到 client 处理的每个 query 上。"
+    }
+  ]
+}
