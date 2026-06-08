@@ -1,0 +1,78 @@
+{
+  "lesson": "28-self-hosted-serving-selection",
+  "title": "自托管 Serving 选型 — llama.cpp、Ollama、TGI、vLLM、SGLang",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课把哪个引擎选作开发笔记本上的一行命令默认项？",
+      "options": [
+        "TGI",
+        "Ollama",
+        "vLLM",
+        "llama.cpp"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪个 2025 年事件让新项目的默认选择远离 TGI？",
+      "options": [
+        "TGI 被 Anthropic 收购",
+        "TGI 提高了价格",
+        "TGI 放弃了 CUDA 支持",
+        "TGI 于 2025 年 12 月 11 日进入维护模式，之后只修 bug"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪种硬件约束会强制选择 llama.cpp，并排除 vLLM / TRT-LLM？",
+      "options": [
+        "Apple M4",
+        "AMD MI300X",
+        "NVIDIA Hopper",
+        "仅 CPU（没有加速器）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "由于 RadixAttention，本课把哪个引擎定位为适合 agentic 多轮和前缀密集工作负载？",
+      "options": [
+        "Ollama",
+        "llama.cpp",
+        "SGLang",
+        "TGI"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课推荐在同一套 GGUF 或 HF 权重上使用哪条 dev-to-prod 流水线？",
+      "options": [
+        "从头到尾只用 TRT-LLM",
+        "开发用 Ollama，生产也用 Ollama",
+        "开发用 Ollama，staging 用 llama.cpp，生产用 vLLM（前缀密集时用 SGLang）",
+        "到处都用 TGI"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么不鼓励把 Ollama 用于共享生产？",
+      "options": [
+        "它是闭源的",
+        "它只能在 Windows 上运行",
+        "Go HTTP 序列化带来开销，并发管理比 vLLM 简单，OpenTelemetry 支持滞后",
+        "它不能加载 GGUF"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
