@@ -1,0 +1,78 @@
+{
+  "lesson": "20-bias-representational-harm",
+  "title": "LLMs 中的 Bias 与 Representational Harm",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课如何区分 representational harm 与 allocational harm？",
+      "options": [
+        "Representational harm 只对 vision models 重要",
+        "Representational harm 是 stereotypes / erasure / demeaning portrayal；allocational harm 是某个 group 的 unequal material outcomes",
+        "Representational 是 computational；allocational 是 statistical",
+        "Allocational harm 只会 offline 发生"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "以下哪一项是 Gallegos et al. 2024 提出的三类 evaluation-metric categories？",
+      "options": [
+        "Pre-RLHF、mid-RLHF、post-RLHF",
+        "Vision、audio、text",
+        "WEAT、BLEU、ROUGE",
+        "Embedding-based、probability-based、generated-text-based"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么除了 single-axis evaluation 还需要 intersectional fairness evaluation？",
+      "options": [
+        "Intersectionality 与 cross-validation 相同",
+        "Single-axis measures 计算更便宜",
+        "Single-axis 是唯一法律允许的方法",
+        "只在交叉处出现的 bias（例如 gender x race）会被一次只看一个 axis 的 evaluations 漏掉"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "WinoIdentity（COLM 2025）引入了什么？",
+      "options": [
+        "对 demographic classifiers 的 adversarial attack",
+        "面向 identity terms 的新 tokenizer",
+        "Embedding space 中 WEAT 的替代品",
+        "Uncertainty-based intersectional fairness evaluation：比较模型在 intersectional identity tuples 上的 outcomes uncertainty，而不仅是 point predictions"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "以下哪一项是 bias 的 mechanistic-interpretability approach？",
+      "options": [
+        "从 PPO 切换到 DPO",
+        "识别 MLP layers 中的 gender neurons、使用 SAEs 暴露 race-correlated features，或操控特定 attention heads（UniBias）",
+        "添加更多 KL regularization",
+        "重新标注 training set"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "10-year meta-critique（arXiv:2508.11067）如何评价 bias literature？",
+      "options": [
+        "它过度聚焦 binary-gender bias，忽视其他 axes（disability、religion、migration status、multi-lingual identity），可能通过 neglect 伤害 marginalized groups",
+        "它回避 quantitative methods",
+        "它过度强调 intersectionality",
+        "它在所有 identity axes 上都很均衡"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
