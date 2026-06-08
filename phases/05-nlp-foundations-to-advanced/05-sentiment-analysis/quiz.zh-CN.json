@@ -1,0 +1,102 @@
+{
+  "lesson": "05-sentiment-analysis",
+  "title": "情感分析",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 'The food was not great' 对 naive BoW 分类器来说是难例？",
+      "options": [
+        "它没有标点",
+        "它混合了英语和法语",
+        "否定会翻转意义，但 bag of words 丢掉了 'not' 和 'great' 之间的关系",
+        "它包含的 token 太少"
+      ],
+      "correct": 2,
+      "explanation": "BoW 无法把 'not' 绑定到它否定的词上，所以分类器会错过 polarity 翻转。"
+    },
+    {
+      "stage": "pre",
+      "question": "经典情感分析由哪两步组成？",
+      "options": [
+        "先翻译，再分类",
+        "先 embedding，再聚类",
+        "表示（向量化文本）和分类（在向量上训练线性模型）",
+        "先搜索，再排序"
+      ],
+      "correct": 2,
+      "explanation": "经典情感分析是特征提取之后接线性分类器。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 Naive Bayes 尽管有 'naive' 独立性假设仍然有效？",
+      "options": [
+        "在稀疏文本特征和中等数据量下，分类器主要关心每个词偏向哪一边，而不是精确联合概率",
+        "Naive Bayes 会秘密学习交互项",
+        "这个假设对文本其实是真的",
+        "Laplace smoothing 修复了依赖关系"
+      ],
+      "correct": 0,
+      "explanation": "即便独立性假设是错的，每个词的偏向信息也足以很好地分类。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么在预处理中加入带 'NOT_' 前缀的 token？",
+      "options": [
+        "为了归一化大小写",
+        "为了做词干提取",
+        "为了把 'good' 和 'NOT_good' 变成独立特征，让分类器可以给它们相反权重",
+        "为了缩小词表"
+      ],
+      "correct": 2,
+      "explanation": "Negation scoping 会把被否定的形式拆成不同特征，让 BoW 分类器能建模翻转。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么在情感分析中移除 stopwords 有风险？",
+      "options": [
+        "否定词（'not'、'no'、'never'）通常被当作 stopwords，但它们携带情感信号",
+        "Stopword 列表太长",
+        "它会增加稀疏性",
+        "Stopword removal 会破坏 tokenization"
+      ],
+      "correct": 0,
+      "explanation": "默认 stopword 列表会删除否定词和类似的情感信号载体。"
+    },
+    {
+      "stage": "post",
+      "question": "当情感类别不平衡时，应该报告哪个指标？",
+      "options": [
+        "Macro-F1（每类 F1 的等权平均）",
+        "只报告 accuracy",
+        "Mean squared error",
+        "只报告 Micro-F1"
+      ],
+      "correct": 0,
+      "explanation": "Macro-F1 会迫使少数类也被计入；accuracy 或 micro-F1 会隐藏它。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该跳过经典模型，改用 transformer 做情感分析？",
+      "options": [
+        "当你少于 100 个样本时",
+        "当延迟很关键时",
+        "当你需要可解释性时",
+        "讽刺检测、情感会转折的长文档、aspect-based sentiment 或低资源语言"
+      ],
+      "correct": 3,
+      "explanation": "讽刺、aspect-based 和跨语言情感超出了经典 BoW 模型的能力范围。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 L2 regularization 对文本上的 logistic regression 很重要？",
+      "options": [
+        "计算梯度必须用它",
+        "避免 ReLU dead units",
+        "加速矩阵求逆",
+        "否则稀疏高维文本特征会让模型记住训练样本"
+      ],
+      "correct": 3,
+      "explanation": "L2 能防止文本这种稀疏特征、高维场景下的过拟合。"
+    }
+  ]
+}
