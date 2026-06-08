@@ -1,0 +1,78 @@
+{
+  "lesson": "87-end-to-end-safety-gate",
+  "title": "Capstone 87 — End-to-End Safety Gate",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "三个 checkpoints 位于 request lifecycle 的哪里？",
+      "options": [
+        "三个都在 model 完成后运行",
+        "Pre-gen 在 model 前运行在 prompt 上，during-gen 过滤 stream，post-gen 运行在 completed output 上",
+        "三个都在 model 被调用前运行",
+        "只有 post-gen 运行；pre-gen 和 during-gen 是别名"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "during-gen filtering 的目标是什么？",
+      "options": [
+        "把 output 翻译成另一种语言",
+        "buffer chunks，并在已知 harmful continuation 出现且用户看到之前提前终止 stream",
+        "提高 token throughput",
+        "用 refusal 替换 prompt"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "aggregator 如何决定 final action？",
+      "options": [
+        "对每个 signal 的 confidences 求平均",
+        "取 detector、token-filter、classifier 和 rules signals 中的最大 severity，并映射到 block、redact、warn 或 allow",
+        "第二次调用模型",
+        "只看 rules engine"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 gate 要为每个 request 发出 structured RequestTrace？",
+      "options": [
+        "为了拖慢系统",
+        "为了给 reviewer 一条 per-checkpoint audit trail，让任一 layer 的 regression 都能追踪到正确 module",
+        "为了替换 logging",
+        "为了把 trace 复制进 prompt"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "当 pre-gen confidence 超过 block threshold 时会发生什么？",
+      "options": [
+        "仍然调用 model 以保证完整性",
+        "gate 返回 policy refusal，并完全跳过 during-gen 和 post-gen",
+        "gate 抛出异常",
+        "gate 降低 threshold 并重试"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 demo 有意让某些 encoding-trick prompts 到达 during-gen？",
+      "options": [
+        "因为 encoding tricks 不是真实攻击",
+        "因为 input pipeline 不一定及时 normalize 它们；during-gen filter 是捕获 leaked continuation 的 defense in depth",
+        "因为 model 无论如何会拒绝它们",
+        "因为 rules engine 处理 encoding"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
