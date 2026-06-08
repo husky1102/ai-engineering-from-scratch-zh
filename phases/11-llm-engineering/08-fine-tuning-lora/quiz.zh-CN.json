@@ -1,0 +1,37 @@
+[
+  {
+    "question": "LoRA（Low-Rank Adaptation）背后的核心洞见是什么？",
+    "options": ["大多数 weights 都不重要", "fine-tuning 期间的 weight updates 具有低 intrinsic rank，因此可以用两个小矩阵近似，而不是更新完整 weight matrix", "Fine-tuning 只需要最后一层", "更小的模型总是更好"],
+    "correct": 1,
+    "explanation": "Aghajanyan et al. 证明 fine-tuning updates 位于低维子空间中。LoRA 利用这一点，把 update 表示为 W + BA，其中 B (d x r) 和 A (r x d) 具有较小 rank r，通常为 8-64。",
+    "stage": "pre"
+  },
+  {
+    "question": "与 full fine-tuning 一个 8B 模型相比，LoRA 节省多少内存？",
+    "options": ["没有节省", "通过冻结 base weights 并训练 <1% 的参数，从 ~56GB 降到 ~6GB", "减少 50%", "只节省磁盘空间"],
+    "correct": 1,
+    "explanation": "Full fine-tuning 需要为全部 8B 参数保存 gradients 和 optimizer states（~56GB）。LoRA 冻结 base weights，只训练 adapter matrix（rank 16 时约 80M 参数），总共需要 ~6GB。",
+    "stage": "pre"
+  },
+  {
+    "question": "QLoRA 是什么？",
+    "options": ["Quantized LoRA：base model 以 4-bit precision 加载，而 LoRA adapter 以 16-bit 训练，结合两种技术的内存节省", "更快版本的 LoRA", "应用于量化 activations 的 LoRA", "一种不同的 fine-tuning algorithm"],
+    "correct": 0,
+    "explanation": "QLoRA（Dettmers et al.）以 4-bit（NF4 quantization）加载冻结的 base model，同时用 FP16/BF16 训练 LoRA adapter。这使得在单张消费级 GPU、6GB VRAM 中微调 7B 模型成为可能。",
+    "stage": "post"
+  },
+  {
+    "question": "LoRA 中的 'rank' 参数（r）控制什么？",
+    "options": ["training epochs 的数量", "adapter 的容量：更高 rank 能捕捉更复杂的 adaptation，但会使用更多参数和内存", "learning rate", "要 fine-tune 的层数"],
+    "correct": 1,
+    "explanation": "Rank r 决定 adapter matrix A (r x d) 和 B (d x r) 的大小。Rank 4 训练很少参数（快、便宜）。Rank 64 训练更多参数（表达力更强）。多数任务在 rank 8-32 上表现良好。",
+    "stage": "post"
+  },
+  {
+    "question": "把 LoRA weights 合并回 base model 时会发生什么？",
+    "options": ["模型变得更大", "adapter matrix 被加到 base weights 上（W_merged = W_base + B*A），产生一个没有推理开销的标准模型", "模型需要重新训练", "合并是不可能的"],
+    "correct": 1,
+    "explanation": "由于 LoRA 添加的是 W_base + B*A，你可以一次性计算 B*A，并永久加到 W_base。合并后的模型具有与原始模型相同的架构和推理速度，没有 adapter overhead。",
+    "stage": "post"
+  }
+]
