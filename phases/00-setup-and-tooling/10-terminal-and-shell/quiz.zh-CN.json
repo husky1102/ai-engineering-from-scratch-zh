@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "在 shell 命令中，管道操作符 '|' 做什么？",
+      "options": [
+        "并行运行两个命令",
+        "把一个命令的标准输出作为下一个命令的标准输入",
+        "把命令输出保存到文件",
+        "把两个文件合并成一个"
+      ],
+      "correct": 1,
+      "explanation": "管道操作符会把命令连接成一条 pipeline。例如，'cat log.txt | grep error' 会把 log.txt 的内容作为输入发送给 grep，然后 grep 筛选出包含 'error' 的行。"
+    },
+    {
+      "stage": "pre",
+      "question": "当你关闭启动某个运行中进程的终端时，会发生什么？",
+      "options": [
+        "该进程会继续在后台运行",
+        "该进程会收到 hangup 信号（SIGHUP），通常会终止",
+        "该进程会暂停，直到你打开新终端",
+        "该进程会自动迁移为系统服务"
+      ],
+      "correct": 1,
+      "explanation": "关闭终端会向子进程发送 SIGHUP，默认情况下会导致它们终止。tmux、nohup 或 screen 这样的工具可以防止这种情况。"
+    },
+    {
+      "stage": "post",
+      "question": "对于长时间运行的训练任务，相比使用 'nohup command &'，tmux 的关键优势是什么？",
+      "options": [
+        "tmux 比 nohup 使用更少 CPU",
+        "tmux 允许你 detach、reattach，并在多个窗格中查看实时输出",
+        "tmux 会自动重启失败的进程",
+        "tmux 会压缩进程输出以节省磁盘空间"
+      ],
+      "correct": 1,
+      "explanation": "tmux 会创建持久会话，你可以先 detach，之后再 reattach，并在多个窗格中看到实时输出。nohup 只会记录到文件，无法交互或重新连接。"
+    },
+    {
+      "stage": "post",
+      "question": "'python train.py > output.log 2>&1' 完成了什么？",
+      "options": [
+        "运行 train.py，并且只把错误保存到 output.log",
+        "运行 train.py，并把标准输出和标准错误都重定向到 output.log",
+        "运行 train.py 两次，并记录第二次运行",
+        "以双倍内存分配运行 train.py"
+      ],
+      "correct": 1,
+      "explanation": "'> output.log' 会把 stdout 重定向到文件。'2>&1' 会把 stderr 发送到和 stdout 相同的位置。结果是普通输出和错误都会被捕获到同一个文件中。"
+    },
+    {
+      "stage": "post",
+      "question": "哪个命令可以让你从本地浏览器访问 GPU 机器上运行在 8888 端口的远程 Jupyter notebook？",
+      "options": [
+        "scp -P 8888 user@gpu-box:~/notebook.ipynb",
+        "ssh -L 8888:localhost:8888 user@gpu-box",
+        "rsync -avz user@gpu-box:8888 localhost:8888",
+        "ssh user@gpu-box --forward-port 8888"
+      ],
+      "correct": 1,
+      "explanation": "SSH 本地端口转发（-L）会把远程端口映射到你的本地机器。运行这个命令后，在浏览器中打开 localhost:8888 就能访问远程 Jupyter 服务器。"
+    }
+  ]
+}
