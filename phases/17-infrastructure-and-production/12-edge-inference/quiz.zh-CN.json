@@ -1,0 +1,78 @@
+{
+  "lesson": "12-edge-inference",
+  "title": "Edge Inference：Apple Neural Engine、Qualcomm Hexagon、WebGPU/WebLLM、Jetson",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "按本课所述，使 mobile LLM inference 慢于 datacenter 的核心约束是什么？",
+      "options": [
+        "Wi-Fi latency",
+        "Compute throughput",
+        "Memory bandwidth（mobile DRAM 为 50-90 GB/s，而 HBM3 为 2-3 TB/s）",
+        "Storage capacity"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 Apple Neural Engine 能避免 CPU-NPU copy overhead？",
+      "options": [
+        "它使用 PCIe 5.0",
+        "Core ML 会禁用 KV cache",
+        "它在 copy 前把 weights 转码为 FP4",
+        "Apple Silicon 采用 unified memory：CPU 和 ANE 共享同一池"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课为浏览器中的 WebGPU + WebLLM 推荐哪种 quantization format？",
+      "options": [
+        "NVFP4",
+        "FP8",
+        "通过 mlc_llm convert_weight 编译的 Q4 MLC (q4f16_1)",
+        "GGUF Q4_K_M"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课报告的 2026 年 WebGPU mobile coverage 大约是多少？",
+      "options": [
+        "所有浏览器 100%",
+        "只有 iOS Safari",
+        "低于 10%",
+        "约 70-75%，Firefox Android 仍在追赶"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么在典型手机上保持 128K context 不现实？",
+      "options": [
+        "Tokenizers 在超过 8K 后会失败",
+        "Model weights 加 32K tokens 的 KV cache，再加 OS overhead，很容易超过 8 GB RAM 预算",
+        "WebGPU 将 context 限制为 4K",
+        "iOS 禁止长上下文"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 voice 被强调为 edge inference 的 killer app？",
+      "options": [
+        "Voice agents 对 latency 敏感（first token < 500 ms），而 local inference 完全消除 network latency",
+        "Voice models 不需要 KV cache",
+        "Voice models 总能放进 50 MB",
+        "Voice 只能在 WebAssembly 中运行"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
