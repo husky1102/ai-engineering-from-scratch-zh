@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "什么是 “single-agent ceiling”？",
+      "options": ["一个 agent 能使用的最大工具数量", "单个 agent 因为任务超过一个 context window、需要不同 expertise，或需要 parallel work 而失败的那个点", "agent 每分钟能发起的 API calls 上限", "能在单个 GPU 上运行的最大模型尺寸"],
+      "correct": 1,
+      "explanation": "single agent 只有一个 context window、一个 system prompt，并且按顺序处理。当任务需要读取 50 个文件（context overflow）、在 research 和 coding 之间切换（mixed expertise），或同时做独立工作（parallelism）时，single agent 就会崩掉。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么可能会使用多个 specialized agents，而不是一个强大的 general agent？",
+      "options": ["多个 agents 总是比一个大模型更便宜", "每个 agent 可以有 focused system prompt、更小的 context 和 specialized tools，从而在自己的 specific subtask 上表现更好", "多个 agents 可以共享同一个 context window", "General agents 不能使用 tools"],
+      "correct": 1,
+      "explanation": "optimized for search 的 researcher agent、optimized for implementation 的 coder agent、optimized for code quality 的 reviewer agent，各自都会比一个试图同时扮演三种角色的 single agent 做得更好。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候 pipeline（sequential）multi-agent pattern 比 parallel fan-out pattern 更好？",
+      "options": ["当你想最小化 total latency 时", "当每个 stage 都依赖上一个 stage 的 output 时，例如先 research、再 code、再 review", "当所有 subtasks 彼此独立时", "当你的 GPU 数量多于 tasks 时"],
+      "correct": 1,
+      "explanation": "当工作本质上是 sequential 时，pipeline patterns 才合适：coder 需要 researcher 的 output，reviewer 需要 coder 的 output。subtasks 独立时，parallel fan-out 更好。"
+    },
+    {
+      "stage": "post",
+      "question": "multi-agent systems 中的 supervisor pattern 是什么？",
+      "options": ["由人类手动给每个 agent 分配 tasks", "一个 central orchestrator agent，负责分解 task、委派给 worker agents、收集结果并决定 next steps", "一个记录 agent actions 以便 debugging 的 monitoring system", "agents 投票选出最佳 response 的 pattern"],
+      "correct": 1,
+      "explanation": "supervisor agent 像项目经理：把 task 拆成 subtasks，分配给 specialized workers，review 它们的 output，并决定是 iterate 还是 finalize。这给 workflow 提供 centralized control。"
+    },
+    {
+      "stage": "post",
+      "question": "multi-agent systems 相比 single agents 的主要 tradeoff 是什么？",
+      "options": ["Multi-agent systems 总是产生更低质量的结果", "多个 LLM calls 与 inter-agent communication 带来更高 complexity、latency 和 cost，用来换取对复杂任务更好的处理能力", "Multi-agent systems 需要更多 training data", "Multi-agent systems 不能使用 external tools"],
+      "correct": 1,
+      "explanation": "每增加一个 agent，都意味着更多 LLM calls（cost）、更多 round trips（latency）和更多 failure modes（debugging complexity）。只有当任务确实超过 single agent 能处理的范围时，multi-agent 才值得。"
+    }
+  ]
+}
