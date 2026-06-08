@@ -1,0 +1,78 @@
+{
+  "lesson": "71-classical-metrics",
+  "title": "经典指标",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 tokenizer 要在 metric layer 选择，而不是在 runner layer 选择？",
+      "options": [
+        "无论 tokenizer 如何选择，metric implementations 都是 O(n)",
+        "tokenizer 定义了什么算作 token match；替换它会改变 benchmark",
+        "Numpy 要求在 import time 提供 tokenizer",
+        "Tokenizers 是 model-specific 的，runner 看不到 model"
+      ],
+      "correct": 1,
+      "explanation": "BLEU 和 F1 对 tokenisation 很敏感。把 tokenizer 绑定到 metric 可以让 scores 可复现，也能让你明确指出规则。"
+    },
+    {
+      "stage": "pre",
+      "question": "modified n-gram precision 做了 plain n-gram precision 不做的什么事？",
+      "options": [
+        "它使用不同的 log base",
+        "它会用任意 reference 中看到的最大 count 来 clip 每个 candidate n-gram count",
+        "它比 plain precision 运行更快",
+        "它返回 0 到 100 的值，而不是 0 到 1"
+      ],
+      "correct": 1,
+      "explanation": "按 reference cap 进行 clipping，可以阻止 candidate 通过反复重复一个 high-precision word 来虚增 score。"
+    },
+    {
+      "stage": "check",
+      "question": "BLEU 为什么使用 brevity penalty？",
+      "options": [
+        "没有它时，非常短但匹配少量词的 candidate 会得到很高 precision 和不公平的高 BLEU",
+        "长 candidates 会让 geometric mean 数值不稳定",
+        "brevity penalty 替代了 n-gram count cap",
+        "它补偿 additive-one smoothing"
+      ],
+      "correct": 0,
+      "explanation": "只看 precision 会奖励短输出。BP 使用 exp(1 - r/c) 下调短于 reference 的 candidates。"
+    },
+    {
+      "stage": "check",
+      "question": "ROUGE-L 比较的是什么？",
+      "options": [
+        "相对于任意 reference 4-gram 的 4-gram precision",
+        "candidate 和 reference token sequences 的 longest common subsequence",
+        "candidate 和 reference strings 之间的 Levenshtein distance",
+        "character-level Jaccard index"
+      ],
+      "correct": 1,
+      "explanation": "ROUGE-L 使用 LCS length，然后计算 precision（LCS/cand-len）和 recall（LCS/ref-len），再用 F-beta 组合。"
+    },
+    {
+      "stage": "check",
+      "question": "Token-level F1 在哪种情况下返回 1.0？",
+      "options": [
+        "prediction 为空而 target 非空时",
+        "prediction 和 target 都为空时",
+        "prediction 是带额外噪声的 target superset 时",
+        "prediction 和 target 恰好共享一个 token 时"
+      ],
+      "correct": 1,
+      "explanation": "按约定，empty-empty 是 perfect match。任何非空 target 搭配 empty prediction 都是 0.0。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 `score` function 根据 `metric_name` 而不是 category 分派？",
+      "options": [
+        "它让同一 category 可以在不同 tasks 上使用不同 metrics，并让 dispatcher 保持 metric-agnostic",
+        "Category 比 metric_name 更难验证",
+        "metric_name 比 category 更短",
+        "runner 无法访问 category 字段"
+      ],
+      "correct": 0,
+      "explanation": "metric_name 是契约。一个 summary task 可以在一条 record 上使用 rouge_l，在另一条上使用 bleu_4；dispatcher 不需要关心。"
+    }
+  ]
+}
