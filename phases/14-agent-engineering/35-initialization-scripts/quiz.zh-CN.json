@@ -1,0 +1,90 @@
+{
+  "lesson": "35-initialization-scripts",
+  "title": "面向代理的初始化脚本",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "init script 消除了什么？",
+      "options": [
+        "推理延迟",
+        "每个会话的 setup tax：探测 runtime、列出 repo、在每个新会话中重试相同检查",
+        "Provider rate limits",
+        "Authn tokens"
+      ],
+      "correct": 1,
+      "explanation": "脚本只缴一次税，并把答案写进代理会读取的 init_report.json。"
+    },
+    {
+      "stage": "pre",
+      "question": "init script 的失败模式契约是什么？",
+      "options": [
+        "Fail soft 并继续",
+        "大声失败、快速失败、只在一个地方失败；当工作台坏掉时拒绝启动",
+        "永远成功",
+        "永远重试"
+      ],
+      "correct": 1,
+      "explanation": "全部意义就是在工作台坏掉时拒绝启动；静默 fallback 会击败这个目的。"
+    },
+    {
+      "stage": "check",
+      "question": "下面哪一项不是本课列出的 probes？",
+      "options": [
+        "Runtime versions",
+        "Dependency availability",
+        "Test command resolvability",
+        "逐 token sampling temperature"
+      ],
+      "correct": 3,
+      "explanation": "Probes 包括 runtime versions、deps、test command、paths、env vars、state freshness、last-known-good commit。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么本课说 init 必须是幂等的？",
+      "options": [
+        "它满足 SOC 2",
+        "连续运行两次时，除新 timestamp 外应是 no-op，这样它就能接入 CI、hooks 或 pre-task slash command",
+        "幂等可以省钱",
+        "JSON Schema 要求如此"
+      ],
+      "correct": 1,
+      "explanation": "幂等性让 init 可以安全地从多个入口点调用（hooks、CI、slash command）。"
+    },
+    {
+      "stage": "check",
+      "question": "last-known-good commit anchoring 是什么？",
+      "options": [
+        "团队负责人最近的 commit",
+        "将当前 commit 与 LKG 文件对比；如果 diff 超过预算且没有人类确认，就拒绝启动",
+        "repo 中最早的 commit",
+        "HEAD 与 main 的 merge base"
+      ],
+      "correct": 1,
+      "explanation": "Cloudflare 的 AI Code Review 用 LKG 限定 reviewer 范围，以防止漂移跨会话叠加。"
+    },
+    {
+      "stage": "post",
+      "question": "带 TTL 的 lock file 模式做了什么？",
+      "options": [
+        "锁住 repo，禁止编辑",
+        "成功 probe pass 后写入 prereqs.lock；之后运行在 24h 内信任该 lock，如果 manifest hash 匹配就跳过昂贵 probes",
+        "阻止所有写入 24 小时",
+        "禁用 CI"
+      ],
+      "correct": 1,
+      "explanation": "形状与 Docker layer caches 相同：idempotent probe + content hash = skip。"
+    },
+    {
+      "stage": "post",
+      "question": "什么绝不应该出现在 init hot path 中？",
+      "options": [
+        "本地 filesystem reads",
+        "Network calls、LLM calls、外部 license checks；probes 是三秒以内的确定性 plumbing",
+        "读取 env vars",
+        "读取 lockfile"
+      ],
+      "correct": 1,
+      "explanation": "调用 LLM 的 probe 是 workflow，不是 probe；init 应保持确定性。"
+    }
+  ]
+}
