@@ -1,0 +1,37 @@
+[
+  {
+    "question": "LLM inference 的两个阶段是什么？",
+    "options": ["Training 和 evaluation", "Prefill（并行处理 prompt，compute-bound）和 decode（一次生成一个 token，memory-bound）", "Encoding 和 decoding", "Forward 和 backward"],
+    "correct": 1,
+    "explanation": "Prefill 并行处理所有 prompt tokens（受 compute 限制）。Decode 以 autoregressive 方式一次生成一个 token（受加载 model weights 的 memory bandwidth 限制）。不同优化会瞄准不同阶段。",
+    "stage": "pre"
+  },
+  {
+    "question": "KV-cache 在 autoregressive generation 中消除了什么？",
+    "options": ["对 attention masks 的需要", "每个 generation step 中对所有 previous tokens 的 key 和 value vectors 的冗余重新计算", "embedding lookup", "softmax computation"],
+    "correct": 1,
+    "explanation": "没有 KV-cache 时，生成 token N 需要为前 N-1 个 tokens 重新计算 attention keys 和 values。KV-cache 存储这些 vectors，所以每个新 token 只计算自己的 K 和 V，每步节省 O(N) computation。",
+    "stage": "pre"
+  },
+  {
+    "question": "continuous batching 是什么，为什么它能提升 throughput？",
+    "options": ["把所有 requests 放进一个大 batch 处理", "当 requests 开始和结束时，动态地从 running batch 中添加和移除 requests，而不是等待整个 batch 完成", "使用更大的 batch sizes", "跨多个 models batching"],
+    "correct": 1,
+    "explanation": "在 static batching 中，短 request 会一直占着 batch slot，直到最长 request 完成。Continuous batching 会立即用新 requests 填补已完成的 slots，让 GPU 保持忙碌并提升整体 throughput。",
+    "stage": "post"
+  },
+  {
+    "question": "PagedAttention（vLLM 使用）解决了什么问题？",
+    "options": ["它加速 attention computation", "它像 virtual memory 一样用 fixed-size blocks 管理 KV-cache memory，消除 variable-length sequences 导致的 fragmentation", "它减少 model size", "它提升 tokenization speed"],
+    "correct": 1,
+    "explanation": "variable-length sequences 的 KV-cache 会导致 memory fragmentation（allocations 之间出现浪费空隙）。PagedAttention 用 fixed blocks 分配 KV-cache，并像 OS virtual memory 一样用 page table 映射它们。",
+    "stage": "post"
+  },
+  {
+    "question": "speculative decoding 是什么？",
+    "options": ["生成多个 responses 并选择最好的一个", "使用小型 draft model 提出多个 tokens，再由大型模型并行验证，从而加速 generation", "预测用户想要哪些 tokens", "缓存频繁生成的 sequences"],
+    "correct": 1,
+    "explanation": "一个小而快的模型生成 N 个 candidate tokens。大型模型在单次 forward pass 中并行验证全部 N 个。如果接受 K 个 tokens，你就用约 1 次大模型 step 的时间生成了 K 个 tokens。",
+    "stage": "post"
+  }
+]
