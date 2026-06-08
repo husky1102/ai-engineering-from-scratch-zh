@@ -1,0 +1,78 @@
+{
+  "lesson": "56-iteration-scheduler",
+  "title": "迭代调度器",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 scheduler 使用 UCB scoring，而不是总是选择当前最好的 branch？",
+      "options": [
+        "因为 UCB 计算得更快",
+        "因为 greedy picks 永远不会探索；UCB 会在 exploitation 与 exploration 之间取得平衡",
+        "因为 asyncio 要求使用 UCB",
+        "因为否则 queue 无法排序"
+      ],
+      "correct": 1,
+      "explanation": "Greedy 会锁定第一个领先者。Uniform 永远不会利用已有收益。UCB 会挑选 leader，同时通过 sqrt(ln N / n) 项为探索较少的 branches 保留容量。"
+    },
+    {
+      "stage": "pre",
+      "question": "在 UCB1 下，已完成 runs 为零的 branch 会得到什么分数？",
+      "options": [
+        "零",
+        "exploration constant c",
+        "正无穷，因此未尝试的 branches 总会先被选择",
+        "所有其他 branches 的 mean reward"
+      ],
+      "correct": 2,
+      "explanation": "本课为 runs=0 分配 +inf。这保证每个 branch 至少被尝试一次，之后才会重新访问任何 branch。"
+    },
+    {
+      "stage": "check",
+      "question": "scheduler 如何让多个 slots 保持忙碌？",
+      "options": [
+        "它在线程池中运行 runner",
+        "它为每个 dispatched hypothesis 使用 asyncio.create_task，并在 in-flight 集合上等待 FIRST_COMPLETED",
+        "它使用 multiprocessing",
+        "它在 sleep 上阻塞 event loop"
+      ],
+      "correct": 1,
+      "explanation": "每个 dispatched hypothesis 都会变成一个 task。主循环等待 FIRST_COMPLETED，因此完成的 slot 会立刻释放，并派发另一个 hypothesis。"
+    },
+    {
+      "stage": "check",
+      "question": "scheduler 什么时候会为某个 branch 发出 paper.trigger？",
+      "options": [
+        "每当一个 result 落到该 branch 上时",
+        "当第一个 result 使该 branch 的 mean 达到或超过 paper threshold 时，并且每个 branch 只触发一次",
+        "只在 run 结束时",
+        "当命中 prune floor 时"
+      ],
+      "correct": 1,
+      "explanation": "trigger 每个 branch 只触发一次，也就是该 branch 的 mean 第一次跨过 threshold 的时候。BranchStats 上的 paper_triggered flag 会防止重复触发。"
+    },
+    {
+      "stage": "post",
+      "question": "如果某个 branch 在达到 minimum-runs threshold 后 mean reward 仍低于 prune floor，会发生什么？",
+      "options": [
+        "什么都不会发生；UCB 最终会选择另一个 branch",
+        "该 branch 被标记为 pruned，并且 queue 中该 branch 上剩余的 hypotheses 会被移除",
+        "scheduler 抛出异常",
+        "reward floor 会自动降低"
+      ],
+      "correct": 1,
+      "explanation": "Pruning 会将该 branch 从未来调度中移除。Pruning 与 picker 是分开的：UCB 负责排序，pruning 负责剔除。"
+    },
+    {
+      "stage": "post",
+      "question": "scheduler 强制执行哪两个 budgets 作为硬限制？",
+      "options": [
+        "Memory 和 CPU",
+        "max_experiments（total runs）和 max_seconds（wall clock）",
+        "slots 和 queue depth",
+        "paper triggers 和 prune count"
+      ],
+      "correct": 1,
+      "explanation": "二者都会作为 stop reasons 触发。max_experiments 限制总工作量。max_seconds 限制 wall time。trace 会记录是哪一个停止了 run。"
+    }
+  ]
+}
