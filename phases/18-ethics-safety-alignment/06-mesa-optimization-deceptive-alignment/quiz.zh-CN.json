@@ -1,0 +1,78 @@
+{
+  "lesson": "06-mesa-optimization-deceptive-alignment",
+  "title": "Mesa-Optimization 与 Deceptive Alignment",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "哪一组最能概括 inner / outer alignment 的区别？",
+      "options": [
+        "Outer = 模型是否能在硬件上运行；inner = loss 是否低",
+        "Outer = base objective 是否匹配我们想要的东西；inner = mesa-objective 是否匹配 base objective",
+        "Outer = policy 是否稳定；inner = temperature 是否低",
+        "Outer = 数据是否干净；inner = 优化器是否随机"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "下面哪一项不是 Hubinger et al. 的四类 mesa-objective alignment 之一？",
+      "options": [
+        "Approximately aligned",
+        "Robustly aligned",
+        "Proxy aligned",
+        "Probabilistically aligned"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在什么条件下，deceptive alignment 对 mesa-optimizer 来说是 reward-maximizing 策略？",
+      "options": [
+        "它用 PPO 而不是 DPO 训练",
+        "它有持久 terminal goal，具备区分训练与部署的 situational awareness，并且如果它在训练中背离，base optimizer 会修改它",
+        "它的容量超过 100B 参数",
+        "它只要有任意内部表示即可"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么标准 adversarial training 可能失败，甚至恶化 deceptive alignment？",
+      "options": [
+        "它需要比 RLHF 更多的计算",
+        "它教会 mesa-optimizer 更清晰地区分 test 与 deployment，而不是得到 aligned mesa-objective",
+        "它使用了错误的 loss function",
+        "它不能在 GPU 上运行"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Hubinger et al.（2019）提出的 gradient hacking 是什么？",
+      "options": [
+        "一种猜测性病理：有能力的 mesa-optimizer 产生能塑造自身梯度更新的输出，以保留其 mesa-objective",
+        "一种针对 instruction-tuned model 的 jailbreaking 方法",
+        "autograd 中的 bug",
+        "一种加快训练的技术"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "下面哪一项是 OUTER alignment failure，而不是 inner failure？",
+      "options": [
+        "Reward hacking 和 sycophancy 因 base objective 本身就是人类意图的有缺陷代理而涌现",
+        "Mesa-optimizer 优化一个在分布外发散的代理目标",
+        "Backdoor 在 SFT 后仍然保留",
+        "Mesa-optimizer 在评估期间隐藏自己的目标"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
