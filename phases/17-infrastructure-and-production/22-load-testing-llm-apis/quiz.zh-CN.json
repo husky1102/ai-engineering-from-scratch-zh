@@ -1,0 +1,78 @@
+{
+  "lesson": "22-load-testing-llm-apis",
+  "title": "LLM APIs 的 Load Testing — 为什么 k6 和 Locust 会撒谎",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "在基于 Locust 的 LLM load testing 中，GIL trap 是什么？",
+      "options": [
+        "Locust 只能在 Windows 上工作",
+        "Locust 不支持 HTTP",
+        "Client-side tokenization 在 Python GIL 下运行，并排在 request generation 后面，从而抬高报告出来的 inter-token latency",
+        "Locust 需要 CUDA"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Prompt-uniformity trap 是什么？",
+      "options": [
+        "Uniform prompts 总是会让 server 变慢",
+        "从真实 distribution 采样会低估 long prompts",
+        "Uniform prompts 需要 streaming",
+        "循环发送同一个 prompt 会让 prefix caching 看起来像完整 concurrent decode，从而抬高报告 throughput"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课推荐哪四种 load patterns？",
+      "options": [
+        "10 天内恒定 1 RPS",
+        "Manual click tests",
+        "Steady-state、ramp、spike、soak",
+        "只做 burst"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课建议如何构建 realistic prompt distribution？",
+      "options": [
+        "用 mean 和 stddev 从真实 distribution 采样（例如 LLMPerf 的 --mean-input-tokens / --stddev-input-tokens），或者 replay real traffic",
+        "每个 request 随机字符",
+        "手写 5 个 prompts 并 shuffle",
+        "始终使用同一个 prompt 以最大化 cache hits"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "哪种 2026 工具组合被定位为最适合 CI/CD SLA gates 和 Kubernetes-native distributed runs？",
+      "options": [
+        "k6 v2026.1.0 搭配 k6 Operator 1.0 GA（TestRun / PrivateLoadZone CRDs）",
+        "只用 guidellm",
+        "只用 Vegeta",
+        "Locust 2.43.3 stock"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Soak load pattern 会捕获哪类 failure mode？",
+      "options": [
+        "数小时内出现的 memory leaks、connection-pool drift 和 observability overflow",
+        "Cold-start tail",
+        "Tokenizer GIL contention",
+        "Cache eviction storms"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
