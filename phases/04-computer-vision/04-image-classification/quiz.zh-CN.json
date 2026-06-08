@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "你的模型输出 shape 为 (N, C) 的 raw logits。你写了 `loss = cross_entropy(softmax(logits), y)`。哪里错了？",
+      "options": ["没错，这是正确 API", "cross_entropy 会在内部重新应用 softmax，因此你最终计算的是 softmax(softmax(logits))，产生接近均匀的概率和无用的 gradient", "cross_entropy 会抛出关于 shape 的 ValueError", "Accuracy 会精确下降 1/C"],
+      "correct": 1,
+      "explanation": "PyTorch 的 cross_entropy 期望 raw logits，它在内部为了 numerical stability 融合了 log_softmax 和 NLL。先应用 softmax 会得到 softmax(softmax(x))，这会把 logits 压向均匀分布，并让 gradient 接近零。Training loss 可能在前几步看起来合理，然后停滞。始终传入 raw logits。"
+    },
+    {
+      "stage": "pre",
+      "question": "你评估一个 10-class classifier，得到 92% accuracy。Class 0 有 9,000 个 example；classes 1-9 共享 1,000 个 example（大约每类 111 个，总共 10,000 个）。这个 headline number 隐藏了什么？",
+      "options": ["什么都没有，accuracy 就是 accuracy", "模型可能对每个 input 都预测 class 0，仍然得到 90%（9000/10000）；剩余 2% 可能来自任何其他 class。Per-class precision/recall 才能告诉你真实发生了什么", "Validation loss 是错的", "模型肯定 over-fitting"],
+      "correct": 1,
+      "explanation": "在 9000/1000 split（10,000 个 total example 的 90/10 imbalance）上，总是预测 majority class 会得到 9000/10000 = 90% accuracy。92% 这个数字可能隐藏九个 minority class 各自只有约 20% accuracy。Per-class precision、recall、F1 和 confusion matrix 才是能暴露这一点的 diagnostics，所以 aggregate accuracy alone 永远不足以支撑 classifier 上线。"
+    },
+    {
+      "stage": "post",
+      "question": "Mixup 会把 one-hot label 替换成 lambda * y_i + (1-lambda) * y_j 这样的 interpolated soft target。为什么这有助于 generalisation？",
+      "options": ["它让 effective batch size 翻倍", "模型被迫在 class 之间产生 smooth prediction，而不是记忆 hard one-hot target，这会同时改善 calibration 和 test accuracy", "它允许你用更大的 learning rate 训练", "它保证 train loss 为零"],
+      "correct": 1,
+      "explanation": "针对 hard one-hot target 训练，会推动 logits 在每个 training point 上变得任意尖锐，这会损害 calibration 并引发 overfitting。Mixup 对 input 和 label 做 convex combination，迫使 classifier 在 training point 之间行为平滑，这是自然图像 class 的合理先验，并且能在不增加数据的情况下稳定提升 test accuracy。"
+    },
+    {
+      "stage": "post",
+      "question": "你在 CIFAR-10 上把 `RandomCrop(32, padding=4, padding_mode='zeros')` 换成了 `padding_mode='reflect'`。为什么 reflect 在这里更好？",
+      "options": ["Reflect pad 更快", "Zero padding 会产生硬黑边，模型会学会依赖它；reflect pad 会镜像 edge pixel，让 augmented crop 看起来像自然照片", "Reflect pad 会改变 output size", "Reflect pad 是 batch normalization 要求的"],
+      "correct": 1,
+      "explanation": "Zero-padded crop 会有可见黑边，把 crop position 的信息泄露进 feature。网络可能学会看角落并隐式撤销 augmentation。Reflect pad 会镜像真实内容，因此每个 crop 仍然看起来像自然图像，网络无法在 augmentation 上作弊。"
+    },
+    {
+      "stage": "post",
+      "question": "你训练了一个 classifier，confusion matrix 显示大多数错误是 class 3 被预测为 class 5，以及 class 5 被预测为 class 3。最有影响力的下一步是什么？",
+      "options": ["在所有 class 上均匀增加更多 training data", "增加 batch size", "查看一批让模型混淆的 class-3 和 class-5 图像；这两个 class 可能确实有歧义、标错了，或在视觉上相似到需要 targeted augmentation 或重新标注 training set", "从 SGD 切换到 Adam"],
+      "correct": 2,
+      "explanation": "Confusion matrix 集中在一个 off-diagonal pair 上，说明 failure mode 是 specific 的。正确行动是检查这些图像：你经常会发现 mislabeled data、near-duplicate classes，或模型尚未学会的简单 invariance。当 failure 如此 localised 时，笼统改变（更多数据、新 optimizer）很少有帮助。"
+    }
+  ]
+}
