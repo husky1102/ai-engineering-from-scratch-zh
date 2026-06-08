@@ -1,0 +1,102 @@
+{
+  "lesson": "20-structured-outputs-constrained-decoding",
+  "title": "Structured Outputs 与 Constrained Decoding",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么只靠 prompt 写 “return JSON” 对生产不够？",
+      "options": [
+        "JSON 太冗长",
+        "Prompts 太长",
+        "Frontier models 大多数时候会遵守，但不是总是遵守；一小部分 malformed outputs 就会破坏 downstream parsers",
+        "Prompting 无法描述 schemas"
+      ],
+      "correct": 2,
+      "explanation": "Prompt-only structure 在 frontier models 上大约 80% 有效；生产需要更硬的 guarantees。"
+    },
+    {
+      "stage": "pre",
+      "question": "Constrained decoding 在每个 generation step 修改什么？",
+      "options": [
+        "KV cache",
+        "Tokenizer",
+        "Training loss",
+        "Logit vector，mask 那些会使 target grammar 失效的 tokens，使采样只发生在 valid continuations 上"
+      ],
+      "correct": 3,
+      "explanation": "Logit processor 把 invalid tokens 设为 -inf，使 softmax 不可能采样它们。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 constrained decoding 可能比 free generation 更快？",
+      "options": [
+        "模型更小",
+        "Forced scaffold tokens（例如 '{\"name\": \"'）可以不经 sampling 直接发出，同时 valid-token search space 会缩小",
+        "它完全避免 softmax",
+        "它跳过 backprop"
+      ],
+      "correct": 1,
+      "explanation": "确定的 tokens 会跳过 sampling，缩小后的 valid-token sets 会降低 decode cost。"
+    },
+    {
+      "stage": "check",
+      "question": "哪种 schema design choice 可以防止模型 premature commitment？",
+      "options": [
+        "把 'answer' 放在最前面",
+        "使用更短的 keys",
+        "把 reasoning fields 放在 answer/decision field 前，让模型先思考再承诺",
+        "使用 snake_case"
+      ],
+      "correct": 2,
+      "explanation": "Field order 是逻辑：把 reasoning 放在前面，能让模型在锁定答案前先思考。"
+    },
+    {
+      "stage": "check",
+      "question": "Outlines 这类 FSM-based constrained decoding tools 的限制是什么？",
+      "options": [
+        "它们不是 deterministic",
+        "它们把你锁定到 OpenAI",
+        "Recursive schemas 必须被 flatten；真正 recursive structures 需要 XGrammar 这样的 CFG-based engines",
+        "它们只支持 enums"
+      ],
+      "correct": 2,
+      "explanation": "FSMs 无法表示无界 recursion；CFG engines 可以处理它。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么说 Instructor 不修改 logits？",
+      "options": [
+        "Instructor 把 schema 格式化进 prompt，并 parse/retry 输出；logit masking 要么发生在 server-side，要么根本不发生",
+        "它使用 gradient updates",
+        "Anthropic 要求如此",
+        "它编辑 prompt"
+      ],
+      "correct": 0,
+      "explanation": "Instructor 使用 provider-side structured output 加 client-side validation 和 retries，而不是 logit masking。"
+    },
+    {
+      "stage": "post",
+      "question": "像 date='YYYY-MM-DD' 这样的严格 regex 会引入什么问题？",
+      "options": [
+        "它要求 CFG support",
+        "它移除了 unknown values 的 escape hatch，所以模型会编造日期，而不是返回 null/sentinel",
+        "它破坏 JSON parsing",
+        "Regex 很慢"
+      ],
+      "correct": 1,
+      "explanation": "过严 grammars 会迫使模型发明 values；始终为 unknowns 允许 null/sentinel。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该选择 vLLM guided decoding，而不是 vendor structured-output API？",
+      "options": [
+        "永远选择 vendor",
+        "只用于 tiny schemas",
+        "只与 byte-level BPE 一起使用",
+        "Self-hosted inference，你控制模型，并想要没有 retries 的 logit-level guarantees"
+      ],
+      "correct": 3,
+      "explanation": "vLLM guided decoding 适合带 logit-level constraints 的 self-hosted serving；vendor APIs 会把你锁在它们的 stack 中。"
+    }
+  ]
+}
