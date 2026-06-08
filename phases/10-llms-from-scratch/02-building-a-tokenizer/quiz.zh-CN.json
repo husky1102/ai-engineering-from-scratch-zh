@@ -1,0 +1,37 @@
+[
+  {
+    "question": "为什么基础 BPE tokenizer 在 multilingual 或 code 输入上会出问题？",
+    "options": ["BPE 天生只适用于单语言", "如果没有正确的 Unicode 处理、byte fallback 和 pre-tokenization regex，它会产生错误或低效的 token sequences", "Multilingual text 无法 tokenize", "BPE 只适用于 ASCII"],
+    "correct": 1,
+    "explanation": "朴素 BPE 实现可能无法处理多字节 Unicode 字符，可能错误地跨 word boundaries merge，也可能没有为训练 vocabulary 之外的字符提供 byte-level fallback。",
+    "stage": "pre"
+  },
+  {
+    "question": "pre-tokenization regex 在 production tokenizer 中的作用是什么？",
+    "options": ["它移除标点", "它在 BPE merges 之前按 word boundaries 切分文本，防止跨 spaces 和 word boundaries 的 merges", "它压缩 whitespace", "它把文本转换为小写"],
+    "correct": 1,
+    "explanation": "Pre-tokenization regex 会把文本切成 chunks（通常在 word boundaries、numbers 和 punctuation 处），让 BPE merges 只发生在 chunks 内。没有它，BPE 可能会把 'end' 和下一个词前面的空格合并。",
+    "stage": "pre"
+  },
+  {
+    "question": "什么是 special token，为什么 tokenizers 要专门处理它们？",
+    "options": ["频繁出现的 tokens", "像 <|endoftext|> 或 [PAD] 这样控制模型行为、且必须编码为单个特定 ID 的保留 tokens", "embedding 值最高的 tokens", "只在 evaluation 中使用的 tokens"],
+    "correct": 1,
+    "explanation": "Special tokens 具有结构用途：标记文档边界、padding sequences、指示 generation 的开始/结束。它们必须被识别并编码为精确 ID，而不能被切成 subwords。",
+    "stage": "post"
+  },
+  {
+    "question": "如何评估一个 custom tokenizer 是否优秀？",
+    "options": ["看它是否能 tokenize 你的名字", "在多样文本上测量 compression ratio（tokens per character），并与 tiktoken 等成熟 tokenizers 比较", "统计 vocabulary size", "只测量 encoding speed"],
+    "correct": 1,
+    "explanation": "Compression ratio（bytes per token 或 tokens per word）衡量效率。好的 tokenizer 会为同样文本产生更少 tokens，这意味着 context window 能容纳更多内容。应跨语言和领域比较。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么现代 LLM 更偏好 byte-level BPE 而不是 word-level tokenization？",
+    "options": ["它更快", "它可以在没有 unknown tokens 的情况下表示任何输入，同时仍能为常见 patterns 学到高效 subword merges", "它产生更小的 vocabularies", "Word-level tokenization 更准确"],
+    "correct": 1,
+    "explanation": "Word-level tokenizers 无法处理没见过的词（会产生 [UNK] tokens）。Byte-level BPE 从 raw bytes 开始（保证任何输入都能覆盖），并为常见序列学习 merges，在覆盖率和效率之间取得平衡。",
+    "stage": "post"
+  }
+]
