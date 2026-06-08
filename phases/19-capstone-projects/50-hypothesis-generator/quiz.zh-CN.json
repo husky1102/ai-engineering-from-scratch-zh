@@ -1,0 +1,78 @@
+{
+  "lesson": "50-hypothesis-generator",
+  "title": "假设生成器",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 generator 要产生一个排序队列，而不是单个 hypothesis？",
+      "options": [
+        "因为 parser 无法读取单个 block",
+        "因为 runner 需要深度，这样当第一个 hypothesis 失败时，它可以弹出下一个",
+        "因为 mock model 只能输出列表",
+        "因为 embedding 需要多个输入"
+      ],
+      "correct": 1,
+      "explanation": "生成队列的目的，是把采样成本摊销到整个循环中。当第一个 hypothesis 失败时，runner 可以弹出下一个，而不必重新采样。"
+    },
+    {
+      "stage": "pre",
+      "question": "temperature ramp 在每一轮实现了什么？",
+      "options": [
+        "它提高 parser 容忍度",
+        "它拓宽采样分布，让后续草稿可以落得离 seed 更远",
+        "它增加 embedding 维度",
+        "它把 seed 值乘以三"
+      ],
+      "correct": 1,
+      "explanation": "更高的 temperature 会拓宽采样分布。ramp 鼓励每一轮漂移得更远，让 novelty filter 有事可做。"
+    },
+    {
+      "stage": "check",
+      "question": "novelty filter 何时拒绝一个草稿？",
+      "options": [
+        "当它的 rank score 低于阈值时",
+        "当它到任一 prior survivor 的最小 cosine distance 低于 novelty threshold 时",
+        "当它的 parser 通过但 tag 数量错误时",
+        "当它的 draft pass 大于队列长度时"
+      ],
+      "correct": 1,
+      "explanation": "novelty 是到 prior survivors 的最小距离。如果这个距离低于阈值，该草稿就是近重复项，会被丢弃。"
+    },
+    {
+      "stage": "check",
+      "question": "rank score 由哪三个组件组合而成？",
+      "options": [
+        "Latency、throughput、cost",
+        "Novelty、specificity、testability",
+        "Temperature、seed、pass index",
+        "Variables、metric、baseline length"
+      ],
+      "correct": 1,
+      "explanation": "rank score 是 novelty、specificity 和 testability 的加权和。每个子分数都在零到一之间。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 mock language model 使用 temperature bucket 作为键，而不是使用原始 float？",
+      "options": [
+        "因为 float 不能被 hash",
+        "因为 bucket 让 schedule 离散化，所以 temperature 的小变化可以选中不同的脚本化草稿",
+        "因为 parser 需要整数",
+        "因为 embedding 要求这样"
+      ],
+      "correct": 1,
+      "explanation": "bucket 会离散化连续 schedule。两个相邻 temperature 可以映射到不同 bucket，并从脚本库中拉出不同草稿，这就是 mock 模拟多样化采样的方式。"
+    },
+    {
+      "stage": "check",
+      "question": "如果 mock model 产生的每个草稿都无法通过 parser，会发生什么？",
+      "options": [
+        "generator 抛出硬错误",
+        "队列为空，并且每一轮都会记录一次 parse rejection，使失败模式可审计",
+        "runner 用新 prompt 重试",
+        "novelty threshold 自动降低"
+      ],
+      "correct": 1,
+      "explanation": "parser 失败会被记录成带 parse reject 原因的日志。队列可以为空返回，而不会让循环崩溃，并且日志会解释原因。"
+    }
+  ]
+}
