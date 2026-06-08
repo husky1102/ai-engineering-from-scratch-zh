@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Cosine similarity 度量两个向量之间的什么？",
+      "options": [
+        "它们之间的 Euclidean distance",
+        "它们之间的夹角，并忽略向量大小",
+        "它们逐元素乘积的总和",
+        "任意单个维度上的最大差异"
+      ],
+      "correct": 1,
+      "explanation": "Cosine similarity 度量两个向量夹角的余弦值，并用它们的大小进行归一化。它的范围从 -1（方向相反）到 +1（方向相同），并且忽略向量长度，所以它在 NLP 中很常见，因为文档长度通常是噪声。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 L1 distance 被称为“Manhattan distance”？",
+      "options": [
+        "它是在 Manhattan 发明的",
+        "它度量沿网格移动的距离，就像在城市街区中行走",
+        "它只能在恰好二维中使用",
+        "它计算所有维度中的最大差异"
+      ],
+      "correct": 1,
+      "explanation": "L1 distance 会沿每条坐标轴求绝对差之和，对应于在只能沿坐标轴移动（不能走对角线）的网格上走出的最短路径，就像在城市街道网格中行走。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 L1 regularization (Lasso) 会产生稀疏权重，而 L2 regularization (Ridge) 不会？",
+      "options": [
+        "L1 使用的惩罚常数比 L2 更大",
+        "L1 的菱形约束在权重为零的坐标轴上有角；损失等高线很可能先在这些角上相切",
+        "L2 regularization 只作用于 bias terms",
+        "L1 regularization 会把低于阈值的权重裁剪为零"
+      ],
+      "correct": 1,
+      "explanation": "L1 约束区域是一个角与坐标轴对齐的菱形。损失函数的等高线椭圆最可能先接触菱形的某个角，在那里一个或多个权重恰好为零。L2 约束是没有角的圆形，所以接触点上的所有权重通常都非零。"
+    },
+    {
+      "stage": "post",
+      "question": "在比较概率分布时，Wasserstein distance 相比 KL divergence 有什么优势？",
+      "options": [
+        "Wasserstein 总是小于 KL divergence",
+        "即使分布不重叠，Wasserstein 也能提供有意义的梯度，而 KL 会变成无穷大",
+        "Wasserstein 是对称的，而 KL 不是",
+        "B 和 C 都正确"
+      ],
+      "correct": 3,
+      "explanation": "Wasserstein distance 是真正的 metric（对称，满足三角不等式），并且即使在分布不重叠时也能提供梯度。KL divergence 是非对称的，并且当分布不重叠时会变成无穷大，这也是 WGANs 用 Wasserstein 替代基于 KL 的 GANs 的原因。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该使用 Mahalanobis distance 而不是 Euclidean distance？",
+      "options": [
+        "当特征全都是二值（0 或 1）时",
+        "当特征尺度不同，并且彼此相关时",
+        "当你比较的是字符串而不是向量时",
+        "当你需要比 L2 更快的计算时"
+      ],
+      "correct": 1,
+      "explanation": "Mahalanobis distance 会考虑数据的协方差结构，在计算 L2 距离之前先对特征去相关并归一化。它能正确处理尺度不同且存在相关性的特征，而 Euclidean distance 会平等对待所有维度。"
+    }
+  ]
+}
