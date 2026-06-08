@@ -1,0 +1,78 @@
+{
+  "lesson": "32-token-positional-embeddings",
+  "title": "Token 和位置嵌入",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "embedding 阶段会从 (B, T) id 产生什么形状？",
+      "options": [
+        "(B, T)",
+        "(B, V)",
+        "(B, T, D)，其中 D 是模型维度",
+        "(B, T, V)，其中 V 是词表大小"
+      ],
+      "correct": 2,
+      "explanation": "每个 id 都会映射为一个 D 维向量。batch 保留 B 和 T，并新增一个特征维度 D。"
+    },
+    {
+      "stage": "check",
+      "question": "本课如何组合 token embedding 和 positional embedding？",
+      "options": [
+        "沿特征轴拼接",
+        "逐元素求和，并把位置向量广播到 batch 维度",
+        "通过一个额外线性投影",
+        "取逐元素最大值"
+      ],
+      "correct": 1,
+      "explanation": "形状为 (B, T, D) 和 (T, D) 的两个张量会相加。广播会沿 batch 轴复制位置表。"
+    },
+    {
+      "stage": "check",
+      "question": "SinusoidalPositionalEmbedding 会贡献多少可学习参数？",
+      "options": [
+        "max_context_length",
+        "max_context_length * d_model",
+        "d_model",
+        "零"
+      ],
+      "correct": 3,
+      "explanation": "sinusoidal table 由公式计算并作为 buffer 存储。它不贡献参数。"
+    },
+    {
+      "stage": "check",
+      "question": "哪种 positional encoding 不能接受超过其构造限制的序列？",
+      "options": [
+        "Sinusoidal positional embedding",
+        "Learned positional embedding",
+        "两者都是",
+        "两者都不是"
+      ],
+      "correct": 2,
+      "explanation": "在本课实现中，两个类都会在 forward 时强制 max_context_length。Learned 天然受表限制；sinusoidal 这里也受限，因为它使用预构建表。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 sinusoidal 方案在相邻特征对上同时使用 sin 和 cos？",
+      "options": [
+        "因为只用 sin 不具备周期性",
+        "因为单独的 cos 无法反向传播",
+        "使位置 p+k 的向量成为位置 p 向量的线性函数",
+        "因为它会让参数量翻倍"
+      ],
+      "correct": 2,
+      "explanation": "在相同波长上配对 sin 和 cos，位置移动 k 就是一次旋转，而旋转是线性映射。attention 随后可以通过线性投影学习相对偏移。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 embedding 的反向传播只更新 batch 中出现过的 token 表行？",
+      "options": [
+        "PyTorch 只存储非零条目的梯度",
+        "前向传播中未触碰的行根据链式法则产生零梯度",
+        "优化器会跳过没见过的行",
+        "Token id 存储在稀疏数据结构中"
+      ],
+      "correct": 1,
+      "explanation": "没有贡献到任何输出的行，对 loss 的导数为零，因此该步梯度为零。"
+    }
+  ]
+}
