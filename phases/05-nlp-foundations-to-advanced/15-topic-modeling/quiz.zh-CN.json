@@ -1,0 +1,102 @@
+{
+  "lesson": "15-topic-modeling",
+  "title": "主题建模：LDA 与 BERTopic",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "LDA 对每篇文档做了什么假设？",
+      "options": [
+        "每篇文档只属于一个主题",
+        "文档就是句子",
+        "每篇文档是主题的混合；每个主题是词上的分布",
+        "文档与主题相互独立"
+      ],
+      "correct": 2,
+      "explanation": "LDA 的生成故事是 mixed-membership：每篇文档有一个主题分布，每个主题有一个词分布。"
+    },
+    {
+      "stage": "pre",
+      "question": "BERTopic 用什么来形成主题聚类？",
+      "options": [
+        "直接在词表上做 softmax",
+        "用 sentence transformer 编码文档，用 UMAP 降维，然后用 HDBSCAN 聚类",
+        "运行 BM25 后接 k-means",
+        "端到端训练一个 LSTM"
+      ],
+      "correct": 1,
+      "explanation": "BERTopic = embeddings + UMAP + HDBSCAN，并用 class-based TF-IDF 提取主题词。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 scikit-learn 的 LDA 期望 raw counts（CountVectorizer），而不是 TF-IDF？",
+      "options": [
+        "TF-IDF 太慢",
+        "LDA 的概率模型定义在整数词项计数上；TF-IDF 会扭曲底层分布",
+        "LDA 不能处理浮点数",
+        "内存限制"
+      ],
+      "correct": 1,
+      "explanation": "LDA likelihood 假设输入是计数；喂入 TF-IDF 值会违反模型假设。"
+    },
+    {
+      "stage": "check",
+      "question": "在 BERTopic 输出中，HDBSCAN 的 -1 标签是什么意思？",
+      "options": [
+        "一个保留类别",
+        "密度算法无法有把握分配的文档所组成的 outlier cluster",
+        "Stopword cluster",
+        "Top topic"
+      ],
+      "correct": 1,
+      "explanation": "HDBSCAN 用 -1 标记未聚类的点；在 BERTopic 中，这些是无法适配任何主题的文档。"
+    },
+    {
+      "stage": "check",
+      "question": "主题模型评估中常用的默认 coherence metric 是哪一个？",
+      "options": [
+        "BLEU",
+        "Accuracy",
+        "只有 Perplexity",
+        "通过 top topic words 的滑动窗口 NPMI 计算 c_v coherence"
+      ],
+      "correct": 3,
+      "explanation": "c_v coherence（Roder et al., 2015）是规范的自动 topic-coherence metric。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候 LDA 通常比 BERTopic 更合适？",
+      "options": [
+        "在短推文上",
+        "长文档，其中 mixed-membership topic distributions 有用，且 embeddings 会截断输入",
+        "当 embeddings 有噪声时",
+        "当你需要每篇文档只有一个主题时"
+      ],
+      "correct": 1,
+      "explanation": "长文档受益于 LDA 的 mixed-membership model；BERT encoders 会截断输入。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 BERTopic 通常在短文本（推文、标题）上胜出？",
+      "options": [
+        "短文本的主题更少",
+        "它更快",
+        "嵌入空间中的语义相似性可以捕捉意义，而 bag-of-words 计数过于稀疏",
+        "它支持更多语言"
+      ],
+      "correct": 2,
+      "explanation": "BERT embeddings 为短文本提供语义相似性；在短文本中，词重叠统计往往失效。"
+    },
+    {
+      "stage": "post",
+      "question": "你应该监控哪一种常见的 LDA 失败模式？",
+      "options": [
+        "和为 1 的文档混合",
+        "与标注类别完美匹配的主题",
+        "吸收 stopwords 或极高频词的 junk topics",
+        "文档太少的主题"
+      ],
+      "correct": 2,
+      "explanation": "LDA 可能创建吸收 stopwords 的 junk topics；更严格的 min_df/max_df 和 stopword filtering 可以缓解。"
+    }
+  ]
+}
