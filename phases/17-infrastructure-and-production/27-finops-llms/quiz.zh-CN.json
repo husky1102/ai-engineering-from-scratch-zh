@@ -1,0 +1,78 @@
+{
+  "lesson": "27-finops-llms",
+  "title": "LLMs 的 FinOps — Unit Economics 与 Multi-Tenant Attribution",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么传统 FinOps 在 LLM spend 上会失效？",
+      "options": [
+        "LLMs 不花钱",
+        "LLM bills 总是免费的",
+        "Cloud providers 拒绝 itemize",
+        "Costs 是 token-transactions 而不是 resource-uptime；tags 不会从 API calls 自动传播，你必须在 call site stamp user/task/tenant"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课要求在 day one instrument 哪三个 attribution dimensions？",
+      "options": [
+        "Per-user（user_id）、per-task（task_id + route）、per-tenant（tenant_id）",
+        "Provider、model、API version",
+        "Region、AZ、datacenter",
+        "GPU、CPU、RAM"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Cost attribution 中应该拆出哪四个 token layers？",
+      "options": [
+        "Prompt、tool、memory、response",
+        "Input、output、network、disk",
+        "Cache、model、gateway、observability",
+        "GPU、CPU、RAM、storage"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Enforcement ladder 中的 kill-switch trigger 是什么？",
+      "options": [
+        "Tenant spend z-score > 4（相对 baseline）；auto-pause tenant 并 page on-call",
+        "Latency P50 > 2s",
+        "任意 5xx response",
+        "一分钟内 spend 超过 $1"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课推荐用哪个 unit metric 替代 $/M tokens？",
+      "options": [
+        "Cost per gateway",
+        "Cost per GPU-hour",
+        "Cost per second",
+        "Cost per product outcome（例如 cost per resolved support ticket、cost per generated article、cost per successful agent task）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课称哪种 attribution pattern 是 mature teams 使用的最高准确率方案？",
+      "options": [
+        "Sampling and extrapolation",
+        "Model-based allocation",
+        "Tag-and-aggregate only",
+        "Telemetry joiner —— 通过 trace IDs 将 traces join 到 billing"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
