@@ -1,0 +1,78 @@
+{
+  "lesson": "12-red-teaming-pair-automated-attacks",
+  "title": "Red-Teaming：PAIR 与自动化攻击",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 manual red-teaming 不足以评估 frontier models？",
+      "options": [
+        "它无法 scale；attack success rate 需要统计样本，而且 target 会随着每次 model release 移动",
+        "Manual prompts 总是被 filters 阻止",
+        "Manual testing 产生太多 false positives",
+        "Manual testers 不能读取 model outputs"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "PAIR 代表什么，它做什么？",
+      "options": [
+        "Prompt Automatic Iterative Refinement；一个 attacker LLM 为 target 迭代提出 jailbreaks，并把 prior attempts 作为 in-context feedback",
+        "Pairwise Adversarial Inference Routing；在 models 间路由 attacks",
+        "Pre-Action Inspection Reasoning；一种 defensive scaffolding",
+        "Persuasive Adversarial Iterative Reward；用 persuader 替换 RM"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 PAIR 对 black-box target 比 GCG 更高效？",
+      "options": [
+        "PAIR 使用比 GCG 更大的 attacker model",
+        "GCG 只攻击 open-source models",
+        "GCG 需要 white-box gradient access，并产生无法使用 in-context feedback 的不可读 suffixes；PAIR 是 black-box、natural-language，并使用 in-context learning",
+        "PAIR 会忽略 target 的 response"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 Attack Success Rate（ASR）必须同时报告 query budget 和 judge identity？",
+      "options": [
+        "因为 judges 总是一致",
+        "因为 budgets 只能由 JailbreakBench 设置",
+        "因为 ASR 会随 attacker 被允许的 queries 数量变化，也会随哪个 LLM 判断 response 为 jailbreak 而变化",
+        "因为 ASR 是 export-control regulations 要求的"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "以下哪种 automated attack 最适合描述为 'tree-of-attacks with pruning'？",
+      "options": [
+        "TAP",
+        "GCG",
+        "PAP",
+        "AutoDAN"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "哪个标准化 benchmark 使用覆盖 7 个 categories 的 510 个 behaviours，并包含 semantic 与 functional harm tests？",
+      "options": [
+        "JailbreakBench",
+        "HarmBench",
+        "WMDP",
+        "TruthfulQA"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
