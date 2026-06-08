@@ -1,0 +1,78 @@
+{
+  "lesson": "58-vision-encoder-patches",
+  "title": "视觉编码器 Patches",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 Vision Transformer 使用 patches，而不是每个 pixel 输入一个 token？",
+      "options": [
+        "Patches 是 PyTorch 要求的",
+        "Pixel-per-token sequences 会让 attention compute 按二次复杂度爆炸，在典型 resolutions 下不可处理",
+        "Patches 会提升 image quality",
+        "它避免使用 tokenizer"
+      ],
+      "correct": 1,
+      "explanation": "一张 224x224 image 是 150528 个 pixel tokens。Attention 对长度是二次复杂度，因此 16x16 patching 会把 sequence 缩到 196 tokens，让 model 可处理。"
+    },
+    {
+      "stage": "pre",
+      "question": "kernel = stride = patch_size 的 Conv2d 与 flatten-then-linear 之间是什么关系？",
+      "options": [
+        "它们产生不同输出",
+        "Conv2d 是对每个 patch 表达同一个 linear projection 的更快方式",
+        "Conv2d 添加 non-linearity",
+        "Flatten-then-linear 不可能实现"
+      ],
+      "correct": 1,
+      "explanation": "每个 Conv2d output location 都会把 patch pixels 与一个 filter 做 dot product，这与 flatten-then-linear 完全相同。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 2D sinusoidal position embedding 是 deterministic，而不是 learned？",
+      "options": [
+        "Learned positions 是非法的",
+        "固定 sin/cos signals 可以干净地插值到模型未见过的 grids，这在 resolution 改变时很有用",
+        "它节省磁盘空间",
+        "必须使用 random init"
+      ],
+      "correct": 1,
+      "explanation": "固定 sinusoidal positions 在不同 resolutions 下是 deterministic 的，并让同一个 encoder 能运行在训练时没有见过的 inputs 上。"
+    },
+    {
+      "stage": "check",
+      "question": "一张 224x224 image 在 patch_size=16 且带一个 CLS token 时，输出 sequence length 是多少？",
+      "options": [
+        "196",
+        "197",
+        "224",
+        "256"
+      ],
+      "correct": 1,
+      "explanation": "224/16 = 14，所以 14x14 = 196 patches，再加一个 CLS token，总共 197 tokens。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 reconstruction（unfold then unflatten）是 patch front end 的有用 sanity check？",
+      "options": [
+        "它提升 accuracy",
+        "pixels 在没有 projection 的 patch-flatten 中 round-trip 后必须等于 input；失败意味着 unfold math 有错",
+        "这是 ONNX 要求的",
+        "它加速 inference"
+      ],
+      "correct": 1,
+      "explanation": "没有 projection 时，patch step 是可逆的。如果 round-trip 发生漂移，说明 unfold logic 有 bug，encoder 其余部分就不可靠。"
+    },
+    {
+      "stage": "post",
+      "question": "当你把本课中的 2D sinusoidal position embedding 换成 learned position embedding 时，会发生什么变化？",
+      "options": [
+        "没有任何变化",
+        "Learned positions 可以在固定 resolution 上拟合得稍好；sinusoidal positions 无需重新训练即可迁移到新 resolutions",
+        "Sinusoidal positions 会花费更多 parameters",
+        "Sinusoidal positions 每一步都是 random 的"
+      ],
+      "correct": 1,
+      "explanation": "Learned positions 在单一 resolution 上很灵活。Sinusoidal positions 不需要 parameters，并且能承受 resolution shifts。"
+    }
+  ]
+}
