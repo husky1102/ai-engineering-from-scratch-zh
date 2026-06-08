@@ -1,0 +1,90 @@
+{
+  "lesson": "11-planning-htn-and-evolutionary",
+  "title": "使用 HTN 和 Evolutionary Search 做规划",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "相对于 free-form LLM plan，HTN 增加了什么？",
+      "options": [
+        "当 operator preconditions 和 effects 被执行时，可证明的正确性",
+        "更便宜的 inference",
+        "更短的 prompts",
+        "更好的 embeddings"
+      ],
+      "correct": 0,
+      "explanation": "HTN 的 symbolic operators 带 preconditions 和 effects，能 by construction 保证 soundness。"
+    },
+    {
+      "stage": "pre",
+      "question": "AlphaEvolve 面向哪一类问题？",
+      "options": [
+        "Free-form prose generation",
+        "带 machine-checkable、deterministic fitness function 的 optimizations",
+        "Multi-turn chat memory",
+        "Vector search ranking"
+      ],
+      "correct": 1,
+      "explanation": "Evolutionary search 需要 deterministic evaluator；AlphaEvolve 面向那些存在这种 evaluator 的 domains。"
+    },
+    {
+      "stage": "check",
+      "question": "ChatHTN 在使用 LLM 的同时如何保留 plan soundness？",
+      "options": [
+        "它没有保留；soundness 只是 best-effort",
+        "LLM suggestions 只作为 candidate decompositions 进入，并根据 operator schema 验证；symbolic layer 拥有 correctness",
+        "它在 HTN traces 上 fine-tune LLM",
+        "它使用 vector database"
+      ],
+      "correct": 1,
+      "explanation": "LLM 扩展 method library，但不能绕过 operator preconditions 和 effects。"
+    },
+    {
+      "stage": "check",
+      "question": "本课引用了 AlphaEvolve 的哪项结果？",
+      "options": [
+        "56 年来首次改进 4x4 complex matrix multiplication 的 Strassen 结果",
+        "让 Gemini inference 加速 10x",
+        "在 HumanEval 上击败 GPT-4",
+        "首次证明 P=NP"
+      ],
+      "correct": 0,
+      "explanation": "AlphaEvolve 为 4x4 complex matmul 找到 48 scalar multiplications，是 56 年来对 Strassen 的首次改进。"
+    },
+    {
+      "stage": "check",
+      "question": "HTN 中哪个元素是带 preconditions 和 effects 的 primitive directly-executable action？",
+      "options": [
+        "Task",
+        "Method",
+        "Operator",
+        "State"
+      ],
+      "correct": 2,
+      "explanation": "Operators 是 primitives；methods 分解 compound tasks；state 是 facts 的集合。"
+    },
+    {
+      "stage": "post",
+      "question": "本课对没有真实 evaluator 的 AlphaEvolve 发出什么警告？",
+      "options": [
+        "它很慢",
+        "询问 LLM 代码是否更好不是 fitness function；evaluator 必须 deterministic 且快速",
+        "它违反 Apache 2.0",
+        "它不能在 GPUs 上运行"
+      ],
+      "correct": 1,
+      "explanation": "没有 deterministic evaluator，搜索就没有可收敛的信号。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该选择 ReAct 或 ReWOO，而不是 HTN 或 AlphaEvolve？",
+      "options": [
+        "永远不要；HTN 严格更好",
+        "当你不需要 formal soundness 或 machine-checkable fitness 时；多数 agent tasks 属于这里",
+        "当你有 GPU cluster 可用时",
+        "当 latency 低于 100 ms 时"
+      ],
+      "correct": 1,
+      "explanation": "本课明确警告不要 over-engineering：多数 tasks 不需要 formal planning 或 evolutionary search。"
+    }
+  ]
+}
