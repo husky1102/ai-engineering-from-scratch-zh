@@ -1,0 +1,78 @@
+{
+  "lesson": "05-eagle3-speculative-decoding",
+  "title": "生产中的 EAGLE-3 Speculative Decoding",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 speculative decoding 能利用 plain decode 中存在的一个缺口？",
+      "options": [
+        "Decode 是 compute-bound，因此增加更多 compute 是免费的",
+        "Decode 无法从 batching 中受益",
+        "Decode 比 prefill 需要更多 network bandwidth",
+        "Decode 是 memory-bound，因此 GPU 大多在等待 HBM 读取 weights"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Acceptance rate alpha 衡量什么？",
+      "options": [
+        "Decode 期间使用的 GPU memory 比例",
+        "Draft 提出的 tokens 中被 target model 接受的比例",
+        "Draft model 的 latency overhead",
+        "KV cache 的 cache hit rate"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "相比 EAGLE-2，EAGLE-3 做了什么改变，使 general chat 上 alpha 推到约 0.6-0.8？",
+      "options": [
+        "它使用同 family 的 full-sized draft model",
+        "它在 CPU 而不是 GPU 上运行",
+        "它完全移除了 verify step",
+        "Draft head 在 multiple target layers 上训练，而不只是 last layer"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课说，在大多数 2026 hardware 的 high concurrency 下，alpha 低于多少时 speculative decoding 会变成净负收益？",
+      "options": [
+        "0.95",
+        "0.05",
+        "0.55",
+        "0.85"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "即使 mean ITL 下降，打开 EAGLE-3 后最应该密切观察哪个 metric？",
+      "options": [
+        "Cold-start time",
+        "GPU memory utilization",
+        "P99 ITL，因为 rejected-draft two-passes 在 full batch 下可能串行化",
+        "Mean E2E latency"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "根据本课，为什么 speculative decoding 在 vLLM 2026 中是 opt-in（不是 default）？",
+      "options": [
+        "Acceptance rate 取决于 workload，不测 alpha 就打开它是 production anti-pattern",
+        "它只在 Blackwell GPUs 上工作",
+        "它与 PagedAttention 不兼容",
+        "它需要单独 license"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
