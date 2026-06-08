@@ -1,0 +1,78 @@
+{
+  "lesson": "14-prompt-semantic-caching",
+  "title": "Prompt Caching 与 Semantic Caching Economics",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "L1 semantic caching 与 L2 prompt/prefix caching 的区别是什么？",
+      "options": [
+        "L1 在 embedding similarity 命中时完全跳过 LLM；L2 在 provider 端为 repeated prefixes 复用 attention KV",
+        "L1 在 provider 端，L2 在 client 端",
+        "L2 存储 embeddings；L1 存储 attention KV",
+        "L1 和 L2 是同一回事"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪个 Anthropic 机制会为 L2 prompt caching 标记 blocks 可缓存？",
+      "options": [
+        "request blocks 上的 explicit cache_control attribute",
+        "一个单独的 /caches endpoint",
+        "tool definitions 中的 filename suffixes",
+        "一个 implicit prompt-length threshold"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "parallelization anti-pattern 如何膨胀账单？",
+      "options": [
+        "Parallel requests 会绕过 batching",
+        "Parallelization 会触发 per-request guardrail charge",
+        "所有 parallel requests 自动共享一个 cache entry",
+        "具有相同 prefix 的 N 个 parallel requests 在 first cache write 完成前到达，因此每个都支付 write premium，且没有任何 discount"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "cacheable prefixes 中的 dynamic-content anti-pattern 是什么？",
+      "options": [
+        "把 tool schemas 放进 prefix",
+        "总是 streaming responses",
+        "把每次 request 都变化的内容（精确到分钟的当前时间、request ID、随机 example 顺序）放进 cacheable prefix，杀死 hit rate",
+        "使用太短的 system prompt"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "batch + cached input 如何在 overnight workloads 中叠加降低成本？",
+      "options": [
+        "Batch 只节省 output cost",
+        "Batch APIs 给 50% off；cached input 再增加约 10x；合并后 overnight pipelines 降到 synchronous-uncached cost 的约 10%",
+        "Batch 与 caching 不兼容",
+        "Caching 会禁用 batch eligibility"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课如何看待 semantic cache “95% accuracy” claims？",
+      "options": [
+        "95% 是 OpenAI default cache hit rate",
+        "95% 指 match correctness，不是 hit rate；报告的 production hit rates 从约 10%（open chat）到约 70%（structured FAQ）不等",
+        "95% 是 vendor-documented hit-rate baseline",
+        "95% 意味着你应该期待 95% cache hits"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
