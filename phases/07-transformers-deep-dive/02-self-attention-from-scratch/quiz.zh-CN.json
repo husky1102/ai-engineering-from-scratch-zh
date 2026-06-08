@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 vanilla self-attention 要用 1/sqrt(d_k) 缩放 dot product？",
+      "options": ["为了让输出值位于 0 和 1 之间", "为了防止 dot products 在高维中变大，从而把 softmax 推到梯度极小的区域", "为了把 query 和 key vectors 归一化到单位长度", "为了降低矩阵乘法的计算成本"],
+      "correct": 1,
+      "explanation": "当 d_k 很大时，随机向量的 dot product 会按 sqrt(d_k) 成比例增长。没有缩放时，softmax 会接收很大的输入，产生接近 one-hot 的输出，导致梯度消失。"
+    },
+    {
+      "stage": "pre",
+      "question": "self-attention 中的三个 projections 是什么？",
+      "options": ["Input、hidden 和 output", "Query、key 和 value——每一个都是同一输入的 learned linear projection", "Encoder、decoder 和 cross-attention", "Embedding、position 和 segment"],
+      "correct": 1,
+      "explanation": "Self-attention 会让输入通过三个不同的 weight matrices，产生 queries（我在寻找什么？）、keys（我包含什么？）和 values（如果匹配，我输出什么？）。"
+    },
+    {
+      "stage": "post",
+      "question": "在 8 个 heads 且 d_model=512 的 multi-head attention 中，每个 head 的维度是多少？",
+      "options": ["512——每个 head 都看到完整维度", "64——d_model 会在 heads 间均匀切分（512/8=64）", "8——每个 head 一个维度", "4096——每个 head 会扩展表示"],
+      "correct": 1,
+      "explanation": "Multi-head attention 会把 d_model 切成 h 个 heads，每个 head 在 d_k = d_model/h 维上运行。512/8 = 64，即每个 head 64 维；总计算成本等于 full dimension 的 single-head attention。"
+    },
+    {
+      "stage": "post",
+      "question": "autoregressive attention 中的 causal mask 会防止什么？",
+      "options": ["它防止模型 attend 到 padding tokens", "它防止每个位置 attend 到未来位置，确保模型在预测下一个 token 时只能使用过去 context", "它防止 attention weights 变得过大", "它防止模型 attend 到自己的位置"],
+      "correct": 1,
+      "explanation": "在 autoregressive generation 中，token t 不能看见 token t+1、t+2 等。causal mask 会在 softmax 前把未来位置设为 -infinity，从而把它们的 attention weights 置零。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 self-attention 在 sequence length n 上具有 O(n^2) complexity？",
+      "options": ["因为模型堆叠了 n 层", "因为每个 token 都会和每个其他 token 计算 attention scores，产生一个 n x n attention matrix", "因为 attention 后面的 feedforward layers 是二次复杂度", "因为 attention 的反向传播需要 n^2 次梯度计算"],
+      "correct": 1,
+      "explanation": "QK^T 矩阵乘法会产生一个 n x n attention matrix，其中 entry (i,j) 表示 token i 到 token j 的 attention。计算和内存都按 O(n^2) 缩放，这也是 long-context models 需要 FlashAttention 等技术的原因。"
+    }
+  ]
+}
