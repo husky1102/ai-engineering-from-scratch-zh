@@ -1,0 +1,90 @@
+{
+  "lesson": "04-multimodal-document-qa",
+  "title": "Capstone 04 — Multimodal Document QA (Vision-First PDF, Tables, Charts)",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 2026 年 frontier 在 financial PDFs 和 scientific papers 上更偏好 vision-first late interaction，而不是 OCR-then-text？",
+      "options": [
+        "Vision models 每页更便宜",
+        "OCR pipelines 会搞坏 rotated tables、dense equations 和 chart imagery，丢掉一半信号",
+        "OCR 比 rendering 更慢",
+        "OCR 不能在 GPUs 上运行"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "ColPali-style retrieval 中的 late interaction 是什么意思？",
+      "options": [
+        "每个 query token 都与每个 patch token 打分，并通过 MaxSim 对 per-token maxima 求和",
+        "Embeddings 被推迟到 eval time 才计算",
+        "Embeddings 在用户点击 result 后才计算",
+        "Reranker 只在 final candidate 上运行"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "ColQwen embedding 每页大约产生多少 patch vectors，这造成什么 storage problem？",
+      "options": [
+        "每页约 2048 个 patch vectors，相比 single-vector indexes 会让 raw storage 膨胀",
+        "正好 128 个 vectors，可干净装入任何 vector DB",
+        "每页 1 个 vector，没有 storage issue",
+        "16 个 vectors，storage overhead 可忽略"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "DocPruner 在这个 pipeline 中做什么？",
+      "options": [
+        "在 ingestion 前移除 duplicate PDF pages",
+        "通过保留约 50% 的 high-signal patches 来压缩 multi-vector index，几乎没有 accuracy loss",
+        "为更短 vectors 重写 query embedding",
+        "围绕 evidence regions 裁剪 bounding boxes"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么某些 pages 仍然要拼入 OCR text channel？",
+      "options": [
+        "它改善 PDF rendering quality",
+        "VLMs 无法读取 180 DPI 的 images",
+        "OCR 是 primary retrieval modality",
+        "Equation-dense 和 table-heavy pages 受益于 image 旁边的 text fallback"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "这个 capstone 针对哪个 benchmark 做 vision-first retrieval evaluation？",
+      "options": [
+        "RewardBench-2",
+        "SWE-bench Pro",
+        "ViDoRe v3",
+        "MMLU-Pro"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Rubric 中的 evidence-region grounding 是什么意思？",
+      "options": [
+        "DocPruner 达到的 compression ratio",
+        "p99 tail 的 re-ranker latency",
+        "每个 query 检索的 pages 总数",
+        "Cited bounding boxes 中实际包含 answer span 的比例"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
