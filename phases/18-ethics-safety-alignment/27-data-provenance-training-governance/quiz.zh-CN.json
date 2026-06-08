@@ -1,0 +1,78 @@
+{
+  "lesson": "27-data-provenance-training-governance",
+  "title": "数据出处与训练数据治理",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么训练数据治理的合规窗口在收集时，而不是训练之后？",
+      "options": [
+        "因为监管机构不会审计已部署模型",
+        "因为 cookie-consent 框架禁止收集后使用",
+        "因为 GDPR right-to-erasure 不适用于 AI",
+        "一旦数据进入模型权重，外科式删除就不可能；彻底补救只有从头重训，而这代价过高"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "California AB 2013 大约要求开发者在数据集摘要中发布多少个法定项目？",
+      "options": [
+        "3",
+        "30",
+        "12",
+        "7"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "相对于 Gebru 等 2018 datasheet 结构，AB 2013 的哪一项是新的？",
+      "options": [
+        "数据集来源或所有者",
+        "系统是否使用或持续使用 synthetic data generation",
+        "清洗、处理或其他修改",
+        "数据收集的时间段"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "2025 年 DPA 对公开可得第一方内容上的 LLM 训练趋同形成了什么原则？",
+      "options": [
+        "任何情况下都禁止训练",
+        "只能使用 synthetic data",
+        "始终要求用户明确 consent",
+        "在有 opt-out 和适当防护措施时，legitimate interest 可以正当化对公开可得第一方内容的训练；不要求 consent"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "下列哪一项不是本课列出的不可逆问题的部分补救？",
+      "options": [
+        "Unlearning（通过 MIA 测量的近似移除）",
+        "基于 influence-function 的定位和选择性更新",
+        "GDPR 强制的自动权重删除",
+        "对源自该数据的输出进行 fine-tune-suppression"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Data Provenance Initiative 的 “Consent in Crisis”（2024 年 7 月）发现了什么？",
+      "options": [
+        "发布者正在以加速速度添加 robots.txt 限制；可开放训练的 commons 正在快速收缩，2023 到 2024 年约 25% 的 top training sources 添加了限制",
+        "Synthetic data 已经完全取代 web data",
+        "各类来源的 consent rates 都保持稳定",
+        "Robots.txt 限制逐年减少"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
