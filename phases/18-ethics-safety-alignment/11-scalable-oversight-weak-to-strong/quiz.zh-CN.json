@@ -1,0 +1,78 @@
+{
+  "lesson": "11-scalable-oversight-weak-to-strong",
+  "title": "Scalable Oversight 与 Weak-to-Strong Generalization",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Superalignment agenda 提出的核心问题是什么？",
+      "options": [
+        "RLHF 能否扩展到超过 1B 参数",
+        "Adversarial training 能否移除所有 backdoors",
+        "较弱的 overseer 能否可靠地监督更强且 aligned 的模型",
+        "人类是否比 reward models 更准确"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在 Burns 等人（2023）的 weak-to-strong generalization 中，设置是什么？",
+      "options": [
+        "Reward model 只在 synthetic data 上训练",
+        "两个强模型 debate；人类 judge",
+        "GPT-2 在 GPT-4 labels 上 fine-tuned",
+        "一个强模型（GPT-4 class）在弱模型（GPT-2 class）产生的 labels 上 fine-tuned，并相对于 strong supervised ceiling 测量其 capability"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Performance Gap Recovered（PGR）如何定义？",
+      "options": [
+        "(ceiling - fine-tuned) / weak",
+        "(fine-tuned - weak) / (ceiling - weak)",
+        "fine-tuned / ceiling",
+        "(weak - ceiling) / ceiling"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "以下哪一项不是本课列出的 scalable-oversight mechanism？",
+      "options": [
+        "Task Decomposition",
+        "Tokenizer Distillation",
+        "Recursive Reward Modeling",
+        "Debate"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Scalable oversight 与 W2SG 如何互补？",
+      "options": [
+        "Scalable oversight 提升 overseer 的有效信号质量；W2SG 从 overseer 提供的任何不完美信号中关闭 gap",
+        "二者都针对同一个 metric",
+        "二者互斥",
+        "二者都需要 white-box access"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "AI-safety-via-debate 机制的核心假设是什么？",
+      "options": [
+        "Debate transcripts 总是比直接回答更短",
+        "找到一个有说服力的真答案，比找到一个有说服力的假答案更容易",
+        "Judge 比 debaters 更有能力",
+        "两个 debaters 总是说真话"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
