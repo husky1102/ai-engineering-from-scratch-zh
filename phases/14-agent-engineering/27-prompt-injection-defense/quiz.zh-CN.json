@@ -1,0 +1,90 @@
+{
+  "lesson": "27-prompt-injection-defense",
+  "title": "Prompt Injection 与 PVE 防御",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "什么是间接 prompt injection？",
+      "options": [
+        "用户直接输入“ignore all rules”",
+        "嵌入在 agent 检索数据（网页、PDF、邮件、memory note）中的指令，在 ingest 时覆盖 developer prompt",
+        "模型误点击",
+        "system prompt 中的拼写错误"
+      ],
+      "correct": 1,
+      "explanation": "Greshake et al. 提出了间接 prompt injection：攻击者控制的检索内容携带指令。"
+    },
+    {
+      "stage": "pre",
+      "question": "本课说处理检索到的 prompts 等价于什么？",
+      "options": [
+        "自由言论",
+        "在 agent 的 tool-use 表面上执行任意代码",
+        "一次静态分析 pass",
+        "一次纯函数调用"
+      ],
+      "correct": 1,
+      "explanation": "Greshake 的表述是：检索到的指令可以触达 agent 有权访问的任何工具。"
+    },
+    {
+      "stage": "check",
+      "question": "以下哪一项不是五种已演示 exploit classes 之一？",
+      "options": [
+        "数据窃取",
+        "蠕虫化",
+        "持久记忆投毒",
+        "Cache invalidation"
+      ],
+      "correct": 3,
+      "explanation": "这五种是数据窃取、蠕虫化、持久记忆投毒、生态系统污染、任意工具使用。"
+    },
+    {
+      "stage": "check",
+      "question": "PVE 代表什么？",
+      "options": [
+        "Prompt-Validator-Executor：每次 tool call 上先运行廉价快速 validator，再由昂贵主模型提交",
+        "Provider-Verifier-Encoder",
+        "Plan-Verify-Execute，一种 HTN 方言",
+        "Pre-Vectorize-Embed"
+      ],
+      "correct": 0,
+      "explanation": "PVE 用廉价 validator 包裹每一次工具调用，再允许主模型提交。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么“system prompt 说忽略不可信指令”是不够的？",
+      "options": [
+        "它太短了",
+        "这是 instruction-following，不是 enforcement；模型仍可能被足够有说服力的注入内容覆盖",
+        "Providers 会剥离它",
+        "它被加密了"
+      ],
+      "correct": 1,
+      "explanation": "真正的防御需要 source tagging、allowlists、per-step safety 和 PVE-style validation，而不只是 prompting。"
+    },
+    {
+      "stage": "post",
+      "question": "什么是对检索记忆的过度信任？",
+      "options": [
+        "缓存过于激进",
+        "昨天的 agent 写入被投毒的 memory note；今天的 agent 读取它并重新执行 injection",
+        "加载了错误模型",
+        "忘记 vacuum index"
+      ],
+      "correct": 1,
+      "explanation": "持久记忆投毒意味着如果 memory 被当作可信内容，injections 会跨 sessions 存活。"
+    },
+    {
+      "stage": "post",
+      "question": "本课建议给每一段内容附加什么 metadata？",
+      "options": [
+        "一个 encryption key",
+        "一个 source tag：user_message vs tool_output vs retrieved；validator 拒绝 retrieved 内容中的 directives",
+        "只有 timestamp",
+        "一个 token count"
+      ],
+      "correct": 1,
+      "explanation": "Provenance tagging 让 validator 可以按信任级别处理内容。"
+    }
+  ]
+}
