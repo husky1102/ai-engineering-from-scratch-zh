@@ -1,0 +1,90 @@
+{
+  "lesson": "09-code-migration-agent",
+  "title": "Capstone 09 — 代码迁移 Agent（Repo-Level Language / Runtime Upgrade）",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 pipeline 要组合 deterministic substrate 和 agent layer，而不是只用其中之一？",
+      "options": [
+        "OpenRewrite 或 libcst 可以安全、低成本地处理 70-80% 的 mechanical rewrites，把 ambiguous long tail 留给 agent",
+        "agents 单独使用比 recipes 更快",
+        "deterministic recipes 比 LLMs 更慢",
+        "determinism 只对 build system 必要"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "pipeline 用什么信号作为 successful migration 的 ground truth？",
+      "options": [
+        "agent 按 rubric 自评",
+        "PR 上的 reviewer approval",
+        "Diff size 低于 hard limit",
+        "sandbox 中 CI 变绿，且没有超过小阈值的 coverage regression"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "agent loop 对每个 repo 强制哪些 budget caps？",
+      "options": [
+        "无限 time 和 cost；只在 errors 时 abort",
+        "没有 turn limit，$100 ceiling",
+        "1 hour wall-clock 和 100 turns",
+        "30 minutes wall-clock、$8 cost 和 20 agent turns"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "迁移后 coverage 下降超过约 2% 时，会触发什么 gate？",
+      "options": [
+        "绕过 reviewer",
+        "repo 被归入 coverage_regression failure class，而不是打开干净 PR",
+        "deterministic substrate 重放它的 recipes",
+        "agent 自动 force-push 一个 fix"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 failure taxonomy 被视为交付物，而不是 side artifact？",
+      "options": [
+        "它替代了 test suite",
+        "它按 class 对 failed repos 分组，让未来的 recipe authors 可以瞄准 top failure modes",
+        "GitHub branch protection 要求它",
+        "它满足 compliance checklist"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "这个 capstone 针对 Java 8 到 17 迁移使用哪个 public benchmark？",
+      "options": [
+        "Amazon 的 MigrationBench",
+        "SWE-bench Pro",
+        "MMLU-Pro",
+        "ViDoRe v3"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "agent integration rubric 衡量 fix distribution 的哪一方面？",
+      "options": [
+        "source file 的 tokenization speed",
+        "每个 repo 的 force-pushes 数量",
+        "pinned dependencies 的数量",
+        "OpenRewrite 处理的 fixes 与 agent layer authored fixes 的比例"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
