@@ -1,0 +1,67 @@
+[
+  {
+    "id": "feateng-pre-1",
+    "stage": "pre",
+    "question": "为什么特征工程通常比选择更复杂的算法更有影响？",
+    "options": [
+      "特征工程会让代码运行更快",
+      "好特征会把原始数据隐藏的模式暴露给模型，让简单模型也能有效工作",
+      "特征工程消除了对测试集的需求",
+      "复杂算法无法处理原始数据"
+    ],
+    "correct": 1,
+    "explanation": "数据的表示方式比算法本身更重要。像 BMI (weight/height^2) 这样设计良好的特征，会直接暴露相关模式，让 logistic regression 这样的简单模型也能与复杂 ensemble 竞争。"
+  },
+  {
+    "id": "feateng-pre-2",
+    "stage": "pre",
+    "question": "什么是 one-hot encoding？",
+    "options": [
+      "用每个类别在数据集中的频率替换该类别",
+      "为每个类别创建一个二进制列，并且每一行恰好有一列被设为 1",
+      "把所有特征转换成 0 到 1 之间的值",
+      "把目标变量编码成概率"
+    ],
+    "correct": 1,
+    "explanation": "One-hot encoding 会为每个唯一类别创建一个二进制列。对于取值为 red/blue/green 的 color 特征，它会生成三列：is_red、is_blue、is_green。"
+  },
+  {
+    "id": "feateng-post-1",
+    "stage": "post",
+    "question": "target encoding 有什么数据泄漏风险？",
+    "options": [
+      "它会让模型训练太慢",
+      "它用目标均值替换类别；如果不是只在训练数据上计算，就可能从测试集泄漏信息",
+      "它会创建太多特征",
+      "它只适用于二分类目标"
+    ],
+    "correct": 1,
+    "explanation": "Target encoding 会用该类别的目标均值替换每个类别。如果在完整数据集上计算（包括测试数据），测试标签就会泄漏进训练特征中，从而夸大性能估计。"
+  },
+  {
+    "id": "feateng-post-2",
+    "stage": "post",
+    "question": "TF-IDF 会按词的 inverse document frequency 来加权。这样有什么效果？",
+    "options": [
+      "像 'the' 这样的常见词会因为出现频繁而获得高权重",
+      "稀有且有辨识度的词会获得更高权重，而常见词权重更低",
+      "所有词都会获得相同权重，不管频率如何",
+      "每篇文档只保留最常见的词"
+    ],
+    "correct": 1,
+    "explanation": "IDF = log(total docs / docs containing word)。常见词（出现在许多文档中）会得到较低 IDF。稀有且有辨识度的词会得到较高 IDF，使它们在表示中更有影响力。"
+  },
+  {
+    "id": "feateng-post-3",
+    "stage": "post",
+    "question": "你有两个相关系数为 0.98 的特征。为什么可能要移除其中一个？",
+    "options": [
+      "高度相关的特征总会导致模型崩溃",
+      "它们是冗余的 -- 两者携带的信息几乎相同，保留两者会增加过拟合风险，却不增加信号",
+      "相关特征会让数据变成非平稳的",
+      "相关系数高于 0.5 意味着这些特征在测量不同的东西"
+    ],
+    "correct": 1,
+    "explanation": "r=0.98 的特征几乎是冗余的。保留两者相当于增加一个带噪声的重复特征，会提高维度、过拟合风险和多重共线性，却不会提供关于目标的新信息。"
+  }
+]
