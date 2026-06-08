@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 2024+ 年的 SOTA text-to-image models（SD3、FLUX、Z-Image）用 Diffusion Transformer（DiT）取代了 U-Net denoiser？",
+      "options": ["Transformers 更容易编写", "DiT 比 U-Net scale 得更可预测（与 LLMs 处在同一 scaling-law regime），更擅长处理 prompt-accurate generation 所需的长程空间依赖，并且能通过 cross 或 joint attention 与 text encoders 自然配合", "U-Net 已经不再支持 GPU", "DiT 的 parameters 更少"],
+      "correct": 1,
+      "explanation": "DiT 把 diffusion 当成另一种 sequence-modelling task。它像 language models 一样 scale，避开了 convolutions 的固定 inductive bias 对长程结构造成的瓶颈，并且能干净地接入 transformer text encoders。每个 2026 年 SOTA model：SD3、FLUX.1、FLUX.2、SD4、Z-Image、Qwen-Image，都是 DiT。"
+    },
+    {
+      "stage": "pre",
+      "question": "Rectified flow 训练模型沿 data 与 noise 之间的 straight-line interpolation 预测 velocity `v = epsilon - x_0`。为什么这能用 20-step sampling 代替 1000 steps？",
+      "options": ["它不能；rectified flow 也需要 1000 steps", "学到的 ODE 比 DDPM 的 curved SDE 更接近直线，因此 few-step Euler integration 就能产生准确 samples；结合 distillation 后可以得到 FLUX schnell 这样的 1-4 step variants", "Euler 严格优于 DDIM", "它需要更大的模型"],
+      "correct": 1,
+      "explanation": "DDPM 的 reverse process 是一条 stochastic curved path，需要很多小 steps。Rectified flow 定义 straight-line interpolation；学到的 velocity 沿 trajectory 近似恒定。积分一条 near-straight ODE 只需要少量 steps。SD3 和 FLUX 在 full quality 下使用 20-30 steps sampling；schnell/turbo/LCM 会进一步 distill 到 1-4 steps。"
+    },
+    {
+      "stage": "post",
+      "question": "MMDiT（SD3）使用两套 weights，一套给 text tokens，一套给 image tokens，并共享一个 single joint attention layer。为什么？",
+      "options": ["为了节省内存", "Text 和 image embeddings 在概念上是不同分布；独立 weights 让每种 modality 处理自己的 representation，而 joint attention 让它们交互；结果是比单一 shared stream 更好的 text-image alignment 和 prompt following", "这是 legacy design", "只有 image tokens 实际经过 attention"],
+      "correct": 1,
+      "explanation": "Stable Diffusion 3 的 MMDiT 保留 per-modality weight streams，以保持 text 和 image tokens 的不同统计特性，同时用 joint self-attention layer 让它们融合。这在结构上比 concatenate-and-share（SD1/2 使用的方式）更有表达力，并在经验上提升了 prompt adherence 和 text rendering。FLUX 将其扩展为交替的 double-stream / single-stream blocks，以提升效率。"
+    },
+    {
+      "stage": "post",
+      "question": "DiT block 中的 AdaLN-Zero 是什么意思，为什么有帮助？",
+      "options": ["epsilon 为 zero 的 layer norm", "Adaptive LayerNorm，其中 modulation MLP 初始化为 zero，让 block 一开始是 identity；训练随后学习 scale/shift/gate，从而稳定 very deep diffusion transformers", "只在 50% 时间应用的 LayerNorm", "mean 为 zero 的 LayerNorm"],
+      "correct": 1,
+      "explanation": "AdaLN 从 conditioning vector 预测 scale、shift 和 gate。'Zero' 表示 MLP 初始化为 zero，所以 gate 从 0 开始，block 表现为 identity。Gradients 会慢慢把 modulation 推离 zero，防止 deep stack 在训练早期发散。它是 DiT 版的 ResNet residual zero-init，并用于每个现代 diffusion transformer。"
+    },
+    {
+      "stage": "post",
+      "question": "FLUX.1-schnell 可以在 4 steps 内生成一张图。哪种技术让它能做到？",
+      "options": ["与 FLUX.1-dev 不同的 base architecture", "Distillation：schnell 使用 adversarial / consistency-style objectives 从一个慢速 many-step teacher 训练而来，使 1-4 denoising steps 能匹配 teacher 的 20-30 step output", "更低精度的 weights", "更小的 parameter count"],
+      "correct": 1,
+      "explanation": "Schnell / Turbo / LCM variants 使用 step distillation。一个 small-step student 学习匹配 many-step teacher 的 output。Base architecture 和 parameter count 往往相同（FLUX.1-dev 和 schnell 都是 12B）。Distillation 让 sub-1-second inference 变得实际可用。这与 SDXL Turbo、SD Turbo 和 Latent Consistency Models 是同一个思想。"
+    }
+  ]
+}
