@@ -1,0 +1,78 @@
+{
+  "lesson": "47-checkpoint-save-resume",
+  "title": "Checkpoint Save and Resume",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "哪一组最能描述完整 training checkpoint？",
+      "options": [
+        "只有 model weights",
+        "Model state、optimizer state、scheduler state、step counters、loss history，以及 python、numpy、torch CPU、torch CUDA 的 RNG state",
+        "只有 loss history",
+        "任何 torch.save() 能序列化的东西"
+      ],
+      "correct": 1,
+      "explanation": "Resume 必须走同一条轨迹。没有 optimizer moments、scheduler position 和 RNG state，resumed loss 就是另一条曲线。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 saver 要先写临时文件再 rename，而不是直接写目标文件名？",
+      "options": [
+        "更快的 I/O",
+        "同一目录内的 POSIX rename 是原子的，所以写入中途崩溃会留下上一个好文件，而不是目标名下的半写文件",
+        "它会 dedupe 文件",
+        "它绕过 fsync"
+      ],
+      "correct": 1,
+      "explanation": "atomic_save 从同目录的 temp file 调用 os.replace。跨设备 rename 会失去原子性，所以 temp file 必须位于目标目录。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 sharded checkpoint 要在 index.json 中为每个 shard 存 sha256？",
+      "options": [
+        "为了 SEO",
+        "这样 loader 可以在 load time 检测截断或被篡改的 shard，而不是静默 merge 坏的 state_dict",
+        "为了压缩文件",
+        "因为 torch 要求这样"
+      ],
+      "correct": 1,
+      "explanation": "load_sharded_checkpoint 会断言每个 shard 的实际 hash 匹配记录值，meta file 的 hash 也要匹配。静默损坏是最糟糕的失败模式。"
+    },
+    {
+      "stage": "check",
+      "question": "resume 如何在当前 epoch 内继续到正确 offset？",
+      "options": [
+        "它跳到下一个 epoch boundary",
+        "TrainState 记录 (epoch, batch_in_epoch)，并恢复 RNG state，所以 loader 会快进 generator，越过已经消费的 batches 后继续",
+        "它使用特殊数据库",
+        "它总是从 step 0 重启"
+      ],
+      "correct": 1,
+      "explanation": "没有 (epoch, batch_in_epoch) 会跳到下一个 epoch boundary 并浪费工作。没有 RNG 会看到不同 batches。二者都必需。"
+    },
+    {
+      "stage": "check",
+      "question": "payload 上的 schema field 带来什么？",
+      "options": [
+        "什么都没有",
+        "migration hook：未来格式变更会 bump schema string，loader 可以基于它 dispatch，而不是破坏旧运行",
+        "漂亮文件名",
+        "压缩"
+      ],
+      "correct": 1,
+      "explanation": "本课使用 ckpt.v1；下一个版本是带 migrate function 的 ckpt.v2。没有这个字段，格式演进就需要破坏兼容性。"
+    },
+    {
+      "stage": "post",
+      "question": "读取 resume demo summary 时，max_loss_diff_after_resume 接近 0 证明了什么？",
+      "options": [
+        "没有有用信息",
+        "post-resume loss trajectory 在 floating point noise 内匹配未中断 baseline，说明 RNG state 和 optimizer state 都被忠实恢复",
+        "模型很好",
+        "磁盘很快"
+      ],
+      "correct": 1,
+      "explanation": "忘记 RNG 会看到不同曲线和非平凡 diff。忘记 optimizer state 会让 diff 很大。接近 zero 的数字就是契约。"
+    }
+  ]
+}
