@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Hungarian algorithm 在 tracking-by-detection 中做什么？",
+      "options": ["过滤 low-confidence detections", "求解 tracks 与 detections 之间 minimum-cost one-to-one assignment：通常使用 1 - IoU 作为 cost，使每条 track 最多匹配一个 detection，反之亦然", "训练 detector", "预测 future trajectories"],
+      "correct": 1,
+      "explanation": "每个 tracking-by-detection frame 都要解决一个 assignment problem：M 条 tracks、N 个 detections，寻找最好的一对一匹配。Hungarian 是这个问题的 optimal polynomial algorithm。Cost 通常是 1 - IoU（overlap 越高，cost 越低）。scipy.optimize.linear_sum_assignment 是标准实现。SORT、DeepSORT、ByteTrack、BoT-SORT 都使用它。"
+    },
+    {
+      "stage": "pre",
+      "question": "ByteTrack 的标志性贡献是什么？",
+      "options": ["一个新 backbone", "Second-stage association：尝试把 leftover tracks 匹配到 low-confidence detections，从而恢复短暂 occlusions 和标准 trackers 因丢弃这些 detections 而失去的 IDs", "一个新的 Kalman filter", "一个 appearance embedding"],
+      "correct": 1,
+      "explanation": "大多数 trackers 会丢弃低于 confidence threshold（约 0.5）的 detections。ByteTrack 保留它们，并运行第二次 Hungarian pass，尝试把它们匹配到没有匹配上任何 high-confidence detection 的 tracks。这能恢复短暂 occlusions 和 crossings，并在没有任何 learned appearance features 的情况下显著提升 MOT17 上的 IDF1。它的简单性让它成为 Ultralytics 和 Roboflow Supervision 的默认选择。"
+    },
+    {
+      "stage": "post",
+      "question": "SAM 2 的 memory-based tracker 如何避免显式 Hungarian-style association？",
+      "options": ["它内部运行 SORT", "它把 per-instance spatio-temporal features 存入 memory bank；在每个新 frame 上，memory 与 current features 之间的 cross-attention 会直接产生同一 instance 的 mask，association 隐含在 attention operation 中", "它使用 Kalman filter", "它要求每帧都有 hand-labelled IDs"],
+      "correct": 1,
+      "explanation": "SAM 2 用 memory-conditional segmenter 替代 detect-then-associate loop。Memory bank 保存 instance 在之前 frames 中的 features。在每个新 frame 中，decoder 会让新 frame 的 features 与 memory cross-attend，结果 mask 就是同一个 instance：不需要外部 assignment step。这能优雅地处理 long occlusions，因为即使 instance 消失很多 frames，memory 仍然保留。"
+    },
+    {
+      "stage": "post",
+      "question": "对于主要需求是保持每个人 ID 一致的 surveillance video，应该报告哪个 metric？",
+      "options": ["MOTA", "IDF1：ID precision 与 recall 的 harmonic mean；衡量 identity preservation over time，而不是 per-frame detection accuracy", "Top-1 accuracy", "FID"],
+      "correct": 1,
+      "explanation": "MOTA 混合了 detection 和 association errors，因此一个有很多 false positives 的 tracker 可能掩盖自己的 ID failures。IDF1 专为 'who is who over time' 问题设计：它在整段 video 上把 predicted tracks 与 ground-truth tracks 做 global matching，并计算 identity labels 上的 F1。对 surveillance 和 crowd analytics，应报告 IDF1；HOTA 是更广的 academic standard。"
+    },
+    {
+      "stage": "post",
+      "question": "SAM 3.1 Object Multiplex（March 2026）在许多 tracked instances 之间引入 shared memory。这启用了什么？",
+      "options": ["更低 accuracy", "高效 multi-object tracking：一个 shared memory bank 加 per-instance query tokens 取代 N 个独立 memory banks，使 cost 随 instances 数量 sub-linearly 增长，并让 concert-crowd-sized scenes 变得可处理", "Cloud-only inference", "一个新的 training objective"],
+      "correct": 1,
+      "explanation": "Pre-Multiplex 的 SAM 2 / SAM 3 会为每个 object 使用自己的 memory bank；cost 随 instances 数量线性增长。Multiplex（March 2026）引入一个 shared memory，并用 per-instance query tokens 获取 instance-specific features。Many-object tracking：crowds、traffic、warehouse workers，第一次对 memory-based tracker 来说变得高效。"
+    }
+  ]
+}
