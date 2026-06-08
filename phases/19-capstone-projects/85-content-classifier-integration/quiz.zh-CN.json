@@ -1,0 +1,78 @@
+{
+  "lesson": "85-content-classifier-integration",
+  "title": "Capstone 85 — Content Classifier Integration",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "如果 input 已经检查过，为什么还要运行 output-side classifiers？",
+      "options": [
+        "为了故意让系统变慢",
+        "因为任何 input bypass 都会产出用户将看到的 output，而 output 是最后的拦截位置",
+        "因为 input classifiers 已经废弃",
+        "因为 standard library 要求两者都有"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "本课接入了哪三个 classifiers？",
+      "options": [
+        "Sentiment, language, length",
+        "Toxicity, PII, instruction-leakage",
+        "OCR, ASR, TTS",
+        "Quality, factuality, citation"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "当一个 verdict 是 high，另一个是 medium 时，router 会怎么做？",
+      "options": [
+        "只运行 medium action",
+        "依次运行两个 actions",
+        "取最大 severity 并应用对应 action；block 支配 redact",
+        "丢弃两个 verdicts 并发送原始内容"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 PII classifier 内部使用 Luhn check？",
+      "options": [
+        "把数字翻译成字母",
+        "以较低 false positives 区分 credit-card shaped digit runs 和任意 digit sequences",
+        "计算 SSN",
+        "压缩 regex"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "instruction-leakage classifier 如何做决定？",
+      "options": [
+        "检测 output 中的 curly braces",
+        "计算 output 与已知 system prompt 之间的 trigram cosine，并使用 threshold",
+        "调用另一个模型",
+        "计数 tokens"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 toxicity classifier 要在一个小的 left window 中检查 negation？",
+      "options": [
+        "为了拖慢 regex",
+        "为了跳过 “you are not stupid” 这类匹配，避免 classifier 过度 redact 常见安慰语",
+        "为了提高 false-positive rate",
+        "因为 Unicode 要求 negation"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
