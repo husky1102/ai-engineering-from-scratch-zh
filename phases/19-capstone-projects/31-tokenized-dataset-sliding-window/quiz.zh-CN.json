@@ -1,0 +1,78 @@
+{
+  "lesson": "31-tokenized-dataset-sliding-window",
+  "title": "使用 Sliding Window 构建 Tokenized Dataset",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Causal LM training batch 的 shape contract 是什么？",
+      "options": [
+        "(B, T) input ids 和 (B, T) target ids，其中 target 是 input 向左 shift 一位",
+        "(B, V) vocabulary 上的 one-hot vectors",
+        "(B, T, T) attention masks，其中 input ids 位于 diagonal",
+        "(B, 2) input id 和 label pairs"
+      ],
+      "correct": 0,
+      "explanation": "Causal LM training 读取 (B, T) input ids，并预测相同 shape 的 target ids，其中 target[t] = input[t+1]。"
+    },
+    {
+      "stage": "check",
+      "question": "长度为 N 的 id stream 中，用 stride S 能放下多少个长度为 T+1 的 windows？",
+      "options": [
+        "N // (T + 1)",
+        "max(0, 1 + (N - (T + 1)) // S)",
+        "(N - T) * S",
+        "N - T - S"
+      ],
+      "correct": 1,
+      "explanation": "第一个 window 从 0 开始。后续 windows 从 S 的倍数开始。最后一个 window 仍必须覆盖 T+1 个 ids。"
+    },
+    {
+      "stage": "check",
+      "question": "把 stride 减半会对 dataset 产生什么影响？",
+      "options": [
+        "它会把每个 epoch 的 training examples 数量减半",
+        "它会大致把每个 epoch 的 training examples 数量翻倍",
+        "它没有影响，因为 windows 永不 overlap",
+        "它会移除 consecutive windows 之间的 overlap"
+      ],
+      "correct": 1,
+      "explanation": "更小的 stride 会产生更多 overlapping windows，增加 example count 和 boundary diversity，代价是每个 epoch 更多 compute。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么给 DataLoader 传入显式 `torch.Generator`？",
+      "options": [
+        "它能加速 data loading",
+        "它移除了 batch padding 的需要",
+        "它让使用相同 seed 的 runs 之间 shuffle deterministic",
+        "它启用 multi-GPU training"
+      ],
+      "correct": 2,
+      "explanation": "Seeded generator 会复现相同 shuffle。使用相同 seed 的 reruns 会以相同顺序看到 batches，这是公平比较 hyperparameters 所必需的。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 dataset 从每个大小为 T+1 的 window 返回 (input[:-1], input[1:])？",
+      "options": [
+        "它丢弃一个 id 以节省 memory",
+        "它实现 shift-by-one target，让 loss 测量 next-token prediction",
+        "它从 input 中移除一个 special token",
+        "这是 PyTorch tensor indexing 的怪癖"
+      ],
+      "correct": 1,
+      "explanation": "Position t 的 target 是 position t+1 的 input。把 window 切成 [:-1] 和 [1:] 就表达了这个 contract。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课 drop incomplete trailing windows，而不是 padding 它们？",
+      "options": [
+        "Padding 会改变 vocabulary size",
+        "Dropping 让每个 example 保持相同长度，因此不需要 loss mask",
+        "Model 不支持 padded tokens",
+        "Dropped data 会在下一个 epoch 被恢复"
+      ],
+      "correct": 1,
+      "explanation": "所有 examples 按 construction 都恰好是 T tokens 长，所以 batch 是干净的 rectangular tensor，loss 可以在没有 mask 的情况下统一应用。"
+    }
+  ]
+}
