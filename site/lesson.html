@@ -3371,7 +3371,7 @@
         if (language === 'rust') return 'cargo run --';
         if (language === 'julia') return 'julia';
         if (language === 'shell') return 'bash';
-        return 'run';
+        return '';
       }
 
       function loadRuntimeManifest() {
@@ -3489,8 +3489,12 @@
             var language = record.language || ((record.languages && record.languages[0]) || '');
             var icon = langIconFromLanguage(language);
             var entry = record.entry || '';
-            var runCmd = entry ? (langCommandFromLanguage(language) + ' ' + entry) : '';
+            var command = langCommandFromLanguage(language);
+            var runCmd = entry && command && runtime !== 'static-only' ? (command + ' ' + entry) : '';
             var notes = Array.isArray(record.notes) && record.notes.length ? record.notes : [runtimeDefaultNote(runtime)];
+            if (runtime === 'static-only' && notes.length === 1 && notes[0] === 'non-Python lesson; browser execution not enabled yet') {
+              notes = [runtimeDefaultNote(runtime)];
+            }
             var packages = Array.isArray(record.packages) ? record.packages : [];
 
             html += '<div class="code-card">';
@@ -3509,7 +3513,7 @@
                 html += '<a class="code-card-btn" href="' + escapeAttr(record.notebook) + '" target="_blank" rel="noopener">' + escapeHtml(t('openNotebook')) + '</a>';
               }
               html += '</div>';
-            } else {
+            } else if (!entry && runtime !== 'static-only') {
               html += '<div class="runtime-meta">' + escapeHtml(t('runtimeNoCode')) + '</div>';
             }
             if (record.notebook) {
