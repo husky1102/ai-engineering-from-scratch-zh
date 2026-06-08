@@ -1,0 +1,90 @@
+{
+  "lesson": "11-llm-observability-dashboard",
+  "title": "Capstone 11 — LLM Observability & Eval Dashboard",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Langfuse、Phoenix 和 OpenLLMetry 收敛到了哪个 ingest schema？",
+      "options": [
+        "每个 vendor 各自的 proprietary JSON",
+        "Prometheus exposition format",
+        "通过 OTLP HTTP 传输的 OpenTelemetry GenAI semantic conventions",
+        "普通 CSV log files"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "为什么在 storage tier 中分离 ClickHouse 和 Postgres？",
+      "options": [
+        "它们可以互换，会随机选择一个",
+        "Postgres 对 span ingest 更快",
+        "ClickHouse 不能存储 strings",
+        "ClickHouse 处理 spans 上的 columnar analytics，而 Postgres 保存 users、sessions 和 app metadata"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "OpenTelemetry Collector 中的 tail-sampling processor 做什么？",
+      "options": [
+        "在 trace 完成后决定是否保留它，使用 keep errors plus sample successes 这类规则",
+        "把旧 traces replay 到 Postgres",
+        "无条件 streaming 每个 byte",
+        "截断低于 100ms 的 spans"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "dashboard 如何检测跨周 drift？",
+      "options": [
+        "在 pooled prompt embeddings 上计算 PSI 或 KL divergence，并观察 eval-score trends",
+        "人工目测 dashboard",
+        "读取最新 deploy timestamp",
+        "统计 unique trace IDs"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "交付物在 injected PII-leak regression 上的 MTTR 目标是什么？",
+      "options": [
+        "低于 1 hour",
+        "24 hours 内",
+        "下一个 on-call shift 内",
+        "从 bug deployed 到 Slack alert 低于 5 minutes"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为了满足 trace-coverage rubric，哪些 SDK families 必须产生 canonical GenAI spans？",
+      "options": [
+        "只有 vLLM",
+        "至少六个：OpenAI、Anthropic、Google GenAI、LangChain、LlamaIndex 和 vLLM",
+        "任意一个 SDK 就足够",
+        "只有 OpenAI 和 Anthropic"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "evaluation results 如何链接回原始 LLM call？",
+      "options": [
+        "作为 nightly emailed CSV",
+        "只作为 Slack messages",
+        "作为没有 trace ID 的独立 Postgres table",
+        "作为写入 ClickHouse、位于 parent trace 子级的 eval spans"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
