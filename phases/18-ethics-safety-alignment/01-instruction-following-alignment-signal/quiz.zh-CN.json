@@ -1,0 +1,78 @@
+{
+  "lesson": "01-instruction-following-alignment-signal",
+  "title": "指令遵循作为对齐信号",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么原始预训练语言模型在面对“write a Python function that reverses a list”时，经常返回另一个 prompt 而不是代码？",
+      "options": [
+        "它的词表缺少 Python token",
+        "没有微调就无法表示函数签名",
+        "它的 temperature 默认是零",
+        "它被训练来补全网页风格文本，而这类文本中的 prompt 往往会继续接更多 prompt"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "InstructGPT reward model 在成对偏好标签上使用哪种 loss？",
+      "options": [
+        "标注者分数上的均方误差",
+        "Bradley-Terry：-log sigmoid(r(x, y_w) - r(x, y_l))",
+        "带固定 margin 的 hinge loss",
+        "预测 reward 与真实 reward 之间的交叉熵"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "InstructGPT 第 3 阶段中的 KL 惩罚主要在防止什么？",
+      "options": [
+        "tokenizer 统计信息的灾难性遗忘",
+        "PPO 梯度更新中的数值不稳定",
+        "采样过程中上下文窗口溢出",
+        "优化器找到利用 reward model 的对抗性高 reward 字符串"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "PPO-ptx 把什么问题混入 RL 目标以进行缓解？",
+      "options": [
+        "PPO 期间 reward model 发生漂移",
+        "KL 项变成负数",
+        "alignment tax：在 RLHF 未针对的 benchmark 上回退",
+        "SFT 与 RM 之间的 tokenizer 不匹配"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "1.3B InstructGPT 大约 70% 的时候比 175B base GPT-3 更受偏好。这说明对齐和能力之间是什么关系？",
+      "options": [
+        "对齐是不同于能力的另一个轴，而且 base model 设定能力下限",
+        "偏好率超过 50% 证明代理 reward 等同于 human values",
+        "能力和对齐在规模上是同一个轴",
+        "更大的 base model 总是输给小型已对齐模型"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "InstructGPT 中的 reward model 从下面哪个模型初始化？",
+      "options": [
+        "没有预训练的随机标量回归器",
+        "一个单独的 encoder-only transformer",
+        "保留 LM head 的 base pre-trained model",
+        "把 LM head 替换成标量 head 的 SFT model"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
