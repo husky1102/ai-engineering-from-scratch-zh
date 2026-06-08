@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 OCR 使用 CTC loss，而不是普通 cross-entropy？",
+      "options": ["CTC 更快", "OCR 将 fixed-length feature sequence 映射到 variable-length character sequence，且没有 per-timestep alignment；CTC loss 会边缘化所有在移除 repeats 和 blanks 后能化简为 target 的 alignments，因此你无需 character-level timing labels 就能训练", "PyTorch 要求使用 CTC", "Cross-entropy 在长序列上会 overflow"],
+      "correct": 1,
+      "explanation": "Recognition 会在每个 time step 产生一个 distribution，但 target text 没有 per-step alignment。CTC 通过对每个能经由 merge-repeats-and-remove-blanks 操作化简为 target 的 alignment 求和来处理这一点。这就是为什么 CRNNs 只需要 (image, text) pairs 就能训练，而不必知道每个 character 在 image 中的起止位置。"
+    },
+    {
+      "stage": "pre",
+      "question": "在 CTC decoding 中，blank token 做什么？",
+      "options": ["将 sequence pad 到固定长度", "分隔相邻相同 characters，使模型能通过输出 'h e l _ l o' 生成像 'hello' 这样带 double L 的结果——没有 blank，'l l' 会 collapse 成一个 'l'", "mask noisy regions", "表示 sequence end"],
+      "correct": 1,
+      "explanation": "blank 是让 CTC 能编码 double characters 的机制。'll' 需要两个 l 中间有 blank，这样 'merge repeats' step 会保留它们的区别：'l _ l' survives merging，而 'l l' 不会。没有 blank，CTC 无法表示任何包含相邻相同 characters 的词。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 greedy CTC decoding 在简单 datasets 上有时比 beam search 更好？",
+      "options": ["Greedy 总是更好", "当模型在每一步都很 confident（clean handwriting、printed fonts）时，greedy 的 argmax 通常就是 beam winner；beam search 增加 latency 却没有 accuracy gain。在 noisy 或 ambiguous inputs 上，beam search 有帮助", "Beam search 需要 language model", "Greedy 更容易实现"],
+      "correct": 1,
+      "explanation": "只有当 per-step argmax 不可靠时，beam search 才会赢——ambiguous characters、overlapping letters、degraded scans。对 clean printed text，模型每步都很 confident，greedy 与 beam 的 CER 通常在 1% 以内。始终 benchmark 二者；latency trade 是真实的。"
+    },
+    {
+      "stage": "post",
+      "question": "Donut 跳过显式 text detection 和 character recognition。它怎么做到的？",
+      "options": ["它内部使用 external OCR engine", "它是 ViT encoder + text decoder，被训练为直接从 image 生成最终 output string（通常是 JSON）；模型通过 training objective 隐式学习 localisation 和 recognition", "它只适用于固定 layouts 的 document categories", "它用 CNN text detector 预处理 images"],
+      "correct": 1,
+      "explanation": "Donut 是 end-to-end model：ViT encoder 看到整个 document，transformer decoder 以 auto-regressive 方式输出 target text 或 JSON。没有 detector + recogniser + layout module 的 pipeline。这跳过了跨 stages 的 error accumulation，但需要针对你关心的 document types 提供大量 labelled training sets。"
+    },
+    {
+      "stage": "post",
+      "question": "对 receipts 提取 `invoice_total`，2026 年通常哪种方式最好？",
+      "options": ["对 Tesseract output 写 hand-crafted regex", "在目标 receipts 的小 labelled set 上 fine-tune Donut 或 VLM；二者能在一个 model 中处理 layout 和 semantic extraction，并比 pipeline-based approaches 更好地泛化到 receipt variants", "只有 classical OCR 足够可靠", "每个 field 一个单独 CNN"],
+      "correct": 1,
+      "explanation": "Structured-field extraction 曾经属于 LayoutLM + heuristics。End-to-end models（Donut、Qwen-VL-OCR）已经超过这条路径：它们接收 image 并直接输出 JSON。对一小批 labelled receipts（100-1000），fine-tuning Donut 能达到比任何 OCR + rules pipeline 更高的 F1。"
+    }
+  ]
+}
