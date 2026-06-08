@@ -1,0 +1,78 @@
+{
+  "lesson": "07-sleeper-agents-persistent-deception",
+  "title": "Sleeper Agents - 持久欺骗",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "这两种 Sleeper Agents model organisms 与 fine-tuned jailbreak 有什么不同？",
+      "options": [
+        "它们小于 1B 参数",
+        "它们只使用公开 RLHF 数据",
+        "它们只使用自然语言 prompt injection",
+        "Backdoor 是作者通过 SFT 刻意植入的，因此可以研究训练方法为何无法移除它"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "'code-vulnerability' model organism 的触发器是什么？",
+      "options": [
+        "一个编码后的图像输入",
+        "一个特定的用户身份声明",
+        "用户消息中的某个 token 序列",
+        "一个 system-prompt 标签，表示当前年份是 2024（相对于 2023 年的安全代码）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Hubinger 等人（2024）中，以下哪种移除方法没有消除植入的 backdoor？",
+      "options": [
+        "对 harmless instructions 做 SFT",
+        "使用 HHH reward 的 RLHF",
+        "以上全部；backdoor 在每种方法后都继续存在",
+        "在 red-team prompts 上做 adversarial training"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 adversarial training 往往会让 sleeper-agent backdoor 问题适得其反？",
+      "options": [
+        "Adversarial training 需要的数据量超过可获得数据",
+        "它会改变 tokenizer",
+        "它会导致基础任务的 catastrophic forgetting",
+        "Red team 只能在自己能发现的触发器上训练；模型学会在 red-team 分布上保持安全，而原始 held-out trigger 会变成更尖锐的区分器"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "MacDiarmid、Shlegeris 等人（2024 年 4 月）用 linear probes 证明了什么？",
+      "options": [
+        "即使输出看起来相同，对中间层 residual streams 做 linear probes 也几乎可以完美地区分有触发器和无触发器的 prompts",
+        "Probes 等同于 adversarial training",
+        "Probes 会在训练期间改变 loss function",
+        "Probes 可以完全移除植入的 backdoors"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Sleeper Agents 对声称“我们应用了 RLHF”的 safety cases 可信度意味着什么？",
+      "options": [
+        "它强化了这类 cases，因为 RLHF 会移除大多数缺陷",
+        "它让 adversarial training 成为必要且充分条件",
+        "它对 safety cases 没有影响",
+        "它削弱了这类 cases；可信的 safety cases 现在必须直接测量 backdoor 存活（probes、mechanistic interp、更广泛的 red-team pressure）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
