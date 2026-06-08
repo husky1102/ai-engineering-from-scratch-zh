@@ -1,0 +1,37 @@
+[
+  {
+    "question": "为什么 AI startups 常常因为成本问题而不是模型质量失败？",
+    "options": ["模型总是足够好", "per-call costs 会快速复合：1 万用户每天调用 10 次，在收取第一美元之前就要 $250/day tokens 成本", "Cost optimization 很容易", "API providers 提供无限免费层"],
+    "correct": 1,
+    "explanation": "LLM API 成本会随使用量线性扩展。一个每次调用花 $0.003 的功能看似便宜，直到它每天被调用 100K 次（$300/day，$9K/month）。没有 cost optimization，许多 AI products 在规模化后无法盈利。",
+    "stage": "pre"
+  },
+  {
+    "question": "LLM applications 的 semantic caching 是什么？",
+    "options": ["缓存 model weights", "存储先前 queries 的 responses，并在新 query 语义相似（不只是完全匹配）时服务 cached responses", "只缓存 embeddings", "预生成所有可能 responses"],
+    "correct": 1,
+    "explanation": "Exact-match caching 只对相同 queries 有帮助。Semantic caching 会 embedding queries，并在 cosine similarity 超过阈值时服务 cached responses。'What's the weather in NYC?' 会匹配 'NYC weather today?'。",
+    "stage": "pre"
+  },
+  {
+    "question": "作为 cost optimization strategy，model routing 是什么？",
+    "options": ["跨 servers 做 load balancing", "根据 query classification 把简单 queries 发送给便宜/快速模型，把复杂 queries 发送给昂贵/强大模型", "在不同 API providers 之间 routing", "缓存多个模型的 responses"],
+    "correct": 1,
+    "explanation": "不是每个 query 都需要 GPT-4。classifier 会把简单问题（FAQ、问候）路由到便宜模型（GPT-3.5、Haiku），把复杂问题（reasoning、analysis）路由到昂贵模型。这可以削减 50-80% 成本。",
+    "stage": "post"
+  },
+  {
+    "question": "prompt compression 是什么，它如何降低成本？",
+    "options": ["通过删除单词让 prompts 更短", "移除冗余 tokens、总结长 contexts、消除 boilerplate，在保留关键信息的同时减少 input token count", "用 gzip 压缩 prompts", "使用更短变量名"],
+    "correct": 1,
+    "explanation": "RAG applications 中 input tokens 主导成本（大型 retrieved contexts）。Prompt compression 会移除 filler words、总结冗长 passages，并裁剪低相关 chunks，从而在不丢失关键信息的情况下减少 token count。",
+    "stage": "post"
+  },
+  {
+    "question": "prefix caching 是什么，哪个 provider feature 支持它？",
+    "options": ["缓存每个 response 的第一个词", "为共享 prompt prefixes（system prompt + tool definitions）复用 KV-cache 计算，从而降低重复模式的延迟和成本", "缓存 DNS lookups", "API responses 的浏览器缓存"],
+    "correct": 1,
+    "explanation": "如果你的 system prompt + tool definitions 有 5000 tokens 且在 requests 间完全相同，prefix caching 会计算一次 KV-cache 并复用它。Anthropic 的 prompt caching 和 OpenAI 的 cached tokens 都支持这一点。",
+    "stage": "post"
+  }
+]
