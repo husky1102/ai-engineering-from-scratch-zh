@@ -1,0 +1,78 @@
+{
+  "lesson": "36-training-loop-eval",
+  "title": "Training Loop and Evaluation",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 target tensor 必须是 input tensor 向后移动一个位置？",
+      "options": [
+        "Cross entropy 需要完全相同的 tensors",
+        "Next token prediction 是训练目标：在每个位置，模型预测后面那个 token；忘记 shift 会把模型训练成预测自身，学不到任何有用东西",
+        "它能加速 optimizer",
+        "这是 AdamW 要求的"
+      ],
+      "correct": 1,
+      "explanation": "Input 是 tokens 0..T-1；target 是 tokens 1..T；loss 在扁平的 (batch*seq, vocab) 和 (batch*seq,) 形状上计算。"
+    },
+    {
+      "stage": "pre",
+      "question": "evaluate_model 做了 training step 不做的什么事？",
+      "options": [
+        "它运行 optimizer",
+        "它在 no_grad 且 dropout disabled 的状态下运行固定数量的 validation batches，返回可复现的 mean loss",
+        "它改变模型权重",
+        "它计算两次 gradients"
+      ],
+      "correct": 1,
+      "explanation": "Held out evaluation 不需要 gradients，不需要 dropout，并且需要 validation data 的固定切片，以便多次运行间可复现。"
+    },
+    {
+      "stage": "check",
+      "question": "哪些 AdamW parameters 会施加 weight decay？",
+      "options": [
+        "所有 parameter 一视同仁",
+        "Matrix-shaped tensors（linear weights、embedding tables）接收 weight decay；scale、shift 和 bias tensors 接收 zero decay",
+        "只有 LM head",
+        "只有 LayerNorm scales"
+      ],
+      "correct": 1,
+      "explanation": "对 LayerNorm scale 施加 decay 会把 scale 推向零并破坏 normalization；这种 split 是标准生产模式。"
+    },
+    {
+      "stage": "check",
+      "question": "Warmup-plus-cosine schedule 从 step 0 到 final step 画出什么形状？",
+      "options": [
+        "Constant",
+        "在 warmup_steps 内从零 linear ramp 到 max，然后在剩余 steps 中从 max cosine decay 到 min_lr",
+        "Exponential growth",
+        "Step function"
+      ],
+      "correct": 1,
+      "explanation": "Warmup 填充 optimizer state；cosine decay 会逐渐减小 step size，让最终阶段微调权重。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么要在 optimizer.step() 前 clip gradient norm？",
+      "options": [
+        "它加速 matmul",
+        "坏 batch 可能产生巨大 gradient，抹掉数小时训练成果；clip 到 max_norm=1.0 能让 optimizer 保持在安全范围，同时不扭曲正常 update",
+        "它减少 memory usage",
+        "它移除 warmup requirement"
+      ],
+      "correct": 1,
+      "explanation": "Gradient clipping 是防止 divergence 的最便宜保险；一是多数设置都能扛住的默认值。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么把 per step records 记录为 JSONL，而不是 pickled state？",
+      "options": [
+        "JSONL 是 optimizer 要求的",
+        "JSONL records 能跨 refactor 保持耐用，可 grep，可用三十行代码绘图，并能在 crash 后保留；pickled state 会把你绑定到产生它的 module layout",
+        "JSONL 训练更快",
+        "JSONL 使用更少 GPU memory"
+      ],
+      "correct": 1,
+      "explanation": "任何 crash 都会留下可读 artifact；resume 会读取最后一步；基于它构建工具也很简单。"
+    }
+  ]
+}
