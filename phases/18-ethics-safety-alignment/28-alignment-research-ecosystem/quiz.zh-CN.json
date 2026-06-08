@@ -1,0 +1,78 @@
+{
+  "lesson": "28-alignment-research-ecosystem",
+  "title": "Alignment Research Ecosystem - MATS、Redwood、Apollo、METR",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "MATS 做什么，它的大致规模是什么？",
+      "options": [
+        "一个 reward-model training service",
+        "ML Alignment & Theory Scholars：一个 research mentorship program，自 2021 年以来有 527+ scholars、180+ papers，且 2025 年前 alumni 中约 80% 从事 safety/security",
+        "一个颁发 AI export licenses 的监管机构",
+        "一个由 EU 拥有的 frontier safety institute"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Redwood Research 提出了哪个 agenda？",
+      "options": [
+        "LLMs 的 differential privacy",
+        "AI Control（第 10 课）：通过 U / T / H protocols 在 subversion 下保持安全",
+        "通过 SynthID 做 watermarking",
+        "Constitutional AI"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪个组织撰写了 In-Context Scheming paper 和 'Towards Safety Cases for AI Scheming' framework？",
+      "options": [
+        "METR",
+        "MATS",
+        "Eleos AI",
+        "Apollo Research"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "METR 在 alignment ecosystem 中独特的 methodological style 是什么？",
+      "options": [
+        "Base models 的 adversarial training",
+        "Task-based capability evaluations、autonomous-task time-horizon studies，以及 framework synthesis（例如 'Common Elements of Frontier AI Safety Policies'）",
+        "Hardware-attested verifiable inference",
+        "仅 closed-source red-teaming"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 multi-organisation co-authorship 对 safety claims 很重要？",
+      "options": [
+        "它增加 citation counts",
+        "它加快 publication",
+        "它是 EU AI Act 强制要求的",
+        "实验室评估自己的模型存在结构性利益冲突；external evaluators（Redwood、Apollo、METR、Eleos、UK AISI）可以提出并验证实验室可能低报的 failure modes"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Eleos AI Research 对 ecosystem 的主要贡献是什么？",
+      "options": [
+        "AI Control benchmarks",
+        "Watermarking standards",
+        "California training-data law drafting",
+        "Pre-deployment model-welfare evaluations（第 19 课），包括 Claude Opus 4 system card 中的 external welfare assessment"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
