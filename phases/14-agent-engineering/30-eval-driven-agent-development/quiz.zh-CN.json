@@ -1,0 +1,90 @@
+{
+  "lesson": "30-eval-driven-agent-development",
+  "title": "Eval-Driven Agent Development",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课命名的三层 evaluation 是什么？",
+      "options": [
+        "Static benchmarks、custom offline evals、online production evals",
+        "Unit、integration、end-to-end",
+        "Smoke、regression、acceptance",
+        "Pre、check、post"
+      ],
+      "correct": 0,
+      "explanation": "Static（SWE-bench、GAIA）、custom offline（LLM-judge、exec、trajectory）、online（replays、alerts、cost/latency）。"
+    },
+    {
+      "stage": "pre",
+      "question": "Anthropic 推荐的起点是什么？",
+      "options": [
+        "从 multi-agent debate 开始",
+        "从简单 prompts 开始，用全面 evaluation 优化它们，并且只在需要时添加 multi-step agentic systems",
+        "从 hierarchical orchestration 开始",
+        "只从 frontier model 开始"
+      ],
+      "correct": 1,
+      "explanation": "Anthropic 明确表示 evaluation 是驱动其他所有选择的外层循环。"
+    },
+    {
+      "stage": "check",
+      "question": "Evaluator-optimizer tight loop 是什么？",
+      "options": [
+        "Train、evaluate、deploy",
+        "Proposer 生成输出，evaluator 评判，refine 直到 evaluator 通过（Self-Refine 的泛化）",
+        "Sample、sort、deduplicate",
+        "Cache、retry、fail"
+      ],
+      "correct": 1,
+      "explanation": "它是 Self-Refine 的泛化：任何 flow 都可以包进 propose-judge-refine。"
+    },
+    {
+      "stage": "check",
+      "question": "2026 年关于 evals 存放位置的最佳实践是什么？",
+      "options": [
+        "只放在单独的 vendor dashboard 中",
+        "放在代码旁边，在每个 PR 的 CI 中运行，用 eval scores gate merges",
+        "只按季度运行",
+        "完全由 QA team 拥有"
+      ],
+      "correct": 1,
+      "explanation": "与代码 colocated、CI-gated、regression-tracked 是标准做法。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么本课警告不要使用没有 grounding 的 LLM-judge？",
+      "options": [
+        "它太慢",
+        "Judges 也会幻觉；搭配 CRITIC pattern，让 judgment 基于外部工具 grounding",
+        "它违反 Apache 2.0",
+        "它只在 GPUs 上工作"
+      ],
+      "correct": 1,
+      "explanation": "CRITIC（Lesson 5）同样适用：tool-grounded verification 让 judge 保持诚实。"
+    },
+    {
+      "stage": "post",
+      "question": "过拟合 evals 的危险是什么？",
+      "options": [
+        "Compute cost 上升",
+        "为 eval set 优化会偏离生产有用性；需要轮换 cases",
+        "Vector indices 碎片化",
+        "Latency 降得过低"
+      ],
+      "correct": 1,
+      "explanation": "轮换 eval set 可以让优化与生产现实保持一致。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 flaky evals 会造成问题？",
+      "options": [
+        "它们让 inference cost 翻倍",
+        "非确定性 cases 会产生 false alarms；固定 seeds 并 snapshot state",
+        "它们无法访问 database",
+        "它们超过 context window"
+      ],
+      "correct": 1,
+      "explanation": "Flake 会让 regressions 无法解读；必须保证确定性（seeds、state snapshots）。"
+    }
+  ]
+}
