@@ -1,0 +1,37 @@
+[
+  {
+    "question": "DPO 相比 RLHF 的主要优势是什么？",
+    "options": ["DPO 产生更好的模型", "DPO 消除了单独 reward model 和 PPO 的需要，在单个 loop 中直接在 preference pairs 上训练", "DPO 使用更少训练数据", "DPO 不需要任何 preference data"],
+    "correct": 1,
+    "explanation": "RLHF 需要单独训练 reward model，然后运行 PPO optimization。DPO 把两步合进一个 training objective，直接在 preference pairs 上优化 language model。",
+    "stage": "pre"
+  },
+  {
+    "question": "Reference model 在 DPO 中扮演什么角色？",
+    "options": ["它生成 training data", "它作为 anchor，防止 trained model 偏离太远，类似 RLHF 中的 KL penalty", "它评估 model quality", "它处理 tokenization"],
+    "correct": 1,
+    "explanation": "DPO loss 比较 trained policy 和 reference（通常是 SFT）model 下的 log probabilities。Reference model 约束 policy 可以漂移多远，在没有显式 KL tuning 的情况下防止 reward hacking。",
+    "stage": "pre"
+  },
+  {
+    "question": "DPO 中 beta parameter 控制什么？",
+    "options": ["Learning rate", "Policy 被约束保持接近 reference model 的强度——更高 beta 表示更 conservative updates", "Batch size", "Training epochs 数量"],
+    "correct": 1,
+    "explanation": "Beta 缩放 implicit KL divergence penalty。Beta=0.1 允许模型显著偏离 reference（可能更好但更有风险）。Beta=0.5 让它保持接近（更安全但学得更少）。",
+    "stage": "post"
+  },
+  {
+    "question": "DPO 如何隐式表示 reward model？",
+    "options": ["它没有——DPO 没有 reward 概念", "DPO loss function 可由 optimal policy under a reward function 推导出来，并直接通过 policy log probabilities 表达", "它在 language model 内部训练 hidden reward model", "DPO 使用 loss function 作为 reward"],
+    "correct": 1,
+    "explanation": "Rafailov et al. 证明，RLHF objective 的 closed-form solution 会把 reward 表达为 policy 相对 reference 的 log-probabilities 函数。DPO 直接优化这一点，从而隐式学习 reward。",
+    "stage": "post"
+  },
+  {
+    "question": "什么时候仍可能更偏好 RLHF 而不是 DPO？",
+    "options": ["总是——RLHF 严格更好", "当你需要可复用 reward model 来评估多个 policies，或 online data collection 有价值时", "当 preference data 更少时", "当训练更小模型时"],
+    "correct": 1,
+    "explanation": "DPO 是 offline（固定 preference data）。RLHF 支持 online data collection，其中 reward model 给新 generations 打分并发现 reward-hacking patterns。独立 reward model 也可用于 evaluation 和其他 policies。",
+    "stage": "post"
+  }
+]
