@@ -13,7 +13,7 @@
       "explanation": "容器共享宿主机内核，并在进程层级进行隔离，因此可以在几秒内启动。虚拟机会运行带有自己内核的完整客户机 OS，需要更多资源，启动也更慢。"
     },
     {
-      "stage": "pre",
+      "stage": "check",
       "question": "什么是 Dockerfile？",
       "options": [
         "Docker 守护进程的配置文件",
@@ -25,7 +25,7 @@
       "explanation": "Dockerfile 包含一系列顺序执行的指令（FROM、RUN、COPY 等），Docker 会执行这些指令来构建镜像。每条指令都会创建一个可缓存的层。"
     },
     {
-      "stage": "post",
+      "stage": "check",
       "question": "为什么卷挂载对使用 Docker 进行 AI 开发很关键？",
       "options": [
         "卷会利用宿主机磁盘速度，让容器运行得更快",
@@ -37,11 +37,11 @@
       "explanation": "没有卷时，容器内部的一切都会在容器停止后丢失。卷挂载会把宿主机目录映射到容器中，因此模型权重（14+ GB）和数据集可以在重建后继续保留。"
     },
     {
-      "stage": "post",
+      "stage": "check",
       "question": "NVIDIA Container Toolkit 提供了什么能力？",
       "options": [
         "在容器内安装 CUDA 驱动",
-        "通过 --gpus 标志把宿主机 GPU 暴露给 Docker 容器",
+        "通过 `--gpus` 标志把宿主机 GPU 暴露给 Docker 容器",
         "在 AMD 硬件上运行 NVIDIA GPU 容器",
         "在 Docker 构建过程中编译 CUDA 代码"
       ],
@@ -50,15 +50,27 @@
     },
     {
       "stage": "post",
-      "question": "在用于 AI 的 Docker Compose 文件中，'ai-dev' 服务如何访问 'qdrant' 向量数据库？",
+      "question": "在用于 AI 的 Docker Compose 文件中，`ai-dev` 服务如何访问 `qdrant` 向量数据库？",
       "options": [
         "使用宿主机的 IP 地址和端口",
-        "使用服务名 'qdrant' 作为主机名，因为 Compose 会创建共享网络",
+        "使用服务名 `qdrant` 作为主机名，因为 Compose 会创建共享网络",
         "在两个容器之间挂载一个共享卷",
         "在容器之间配置 VPN"
       ],
       "correct": 1,
-      "explanation": "Docker Compose 会自动创建一个共享网络，服务可以通过名称互相访问。ai-dev 容器会使用服务名作为主机名，连接到 'http://qdrant:6333'。"
+      "explanation": "Docker Compose 会自动创建共享网络，服务可以通过名称互相访问。`ai-dev` 容器会使用服务名作为主机名，连接到 `http://qdrant:6333`。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该选择 CUDA `devel` 基础镜像，而不是 `runtime` 基础镜像？",
+      "options": [
+        "当最终镜像必须尽可能小时",
+        "当你需要 nvcc 等编译器来构建 flash-attn 或 bitsandbytes 这类 CUDA 依赖包时",
+        "当你只做 CPU 推理服务时",
+        "当 Docker Compose 需要共享网络时"
+      ],
+      "correct": 1,
+      "explanation": "`devel` 镜像包含编译 CUDA 扩展所需的编译器和头文件。`runtime` 镜像更小，更适合运行已经构建好的代码。"
     }
   ]
 }
