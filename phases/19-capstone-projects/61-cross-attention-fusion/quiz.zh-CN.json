@@ -1,0 +1,78 @@
+{
+  "lesson": "61-cross-attention-fusion",
+  "title": "Cross-Attention 融合",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "在 vision-language modeling 中，early fusion 与 late fusion 的 operational difference 是什么？",
+      "options": [
+        "Early fusion 在 wall-clock time 上先运行",
+        "Early fusion 把 image 和 text tokens 连接成一个 sequence；late fusion 让它们保持分离，并在每个 block 通过 cross-attention 桥接",
+        "Late fusion 使用更多 memory",
+        "Early fusion 是非法的"
+      ],
+      "correct": 1,
+      "explanation": "Chameleon 和 Emu3 是 early-fusion；Flamingo 和 BLIP-2 是 late-fusion。这个 architectural choice 会改变 mask shapes 和 KV caching。"
+    },
+    {
+      "stage": "pre",
+      "question": "在同时包含 self-attention 和 cross-attention 的 decoder block 中，哪一个使用 causal mask？",
+      "options": [
+        "两者都使用",
+        "只有 self-attention 使用；image 是 fully observed 的，cross-attention 没有 temporal order",
+        "只有 cross-attention 使用",
+        "两者都不使用"
+      ],
+      "correct": 1,
+      "explanation": "text generation 是 autoregressive 的，因此 text self-attention 是 causal。image tokens 在任何 text 被 decoded 之前都可见。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 cross-attention KV cache 会每张 image 构建一次？",
+      "options": [
+        "PyTorch 要求 caching",
+        "当 text 被 decoded 时，image keys 和 values 不会改变，因此只投影一次 memory 并在所有 decode steps 中复用 K 和 V，就是全部 inference speedup 的来源",
+        "Caching 节省磁盘空间",
+        "它避免使用 GPU"
+      ],
+      "correct": 1,
+      "explanation": "vision encoder 运行一次。它的 KV projection 计算一次。每个 text token 免费复用 cache。"
+    },
+    {
+      "stage": "check",
+      "question": "当 text length 为 Nt=10、image length 为 Nv=197、hidden=256 时，cross-attention 的 output shape 是什么？",
+      "options": [
+        "(B, 197, 256)",
+        "(B, 10, 256)",
+        "(B, 10, 197)",
+        "(B, 207, 256)"
+      ],
+      "correct": 1,
+      "explanation": "Cross-attention output shape 跟随 query stream，因此无论 key length 是多少，output 都是 (B, Nt, hidden)。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 cross-attention 不使用 mask？",
+      "options": [
+        "Masks 太昂贵",
+        "image 在 text generation 开始前已经 fully observed；每个 text position 都可以 attend to 每个 patch",
+        "PyTorch 不支持 cross masks",
+        "Masks 总是导致 NaN"
+      ],
+      "correct": 1,
+      "explanation": "image patches 上没有 temporal order，也没有需要防止的 leakage，因此 cross-attention 会看到整张 image。"
+    },
+    {
+      "stage": "post",
+      "question": "为了恢复 Flamingo-style training stability，你会添加哪种 extension？",
+      "options": [
+        "去掉 self-attention layer",
+        "在 cross-attention residual 上插入 learned tanh gate，让 model 可以从 text-only behavior 开始，并逐渐进入 image stream",
+        "移除 FFN",
+        "只使用一个 attention head"
+      ],
+      "correct": 1,
+      "explanation": "Flamingo 的 tanh gate 从零开始，在 init 时恢复 text-only behavior，并给 model 一条平滑进入 cross-attention 的路径。"
+    }
+  ]
+}
