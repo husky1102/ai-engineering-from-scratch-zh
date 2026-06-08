@@ -1,0 +1,78 @@
+{
+  "lesson": "07-tensorrt-llm-blackwell",
+  "title": "Blackwell 上使用 FP8 和 NVFP4 的 TensorRT-LLM",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课报告中，在可比的 120B 级 workload 上，Blackwell + TRT-LLM + Dynamo 与 H100 + vLLM 的每百万 tokens 成本差距大约是多少？",
+      "options": [
+        "约 100x",
+        "约 7x",
+        "约 2x",
+        "约 1.1x"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么本课建议在 Blackwell 上让 KV cache 保持 FP8，而不是 NVFP4？",
+      "options": [
+        "任何 engine 都还不支持 NVFP4 KV cache",
+        "FP8 是 NVLink 5 支持的唯一精度",
+        "KV cache 跨越很宽的动态范围；FP4 量化会使 attention scores 出现灾难性准确率损失",
+        "FP8 比 FP4 更省内存"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "TRT-LLM 利用哪项 Blackwell 特性，使模型可以无需训练后转换步骤直接加载？",
+      "options": [
+        "模型提供方发布的 Day-0 FP4 weights",
+        "通过 bitsandbytes 使用 INT2 weights",
+        "FP64 attention",
+        "BF16 KV cache"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "按本课所述，选择 TRT-LLM 栈的主要取舍是什么？",
+      "options": [
+        "它不能 serving MoE models",
+        "它要求完全自治的 remediation",
+        "它会把你锁定到 NVIDIA hardware：没有 AMD、没有 Intel、没有 ARM",
+        "它只能在小规模上工作"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课把哪种精度组合描述为典型 Blackwell 配置？",
+      "options": [
+        "Weights FP4、KV cache FP4、attention 使用 INT8",
+        "所有内容都用 BF16",
+        "Weights NVFP4、activations NVFP4、KV cache FP8、attention accumulator FP32",
+        "Weights INT8、activations FP32、KV cache INT4"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "对于 NVFP4 weight conversion 让 MATH 准确率下降几个点的 reasoning-heavy workloads，本课建议怎么做？",
+      "options": [
+        "切换到 AMD MI300X",
+        "禁用 speculative decoding",
+        "逐模型在 eval set 上验证任务质量；团队常使用 FP8 weights + FP4 activations，或继续在 H200 上全程使用 FP8",
+        "无论如何发布 NVFP4，因为成本收益占主导"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
