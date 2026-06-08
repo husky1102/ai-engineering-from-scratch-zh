@@ -1,0 +1,78 @@
+{
+  "lesson": "42-large-corpus-downloader",
+  "title": "大型语料下载器",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么下载器要为每个分片保留单独的 .partial.json checkpoint？",
+      "options": [
+        "为了让 cache 目录看起来更整齐",
+        "这样恢复下载可以在追加前验证已验证字节上的 sha256 prefix，从而让静默损坏不可能发生",
+        "因为 urllib 要求这样做",
+        "为了在分片文件移动时存储 URL"
+      ],
+      "correct": 1,
+      "explanation": "checkpoint 记录 verified_bytes 以及这些字节的 sha256；只有磁盘上的 hash 匹配时才继续恢复。"
+    },
+    {
+      "stage": "check",
+      "question": "LSH band 方案提供了 exact-hash dedup 没有的什么能力？",
+      "options": [
+        "恒定内存使用",
+        "次线性查找，可以标记 Jaccard similarity 很高的近重复，即使文档只差几个 token",
+        "无损压缩",
+        "更快的 sha256 计算"
+      ],
+      "correct": 1,
+      "explanation": "MinHash 加 LSH 能抓住改写文本和样板变体，而 exact-hash dedup 会直接略过它们。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 checkpoint 要在字节追加之前写，而不是之后？",
+      "options": [
+        "这样方便",
+        "如果进程在写入和 checkpoint 更新之间死亡，下一次恢复会读取一个落后于文件字节的 checkpoint，并静默重新追加，损坏文件",
+        "这样更快",
+        "这样节省磁盘空间"
+      ],
+      "correct": 1,
+      "explanation": "checkpoint-first 与 write-ahead log 一致：崩溃会让已验证偏移落后于或等于文件，绝不会超前。"
+    },
+    {
+      "stage": "check",
+      "question": "manifest sha256 lock file 的作用是什么？",
+      "options": [
+        "它加速读取",
+        "下游阶段只有在 manifest 内容匹配 pinned hash 时才启动，从而关闭攻击者编辑单个文件造成静默损坏的攻击面",
+        "它记录日期",
+        "它是 manifest 的备份"
+      ],
+      "correct": 1,
+      "explanation": "固定 manifest hash 会让代码和数据之间的链接成为内容寻址契约。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 dedup 要放在 tokenization 上游，而不是之后？",
+      "options": [
+        "tokenizer 不能读取 JSONL",
+        "Tokenization 很贵；在同一篇文档上运行两次会让成本翻倍，却不会改善 loss curve，所以先丢掉重复项严格更便宜",
+        "tokenizer 会拒绝重复项",
+        "tokenizer 需要先有 vocabulary"
+      ],
+      "correct": 1,
+      "explanation": "Dedup 是第一个能让每个被丢弃重复文档节省 tokenizer 一次处理的阶段。"
+    },
+    {
+      "stage": "post",
+      "question": "为被丢弃的重复项立 tombstone，比静默删除多保留了什么？",
+      "options": [
+        "磁盘空间",
+        "重复项与它碰撞到的保留项之间的链接，以及能经受未来阈值变化的审计轨迹",
+        "压缩率",
+        "Manifest sha256 稳定性"
+      ],
+      "correct": 1,
+      "explanation": "Tombstone 让未来的 pass 能重新审视去重阈值；删除会丢失证据。"
+    }
+  ]
+}
