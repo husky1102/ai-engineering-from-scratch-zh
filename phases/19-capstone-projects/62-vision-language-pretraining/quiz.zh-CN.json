@@ -1,0 +1,78 @@
+{
+  "lesson": "62-vision-language-pretraining",
+  "title": "Vision-Language 预训练",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "组合 InfoNCE 和 LM loss 会把哪两种不同能力训练进同一个 model？",
+      "options": [
+        "速度和准确率",
+        "Ranking（为 caption 找到正确 image）和 generation（为 image 写 caption）",
+        "压缩和解压缩",
+        "Tokenization 和 detokenization"
+      ],
+      "correct": 1,
+      "explanation": "InfoNCE 处理 ranking；LM loss 处理 generation。CoCa、BLIP 及类似模型会在一次 training pass 中组合两者。"
+    },
+    {
+      "stage": "pre",
+      "question": "在 N 个 pairs 的 batch 上使用 InfoNCE 时，会形成多少 positive pairs 和 negative pairs？",
+      "options": [
+        "1 个 positive 和 N 个 negatives",
+        "similarity matrix diagonal 上的 N 个 positives，以及 off-diagonal 上的 N*(N-1) 个 negatives",
+        "N 个 positives 和 N 个 negatives",
+        "N^2 个 positives"
+      ],
+      "correct": 1,
+      "explanation": "N 个 matching pairs 位于 diagonal；off-diagonal 的所有内容都是 negative。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 contrastive temperature 通常是 learned parameter？",
+      "options": [
+        "PyTorch 要求它",
+        "手动调参很脆弱；让 tau 学习，可以在 training 中 embedding scale 演化时让 model 找到合适的 softmax peakedness",
+        "learned tau 在 GPU 上更快",
+        "它避免使用 Adam"
+      ],
+      "correct": 1,
+      "explanation": "CLIP 引入 learned log-tau，让 contrastive softmax 在 embedding norms 增长时仍处于有用区间。"
+    },
+    {
+      "stage": "check",
+      "question": "哪些 sub-modules 会从 LM loss 接收 gradient，但不会从 contrastive loss 接收 gradient？",
+      "options": [
+        "vision encoder",
+        "cross-attention decoder",
+        "MLP projector",
+        "text-side encoder"
+      ],
+      "correct": 1,
+      "explanation": "Contrastive loss 不触碰 decoder；LM loss 不触碰 text-side mean-pool encoder。"
+    },
+    {
+      "stage": "check",
+      "question": "LM cross-entropy 中的 ignore_index=PAD_ID 起什么作用？",
+      "options": [
+        "加速 loss",
+        "把 padding positions 从 loss 中 mask 掉，这样 model 不会因为 caption 结束后预测 tokens 而受惩罚",
+        "加密 pad tokens",
+        "重新排序 tokens"
+      ],
+      "correct": 1,
+      "explanation": "Padding positions 不携带信号；忽略它们会阻止 loss 学习预测 pad。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 synthetic data 上的 50-step demo 足以认为本课完成？",
+      "options": [
+        "model 在 50 steps 达到 state of the art",
+        "demo 证明 gradient plumbing 能端到端工作；production training shape 完全相同，只是在真实数据上运行数百万 steps",
+        "50 steps 是支持的最大值",
+        "真实数据会改变 architecture"
+      ],
+      "correct": 1,
+      "explanation": "展示出的 dynamics（两个 losses 都下降、没有 NaN、tau 稳定）与十亿 image run 中的 dynamics 相同；只是 scale 更大。"
+    }
+  ]
+}
