@@ -1,0 +1,90 @@
+{
+  "lesson": "26-failure-modes-agentic",
+  "title": "失败模式：为什么 Agent 会坏掉",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "MASFT 的核心主张是什么？",
+      "options": [
+        "失败是随机噪声",
+        "多 Agent 失败是根本设计缺陷，不是靠更好的基础模型就能修掉的 LLM 局限",
+        "更大的模型会让失败消失",
+        "失败来自网络中断"
+      ],
+      "correct": 1,
+      "explanation": "Berkeley 的 MASFT 把失败归类为设计缺陷；它们不会通过扩大基础模型而消失。"
+    },
+    {
+      "stage": "pre",
+      "question": "以下哪一项不是本课列出的五种行业反复出现的失败模式？",
+      "options": [
+        "幻觉动作",
+        "范围蔓延",
+        "级联错误",
+        "Embedding 版本管理"
+      ],
+      "correct": 3,
+      "explanation": "这五种是幻觉动作、范围蔓延、级联错误、上下文丢失、工具误用。"
+    },
+    {
+      "stage": "check",
+      "question": "本课中的级联错误是什么？",
+      "options": [
+        "LLM rate-limit 级联",
+        "一个错误调用跨系统触发下游影响（一个幻觉 SKU 触发四个下游 API 调用）",
+        "一次 cron 失败",
+        "一个 YAML parser 错误"
+      ],
+      "correct": 1,
+      "explanation": "级联会把一次错误调用放大成多系统事故；当 agents 伪造成功时尤其严重。"
+    },
+    {
+      "stage": "check",
+      "question": "LLM Agent Hallucinations Survey 列出了哪两种表现？",
+      "options": [
+        "Hot tokens 和 cold tokens",
+        "Instruction-following Deviation 和 Long-range Contextual Misuse",
+        "Greedy search 和 beam search",
+        "Soft prompts 和 hard prompts"
+      ],
+      "correct": 1,
+      "explanation": "幻觉表现为忽略 system prompt，或忘记/误用早期轮次上下文。"
+    },
+    {
+      "stage": "check",
+      "question": "成功幻觉是什么意思？",
+      "options": [
+        "模型在 benchmarks 上过度自信",
+        "即使目标状态没有改变，agent 仍返回成功消息（通常是在工具返回 400 时）",
+        "用户以为成功了但其实没有",
+        "一个 unit test 通过了"
+      ],
+      "correct": 1,
+      "explanation": "需要重新探测环境状态；agents 在无法区分“我失败了”和“不可能完成”时，经常会伪造完成。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么只标记崩溃是不够的？",
+      "options": [
+        "崩溃很慢",
+        "大多数 agent 失败会产生看起来有效但不会崩溃的输出；需要内容层面的检查",
+        "崩溃会泄露 PII",
+        "日志是付费的"
+      ],
+      "correct": 1,
+      "explanation": "基于崩溃的监控会漏掉大量 agent 失败，因为这些失败呈现为内容问题。"
+    },
+    {
+      "stage": "post",
+      "question": "本课建议在推理链的每一步使用什么缓解措施？",
+      "options": [
+        "添加 sleep()",
+        "自动验证门禁，用环境状态检查事实依据",
+        "禁用 retries",
+        "只降低 temperature"
+      ],
+      "correct": 1,
+      "explanation": "每步门禁（safety classifier、参数校验、CRITIC、状态重新探测）能在失败级联前捕获问题。"
+    }
+  ]
+}
