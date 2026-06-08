@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "temperature < 1.0 会如何影响语言模型的输出分布？",
+      "options": [
+        "让分布更均匀（更随机）",
+        "锐化分布，让最高概率的 token 更可能被选中",
+        "移除除最高概率 token 之外的所有 token",
+        "对输出没有影响"
+      ],
+      "correct": 1,
+      "explanation": "temperature < 1.0 会用一个小于 1 的数除 logits，从而放大 logits 之间的差异。经过 softmax 后，最高概率的 token 会获得更大的概率份额。temperature 接近 0 时会得到 greedy（argmax）decoding。"
+    },
+    {
+      "stage": "pre",
+      "question": "top-k 和 top-p（nucleus）sampling 的关键区别是什么？",
+      "options": [
+        "top-k 比 top-p 更快",
+        "top-k 保留固定数量的 token；top-p 根据累计概率保留可变数量的 token",
+        "top-p 只能在 temperature = 1.0 时使用",
+        "top-k 作用于 logits，而 top-p 作用于 probabilities"
+      ],
+      "correct": 1,
+      "explanation": "无论概率分布如何，top-k 总是恰好保留 k 个 token。top-p 会自适应地保留累计概率超过 p 的最小 token 集合。当模型很有把握时，top-p 保留较少 token；当模型不确定时，它会保留较多 token。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么不能通过标准采样操作 z ~ N(mu, sigma^2) 做反向传播？",
+      "options": [
+        "Normal distribution 没有梯度",
+        "采样操作是非确定性的，并且相对于 mu 和 sigma 没有定义良好的导数",
+        "PyTorch 不支持 normal distribution",
+        "梯度总是精确为零"
+      ],
+      "correct": 1,
+      "explanation": "采样引入了随机不连续性，也就是说你无法为一次随机抽样计算 d(sample)/d(mu)。reparameterization trick 通过写成 z = mu + sigma * epsilon（其中 epsilon ~ N(0,1)）解决这个问题，让 z 成为 mu 和 sigma 的确定性、可微函数。"
+    },
+    {
+      "stage": "post",
+      "question": "在 Metropolis-Hastings MCMC 中，如果 proposal standard deviation 设得过大，会发生什么？",
+      "options": [
+        "链会因为步子更大而收敛更快",
+        "大多数 proposal 会落入低概率区域并被拒绝，因此链几乎不移动",
+        "stationary distribution 会变成 uniform distribution",
+        "burn-in period 会变成零"
+      ],
+      "correct": 1,
+      "explanation": "当 proposal standard deviation 很大时，提议点会离当前位置很远，很可能落入低概率区域。这些点会被拒绝，导致链卡在当前点附近。对于高维 Gaussian proposal，最优接受率大约是 23%。"
+    },
+    {
+      "stage": "post",
+      "question": "在 rejection sampling 中，随着目标分布维度升高，接受率会发生什么变化？",
+      "options": [
+        "无论维度如何都保持不变",
+        "它会上升，因为有更多维度可以接受",
+        "它会指数级下降，因为 proposal 的大部分体积都会被拒绝",
+        "在所有情况下都接近 50%"
+      ],
+      "correct": 2,
+      "explanation": "在高维中，proposal distribution 中与 target distribution 重叠的体积会指数级缩小。边界 M 会增大，接受率（1/M）会指数级下降。这就是 rejection sampling 的维度灾难。"
+    }
+  ]
+}
