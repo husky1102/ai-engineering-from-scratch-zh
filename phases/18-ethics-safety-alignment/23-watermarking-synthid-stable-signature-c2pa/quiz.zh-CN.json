@@ -1,0 +1,78 @@
+{
+  "lesson": "23-watermarking-synthid-stable-signature-c2pa",
+  "title": "水印：SynthID、Stable Signature、C2PA",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Kirchenbauer 风格（SynthID-text）的 token 水印如何嵌入信号？",
+      "options": [
+        "通过修改 prompt template",
+        "通过用 public key 加密输出",
+        "在每个解码步骤，hash 前 K 个 token，把 vocabulary 划分为 green/red 集合并让采样偏向 green；检测时通过 z-score 统计 green token",
+        "通过插入隐藏的 HTML comment"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "文本水印面对改写时的主要局限是什么？",
+      "options": [
+        "重述或改写文本会破坏 green-token 统计信号",
+        "改写只影响图像水印",
+        "改写会增强水印",
+        "它们实际上能经受改写"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Stable Signature（Fernandez 等，ICCV 2023）做了什么？",
+      "options": [
+        "使用 C2PA 在上传时给图像签名",
+        "在图像角落添加可见水印",
+        "微调 latent diffusion decoder，使每张生成图像都携带可从 latent 检测的固定嵌入消息",
+        "用 private key 签名元数据"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "2024 年 5 月的 “Stable Signature is Unstable” 结果证明了什么？",
+      "options": [
+        "该水印被证明不可伪造",
+        "该水印需要 C2PA 才能工作",
+        "该水印只在 JPEG 压缩上失败",
+        "生成后对 decoder 的微调可以去除水印并保持图像质量，从而削弱对抗鲁棒性"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "C2PA 元数据与水印如何互补？",
+      "options": [
+        "它们可以互换",
+        "水印由与 C2PA 相同的 key 签名",
+        "元数据可能被移除但携带丰富出处链；水印能跨转码保留但只携带少量 bits；分层使用时，它们提供可用的出处叙事",
+        "C2PA 完全取代水印"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么“没有 SynthID 信号”并不能证明真实性（人类来源）？",
+      "options": [
+        "因为 SynthID 只会给启用 SynthID 的模型生成内容加水印；任何未启用 SynthID 的模型产出默认都没有水印",
+        "因为 SynthID 是闭源的",
+        "因为 SynthID 总会在人类文本上产生假阳性",
+        "因为 SynthID 只适用于 Gemini 输出"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
