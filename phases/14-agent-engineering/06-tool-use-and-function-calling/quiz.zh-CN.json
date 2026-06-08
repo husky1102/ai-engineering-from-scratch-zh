@@ -1,0 +1,90 @@
+{
+  "lesson": "06-tool-use-and-function-calling",
+  "title": "工具使用和函数调用",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Toolformer 用什么信号决定是否保留一个候选 tool annotation？",
+      "options": [
+        "Human label agreement",
+        "包含 tool result 是否会降低 surrounding text 的 next-token loss",
+        "工具是否在 100 ms 内返回",
+        "工具是否发出 valid JSON"
+      ],
+      "correct": 1,
+      "explanation": "Toolformer 的 self-supervised signal 会保留那些 tool results 能降低 next-token loss 的 annotations。"
+    },
+    {
+      "stage": "pre",
+      "question": "本课报告的 BFCL V4 split 是什么？",
+      "options": [
+        "100% single-turn",
+        "40% agentic、30% multi-turn、10% live、10% non-live、10% hallucination",
+        "50% live、50% synthetic",
+        "33% agentic、33% planning、33% reflection"
+      ],
+      "correct": 1,
+      "explanation": "BFCL V4 权重是 40 agentic / 30 multi-turn / 10 live / 10 non-live / 10 hallucination。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么工具的 description 是承重字段？",
+      "options": [
+        "它是用户在 UI 中看到的内容",
+        "模型会读它来选择正确工具；糟糕的 descriptions 是 wrong-tool failures 的首要原因",
+        "它控制 billing buckets",
+        "JSON Schema 要求它存在"
+      ],
+      "correct": 1,
+      "explanation": "Tool descriptions 是模型选择工具的主要信号；差的 descriptions 会导致 wrong-tool routing。"
+    },
+    {
+      "stage": "check",
+      "question": "`tool_use_id` 在 parallel tool calling 中起什么作用？",
+      "options": [
+        "它压缩 JSON payload",
+        "它把每个 tool result 和发起它的 call 关联起来，让乱序返回的结果也能正确路由",
+        "它用 API key 授权调用",
+        "它启用 caching"
+      ],
+      "correct": 1,
+      "explanation": "tool_use_id 是 correlation token；交换它们会把结果路由到错误调用。"
+    },
+    {
+      "stage": "check",
+      "question": "V3 state-based evaluation 试图捕获哪一类失败？",
+      "options": [
+        "Token leakage",
+        "AST-matching tool calls 看起来正确，但让 API 留在错误状态",
+        "Tool execution 太慢",
+        "Schema versioning drift"
+      ],
+      "correct": 1,
+      "explanation": "State-based evaluation 检查生成后的 API state（例如文件是否真的创建），而不是语法级 call matching。"
+    },
+    {
+      "stage": "post",
+      "question": "本课没有把哪个 2026 年问题列为 function calling 的开放问题？",
+      "options": [
+        "Long-horizon tool chaining",
+        "跨许多工具的 dynamic decision-making",
+        "跨 turns 的 memory",
+        "Token-level decoding speed"
+      ],
+      "correct": 3,
+      "explanation": "开放问题是 memory、dynamic decision-making、long-horizon chains 和 hallucination detection；decoding speed 不在列表里。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课把通用 `run_shell(cmd)` 工具称为危险信号？",
+      "options": [
+        "它很慢",
+        "它扩大了 sandbox boundary；像 `git_status()` 这样的具体工具会约束 read/write surface 和风险",
+        "它不能并行调用",
+        "Providers 会拒绝它"
+      ],
+      "correct": 1,
+      "explanation": "窄工具会约束 sandbox surface；通用 shell 工具授予 host 的完整 surface。"
+    }
+  ]
+}
