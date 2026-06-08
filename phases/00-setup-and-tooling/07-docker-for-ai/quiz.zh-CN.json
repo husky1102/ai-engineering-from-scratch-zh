@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Docker 容器和虚拟机之间最主要的区别是什么？",
+      "options": [
+        "容器比虚拟机更慢，但更安全",
+        "容器共享宿主 OS 内核，而虚拟机会运行自己的完整 OS",
+        "容器只能运行 Linux，而虚拟机支持任意 OS",
+        "二者没有实际区别"
+      ],
+      "correct": 1,
+      "explanation": "容器共享宿主机内核，并在进程层级进行隔离，因此可以在几秒内启动。虚拟机会运行带有自己内核的完整客户机 OS，需要更多资源，启动也更慢。"
+    },
+    {
+      "stage": "pre",
+      "question": "什么是 Dockerfile？",
+      "options": [
+        "Docker 守护进程的配置文件",
+        "一组用于逐层构建 Docker 镜像的指令",
+        "记录容器活动的日志文件",
+        "列出正在运行容器的文件"
+      ],
+      "correct": 1,
+      "explanation": "Dockerfile 包含一系列顺序执行的指令（FROM、RUN、COPY 等），Docker 会执行这些指令来构建镜像。每条指令都会创建一个可缓存的层。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么卷挂载对使用 Docker 进行 AI 开发很关键？",
+      "options": [
+        "卷会利用宿主机磁盘速度，让容器运行得更快",
+        "卷会在容器重建之间持久保存数据（模型、数据集、代码），这样你就不用每次重新下载好几个 GB",
+        "正确安装 Python 包必须使用卷",
+        "卷允许多个容器共享同一个 GPU"
+      ],
+      "correct": 1,
+      "explanation": "没有卷时，容器内部的一切都会在容器停止后丢失。卷挂载会把宿主机目录映射到容器中，因此模型权重（14+ GB）和数据集可以在重建后继续保留。"
+    },
+    {
+      "stage": "post",
+      "question": "NVIDIA Container Toolkit 提供了什么能力？",
+      "options": [
+        "在容器内安装 CUDA 驱动",
+        "通过 --gpus 标志把宿主机 GPU 暴露给 Docker 容器",
+        "在 AMD 硬件上运行 NVIDIA GPU 容器",
+        "在 Docker 构建过程中编译 CUDA 代码"
+      ],
+      "correct": 1,
+      "explanation": "NVIDIA Container Toolkit 是一个运行时钩子，会把宿主机 GPU 暴露给容器。CUDA toolkit 位于容器内部，但 GPU 驱动来自宿主机共享。"
+    },
+    {
+      "stage": "post",
+      "question": "在用于 AI 的 Docker Compose 文件中，'ai-dev' 服务如何访问 'qdrant' 向量数据库？",
+      "options": [
+        "使用宿主机的 IP 地址和端口",
+        "使用服务名 'qdrant' 作为主机名，因为 Compose 会创建共享网络",
+        "在两个容器之间挂载一个共享卷",
+        "在容器之间配置 VPN"
+      ],
+      "correct": 1,
+      "explanation": "Docker Compose 会自动创建一个共享网络，服务可以通过名称互相访问。ai-dev 容器会使用服务名作为主机名，连接到 'http://qdrant:6333'。"
+    }
+  ]
+}
