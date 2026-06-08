@@ -1,0 +1,78 @@
+{
+  "lesson": "80-checkpoint-sharded-resume",
+  "title": "Sharded Checkpoint 与 Atomic Resume",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 gather-then-write 在规模化 checkpoint 中是错误模式？",
+      "options": [
+        "它看起来不好看",
+        "所有状态都经过 rank 0；写入带宽是最慢的单条链路，而不是聚合带宽，因此 TB 级写入会耗时数小时",
+        "它使用太多 CPU",
+        "它需要特殊硬件"
+      ],
+      "correct": 1,
+      "explanation": "Sharded write 会随集群规模扩展：64 个 rank 并行写入，会以单个 rank 写 gathered state 的 1/64 时间完成。"
+    },
+    {
+      "stage": "pre",
+      "question": "Manifest 记录了哪些 shard files 自身无法记录的信息？",
+      "options": [
+        "随机数",
+        "world_size、schema version、per-shard sha256 和 shard ownership；让 loader 在触碰状态前拥有可验证的契约",
+        "Filesystem name",
+        "Hostname"
+      ],
+      "correct": 1,
+      "explanation": "没有 manifest，loader 必须猜哪个 shard 属于哪个 rank，并相信文件数量正确。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么写入 <name>.tmp 后 rename，而不是直接写最终文件？",
+      "options": [
+        "更快",
+        "同一 filesystem 内的 POSIX rename 是 atomic：写入中途 crash 会让旧文件保持不变。直接写可能留下半成品 checkpoint，污染下一次 resume",
+        "torch 要求这样",
+        "节省内存"
+      ],
+      "correct": 1,
+      "explanation": "没有 atomic write 时，一次 partial save 加上一个指向它的 updated manifest，会在下一次 load 时损坏状态。"
+    },
+    {
+      "stage": "check",
+      "question": "每个 shard 的 sha256 防御什么？",
+      "options": [
+        "网络攻击",
+        "Partial 或 corrupted writes；load 时验证 hash 能在 truncated shard 触碰模型状态前捕获它",
+        "减速",
+        "内存泄漏"
+      ],
+      "correct": 1,
+      "explanation": "没有 sha256 verification，truncated shard 会静默加载并损坏优化器，之后以 NaN loss 暴露。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 load path 要响亮拒绝 world_size mismatch？",
+      "options": [
+        "只是外观问题",
+        "在 8 个 rank 上恢复 4-rank shard layout 会静默错分 shard；响亮拒绝会迫使 operator 使用 cross-world-size rebalance path",
+        "更容易编码",
+        "硬件需要它"
+      ],
+      "correct": 1,
+      "explanation": "Cross-world-size rebalance 是单独操作；静默拼接错误大小的 shard 会损坏状态。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么生产系统要轮换 checkpoint（keep last K）？",
+      "options": [
+        "审美原因",
+        "没有 rotation，磁盘会在运行中被填满，下一个 checkpoint 会失败；rotation 会在写入新 checkpoint 前删除最旧的，从而约束磁盘使用",
+        "为了压缩",
+        "它不需要"
+      ],
+      "correct": 1,
+      "explanation": "真实运行保留最近 3-5 个 checkpoint；每次新保存前删除最旧的，使磁盘预算固定。"
+    }
+  ]
+}
