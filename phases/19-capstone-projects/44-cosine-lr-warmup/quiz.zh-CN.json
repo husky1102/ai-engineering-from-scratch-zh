@@ -1,0 +1,78 @@
+{
+  "lesson": "44-cosine-lr-warmup",
+  "title": "带线性 Warmup 的 Cosine LR",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 cosine-with-warmup schedule 从 zero 开始，而不是从 lr_max 开始？",
+      "options": [
+        "因为 lr_max 在 step zero 是非法的",
+        "前一千次 update 噪声很大；从 zero 到 lr_max 的 linear ramp 会在运行估计稳定期间给 optimizer 一个较小的有效 step size",
+        "因为 Adam 要求这样",
+        "随机传统"
+      ],
+      "correct": 1,
+      "explanation": "Warmup 让脆弱的 early updates 保持较小；否则模型要么发散，要么进入 plateau。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 schedule 要实现为覆盖 step 的单一函数，而不是三个拼接片段？",
+      "options": [
+        "单函数更小",
+        "拼接的 schedule 在第一次修改 lr_max 时就会丢掉一个边界；单一函数计算同一个 closed-form expression，并保持 warmup 和 total endpoints 处的连续性",
+        "linter 要求这样",
+        "随机"
+      ],
+      "correct": 1,
+      "explanation": "`lr(warmup_steps)` 和 `lr(total_steps)` 处的连续性来自 closed form。"
+    },
+    {
+      "stage": "check",
+      "question": "在 schedule 中，当 step > total_steps 时会发生什么？",
+      "options": [
+        "它抛出异常",
+        "它固定在 lr_min；schedule 不外推，需要延长训练的 trainer 会显式改变 total_steps",
+        "它返回 nan",
+        "它回绕"
+      ],
+      "correct": 1,
+      "explanation": "固定 floor 会让 overshooting trainer 处在有文档说明的状态，而不是崩溃。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么要把 gradient L2 norm 与 learning rate 一起记录？",
+      "options": [
+        "这样好看",
+        "norm 是 training health 的另一半：发散运行会先让 norm spike，再让 loss spike；过激 peak 会表现为 warmup 后 norm 持续偏高",
+        "Adam 要求这样",
+        "传统"
+      ],
+      "correct": 1,
+      "explanation": "共同记录能让病态 schedule 在运行时可见，而不是事后才发现。"
+    },
+    {
+      "stage": "post",
+      "question": "生产中为什么要把 warmup_steps 配成 total_steps 的比例？",
+      "options": [
+        "比例更干净",
+        "适合 20k-step run 的固定 warmup count，在 200M-step run 中几乎等于没有 warmup；比例（典型 1-3 percent）会随训练时长缩放",
+        "随机偏好",
+        "硬件要求"
+      ],
+      "correct": 1,
+      "explanation": "绝对 warmup count 会在不同训练时长尺度上表现失常。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么生产中常见非零 lr_min？",
+      "options": [
+        "Adam 要求非零",
+        "接近 lr_max 10 percent 的 floor 会让 optimizer 在长尾期间继续学习；lr_min 为 zero 会产出一条看起来很好、但模型还没真正完成训练的曲线",
+        "数值稳定性",
+        "向后兼容"
+      ],
+      "correct": 1,
+      "explanation": "schedule 的尾部承载后期 refinement；把它归零会浪费这个信号。"
+    }
+  ]
+}
