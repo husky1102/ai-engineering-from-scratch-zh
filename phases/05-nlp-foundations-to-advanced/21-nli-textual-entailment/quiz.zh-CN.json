@@ -1,0 +1,102 @@
+{
+  "lesson": "21-nli-textual-entailment",
+  "title": "Natural Language Inference：Textual Entailment",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "NLI 会给一个 (premise, hypothesis) pair 分配哪三个标签？",
+      "options": [
+        "Positive / negative / neutral",
+        "True / false / unknown",
+        "Entailment / contradiction / neutral",
+        "Cause / effect / unrelated"
+      ],
+      "correct": 2,
+      "explanation": "NLI 是针对 entailment、contradiction 和 neutral 的 3-way classification。"
+    },
+    {
+      "stage": "pre",
+      "question": "NLI 如何用作 zero-shot text classifier？",
+      "options": [
+        "把每个 candidate label verbalize 成 hypothesis（例如 'This text is about sports'），并选择 entailment score 最高的 label",
+        "通过 averaging embeddings",
+        "通过计算 TF-IDF",
+        "通过 prompting an LLM"
+      ],
+      "correct": 0,
+      "explanation": "NLI-as-classifier 把 labels 转成 hypotheses；模型选择 max-entailment label。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 NLI 可以作为 RAG outputs 的 faithfulness check？",
+      "options": [
+        "它使用 tokenizers",
+        "检查 retrieved context 是否 entails 每个 answer claim，正是 NLI 的训练形式",
+        "它很便宜",
+        "它是 multilingual"
+      ],
+      "correct": 1,
+      "explanation": "Hallucination = answer claims 不被 retrieved context entailed；NLI 直接测量 entailment。"
+    },
+    {
+      "stage": "check",
+      "question": "Hypothesis-only baseline 暴露了什么？",
+      "options": [
+        "Multilingual gaps",
+        "Slow inference",
+        "某些 datasets 中，仅 hypothesis（没有 premise）就能预测 label，说明存在 label leakage",
+        "Tokenizer drift"
+      ],
+      "correct": 2,
+      "explanation": "SNLI 上较高的 hypothesis-only score 揭示了 annotation artifacts；它对调试你的数据很有用。"
+    },
+    {
+      "stage": "check",
+      "question": "哪一类 NLI model family 是 2026 leaderboards 上的标准 workhorse？",
+      "options": [
+        "fastText",
+        "Plain Word2Vec",
+        "在 MNLI/FEVER/ANLI 上 fine-tuned 的 DeBERTa-v3 variants",
+        "GPT-2"
+      ],
+      "correct": 2,
+      "explanation": "在 MNLI 和相关 corpora 上 fine-tuned 的 DeBERTa-v3 是 2026 年的 open NLI workhorse。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 sentence-level NLI models 在 document-length premises 上 accuracy 会下降？",
+      "options": [
+        "它们在短 premises 上训练，无法处理 multi-sentence 和 multi-hop inference；DocNLI-tuned models 能处理更长输入",
+        "更大的输入运行更慢",
+        "Documents 触发 tokenizer drift",
+        "Cosine similarity 衰减"
+      ],
+      "correct": 0,
+      "explanation": "Training distribution mismatch：single-sentence NLI models 在 document-length inputs 上会损失 20+ F1。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 zero-shot accuracy 会因为 hypothesis template 摆动 10+ points？",
+      "options": [
+        "Models 对措辞敏感；例如 'This text is about {label}' 与单独的 '{label}' 会移动 entailment probabilities",
+        "Templates 改变 tokenizer behavior",
+        "Templates 影响 model weights",
+        "Templates 改变 label set"
+      ],
+      "correct": 0,
+      "explanation": "Template wording 会实质性移动 entailment scores；要在小型 held-out set 上调优。"
+    },
+    {
+      "stage": "post",
+      "question": "关于 NLI 用于 hallucination detection，安全的说法边界是什么？",
+      "options": [
+        "它只适用于 English",
+        "它作为 faithfulness signal 可以减少 hallucination，但不能消除 hallucination；要结合 retrieval recall 和 human review",
+        "它会消除 hallucination",
+        "它需要 LLMs"
+      ],
+      "correct": 1,
+      "explanation": "NLI 是有用信号，但不是完整解决方案；应搭配 retrieval metrics 和 human spot-checks。"
+    }
+  ]
+}
