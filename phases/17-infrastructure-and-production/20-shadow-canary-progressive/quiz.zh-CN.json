@@ -1,0 +1,78 @@
+{
+  "lesson": "20-shadow-canary-progressive",
+  "title": "LLMs 的 Shadow Traffic、Canary Rollout 与 Progressive Deployment",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "LLM rollout 中 shadow、canary 和 A/B testing 的正确顺序是什么？",
+      "options": [
+        "先 Shadow（zero-impact compare），再 canary（带 gates 的 live traffic progressive），最后在 stability confirmed 后对 distinct alternatives 做 A/B",
+        "完全跳过 shadow",
+        "先 Canary，再 shadow，再 A/B",
+        "先 A/B，再 shadow，再 canary"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课用哪五类 metrics gate canary progressions？",
+      "options": [
+        "GPU temp、fan speed、queue depth、cost、latency",
+        "只看 offline eval 上的 accuracy",
+        "Latency percentiles、cost per request、error/refusal rate、output length distribution、user-feedback rate",
+        "只看 throughput"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课引用相同 inputs 在 LLMs 上大约有多少 run-to-run accuracy variance？",
+      "options": [
+        "低于 0.1%",
+        "run-to-run outputs 完全相同",
+        "总是 50%",
+        "最高约 15%，原因是 GPU FP non-associativity 加 batch-size variance"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在本课 framing 中，shadow mode 用来做什么？",
+      "options": [
+        "替代 rollback",
+        "替代 evals 的完整 quality test",
+        "最终 production rollout step",
+        "捕获 cost blow-ups、length regressions、refusal changes 和 hard errors 的 smoke test；不是 quality guarantee"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "根据本课，正确的 rollback design 是什么？",
+      "options": [
+        "等待下一个 release window",
+        "用新 model digest redeploy，花数小时",
+        "数秒内 flip policy flag，并恢复 pinned model digest；无需 redeploy",
+        "手动 SSH 到每个 pod"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 cost 与 latency 和 quality 一起被列为 gate？",
+      "options": [
+        "一个好 20% 的 model 每 call 可能贵 3x；没有 cost gate 就 ship 会破坏 unit economics",
+        "每个 provider 都会自动 cap cost",
+        "Cost 是 vanity metric",
+        "不同 providers 的 cost 都相同"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
