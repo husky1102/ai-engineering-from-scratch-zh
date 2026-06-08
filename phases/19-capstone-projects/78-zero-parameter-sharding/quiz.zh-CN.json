@@ -1,0 +1,78 @@
+{
+  "lesson": "78-zero-parameter-sharding",
+  "title": "ZeRO 优化器状态分片",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 ZeRO 首先切分优化器状态，而不是参数？",
+      "options": [
+        "优化器更重要",
+        "优化器状态是最大的内存项，并且只在 step 期间被访问，不在 forward 或 backward 期间访问",
+        "参数更容易",
+        "DeepSpeed 强制要求这样"
+      ],
+      "correct": 1,
+      "explanation": "对于 mixed precision 下的 Adam，fp32 master 加两个 moments 是每个 rank 12P bytes，而 fp16 params + grads 是 4P。先切分最大的项，单位复杂度带来的内存收益最高。"
+    },
+    {
+      "stage": "pre",
+      "question": "ZeRO stage 1 每步的链路模式是什么？",
+      "options": [
+        "一次 allreduce",
+        "对梯度执行一次 reduce_scatter，再对更新后的参数执行一次 allgather",
+        "一次 broadcast",
+        "什么也不做"
+      ],
+      "correct": 1,
+      "explanation": "Reduce_scatter 只把梯度 shard 交给对应 rank；allgather 把更新后的参数 shard 分发回去。总字节数等于 allreduce，内存除以 N。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么每步带宽与 DDP 相同？",
+      "options": [
+        "魔法",
+        "Allreduce 在带宽上等于 reduce_scatter 加 allgather；ZeRO 把它拆成作用于不同数据的两半",
+        "ZeRO 使用压缩",
+        "它并不相同"
+      ],
+      "correct": 1,
+      "explanation": "Ring allreduce 的实现就是 reduce_scatter 然后 allgather。ZeRO 做同样两个操作，但 allgather 轮转的是更新后的参数，而不是求和梯度。"
+    },
+    {
+      "stage": "check",
+      "question": "对于一个在 8 个 rank 上用 mixed precision Adam 训练的 7B 模型，相比 vanilla DDP，内存下降多少？",
+      "options": [
+        "10%",
+        "约 65%（vanilla 16P，对比 ZeRO-1 的 4P + 12P/N = 5.5P）",
+        "99%",
+        "0%"
+      ],
+      "correct": 1,
+      "explanation": "Vanilla：2P + 2P + 4P + 4P + 4P = 16P。ZeRO-1：2P + 2P + (4P+4P+4P)/8 = 5.5P。下降比例是 (16-5.5)/16 = 65.6%。"
+    },
+    {
+      "stage": "check",
+      "question": "ZeRO-2 在 ZeRO-1 之上增加了什么？",
+      "options": [
+        "什么也没有",
+        "在 reduce_scatter 后也丢弃非 shard 梯度，释放每个 rank 的梯度内存；带宽保持不变",
+        "把 backend 切换到 NCCL",
+        "移除优化器"
+      ],
+      "correct": 1,
+      "explanation": "ZeRO-2 会在 reduce_scatter 后把非 shard 梯度部分清零；带宽与 ZeRO-1 相同，但梯度内存更低。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 ZeRO 要求优化器状态 checkpoint 记录哪个 rank 拥有哪个 shard？",
+      "options": [
+        "只是外观问题",
+        "没有 per-rank ownership，保存的状态在重启时不可读；在相同 world size 上恢复需要把正确 shard 放回正确 rank",
+        "它不需要",
+        "为了压缩"
+      ],
+      "correct": 1,
+      "explanation": "Lesson 80 构建 sharded checkpoint manifest，正是为了让 ZeRO run 能在相同拓扑上恢复。"
+    }
+  ]
+}
