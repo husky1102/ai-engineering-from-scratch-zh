@@ -1,0 +1,37 @@
+[
+  {
+    "question": "为什么不能简单地把所有 pre-training data 载入内存？",
+    "options": ["Python 不支持大型数组", "Pre-training corpora 通常是 TB 级，远超可用 RAM，因此需要 streaming pipelines", "把数据载入内存更慢", "内存只用于 model weights"],
+    "correct": 1,
+    "explanation": "LLM pre-training data 通常是 1-15 TB 文本。即使有 256GB RAM，也无法容纳完整 dataset。Streaming pipelines 会即时处理数据，只加载当前 batch 所需内容。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么 data deduplication 对 pre-training 很重要？",
+    "options": ["它节省磁盘空间", "重复 documents 会让模型逐字记忆特定文本，并把 training compute 浪费在重复内容上", "它加快 tokenization", "它减少 vocabulary size"],
+    "correct": 1,
+    "explanation": "Near-duplicate content（boilerplate、scraped duplicates）会让模型记忆而不是泛化。Deduplication 减少 training compute 浪费，并通过保证训练信号多样性提升模型质量。",
+    "stage": "pre"
+  },
+  {
+    "question": "从 variable-length documents 创建 fixed-length training sequences 的目的是什么？",
+    "options": ["让文本更容易阅读", "GPU training 需要统一 tensor shapes，因此 documents 必须被 pack 或 pad 成 fixed-length sequences", "Fixed-length sequences 更准确", "减少 token 总数"],
+    "correct": 1,
+    "explanation": "GPU 处理形状相同的 tensor batches。Variable-length documents 必须被 chunk 成 fixed-length sequences（例如 2048 或 4096 tokens），并在 document boundaries 处使用正确 attention masks。",
+    "stage": "post"
+  },
+  {
+    "question": "如果 data pipeline 慢于 GPU training speed，会发生什么？",
+    "options": ["Training 会自动放慢以匹配", "GPU 会闲置等待 batches，浪费昂贵 compute time", "模型会反复训练同一个 batch", "什么都不会发生——pipeline 异步运行"],
+    "correct": 1,
+    "explanation": "如果 dataloader 无法足够快地提供 batches，GPU 会在 steps 之间停顿。在每小时 $30+ 的 A100 clusters 上，pipeline bottlenecks 会直接浪费钱。Profiling pipeline throughput 必不可少。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么要在 tokenization 前应用 data quality filtering（language detection、content filtering）？",
+    "options": ["Tokenizers 无法处理低质量文本", "低质量数据（spam、boilerplate、toxic content）会按其在训练数据中的占比削弱模型能力", "Tokenization 后无法 filtering", "它减少 tokenization time"],
+    "correct": 1,
+    "explanation": "模型会从它看到的任何数据中学习。如果 10% 的训练数据是 spam 或 low-quality content，模型就会把 10% 容量用于复现这些模式。Early filtering 确保只有高质量信号进入模型。",
+    "stage": "post"
+  }
+]
