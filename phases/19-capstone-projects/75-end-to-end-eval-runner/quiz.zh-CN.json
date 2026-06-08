@@ -1,0 +1,78 @@
+{
+  "lesson": "75-end-to-end-eval-runner",
+  "title": "端到端 Eval Runner",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "ModelAdapter interface 的最小可能表面是什么？",
+      "options": [
+        "generate(prompt, task)，返回 text 加可选 confidence 和 per-token nll",
+        "complete、embed、classify、summarise",
+        "init、login、generate、close",
+        "load_weights、generate、save_weights"
+      ],
+      "correct": 0,
+      "explanation": "一个方法就能覆盖任何 adapter。其他都是可选装饰。runner 不需要更丰富的表面。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 runner 接受 parallel flag，而不是总是并行运行？",
+      "options": [
+        "CPython 中并行执行不安全",
+        "测试需要确定性执行顺序；该 flag 让它们切换到 sequential",
+        "并行执行需要 GPU",
+        "ThreadPoolExecutor 不是 stdlib"
+      ],
+      "correct": 1,
+      "explanation": "测试想要可复现性。生产想要吞吐量。这个 flag 在不写两套代码路径的情况下分离了二者。"
+    },
+    {
+      "stage": "check",
+      "question": "runner 如何确定 calibration buffer 的 correct flag？",
+      "options": [
+        "它调用 adapter 两次并比较输出",
+        "默认 exact_match-style metrics 使用 1.0 阈值，graded metrics 使用 0.5 阈值",
+        "它使用 average bin confidence",
+        "它使用 Brier decomposition"
+      ],
+      "correct": 1,
+      "explanation": "阈值会感知 metric：exact_match-style metrics 使用接近 1.0 的 cutoff，而 graded metrics 默认使用 0.5。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 runner 构建 EvalRun records 并交给 aggregator，而不是内联计算 leaderboard？",
+      "options": [
+        "EvalRun 更省内存",
+        "这让 runner 与 aggregator 解耦，leaderboard layer 可以演进而不触碰 runner",
+        "aggregator 在 numpy arrays 上比 dataclasses 更快",
+        "JSON Schema 要求 EvalRun"
+      ],
+      "correct": 1,
+      "explanation": "组合优于内联。runner 产生 records；aggregator 拥有 leaderboard math。每课拥有一个关注点。"
+    },
+    {
+      "stage": "check",
+      "question": "最终 JSON envelope 中 perplexity block 的作用是什么？",
+      "options": [
+        "它是 leaderboard ranking 必需的",
+        "它是 calibration report 的输入",
+        "它携带每个模型的 held-out language modelling 数字，独立于 task scoring",
+        "它由 bootstrap CI 计算得到"
+      ],
+      "correct": 2,
+      "explanation": "Perplexity 位于 leaderboard 旁边，而不是内部。它使用 adapter 的 per-call token NLL 和 token counts。"
+    },
+    {
+      "stage": "post",
+      "question": "自终止 demo 的 clean-run exit criterion 是什么？",
+      "options": [
+        "每个 task 都 validated、每个 task 都 scored、calibration 已聚合，并且 rule-based adapter 在 leaderboard 上严格高于 random adapter",
+        "每个 task score 都高于 0.9",
+        "每个模型的 ECE 都低于 0.05",
+        "每对模型的 bootstrap CI 都排除零"
+      ],
+      "correct": 0,
+      "explanation": "demo 会端到端强制 contract：每一层都运行了，且最准确的 adapter 排名正确。"
+    }
+  ]
+}
