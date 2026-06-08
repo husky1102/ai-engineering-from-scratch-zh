@@ -7,12 +7,12 @@
       "question": "本课认为 agent 在真实任务上失败的根因是什么？",
       "options": [
         "模型参数不足",
-        "工作台失败：模型周围缺少 surfaces，而不是 LLM 局限",
+        "工作台失败：模型周围缺少表面，而不是 LLM 局限",
         "网络很慢",
         "训练数据过时"
       ],
       "correct": 1,
-      "explanation": "模型并不是不懂 Python；它不懂的是工作。模型周围的 surfaces 缺失了。"
+      "explanation": "模型并不是不懂 Python；它不懂的是工作。模型周围的表面缺失了。"
     },
     {
       "stage": "pre",
@@ -24,11 +24,11 @@
         "Read、write、exec、fork、exit、wait、kill"
       ],
       "correct": 0,
-      "explanation": "七个表面是 instructions、state、scope、feedback、verification、review、handoff。"
+      "explanation": "七个表面是指令、状态、范围、反馈、验证、评审和交接。"
     },
     {
       "stage": "check",
-      "question": "以下哪一项不是本课映射 surfaces 到的八个分布式系统原语之一？",
+      "question": "以下哪一项不是本课把表面映射到的八个分布式系统原语之一？",
       "options": [
         "Function",
         "Worker",
@@ -40,7 +40,7 @@
     },
     {
       "stage": "check",
-      "question": "Vercel 报告的 harness 改动把 success rate 从多少提升到多少？",
+      "question": "Vercel 报告的 harness 改动把成功率从多少提升到多少？",
       "options": [
         "20% 到 60%",
         "80% 到 100%，通过删除 agent 的 80% 工具",
@@ -48,38 +48,38 @@
         "50% 到 70%，通过添加 RAG"
       ],
       "correct": 1,
-      "explanation": "删除 80% 的工具让 Vercel 的 agent 从 80% success 提升到 100%。"
+      "explanation": "删除 80% 的工具让 Vercel 的 agent 从 80% 成功率提升到 100%。"
     },
     {
       "stage": "check",
       "question": "Terminal Bench 2.0 对 model vs harness 展示了什么？",
       "options": [
         "模型单独决定排名",
-        "同一个模型仅改变 harness，就从 top 30 之外移动到第 5 名",
+        "同一个模型仅改变 harness，就从前 30 名之外移动到第 5 名",
         "Harness 改动不重要",
         "只有 GPUs 重要"
       ],
       "correct": 1,
-      "explanation": "LangChain 的 Anatomy of an Agent Harness：同一模型，仅 harness 改动，排名提升 25+。"
+      "explanation": "LangChain 的 Anatomy of an Agent Harness：同一模型，仅 harness 改动，排名提升 25 名以上。"
     },
     {
       "stage": "post",
-      "question": "当你听到新的 harness vocabulary 时，本课建议怎么做？",
+      "question": "当你听到新的 harness 词汇时，本课建议怎么做？",
       "options": [
-        "逐字采用该 vocabulary",
+        "逐字采用该词汇",
         "采用前先翻译回原语（function、worker、trigger、runtime、HTTP/RPC、queue、persistence、policy）",
         "拒绝它",
         "等待 OpenAI 标准化它"
       ],
       "correct": 1,
-      "explanation": "从原语推理，而不是从 vendor taxonomies 推理；vocabulary 会变，但 engineering 不会。"
+      "explanation": "从原语推理，而不是从 vendor taxonomies 推理；词汇会变，但工程不会。"
     },
     {
       "stage": "post",
       "question": "Chat history 相对于工作台处在什么位置？",
       "options": [
-        "Chat 是 system of record",
-        "Chat 是易失的；repo 才是 system of record",
+        "Chat 是记录系统",
+        "Chat 是易失的；repo 才是记录系统",
         "两者等价",
         "两者都不重要"
       ],
