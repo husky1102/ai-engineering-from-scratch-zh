@@ -1,0 +1,37 @@
+[
+  {
+    "question": "为什么手动阅读少量 LLM outputs 不是可靠的 evaluation method？",
+    "options": ["它花费太久", "小样本会漏掉只有在规模化时才出现的 failure modes，而且不同 reviewers 和 sessions 之间的人类判断不一致", "人工 review 太贵", "LLM outputs 总是正确的"],
+    "correct": 1,
+    "explanation": "阅读 10 个 outputs 只是在一个分布中看到 10 个点。prompt change 可能改善 90% 的 outputs，却破坏 10% 的 edge cases。没有系统性 evaluation，你会直到用户报告时才发现 regression。",
+    "stage": "pre"
+  },
+  {
+    "question": "在 LLM applications 语境中，regression testing 是什么？",
+    "options": ["测试 linear regression models", "每次变更（prompt、model、parameters）之后运行固定 test cases，确保质量没有退化", "在 training data 上测试", "测量训练期间的 model loss"],
+    "correct": 1,
+    "explanation": "每次 prompt change、model swap 或 temperature tweak 都会改变输出分布。Regression tests 能捕捉某个改动在一个方面改进、却悄悄让另一个方面退化的情况。",
+    "stage": "pre"
+  },
+  {
+    "question": "LLM-as-judge evaluation approach 是什么？",
+    "options": ["让模型评估自己的 training loss", "使用强 LLM 根据 rubrics 为 outputs 打分，以替代昂贵的人类 evaluation，并扩展到数千个 test cases", "使用模型的 confidence scores", "比较两个模型的 parameter counts"],
+    "correct": 1,
+    "explanation": "LLM-as-judge 把 (input, output, rubric) 发送给强模型（例如 GPT-4），由它为 output 打分。它比 human evaluation 更便宜、更快，虽然有已知 biases（例如偏好冗长回复）。",
+    "stage": "post"
+  },
+  {
+    "question": "什么构成一个好的 LLM application evaluation dataset？",
+    "options": ["尽可能多的 examples", "覆盖常见情况、edge cases、adversarial inputs，以及带清晰 rubrics 的 expected outputs 的多样化 inputs", "只包含最难的 examples", "来自互联网的随机样本"],
+    "correct": 1,
+    "explanation": "好的 eval set 会覆盖分布：happy path cases、edge cases（空输入、超长输入）、adversarial inputs（prompt injection）和 ambiguous queries。每个 example 都有清晰的 expected output 或 scoring rubric。",
+    "stage": "post"
+  },
+  {
+    "question": "在 evaluation 中应如何处理非确定性的 LLM outputs？",
+    "options": ["所有 evaluations 都把 temperature 设为 0", "每个 test case 运行多次，并使用 aggregate metrics（pass rate、average score）来处理输出方差", "非确定性不会影响 evaluation", "只评估第一个 output"],
+    "correct": 1,
+    "explanation": "即使 temperature 为 0，一些 providers 也会引入 sampling variation。每个 test 运行 3-5 次并测量 pass rate 或 average score，比可能刚好命中幸运/倒霉样本的单次运行更可靠。",
+    "stage": "post"
+  }
+]
