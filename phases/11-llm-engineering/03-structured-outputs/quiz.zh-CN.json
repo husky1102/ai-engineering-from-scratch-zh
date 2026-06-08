@@ -1,0 +1,37 @@
+[
+  {
+    "question": "为什么从 LLM 获取 structured JSON output 很有挑战？",
+    "options": ["LLMs 不能生成 JSON", "LLMs 逐 token 生成自由文本，可能在任意位置产生 invalid JSON（缺少 brackets、wrong types、extra text）", "JSON 对 LLMs 来说太复杂", "LLMs 只能输出 plain text"],
+    "correct": 1,
+    "explanation": "LLMs 会自回归地生成 tokens。它们可能添加 trailing comma、忘记 closing bracket、在 JSON 外包 markdown formatting，或者 hallucinate extra fields。每个 token 都独立生成，因此不保证 structural validity。",
+    "stage": "pre"
+  },
+  {
+    "question": "什么是 constrained decoding？",
+    "options": ["限制模型 vocabulary size", "限制模型每一步可以生成哪些 tokens，以确保输出符合 grammar 或 schema", "使用更小的模型", "压缩输出"],
+    "correct": 1,
+    "explanation": "Constrained decoding 会在每个 generation step mask 掉 invalid tokens。在 opening brace 后，只允许 valid JSON keys。在 colon 后，只允许 valid value tokens。这在 token level 保证 structural validity。",
+    "stage": "pre"
+  },
+  {
+    "question": "使用 Pydantic models 做 LLM output validation 的好处是什么？",
+    "options": ["它们让 API calls 更快", "它们定义 typed schemas，可以自动 validate、parse，并用清晰错误消息拒绝 malformed LLM outputs", "它们减少 token usage", "它们提升模型准确率"],
+    "correct": 1,
+    "explanation": "Pydantic 会强制 types、required fields、value constraints 和 nested structures。当 LLM 产生 invalid output 时，Pydantic 会给出具体 error messages，可反馈给模型进行 self-correction。",
+    "stage": "post"
+  },
+  {
+    "question": "当 LLM 尽管有指令仍返回 invalid JSON 时，你应该怎么做？",
+    "options": ["切换到不同模型", "实现 retry loop，把 validation error 作为 context 发回模型，让它修正后再试", "手动修复 JSON", "提高 temperature"],
+    "correct": 1,
+    "explanation": "带 error feedback 的 retry loop 效果很好：parse output，捕获 validation errors，把 error message 作为 context 发回（'Your output had this error: ... Please fix it'）。多数模型会在第二次尝试时自我修正。",
+    "stage": "post"
+  },
+  {
+    "question": "什么时候应使用 API 原生 JSON mode，而不是 prompt-based JSON extraction？",
+    "options": ["永远使用 native JSON mode", "需要 guaranteed structure 时使用 native mode；复杂 extraction 中需要模型推理该提取什么时使用 prompt-based", "永远使用 prompt-based extraction", "它们产生完全相同的结果"],
+    "correct": 1,
+    "explanation": "Native JSON mode（OpenAI 的 response_format、Anthropic 的 tool_use）保证 valid JSON structure。Prompt-based extraction 在复杂推理、决定哪些字段该填时更灵活。结构最重要时使用 native mode。",
+    "stage": "post"
+  }
+]
