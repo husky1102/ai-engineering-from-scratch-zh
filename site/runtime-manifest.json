@@ -209,7 +209,7 @@
         "julia",
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/01-linear-algebra-intuition/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/01-linear-algebra-intuition/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -224,7 +224,7 @@
         "julia",
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/02-vectors-matrices-operations/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/02-vectors-matrices-operations/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -239,7 +239,7 @@
         "julia",
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/03-matrix-transformations/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/03-matrix-transformations/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -256,7 +256,7 @@
         "julia",
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/04-calculus-for-ml/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/04-calculus-for-ml/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -304,7 +304,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/07-bayes-theorem/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/07-bayes-theorem/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -319,7 +319,7 @@
         "julia",
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/08-optimization/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/08-optimization/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -333,7 +333,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/09-information-theory/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/09-information-theory/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -383,7 +383,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/12-tensor-operations/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/12-tensor-operations/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -415,7 +415,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/14-norms-and-distances/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/14-norms-and-distances/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -429,7 +429,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/15-statistics-for-ml/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/15-statistics-for-ml/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -476,7 +476,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/18-convex-optimization/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/18-convex-optimization/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -506,7 +506,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/20-fourier-transform/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/20-fourier-transform/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -520,7 +520,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/21-graph-theory/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/21-graph-theory/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -536,7 +536,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/01-math-foundations/22-stochastic-processes/lesson.ipynb",
+      "notebook": "notebooks/phases/01-math-foundations/22-stochastic-processes/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -552,7 +552,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/02-ml-fundamentals/01-what-is-machine-learning/lesson.ipynb",
+      "notebook": "notebooks/phases/02-ml-fundamentals/01-what-is-machine-learning/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -604,7 +604,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/02-ml-fundamentals/04-decision-trees/lesson.ipynb",
+      "notebook": "notebooks/phases/02-ml-fundamentals/04-decision-trees/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -619,7 +619,7 @@
         "julia",
         "python"
       ],
-      "notebook": "site/notebooks/phases/02-ml-fundamentals/05-support-vector-machines/lesson.ipynb",
+      "notebook": "notebooks/phases/02-ml-fundamentals/05-support-vector-machines/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -633,7 +633,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/02-ml-fundamentals/06-knn-and-distances/lesson.ipynb",
+      "notebook": "notebooks/phases/02-ml-fundamentals/06-knn-and-distances/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -647,7 +647,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/02-ml-fundamentals/07-unsupervised-learning/lesson.ipynb",
+      "notebook": "notebooks/phases/02-ml-fundamentals/07-unsupervised-learning/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],
@@ -661,7 +661,7 @@
       "languages": [
         "python"
       ],
-      "notebook": "site/notebooks/phases/02-ml-fundamentals/08-feature-engineering/lesson.ipynb",
+      "notebook": "notebooks/phases/02-ml-fundamentals/08-feature-engineering/lesson.ipynb",
       "notes": [
         "light Python candidate"
       ],

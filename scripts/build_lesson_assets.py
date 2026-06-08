@@ -52,7 +52,7 @@ def rel(path: Path) -> str:
 
 
 def local_url(path: Path) -> str:
-    return "../" + rel(path)
+    return "content/" + rel(path)
 
 
 def iter_lesson_dirs() -> Iterable[Path]:

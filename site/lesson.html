@@ -1924,6 +1924,14 @@
         return 'lesson.html?path=' + encodeURIComponent(path) + '&lang=' + encodeURIComponent(currentLang);
       }
 
+      function lessonContentUrl(path, suffix) {
+        return 'content/' + path + '/' + suffix;
+      }
+
+      function lessonRepoUrl(path, suffix) {
+        return '../' + path + '/' + suffix;
+      }
+
       function updateLocalizedChrome() {
         document.documentElement.setAttribute('lang', currentLang);
         var loading = document.querySelector('.lesson-loading-text');
@@ -2071,21 +2079,31 @@
 
       function lessonDocCandidates(path) {
         if (currentLang === 'en') {
-          return [{ url: '../' + path + '/docs/en.md', lang: 'en' }];
+          return [
+            { url: lessonContentUrl(path, 'docs/en.md'), lang: 'en' },
+            { url: lessonRepoUrl(path, 'docs/en.md'), lang: 'en' }
+          ];
         }
         return [
-          { url: '../' + path + '/docs/zh-CN.md', lang: 'zh-CN' },
-          { url: '../' + path + '/docs/en.md', lang: 'en' }
+          { url: lessonContentUrl(path, 'docs/zh-CN.md'), lang: 'zh-CN' },
+          { url: lessonContentUrl(path, 'docs/en.md'), lang: 'en' },
+          { url: lessonRepoUrl(path, 'docs/zh-CN.md'), lang: 'zh-CN' },
+          { url: lessonRepoUrl(path, 'docs/en.md'), lang: 'en' }
         ];
       }
 
       function lessonQuizCandidates(path) {
         if (currentLang === 'en') {
-          return [{ url: '../' + path + '/quiz.json', lang: 'en' }];
+          return [
+            { url: lessonContentUrl(path, 'quiz.json'), lang: 'en' },
+            { url: lessonRepoUrl(path, 'quiz.json'), lang: 'en' }
+          ];
         }
         return [
-          { url: '../' + path + '/quiz.zh-CN.json', lang: 'zh-CN' },
-          { url: '../' + path + '/quiz.json', lang: 'en' }
+          { url: lessonContentUrl(path, 'quiz.zh-CN.json'), lang: 'zh-CN' },
+          { url: lessonContentUrl(path, 'quiz.json'), lang: 'en' },
+          { url: lessonRepoUrl(path, 'quiz.zh-CN.json'), lang: 'zh-CN' },
+          { url: lessonRepoUrl(path, 'quiz.json'), lang: 'en' }
         ];
       }
 
@@ -2791,6 +2809,10 @@
       function highlightSyntax(code, lang) {
         var keywords, commentPattern;
 
+        if (!lang || lang === 'text' || lang === 'console' || lang === 'bash' || lang === 'shell' || lang === 'mermaid') {
+          return code;
+        }
+
         if (lang === 'python' || lang === 'py') {
           keywords = /\b(def|class|return|if|elif|else|for|while|in|import|from|as|with|try|except|finally|raise|yield|lambda|not|and|or|is|None|True|False|print|self|pass|break|continue|assert|global)\b/g;
           commentPattern = /(#[^\n]*)/g;
@@ -3301,7 +3323,6 @@
 
         renderOutputsPanel(container);
         renderCodePanel(container);
-        renderQuizPanel(container);
         renderLearningPathPanel(container);
         renderContinuePanel(container);
       }
@@ -3706,8 +3727,9 @@
           }
         }
 
-        var html = '<div class="ai-panel-header"><div class="ai-panel-icon">P</div><div class="ai-panel-title">Learning Path</div></div>';
-        html += '<div class="ai-panel-subtitle">Phase ' + String(phase.id).padStart(2, '0') + ': ' + escapeHtml(phase.name) + '</div>';
+        var phaseNum = String(phase.id).padStart(2, '0');
+        var html = '<div class="ai-panel-header"><div class="ai-panel-icon">P</div><div class="ai-panel-title">' + escapeHtml(t('learningPathTitle')) + '</div></div>';
+        html += '<div class="ai-panel-subtitle">' + escapeHtml(t('phaseLabel')) + ' ' + phaseNum + ': ' + escapeHtml(phase.name) + '</div>';
 
         // Window: 2 before current + current + 2 after, cap at 5 visible.
         var windowSize = 5;
@@ -3720,7 +3742,7 @@
 
         html += '<div class="learning-timeline">';
         if (hiddenBefore > 0) {
-          html += '<span class="timeline-ellipsis" title="' + hiddenBefore + ' earlier lessons">&laquo; ' + hiddenBefore + '</span>';
+          html += '<span class="timeline-ellipsis" title="' + hiddenBefore + ' ' + escapeAttr(t('earlierLessons')) + '">&laquo; ' + hiddenBefore + '</span>';
           html += '<div class="timeline-line done"></div>';
         }
         visible.forEach(function (item, vIdx) {
@@ -3745,7 +3767,7 @@
         });
         if (hiddenAfter > 0) {
           html += '<div class="timeline-line"></div>';
-          html += '<span class="timeline-ellipsis" title="' + hiddenAfter + ' later lessons">' + hiddenAfter + ' &raquo;</span>';
+          html += '<span class="timeline-ellipsis" title="' + hiddenAfter + ' ' + escapeAttr(t('laterLessons')) + '">' + hiddenAfter + ' &raquo;</span>';
         }
         html += '</div>';
 
@@ -3754,11 +3776,11 @@
         var pct = Math.round((completedCount / totalCount) * 100);
 
         html += '<div class="phase-progress-bar"><div class="phase-progress-fill" style="width:' + pct + '%"></div></div>';
-        html += '<div class="phase-progress-text">You\'ve completed ' + completedCount + ' of ' + totalCount + ' lessons in this phase</div>';
+        html += '<div class="phase-progress-text">' + escapeHtml(t('phaseProgress', { completed: completedCount, total: totalCount })) + '</div>';
 
         if (completedCount >= totalCount && phaseIdx < PHASES.length - 1) {
           var nextPhase = PHASES[phaseIdx + 1];
-          html += '<div class="phase-complete-callout visible">Ready for Phase ' + String(nextPhase.id).padStart(2, '0') + ': ' + escapeHtml(nextPhase.name) + '</div>';
+          html += '<div class="phase-complete-callout visible">' + escapeHtml(t('readyForPhase', { phase: String(nextPhase.id).padStart(2, '0'), name: nextPhase.name })) + '</div>';
         }
 
         panel.innerHTML = html;
@@ -3779,22 +3801,23 @@
         var phaseIdx = current.phaseIndex;
         var phase = PHASES[phaseIdx];
 
-        var html = '<div class="ai-panel-header"><div class="ai-panel-icon">N</div><div class="ai-panel-title">Continue Learning</div></div>';
+        var html = '<div class="ai-panel-header"><div class="ai-panel-icon">N</div><div class="ai-panel-title">' + escapeHtml(t('continueLearningTitle')) + '</div></div>';
         html += '<div class="continue-panel">';
 
         if (!next || !next.path) {
-          html += '<div class="phase-finished">\u2705 You finished this phase!</div>';
+          html += '<div class="phase-finished">\u2705 ' + escapeHtml(t('phaseFinished')) + '</div>';
         }
 
         html += '<div class="continue-links">';
 
         var phaseSlug = extractPhaseSlug(phase, phaseIdx);
         var firstLesson = phase.lessons[0] ? extractLessonSlug(phase.lessons[0], 0) : '';
-        html += '<a class="continue-link" href="' + lessonHref('phases/' + phaseSlug + '/' + firstLesson) + '">Browse all Phase ' + String(phase.id).padStart(2, '0') + ' lessons</a>';
-        html += '<a class="continue-link" href="catalog.html">Full course catalog</a>';
+        html += '<a class="continue-link" href="' + lessonHref('phases/' + phaseSlug + '/' + firstLesson) + '">' + escapeHtml(t('browsePhaseLessons', { phase: String(phase.id).padStart(2, '0') })) + '</a>';
+        html += '<a class="continue-link" href="catalog.html">' + escapeHtml(t('fullCourseCatalog')) + '</a>';
         html += '</div>';
 
-        html += '<div class="continue-callout">Run <code>/find-your-level</code> in Claude, Cursor, Codex, OpenClaw, Hermes, or any agent with the curriculum skills installed for a personalized learning path</div>';
+        var pathCallout = escapeHtml(t('personalPathCallout')).replace('/find-your-level', '<code>/find-your-level</code>');
+        html += '<div class="continue-callout">' + pathCallout + '</div>';
         html += '</div>';
 
         panel.innerHTML = html;

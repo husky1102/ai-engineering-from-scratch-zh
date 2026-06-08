@@ -63,7 +63,18 @@
       promptInstallHint: 'Paste into Claude, Cursor, Codex, OpenClaw, Hermes, or any agent that reads prompts',
       sourceFiles: 'Source files',
       viewSource: 'View source',
-      localAssetsMissing: 'Local lesson asset manifest is missing. Run scripts/build_lesson_assets.py.'
+      localAssetsMissing: 'Local lesson asset manifest is missing. Run scripts/build_lesson_assets.py.',
+      learningPathTitle: 'Learning Path',
+      phaseLabel: 'Phase',
+      earlierLessons: 'earlier lessons',
+      laterLessons: 'later lessons',
+      phaseProgress: "You've completed {completed} of {total} lessons in this phase",
+      readyForPhase: 'Ready for Phase {phase}: {name}',
+      continueLearningTitle: 'Continue Learning',
+      phaseFinished: 'You finished this phase!',
+      browsePhaseLessons: 'Browse all Phase {phase} lessons',
+      fullCourseCatalog: 'Full course catalog',
+      personalPathCallout: 'Run /find-your-level in Claude, Cursor, Codex, OpenClaw, Hermes, or any agent with the curriculum skills installed for a personalized learning path'
     },
     'zh-CN': {
       backToHome: '返回首页',
@@ -124,7 +135,18 @@
       promptInstallHint: '复制到 Claude、Cursor、Codex、OpenClaw、Hermes 或任何读取 prompt 的 agent 中使用',
       sourceFiles: '源代码文件',
       viewSource: '查看源码',
-      localAssetsMissing: '缺少本地 lesson 资产清单，请运行 scripts/build_lesson_assets.py。'
+      localAssetsMissing: '缺少本地 lesson 资产清单，请运行 scripts/build_lesson_assets.py。',
+      learningPathTitle: '学习路径',
+      phaseLabel: '阶段',
+      earlierLessons: '前面的课程',
+      laterLessons: '后面的课程',
+      phaseProgress: '你已完成本阶段 {total} 课中的 {completed} 课',
+      readyForPhase: '已准备进入第 {phase} 阶段：{name}',
+      continueLearningTitle: '继续学习',
+      phaseFinished: '你已完成本阶段！',
+      browsePhaseLessons: '浏览第 {phase} 阶段全部课程',
+      fullCourseCatalog: '完整课程目录',
+      personalPathCallout: '在 Claude、Cursor、Codex、OpenClaw、Hermes 或任何安装了课程技能的智能体中运行 /find-your-level，生成个性化学习路径'
     }
   };
 

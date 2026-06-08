@@ -57,5 +57,16 @@
   "promptInstallHint": "Paste into Claude, Cursor, Codex, OpenClaw, Hermes, or any agent that reads prompts",
   "sourceFiles": "Source files",
   "viewSource": "View source",
-  "localAssetsMissing": "Local lesson asset manifest is missing. Run scripts/build_lesson_assets.py."
+  "localAssetsMissing": "Local lesson asset manifest is missing. Run scripts/build_lesson_assets.py.",
+  "learningPathTitle": "Learning Path",
+  "phaseLabel": "Phase",
+  "earlierLessons": "earlier lessons",
+  "laterLessons": "later lessons",
+  "phaseProgress": "You've completed {completed} of {total} lessons in this phase",
+  "readyForPhase": "Ready for Phase {phase}: {name}",
+  "continueLearningTitle": "Continue Learning",
+  "phaseFinished": "You finished this phase!",
+  "browsePhaseLessons": "Browse all Phase {phase} lessons",
+  "fullCourseCatalog": "Full course catalog",
+  "personalPathCallout": "Run /find-your-level in Claude, Cursor, Codex, OpenClaw, Hermes, or any agent with the curriculum skills installed for a personalized learning path"
 }

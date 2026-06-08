@@ -38,6 +38,14 @@ def lab_url_for(notebook_path: str) -> str:
     return "lab/index.html?path=" + notebook
 
 
+def notebook_url_for(notebook_path: str) -> str:
+    """Return the site-local notebook file URL for a generated notebook path."""
+
+    if notebook_path.startswith("site/"):
+        return notebook_path[len("site/") :]
+    return notebook_path
+
+
 def read_runtime_manifest() -> dict[str, object]:
     if not RUNTIME_MANIFEST.is_file():
         raise SystemExit("site/runtime-manifest.json missing; run scripts/detect_runtimes.py first")
@@ -187,7 +195,7 @@ def write_notebooks(include_all: bool, limit: int) -> list[str]:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(notebook, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         notebook_rel = rel(out)
-        record["notebook"] = notebook_rel
+        record["notebook"] = notebook_url_for(notebook_rel)
         record["lab"] = lab_url_for(notebook_rel)
         written.append(notebook_rel)
 

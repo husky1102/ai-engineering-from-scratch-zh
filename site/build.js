@@ -16,6 +16,10 @@ const README_PATH = path.join(REPO_ROOT, 'README.md');
 const ROADMAP_PATH = path.join(REPO_ROOT, 'ROADMAP.md');
 const GLOSSARY_PATH = path.join(REPO_ROOT, 'glossary', 'terms.md');
 const OUTPUT_PATH = path.join(__dirname, 'data.js');
+const CONTENT_ROOT = path.join(__dirname, 'content');
+const PHASES_ROOT = path.join(REPO_ROOT, 'phases');
+const CONTENT_IGNORED_DIRS = new Set(['__pycache__', '.ipynb_checkpoints']);
+const CONTENT_IGNORED_FILES = new Set(['.DS_Store']);
 
 const GITHUB_BASE = 'https://github.com/rohitg00/ai-engineering-from-scratch/tree/main/';
 const SITE_ORIGIN = 'https://aiengineeringfromscratch.com';
@@ -25,6 +29,38 @@ function lessonPath(url) {
   if (!url) return null;
   const m = url.match(/(phases\/[^/]+\/[^/]+)\/?$/);
   return m ? m[1] : null;
+}
+
+function resetDir(dir) {
+  fs.rmSync(dir, { recursive: true, force: true });
+  fs.mkdirSync(dir, { recursive: true });
+}
+
+function copyTree(src, dest) {
+  if (!fs.existsSync(src)) return 0;
+
+  const stat = fs.statSync(src);
+  if (stat.isDirectory()) {
+    if (CONTENT_IGNORED_DIRS.has(path.basename(src))) return 0;
+    fs.mkdirSync(dest, { recursive: true });
+    let copied = 0;
+    for (const entry of fs.readdirSync(src)) {
+      copied += copyTree(path.join(src, entry), path.join(dest, entry));
+    }
+    return copied;
+  }
+
+  if (!stat.isFile()) return 0;
+  if (CONTENT_IGNORED_FILES.has(path.basename(src))) return 0;
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(src, dest);
+  return 1;
+}
+
+function writeContentMirror() {
+  resetDir(CONTENT_ROOT);
+  const copied = copyTree(PHASES_ROOT, path.join(CONTENT_ROOT, 'phases'));
+  console.log(`   mirrored lesson content (${copied} files)`);
 }
 
 // ─── Parse ROADMAP.md for lesson statuses ────────────────────────────
@@ -464,6 +500,7 @@ const ARTIFACTS = ${JSON.stringify(artifacts, null, 2)};
   syncReadme(totalLessons);
   writeSitemap(phases, glossaryTerms.length);
   writeLlms(phases, glossaryTerms.length, artifacts.length);
+  writeContentMirror();
 }
 
 // ─── sitemap.xml from the same PHASES the site renders ───────────────────
