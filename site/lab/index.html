@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notebook Lab - AI Engineering from Scratch</title>
+  <link rel="stylesheet" href="../style.css?v=20260525a">
+  <style>
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .lab-shell {
+      width: min(1080px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 36px 0 72px;
+    }
+
+    .lab-header {
+      display: grid;
+      gap: 12px;
+      border-bottom: 1px solid var(--rule-soft);
+      padding-bottom: 22px;
+      margin-bottom: 24px;
+    }
+
+    .lab-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blueprint);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    .lab-path,
+    .lab-meta {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      overflow-wrap: anywhere;
+    }
+
+    .lab-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .lab-btn {
+      border: 1px solid var(--rule-soft);
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      padding: 7px 11px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .lab-btn:hover {
+      border-color: var(--blueprint);
+      color: var(--blueprint);
+    }
+
+    .lab-status,
+    .lab-error {
+      border: 1px solid var(--rule-soft);
+      background: var(--bg-surface);
+      color: var(--ink-soft);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      padding: 18px;
+    }
+
+    .lab-error {
+      border-color: var(--blueprint);
+      color: var(--ink);
+    }
+
+    .cell {
+      border: 1px solid var(--rule-soft);
+      background: var(--bg-surface);
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    .cell-label {
+      border-bottom: 1px solid var(--rule-soft);
+      color: var(--ink-mute);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      padding: 7px 10px;
+      text-transform: uppercase;
+    }
+
+    .cell-body {
+      padding: 18px;
+    }
+
+    .cell-body.markdown {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.72;
+    }
+
+    .cell-body.markdown h1,
+    .cell-body.markdown h2,
+    .cell-body.markdown h3 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      line-height: 1.08;
+      margin: 0.8em 0 0.35em;
+      text-transform: none;
+    }
+
+    .cell-body.markdown p {
+      margin: 0.55em 0;
+    }
+
+    .cell-body.code {
+      padding: 0;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      background: var(--code-bg);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    @media (max-width: 700px) {
+      .lab-shell {
+        width: min(100vw - 20px, 1080px);
+        padding-top: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="lab-shell">
+    <header class="lab-header">
+      <div class="lab-kicker">Local Notebook Lab</div>
+      <h1 id="labTitle">Notebook</h1>
+      <div class="lab-path" id="labPath"></div>
+      <div class="lab-meta" id="labMeta"></div>
+      <div class="lab-actions">
+        <a class="lab-btn" href="../index.html">课程首页</a>
+        <a class="lab-btn" id="rawLink" href="#">打开原始 notebook</a>
+        <button class="lab-btn" id="downloadBtn" type="button">下载</button>
+      </div>
+    </header>
+    <section id="labContent" class="lab-status">正在加载 notebook...</section>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var path = String(params.get('path') || '').replace(/^\/+/, '');
+      var content = document.getElementById('labContent');
+      var title = document.getElementById('labTitle');
+      var pathEl = document.getElementById('labPath');
+      var meta = document.getElementById('labMeta');
+      var rawLink = document.getElementById('rawLink');
+      var downloadBtn = document.getElementById('downloadBtn');
+      var notebook = null;
+
+      function escapeHtml(value) {
+        return String(value == null ? '' : value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function sourceText(cell) {
+        return Array.isArray(cell.source) ? cell.source.join('') : String(cell.source || '');
+      }
+
+      function renderMarkdown(text) {
+        var html = [];
+        text.split(/\n{2,}/).forEach(function (block) {
+          var trimmed = block.trim();
+          if (!trimmed) return;
+          var heading = trimmed.match(/^(#{1,3})\s+(.+)$/);
+          if (heading) {
+            var level = heading[1].length;
+            html.push('<h' + level + '>' + escapeHtml(heading[2]) + '</h' + level + '>');
+          } else {
+            html.push('<p>' + escapeHtml(trimmed).replace(/\n/g, '<br>') + '</p>');
+          }
+        });
+        return html.join('');
+      }
+
+      function showError(message) {
+        content.className = 'lab-error';
+        content.innerHTML = escapeHtml(message);
+      }
+
+      function render(data) {
+        notebook = data;
+        var cells = Array.isArray(data.cells) ? data.cells : [];
+        var aifs = data.metadata && data.metadata.aifs ? data.metadata.aifs : {};
+        title.textContent = aifs.lesson_path || 'Notebook';
+        pathEl.textContent = path;
+        meta.textContent = cells.length + ' cell(s)' + (aifs.runtime ? ' · ' + aifs.runtime : '');
+
+        var html = cells.map(function (cell, index) {
+          var kind = cell.cell_type || 'cell';
+          var source = sourceText(cell);
+          var body = kind === 'code'
+            ? '<pre><code>' + escapeHtml(source) + '</code></pre>'
+            : '<div class="cell-body markdown">' + renderMarkdown(source) + '</div>';
+          if (kind === 'code') body = '<div class="cell-body code">' + body + '</div>';
+          return '<article class="cell"><div class="cell-label">' + escapeHtml(kind) + ' cell ' + (index + 1) + '</div>' + body + '</article>';
+        }).join('');
+        content.className = '';
+        content.innerHTML = html || '<div class="lab-status">这个 notebook 没有 cell。</div>';
+      }
+
+      if (!path || /(^|\/)\.\.(\/|$)/.test(path) || path.indexOf('notebooks/') !== 0) {
+        showError('缺少有效的 notebook path。');
+        return;
+      }
+
+      var fetchPath = '../' + path;
+      rawLink.href = fetchPath;
+      fetch(fetchPath)
+        .then(function (res) {
+          if (!res.ok) throw new Error('notebook not found');
+          return res.json();
+        })
+        .then(render)
+        .catch(function (err) {
+          showError('无法加载 notebook：' + (err && err.message ? err.message : String(err)));
+        });
+
+      downloadBtn.addEventListener('click', function () {
+        if (!notebook) return;
+        var blob = new Blob([JSON.stringify(notebook, null, 2) + '\n'], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = path.split('/').slice(-2).join('-') || 'lesson.ipynb';
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "locale": "zh-CN",
+  "terms": [
+    {
+      "source": "AI Engineering from Scratch",
+      "target": "AI Engineering from Scratch",
+      "note": "课程品牌名保留英文。"
+    },
+    {
+      "source": "Build It",
+      "target": "动手实现",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "Use It",
+      "target": "实际使用",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "Ship It",
+      "target": "交付成果",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "Learning Objectives",
+      "target": "学习目标",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "The Problem",
+      "target": "要解决的问题",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "The Concept",
+      "target": "核心概念",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "Exercises",
+      "target": "练习",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "Key Terms",
+      "target": "关键术语",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "Further Reading",
+      "target": "延伸阅读",
+      "note": "核心课程分段标题。"
+    },
+    {
+      "source": "from scratch",
+      "target": "从零实现",
+      "note": "动词短语或课程方法时使用。"
+    },
+    {
+      "source": "gradient descent",
+      "target": "梯度下降",
+      "note": "算法名。"
+    },
+    {
+      "source": "backpropagation",
+      "target": "反向传播",
+      "note": "算法名。"
+    },
+    {
+      "source": "tokenizer",
+      "target": "分词器",
+      "note": "保留代码标识符 tokenizer 不翻译。"
+    },
+    {
+      "source": "attention mechanism",
+      "target": "注意力机制",
+      "note": "Transformer 相关术语。"
+    },
+    {
+      "source": "embedding",
+      "target": "嵌入",
+      "note": "向量表示语境。"
+    },
+    {
+      "source": "agent loop",
+      "target": "智能体循环",
+      "note": "Agent 工程术语。"
+    },
+    {
+      "source": "Model Context Protocol",
+      "target": "Model Context Protocol",
+      "note": "协议正式名保留英文，可在正文后注释 MCP。"
+    },
+    {
+      "source": "Retrieval-Augmented Generation",
+      "target": "检索增强生成",
+      "note": "首次出现可保留 RAG 缩写。"
+    }
+  ]
+}

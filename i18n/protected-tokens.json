@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "placeholder_prefix": "__AIFS_TOKEN_",
+  "rules": [
+    {
+      "name": "fenced_code_block",
+      "description": "Protect complete triple-backtick blocks, including the language tag.",
+      "pattern": "(?ms)^```.*?^```$"
+    },
+    {
+      "name": "inline_code",
+      "description": "Protect inline code spans.",
+      "pattern": "`[^`\\n]+`"
+    },
+    {
+      "name": "markdown_link_target",
+      "description": "Protect URL/path targets while allowing link labels to be translated.",
+      "pattern": "\\]\\(([^)]+)\\)"
+    },
+    {
+      "name": "url",
+      "description": "Protect raw URLs.",
+      "pattern": "https?://[^\\s)]+"
+    },
+    {
+      "name": "path",
+      "description": "Protect repository paths and common file references.",
+      "pattern": "(?:^|[\\s(])(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+"
+    },
+    {
+      "name": "cli_command",
+      "description": "Protect common command invocations in prose.",
+      "pattern": "(?:python3?|node|npm|npx|uv|cargo|rustc|julia|git|curl|pnpm|pip)\\s+[^\\n.;]*"
+    },
+    {
+      "name": "json_yaml_key",
+      "description": "Protect JSON/YAML-like field names.",
+      "pattern": "\\b[A-Za-z_][A-Za-z0-9_]*\\s*:"
+    },
+    {
+      "name": "math_variable",
+      "description": "Protect compact math symbols and common indexed variables.",
+      "pattern": "\\b(?:x|y|w|b|n|m|i|j|k|v\\d+|w\\d+|x\\d+|y\\d+|X|Y|MSE|R\\^2)\\b"
+    },
+    {
+      "name": "mermaid_directive",
+      "description": "Protect Mermaid graph directives inside translated text blocks when extracted separately.",
+      "pattern": "\\b(?:graph|flowchart|sequenceDiagram|classDiagram|stateDiagram|subgraph|end|TD|LR|TB|BT|RL)\\b"
+    }
+  ]
+}

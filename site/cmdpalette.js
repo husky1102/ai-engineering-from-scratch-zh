@@ -20,10 +20,31 @@
   var BODY_ATTR   = 'data-palette-open';
 
   // ── Module state ─────────────────────────────────────────────────────
-  var _index      = null;   // lazy-built flat array of searchable items
-  var _activeIdx  = -1;
-  var _isOpen     = false;
-  var _prevFocus  = null;
+  var _index       = null;   // lazy-built flat array of searchable items
+  var _zhIndex     = null;
+  var _zhIndexLoad = null;
+  var _activeIdx   = -1;
+  var _isOpen      = false;
+  var _prevFocus   = null;
+
+  function loadZhIndex() {
+    if (_zhIndexLoad) return _zhIndexLoad;
+    _zhIndexLoad = fetch('search-index.zh-CN.json')
+      .then(function (res) {
+        if (!res.ok) throw new Error('search-index-missing');
+        return res.json();
+      })
+      .then(function (data) {
+        _zhIndex = data && Array.isArray(data.lessons) ? data.lessons : [];
+        _index = null;
+        return _zhIndex;
+      })
+      .catch(function () {
+        _zhIndex = [];
+        return _zhIndex;
+      });
+    return _zhIndexLoad;
+  }
 
   // ── Search index ─────────────────────────────────────────────────────
   /**
@@ -33,6 +54,16 @@
   function buildIndex() {
     if (_index !== null) return _index;
     _index = [];
+    var zhByPath = {};
+
+    if (Array.isArray(_zhIndex)) {
+      for (var z = 0; z < _zhIndex.length; z++) {
+        var zhRecord = _zhIndex[z];
+        if (zhRecord && zhRecord.path && zhRecord.lang === 'zh-CN') {
+          zhByPath[zhRecord.path] = zhRecord;
+        }
+      }
+    }
 
     if (typeof PHASES !== 'undefined' && Array.isArray(PHASES)) {
       for (var i = 0; i < PHASES.length; i++) {
@@ -47,19 +78,25 @@
             if (m) lessonPath = m[1];
           }
 
+          var zh = lessonPath ? zhByPath[lessonPath] : null;
+          var zhKeywords = zh
+            ? [].concat(zh.headings || [], zh.key_terms || [], zh.runtime || '', zh.language || '').join(' ')
+            : '';
+
           _index.push({
             kind:       'lesson',
             id:         'l:' + i + ':' + j,
             phaseId:    phase.id,
             phaseName:  phase.name,
-            name:       lesson.name     || '',
-            summary:    lesson.summary  || '',
-            keywords:   lesson.keywords || '',
-            type:       lesson.type     || '',
-            lang:       lesson.lang     || '',
+            name:       (zh && zh.title) || lesson.name || '',
+            summary:    (zh && zh.summary) || lesson.summary || '',
+            keywords:   [lesson.keywords || '', zhKeywords].join(' '),
+            type:       (zh && zh.runtime) || lesson.type || '',
+            lang:       (zh && zh.lang) || lesson.lang || '',
             status:     lesson.status   || '',
             lessonPath: lessonPath,
             url:        lesson.url      || '',
+            langParam:  zh ? 'zh-CN' : '',
           });
         }
       }
@@ -155,19 +192,65 @@
     return s;
   }
 
+  function parseQuery(query) {
+    var filters = {};
+    var terms = [];
+    String(query || '').trim().split(/\s+/).filter(Boolean).forEach(function (token) {
+      var match = token.match(/^(phase|runtime|type|status|lang|language):(.+)$/i);
+      if (!match) {
+        terms.push(token);
+        return;
+      }
+      var key = match[1].toLowerCase();
+      if (key === 'language') key = 'lang';
+      if (key === 'type') key = 'runtime';
+      filters[key] = match[2].toLowerCase();
+    });
+    return { text: terms.join(' ').trim(), filters: filters };
+  }
+
+  function hasFilters(filters) {
+    return Object.keys(filters || {}).length > 0;
+  }
+
+  function phaseMatches(item, wanted) {
+    var value = String(item.phaseId == null ? '' : item.phaseId);
+    var padded = value.padStart(2, '0');
+    return wanted === value || wanted === padded || wanted === ('phase-' + padded) || wanted === ('phase-' + value);
+  }
+
+  function matchesFilters(item, filters) {
+    if (!filters || !hasFilters(filters)) return true;
+    if (item.kind !== 'lesson') return false;
+
+    if (filters.phase && !phaseMatches(item, filters.phase)) return false;
+    if (filters.runtime && String(item.type || '').toLowerCase().indexOf(filters.runtime) === -1) return false;
+    if (filters.status && String(item.status || '').toLowerCase() !== filters.status) return false;
+    if (filters.lang && String(item.lang || '').toLowerCase() !== filters.lang) return false;
+
+    return true;
+  }
+
   function search(query) {
-    var q = query.trim().toLowerCase();
-    if (!q) return [];
+    var parsed = parseQuery(query);
+    var q = parsed.text.toLowerCase();
+    var filters = parsed.filters;
+    if (!q && !hasFilters(filters)) return [];
 
     var items   = buildIndex();
     var results = [];
 
     for (var i = 0; i < items.length; i++) {
-      var s = scoreItem(items[i], q);
+      if (!matchesFilters(items[i], filters)) continue;
+      var s = q ? scoreItem(items[i], q) : 1;
       if (s > 0) results.push({ item: items[i], s: s });
     }
 
-    results.sort(function (a, b) { return b.s - a.s; });
+    results.sort(function (a, b) {
+      if (b.s !== a.s) return b.s - a.s;
+      if ((a.item.phaseId || 0) !== (b.item.phaseId || 0)) return (a.item.phaseId || 0) - (b.item.phaseId || 0);
+      return String(a.item.name || '').localeCompare(String(b.item.name || ''));
+    });
     return results.slice(0, MAX_RESULTS).map(function (r) { return r.item; });
   }
 
@@ -340,11 +423,13 @@
     if (!list) return;
 
     var query = (_inputEl() ? _inputEl().value : '').trim();
+    var parsed = parseQuery(query);
+    var highlightQuery = parsed.text || '';
 
     if (!query) {
       list.innerHTML =
         '<li class="cp-empty" role="option" aria-disabled="true">' +
-        'Type to search 503 lessons, 499 outputs, and glossary terms' +
+        'Type to search, or filter with phase:02 runtime:browser-pyodide status:complete' +
         '</li>';
       _activeIdx = -1;
       return;
@@ -369,7 +454,7 @@
       if (r.kind === 'lesson') {
         // Prefer the in-site reader; fall back to GitHub URL
         dest = r.lessonPath
-          ? 'lesson.html?path=' + encodeURIComponent(r.lessonPath)
+          ? 'lesson.html?path=' + encodeURIComponent(r.lessonPath) + (r.langParam ? '&lang=' + encodeURIComponent(r.langParam) : '')
           : r.url;
         chip = 'Phase ' + String(r.phaseId).padStart(2, '0');
       } else if (r.kind === 'artifact') {
@@ -406,8 +491,8 @@
         ' data-href="' + escHtml(dest) + '">' +
           '<div class="cp-item-body">' +
             '<span class="' + chipClass + '">' + escHtml(chip) + '</span>' +
-            '<span class="cp-item-name">'    + highlight(r.name,    query) + '</span>' +
-            (snippet ? '<span class="cp-item-summary">' + highlight(snippet, query) + '</span>' : '') +
+            '<span class="cp-item-name">'    + highlight(r.name,    highlightQuery) + '</span>' +
+            (snippet ? '<span class="cp-item-summary">' + highlight(snippet, highlightQuery) + '</span>' : '') +
             (meta    ? '<span class="cp-item-meta">'    + escHtml(meta)             + '</span>' : '') +
           '</div>' +
           '<svg class="cp-item-arrow" width="12" height="12" viewBox="0 0 24 24"' +
@@ -534,6 +619,7 @@
 
     // Build the search index now so the first keystroke is instant
     buildIndex();
+    loadZhIndex();
   }
 
   if (document.readyState === 'loading') {
@@ -543,6 +629,13 @@
   }
 
   // ── Public API ────────────────────────────────────────────────────────
-  window.CmdPalette = { open: open, close: close };
+  window.CmdPalette = {
+    open: open,
+    close: close,
+    _test: {
+      parseQuery: parseQuery,
+      matchesFilters: matchesFilters
+    }
+  };
 
 }());

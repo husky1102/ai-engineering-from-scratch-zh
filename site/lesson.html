@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -159,6 +159,37 @@
 
     .sidebar-phase-nav a:hover {
       color: var(--blueprint);
+    }
+
+    .language-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      border: 1px solid var(--rule-soft);
+      background: var(--bg-surface);
+      padding: 2px;
+    }
+
+    .language-switch button {
+      border: 0;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      min-height: 28px;
+      padding: 0 8px;
+    }
+
+    .language-switch button[aria-pressed="true"] {
+      background: var(--blueprint);
+      color: #fff;
+    }
+
+    .language-switch button:focus-visible {
+      outline: 2px solid var(--blueprint);
+      outline-offset: 2px;
     }
 
     .lesson-main {
@@ -547,7 +578,7 @@
       margin: 24px 0 32px;
     }
 
-    .learning-objectives-title {
+    .lesson-article .learning-objectives-title {
       font-family: var(--font-mono);
       font-size: 0.74rem;
       font-weight: 500;
@@ -558,6 +589,28 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    html[lang="zh-CN"] .lesson-article,
+    html[lang="zh-CN"] .lesson-article p,
+    html[lang="zh-CN"] .lesson-article li {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+      line-height: 1.82;
+      text-align: left;
+    }
+
+    html[lang="zh-CN"] .lesson-article h1,
+    html[lang="zh-CN"] .lesson-article h2,
+    html[lang="zh-CN"] .lesson-article h3,
+    html[lang="zh-CN"] .sidebar-phase-header,
+    html[lang="zh-CN"] .toc-header {
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    html[lang="zh-CN"] .lesson-article h1,
+    html[lang="zh-CN"] .lesson-article h2 {
+      line-height: 1.18;
     }
 
     .learning-objectives ul { margin: 0; padding-left: 20px; }
@@ -1089,6 +1142,7 @@
 
     .output-badge.prompt,
     .output-badge.skill,
+    .output-badge.artifact,
     .output-badge.other {
       border-color: var(--blueprint);
       color: var(--blueprint);
@@ -1228,6 +1282,97 @@
     .code-card-actions {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .runtime-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 2px 8px;
+      margin-bottom: 10px;
+      border: 1px solid var(--blueprint);
+      color: var(--blueprint);
+      background: var(--blueprint-tint);
+    }
+
+    .runtime-badge.local-kernel {
+      border-color: var(--ink-soft);
+      color: var(--ink-soft);
+      background: transparent;
+    }
+
+    .runtime-badge.static-only {
+      border-color: var(--rule-soft);
+      color: var(--ink-mute);
+      background: transparent;
+    }
+
+    .runtime-meta {
+      font-family: var(--font-body);
+      color: var(--ink-soft);
+      font-size: 0.94rem;
+      line-height: 1.55;
+      margin: 0 0 12px;
+      text-align: left;
+    }
+
+    .runtime-notes {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .pyodide-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: -10px 0 18px;
+      flex-wrap: wrap;
+    }
+
+    .pyodide-toolbar button {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--rule-soft);
+      color: var(--ink-soft);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .pyodide-toolbar button:hover:not(:disabled) {
+      border-color: var(--blueprint);
+      color: var(--blueprint);
+    }
+
+    .pyodide-toolbar button:disabled {
+      cursor: default;
+      opacity: 0.6;
+    }
+
+    .pyodide-status {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-mute);
+    }
+
+    .pyodide-output {
+      margin-top: -6px;
+      border-color: var(--blueprint);
+      white-space: pre-wrap;
+    }
+
+    .pyodide-output-error,
+    .pyodide-output-stderr {
+      color: #b42318;
     }
 
     .learning-timeline {
@@ -1559,6 +1704,7 @@
       .ai-panel { padding: 18px 12px; }
       .timeline-item { min-width: 70px; }
       .timeline-line { width: 20px; }
+      .language-switch button { padding: 0 6px; }
     }
   </style>
 </head>
@@ -1593,6 +1739,10 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
+      <div class="language-switch" id="languageSwitch" role="group" aria-label="Language">
+        <button type="button" data-lang-option="zh-CN" aria-pressed="true">中文</button>
+        <button type="button" data-lang-option="en" aria-pressed="false">EN</button>
+      </div>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
         <span class="theme-icon" id="themeIcon">N</span>
       </button>
@@ -1619,7 +1769,7 @@
       <div class="lesson-content" id="lessonContent">
         <div class="lesson-loading" id="lessonLoading">
           <div class="spinner"></div>
-          <div class="lesson-loading-text">Loading lesson...</div>
+          <div class="lesson-loading-text">正在加载课程...</div>
         </div>
       </div>
     </main>
@@ -1627,11 +1777,13 @@
   </div>
 
   <script src="data.js?v=20260525a"></script>
+  <script src="i18n.js?v=20260608a"></script>
   <script src="progress.js?v=20260525a"></script>
   <script src="header.js?v=20260525a" defer></script>
   <script src="cmdpalette.js?v=20260525a" defer></script>
   <script src="figures.js?v=20260607a"></script>
   <script src="lesson-figures.js?v=20260607a"></script>
+  <script src="runner-pyodide.js?v=20260609c"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
     mermaid.initialize({
@@ -1684,10 +1836,23 @@
       }
 
       var params = new URLSearchParams(window.location.search);
-      var lessonPath = params.get('path');
+      var lessonPath = normalizeLessonPath(params.get('path'));
+      var currentLang = window.AIFSI18N ? window.AIFSI18N.resolve(params.get('lang')) : (params.get('lang') || 'zh-CN');
+      currentLang = currentLang === 'en' ? 'en' : 'zh-CN';
+      var lessonContentLang = currentLang;
+      var i18n = (window.AIFSI18N && window.AIFSI18N.fallback && window.AIFSI18N.fallback[currentLang]) || {};
+      document.documentElement.setAttribute('lang', currentLang);
+      updateLocalizedChrome();
+      initLanguageSwitch();
+      if (window.AIFSI18N) {
+        window.AIFSI18N.load(currentLang).then(function (dict) {
+          i18n = dict || i18n;
+          updateLocalizedChrome();
+        });
+      }
 
       if (!lessonPath) {
-        showError('No lesson path specified', 'Add ?path=phases/01-math-foundations/01-linear-algebra-intuition to the URL.');
+        showError(t('noLessonTitle'), t('noLessonBody'));
         return;
       }
 
@@ -1739,6 +1904,56 @@
       initScrollProgress();
       fetchLesson(lessonPath);
 
+      function normalizeLessonPath(path) {
+        if (!path) return '';
+        var normalized = String(path).replace(/^\/+/, '').replace(/\/+$/, '');
+        if (/(^|\/)\.\.(\/|$)/.test(normalized)) return '';
+        return normalized;
+      }
+
+      function t(key, values) {
+        var fallback = (window.AIFSI18N && window.AIFSI18N.fallback && window.AIFSI18N.fallback.en && window.AIFSI18N.fallback.en[key]) || key;
+        var value = (i18n && i18n[key]) || fallback;
+        if (window.AIFSI18N && window.AIFSI18N.format) return window.AIFSI18N.format(value, values || {});
+        return String(value).replace(/\{([a-zA-Z0-9_]+)\}/g, function (m, name) {
+          return values && values[name] != null ? values[name] : m;
+        });
+      }
+
+      function lessonHref(path) {
+        return 'lesson.html?path=' + encodeURIComponent(path) + '&lang=' + encodeURIComponent(currentLang);
+      }
+
+      function updateLocalizedChrome() {
+        document.documentElement.setAttribute('lang', currentLang);
+        var loading = document.querySelector('.lesson-loading-text');
+        if (loading) loading.textContent = t('loadingLesson');
+        var switcher = document.getElementById('languageSwitch');
+        if (switcher) {
+          switcher.setAttribute('aria-label', t('languageLabel'));
+          switcher.querySelectorAll('[data-lang-option]').forEach(function (btn) {
+            var lang = btn.getAttribute('data-lang-option');
+            btn.setAttribute('aria-pressed', lang === currentLang ? 'true' : 'false');
+          });
+        }
+      }
+
+      function initLanguageSwitch() {
+        var switcher = document.getElementById('languageSwitch');
+        if (!switcher) return;
+        switcher.querySelectorAll('[data-lang-option]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var nextLang = btn.getAttribute('data-lang-option') === 'en' ? 'en' : 'zh-CN';
+            if (nextLang === currentLang) return;
+            try { localStorage.setItem('aifs.lang', nextLang); } catch (_) {}
+            var next = new URL(window.location.href);
+            next.searchParams.set('lang', nextLang);
+            if (lessonPath) next.searchParams.set('path', lessonPath);
+            window.location.href = next.toString();
+          });
+        });
+      }
+
       function extractPhaseSlug(phase, index) {
         if (phase.url) {
           var m = phase.url.match(/phases\/([^/]+)/);
@@ -1774,13 +1989,13 @@
             var pp = PHASES[prevPhaseIdx];
             var ppSlug = extractPhaseSlug(pp, prevPhaseIdx);
             var ppFirstLesson = pp.lessons[0] ? extractLessonSlug(pp.lessons[0], 0) : '';
-            html += '<a href="lesson.html?path=phases/' + ppSlug + '/' + ppFirstLesson + '">&larr; Phase ' + String(pp.id).padStart(2, '0') + ': ' + escapeHtml(pp.name) + '</a>';
+            html += '<a href="' + lessonHref('phases/' + ppSlug + '/' + ppFirstLesson) + '">&larr; Phase ' + String(pp.id).padStart(2, '0') + ': ' + escapeHtml(pp.name) + '</a>';
           }
           if (nextPhaseIdx >= 0) {
             var np = PHASES[nextPhaseIdx];
             var npSlug = extractPhaseSlug(np, nextPhaseIdx);
             var npFirstLesson = np.lessons[0] ? extractLessonSlug(np.lessons[0], 0) : '';
-            html += '<a href="lesson.html?path=phases/' + npSlug + '/' + npFirstLesson + '">Phase ' + String(np.id).padStart(2, '0') + ': ' + escapeHtml(np.name) + ' &rarr;</a>';
+            html += '<a href="' + lessonHref('phases/' + npSlug + '/' + npFirstLesson) + '">Phase ' + String(np.id).padStart(2, '0') + ': ' + escapeHtml(np.name) + ' &rarr;</a>';
           }
           html += '</div>';
         }
@@ -1795,7 +2010,7 @@
             var isActive = lesSlug === currentLessonSlug;
             var lesReadable = les.status === 'complete' || !!les.url;
             if (lesReadable) {
-              html += '<a class="sidebar-lesson-link' + (isActive ? ' active' : '') + '" href="lesson.html?path=phases/' + pSlugCurrent + '/' + lesSlug + '">';
+              html += '<a class="sidebar-lesson-link' + (isActive ? ' active' : '') + '" href="' + lessonHref('phases/' + pSlugCurrent + '/' + lesSlug) + '">';
             } else {
               html += '<span class="sidebar-lesson-link disabled">';
             }
@@ -1837,40 +2052,73 @@
         }, { passive: true });
       }
 
-      function fetchLesson(path) {
-        var rawUrl = 'https://raw.githubusercontent.com/rohitg00/ai-engineering-from-scratch/main/' + path + '/docs/en.md';
-        var quizUrl = 'https://raw.githubusercontent.com/rohitg00/ai-engineering-from-scratch/main/' + path + '/quiz.json';
+      function fetchFirst(candidates, parser) {
+        var index = 0;
+        function next() {
+          if (index >= candidates.length) return Promise.resolve(null);
+          var candidate = candidates[index++];
+          return fetch(candidate.url)
+            .then(function (res) {
+              if (!res.ok) throw new Error('fetch-failed');
+              return parser(res).then(function (value) {
+                return { value: value, lang: candidate.lang, url: candidate.url };
+              });
+            })
+            .catch(function () { return next(); });
+        }
+        return next();
+      }
 
-        fetch(rawUrl)
-          .then(function (res) {
-            if (!res.ok) throw new Error('fetch-failed');
-            return res.text();
-          })
-          .then(function (md) {
-            try {
-              renderLesson(md);
-            } catch (err) {
-              console.error('renderLesson failed', err);
-              showError('Render error', 'Loaded the lesson markdown but failed to render it. Details in the browser console.');
+      function lessonDocCandidates(path) {
+        if (currentLang === 'en') {
+          return [{ url: '../' + path + '/docs/en.md', lang: 'en' }];
+        }
+        return [
+          { url: '../' + path + '/docs/zh-CN.md', lang: 'zh-CN' },
+          { url: '../' + path + '/docs/en.md', lang: 'en' }
+        ];
+      }
+
+      function lessonQuizCandidates(path) {
+        if (currentLang === 'en') {
+          return [{ url: '../' + path + '/quiz.json', lang: 'en' }];
+        }
+        return [
+          { url: '../' + path + '/quiz.zh-CN.json', lang: 'zh-CN' },
+          { url: '../' + path + '/quiz.json', lang: 'en' }
+        ];
+      }
+
+      function fetchLesson(path) {
+        fetchFirst(lessonDocCandidates(path), function (res) { return res.text(); })
+          .then(function (docResult) {
+            if (!docResult) {
+              showError(t('lessonNotFoundTitle'), t('lessonNotFoundBody', { path: escapeHtml(path) }));
               return;
             }
-            fetch(quizUrl)
-              .then(function (res) { return res.ok ? res.json() : null; })
-              .catch(function () { return null; })
-              .then(function (data) {
-                if (!data) return;
-                try { renderQuiz(data); }
+            lessonContentLang = docResult.lang || currentLang;
+            try {
+              renderLesson(docResult.value);
+            } catch (err) {
+              console.error('renderLesson failed', err);
+              showError(t('renderErrorTitle'), t('renderErrorBody'));
+              return;
+            }
+            fetchFirst(lessonQuizCandidates(path), function (res) { return res.json(); })
+              .then(function (quizResult) {
+                if (!quizResult) return;
+                try { renderQuiz(quizResult.value); }
                 catch (err) { console.error('renderQuiz failed', err); }
               });
           })
           .catch(function () {
-            showError('Lesson not found', 'Could not fetch the lesson at <code>' + escapeHtml(path) + '</code>. It may not have been written yet.');
+            showError(t('lessonNotFoundTitle'), t('lessonNotFoundBody', { path: escapeHtml(path) }));
           });
       }
 
       function showError(title, msg) {
         var el = document.getElementById('lessonContent');
-        el.innerHTML = '<div class="lesson-error"><h2>' + title + '</h2><p>' + msg + '</p><a href="index.html" class="btn btn-primary">Back to Home</a></div>';
+        el.innerHTML = '<div class="lesson-error"><h2>' + escapeHtml(title) + '</h2><p>' + msg + '</p><a href="index.html" class="btn btn-primary">' + escapeHtml(t('backToHome')) + '</a></div>';
       }
 
       function lessonDescription(md) {
@@ -1893,7 +2141,7 @@
       function updateLessonSeo(title, md) {
         var ORIGIN = 'https://aiengineeringfromscratch.com';
         var path = new URLSearchParams(location.search).get('path') || '';
-        var url = ORIGIN + '/lesson.html?path=' + path;
+        var url = ORIGIN + '/lesson.html?path=' + encodeURIComponent(path) + '&lang=' + encodeURIComponent(currentLang);
         var desc = lessonDescription(md);
         var fullTitle = title + ' · AI Engineering from Scratch';
         var set = function (sel, val) { var m = document.querySelector(sel); if (m) m.setAttribute('content', val); };
@@ -1915,7 +2163,7 @@
           '@context': 'https://schema.org',
           '@graph': [
             { '@type': 'LearningResource', name: title, description: desc, url: url,
-              inLanguage: 'en', isAccessibleForFree: true,
+              inLanguage: lessonContentLang || currentLang, isAccessibleForFree: true,
               isPartOf: { '@type': 'Course', name: 'AI Engineering from Scratch', url: ORIGIN } },
             { '@type': 'BreadcrumbList', itemListElement: [
               { '@type': 'ListItem', position: 1, name: 'Home', item: ORIGIN },
@@ -1936,7 +2184,7 @@
         var html = parseMd(md);
         html += '<div class="ai-panels" id="aiPanels"></div>';
         html = addBottomNav(html);
-        el.innerHTML = '<article class="lesson-article">' + html + '</article>';
+        el.innerHTML = '<article class="lesson-article" lang="' + escapeAttr(lessonContentLang || currentLang) + '">' + html + '</article>';
 
         document.title = extractTitle(md) + ' - AI Engineering from Scratch';
         updateLessonSeo(extractTitle(md), md);
@@ -1946,6 +2194,11 @@
         if (window.mountLessonFigures) window.mountLessonFigures(el);
         renderAIPanels();
         buildTOC();
+        if (window.AIFSPyodideRunner) {
+          window.AIFSPyodideRunner.init(lessonPath).catch(function (err) {
+            console.warn('Pyodide runner unavailable', err);
+          });
+        }
 
         document.querySelectorAll('a[href^="#"]').forEach(function (link) {
           link.addEventListener('click', function (e) {
@@ -2005,8 +2258,8 @@
           return candidate;
         }
 
-        var html = '<div class="toc-header">On this page</div>';
-        html += '<nav aria-label="On this page"><ul class="toc-nav">';
+        var html = '<div class="toc-header">' + escapeHtml(t('onThisPage')) + '</div>';
+        html += '<nav aria-label="' + escapeAttr(t('onThisPage')) + '"><ul class="toc-nav">';
         for (var i = 0; i < headings.length; i++) {
           var heading = headings[i];
           var level = heading.tagName.toLowerCase();
@@ -2149,6 +2402,55 @@
         window.addEventListener('resize', sidebar._tocResizeHandler);
 
         fallbackByScroll();
+      }
+
+      var SECTION_ALIASES = {
+        learningObjectives: ['learning objectives', '学习目标'],
+        problem: ['the problem', 'problem', '要解决的问题', '问题'],
+        concept: ['the concept', 'concept', '核心概念', '概念'],
+        build: ['build it', 'build', '动手实现', '从零实现'],
+        use: ['use it', 'use', '实际使用', '使用'],
+        ship: ['ship it', 'ship', '交付成果', '交付'],
+        exercises: ['exercises', 'exercise', '练习'],
+        keyTerms: ['key terms', 'terms', '关键术语', '术语'],
+        furtherReading: ['further reading', 'reading', '延伸阅读'],
+        labChallenge: ['lab challenge', '实验挑战']
+      };
+
+      function normalizeSectionHeading(text) {
+        return String(text || '')
+          .toLowerCase()
+          .replace(/[`*_#]/g, '')
+          .replace(/^[^\p{L}\p{N}]+/u, '')
+          .replace(/[：:]+$/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function sectionKeyForHeading(text) {
+        var normalized = normalizeSectionHeading(text);
+        if (!normalized) return '';
+        for (var key in SECTION_ALIASES) {
+          var aliases = SECTION_ALIASES[key];
+          for (var i = 0; i < aliases.length; i++) {
+            var alias = aliases[i];
+            if (normalized === alias || normalized.indexOf(alias + ' ') === 0 || normalized.indexOf(alias + '：') === 0 || normalized.indexOf(alias + ':') === 0) {
+              return key;
+            }
+          }
+        }
+        return '';
+      }
+
+      function sectionClassForKey(key) {
+        if (key === 'build') return 'section-build';
+        if (key === 'use') return 'section-use';
+        if (key === 'ship') return 'section-ship';
+        return '';
+      }
+
+      function sectionDataAttr(key) {
+        return key ? ' data-section="' + escapeAttr(key) + '"' : '';
       }
 
       function extractTitle(md) {
@@ -2314,12 +2616,10 @@
           if (h2) {
             out += flushList();
             var slug2 = slugify(h2[1]);
-            var sectionClass = '';
-            var txt = h2[1].toLowerCase();
-            if (txt.indexOf('build it') >= 0 || txt.indexOf('build ') === 0) sectionClass = ' section-build';
-            else if (txt.indexOf('use it') >= 0 || txt.indexOf('use ') === 0) sectionClass = ' section-use';
-            else if (txt.indexOf('ship it') >= 0 || txt.indexOf('ship ') === 0) sectionClass = ' section-ship';
-            if (txt.indexOf('learning objectives') >= 0) {
+            var sectionKey = sectionKeyForHeading(h2[1]);
+            var sectionClass = sectionClassForKey(sectionKey);
+            var sectionAttr = sectionDataAttr(sectionKey);
+            if (sectionKey === 'learningObjectives') {
               var objItems = [];
               for (var lo = i + 1; lo < lines.length; lo++) {
                 var loLine = lines[lo];
@@ -2331,7 +2631,8 @@
                   break;
                 }
               }
-              out += '<div class="learning-objectives"><div class="learning-objectives-title">&#127919; Learning Objectives</div><ul>';
+              out += '<div class="learning-objectives">';
+              out += '<h2 id="' + slug2 + '" class="learning-objectives-title"' + sectionAttr + '>&#127919; ' + inlineFormat(h2[1]) + '</h2><ul>';
               for (var oi = 0; oi < objItems.length; oi++) {
                 out += '<li>' + inlineFormat(objItems[oi]) + '</li>';
               }
@@ -2339,15 +2640,15 @@
               i = lo - 1;
               continue;
             }
-            if (txt.indexOf('lab challenge') >= 0) {
+            if (sectionKey === 'labChallenge') {
               out += flushLabChallenge();
               inLabChallenge = true;
               out += '<div class="lab-challenge">';
-              out += '<h2 id="' + slug2 + '">&#128171; Lab Challenge</h2>';
+              out += '<h2 id="' + slug2 + '"' + sectionAttr + '>&#128171; ' + inlineFormat(h2[1]) + '</h2>';
               continue;
             }
             out += flushLabChallenge();
-            out += '<h2 id="' + slug2 + '" class="' + sectionClass + '">' + inlineFormat(h2[1]) + '</h2>';
+            out += '<h2 id="' + slug2 + '"' + (sectionClass ? ' class="' + sectionClass + '"' : '') + sectionAttr + '>' + inlineFormat(h2[1]) + '</h2>';
             continue;
           }
 
@@ -2472,13 +2773,19 @@
       }
 
       function slugify(text) {
-        return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        var slug = String(text || '')
+          .normalize('NFKD')
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}]+/gu, '-')
+          .replace(/(^-|-$)/g, '')
+          .replace(/-+/g, '-');
+        return slug || 'section';
       }
 
       function renderCodeBlock(code, lang) {
         var highlighted = highlightSyntax(escapeHtml(code), lang);
         var langLabel = lang ? '<span class="code-lang">' + escapeHtml(lang) + '</span>' : '';
-        return '<pre>' + langLabel + '<button class="code-copy" data-code="' + escapeAttr(code) + '">Copy</button><code>' + highlighted + '</code></pre>';
+        return '<pre data-code-lang="' + escapeAttr(lang || '') + '" data-code="' + escapeAttr(code) + '">' + langLabel + '<button class="code-copy" data-code="' + escapeAttr(code) + '">' + escapeHtml(t('copy')) + '</button><code>' + highlighted + '</code></pre>';
       }
 
       function highlightSyntax(code, lang) {
@@ -2526,8 +2833,8 @@
           btn.addEventListener('click', function () {
             var code = btn.getAttribute('data-code');
             navigator.clipboard.writeText(code).then(function () {
-              btn.textContent = 'Copied!';
-              setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+              btn.textContent = t('copied');
+              setTimeout(function () { btn.textContent = t('copy'); }, 1500);
             });
           });
         });
@@ -2638,7 +2945,7 @@
           var target = document.getElementById('mermaid-render-' + idx);
           if (!target) return;
           var def = mermaidPreprocess(pre.textContent);
-          target.innerHTML = '<div class="panel-loading">Rendering diagram...</div>';
+          target.innerHTML = '<div class="panel-loading">' + escapeHtml(t('renderingDiagram')) + '</div>';
 
           var token = ++mermaidRenderSeq;
           target._mermaidRenderToken = token;
@@ -2648,7 +2955,7 @@
             target.innerHTML = result.svg;
           }).catch(function () {
             if (target._mermaidRenderToken !== token) return;
-            target.innerHTML = '<p style="color:var(--text-muted);font-style:italic;">Diagram could not be rendered.</p>';
+            target.innerHTML = '<p style="color:var(--text-muted);font-style:italic;">' + escapeHtml(t('diagramRenderError')) + '</p>';
           });
         });
       }
@@ -2728,7 +3035,7 @@
         lastMermaidTrigger = triggerEl || document.activeElement;
         openMermaidIndex = idx;
 
-        if (title) title.textContent = 'Diagram';
+        if (title) title.textContent = t('diagram');
 
         overlay.classList.add('open');
         overlay.setAttribute('aria-hidden', 'false');
@@ -2751,7 +3058,7 @@
         if (!pre) return;
         var def = mermaidPreprocess(pre.textContent);
 
-        center.innerHTML = '<div class="panel-loading">Rendering diagram...</div>';
+        center.innerHTML = '<div class="panel-loading">' + escapeHtml(t('renderingDiagram')) + '</div>';
         var token = ++mermaidRenderSeq;
         center._mermaidRenderToken = token;
 
@@ -2760,7 +3067,7 @@
           center.innerHTML = result.svg;
         }).catch(function () {
           if (center._mermaidRenderToken !== token) return;
-          center.innerHTML = '<p style="color:var(--text-muted);font-style:italic;">Diagram could not be rendered.</p>';
+          center.innerHTML = '<p style="color:var(--text-muted);font-style:italic;">' + escapeHtml(t('diagramRenderError')) + '</p>';
         });
       }
 
@@ -2786,16 +3093,16 @@
         var article = document.querySelector('.lesson-article');
         if (!article) return;
 
-        var conceptH2 = article.querySelector('#the-concept, #concept');
-        var buildH2 = article.querySelector('#build-it, #build');
-        var keyTermsH2 = article.querySelector('#key-terms');
+        var conceptH2 = findSectionNode(article, 'concept');
+        var buildH2 = findSectionNode(article, 'build');
+        var keyTermsH2 = findSectionNode(article, 'keyTerms');
 
-        var preQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'pre'; }), 'pre', 'Pre-Lesson Check');
-        var checkQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'check'; }), 'check', 'Mid-Lesson Check');
-        var postQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'post'; }), 'post', 'Post-Lesson Quiz');
+        var preQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'pre'; }), 'pre', t('preLessonCheck'));
+        var checkQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'check'; }), 'check', t('midLessonCheck'));
+        var postQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'post'; }), 'post', t('postLessonQuiz'));
 
         if (!preQuizHtml && !checkQuizHtml && !postQuizHtml) {
-          var allHtml = buildQuizHtml(questions, 'all', 'Quiz');
+          var allHtml = buildQuizHtml(questions, 'all', t('quiz'));
           if (allHtml && keyTermsH2) {
             keyTermsH2.insertAdjacentHTML('beforebegin', allHtml);
           } else if (allHtml) {
@@ -2813,8 +3120,8 @@
 
         // Mid-lesson check: land between Build It and Use It if possible,
         // otherwise fall back to before Use It / Ship It / Key Terms.
-        var useH2 = article.querySelector('#use-it, #use');
-        var shipH2 = article.querySelector('#ship-it, #ship');
+        var useH2 = findSectionNode(article, 'use');
+        var shipH2 = findSectionNode(article, 'ship');
         if (checkQuizHtml && useH2) {
           useH2.insertAdjacentHTML('beforebegin', checkQuizHtml);
         } else if (checkQuizHtml && shipH2) {
@@ -2832,6 +3139,20 @@
         }
 
         restoreQuizAnswers();
+      }
+
+      function findSectionNode(article, key) {
+        if (!article || !key) return null;
+        var node = article.querySelector('[data-section="' + key + '"]');
+        if (node) return node;
+        var legacy = {
+          concept: '#the-concept, #concept',
+          build: '#build-it, #build',
+          use: '#use-it, #use',
+          ship: '#ship-it, #ship',
+          keyTerms: '#key-terms'
+        };
+        return legacy[key] ? article.querySelector(legacy[key]) : null;
       }
 
       function buildQuizHtml(questions, id, title) {
@@ -2913,7 +3234,7 @@
         }
         var scoreEl = section.querySelector('.quiz-score');
         if (scoreEl) {
-          scoreEl.textContent = correctCount + '/' + allQs.length + ' correct';
+          scoreEl.textContent = correctCount + '/' + allQs.length + ' ' + t('correctSuffix');
           scoreEl.style.display = 'block';
         }
       }
@@ -2957,16 +3278,16 @@
 
         var nav = '<div class="lesson-nav-bottom">';
         if (prev) {
-          nav += '<a class="lesson-nav-btn prev" href="lesson.html?path=' + prev.path + '">';
-          nav += '<span class="nav-label">&larr; Previous</span>';
+          nav += '<a class="lesson-nav-btn prev" href="' + lessonHref(prev.path) + '">';
+          nav += '<span class="nav-label">&larr; ' + escapeHtml(t('previous')) + '</span>';
           nav += '<span class="nav-title">' + escapeHtml(prev.lessonName) + '</span>';
           nav += '</a>';
         } else {
           nav += '<div></div>';
         }
         if (next) {
-          nav += '<a class="lesson-nav-btn next" href="lesson.html?path=' + next.path + '">';
-          nav += '<span class="nav-label">Next &rarr;</span>';
+          nav += '<a class="lesson-nav-btn next" href="' + lessonHref(next.path) + '">';
+          nav += '<span class="nav-label">' + escapeHtml(t('next')) + ' &rarr;</span>';
           nav += '<span class="nav-title">' + escapeHtml(next.lessonName) + '</span>';
           nav += '</a>';
         }
@@ -2985,31 +3306,30 @@
         renderContinuePanel(container);
       }
 
-      var ghApiCache = {};
+      var runtimeManifestPromise = null;
+      var lessonAssetsPromise = null;
 
-      function ghApiFetch(apiPath, cb) {
-        if (ghApiCache[apiPath]) {
-          cb(null, ghApiCache[apiPath]);
-          return;
+      function loadLessonAssets() {
+        if (!lessonAssetsPromise) {
+          lessonAssetsPromise = fetch('lesson-assets.json')
+            .then(function (res) {
+              if (!res.ok) throw new Error('lesson-assets-missing');
+              return res.json();
+            })
+            .catch(function () { return null; });
         }
-        fetch('https://api.github.com/repos/rohitg00/ai-engineering-from-scratch/contents/' + apiPath, {
-          headers: { 'Accept': 'application/vnd.github.v3+json' }
-        }).then(function (res) {
-          if (!res.ok) throw new Error(res.status);
-          return res.json();
-        }).then(function (data) {
-          ghApiCache[apiPath] = data;
-          cb(null, data);
-        }).catch(function (err) {
-          cb(err, null);
-        });
+        return lessonAssetsPromise;
+      }
+
+      function currentLessonAssets(manifest) {
+        return manifest && manifest.lessons ? (manifest.lessons[lessonPath] || null) : null;
       }
 
       function classifyOutput(name) {
         var lower = name.toLowerCase();
         if (lower.indexOf('prompt') >= 0) return 'prompt';
         if (lower.indexOf('skill') >= 0) return 'skill';
-        return 'other';
+        return 'artifact';
       }
 
       function langIcon(filename) {
@@ -3018,15 +3338,44 @@
         return map[ext] || '··';
       }
 
-      function langCommand(filename) {
-        var ext = filename.split('.').pop().toLowerCase();
-        if (ext === 'py') return 'python';
-        if (ext === 'ts') return 'npx tsx';
-        if (ext === 'js') return 'node';
-        if (ext === 'rs') return 'cargo run --';
-        if (ext === 'jl') return 'julia';
-        if (ext === 'sh') return 'bash';
+      function langIconFromLanguage(language) {
+        var map = { python: 'PY', typescript: 'TS', javascript: 'JS', rust: 'RS', julia: 'JL', shell: 'SH', docker: 'DO', yaml: 'YA', json: 'JS' };
+        return map[language] || '··';
+      }
+
+      function langCommandFromLanguage(language) {
+        if (language === 'python') return 'python';
+        if (language === 'typescript') return 'npx tsx';
+        if (language === 'javascript') return 'node';
+        if (language === 'rust') return 'cargo run --';
+        if (language === 'julia') return 'julia';
+        if (language === 'shell') return 'bash';
         return 'run';
+      }
+
+      function loadRuntimeManifest() {
+        if (!runtimeManifestPromise) {
+          runtimeManifestPromise = fetch('runtime-manifest.json')
+            .then(function (res) {
+              if (!res.ok) throw new Error('runtime-manifest-missing');
+              return res.json();
+            })
+            .catch(function () { return null; });
+        }
+        return runtimeManifestPromise;
+      }
+
+      function runtimeLabel(runtime) {
+        if (runtime === 'browser-pyodide') return t('runtimeBrowser');
+        if (runtime === 'local-kernel') return t('runtimeLocal');
+        if (runtime === 'static-only') return t('runtimeStatic');
+        return runtime || t('runtimeStatic');
+      }
+
+      function runtimeDefaultNote(runtime) {
+        if (runtime === 'browser-pyodide') return t('runtimeBrowserNote');
+        if (runtime === 'local-kernel') return t('runtimeLocalNote');
+        return t('runtimeStaticNote');
       }
 
       function formatSize(bytes) {
@@ -3034,107 +3383,152 @@
         return (bytes / 1024).toFixed(1) + ' KB';
       }
 
-      function extractFrontmatterDesc(content) {
-        var match = content.match(/^---[\s\S]*?description:\s*(.+?)[\r\n]/m);
-        if (match) return match[1].replace(/^["']|["']$/g, '').trim();
-        var firstLine = content.split('\n').find(function (l) { return l.trim() && !l.match(/^[#-]/) && !l.match(/^---/); });
-        return firstLine ? firstLine.trim().substring(0, 120) : '';
-      }
-
       function renderOutputsPanel(container) {
         var panel = document.createElement('div');
         panel.className = 'ai-panel';
-        panel.innerHTML = '<div class="ai-panel-header"><div class="ai-panel-icon">O</div><div class="ai-panel-title">What This Lesson Ships</div></div><div class="ai-panel-subtitle">Prompts, skills, and artifacts you can use right now</div><div id="outputsContent" class="panel-loading">Loading outputs...</div>';
+        panel.innerHTML = '<div class="ai-panel-header"><div class="ai-panel-icon">O</div><div class="ai-panel-title">' + escapeHtml(t('outputsTitle')) + '</div></div><div class="ai-panel-subtitle">' + escapeHtml(t('outputsSubtitle')) + '</div><div id="outputsContent" class="panel-loading">' + escapeHtml(t('loadingOutputs')) + '</div>';
         container.appendChild(panel);
 
-        ghApiFetch(lessonPath + '/outputs', function (err, data) {
+        loadLessonAssets().then(function (manifest) {
           var el = document.getElementById('outputsContent');
-          if (err || !data || !Array.isArray(data) || data.length === 0) {
-            el.innerHTML = '<div class="panel-fallback"><a href="https://github.com/rohitg00/ai-engineering-from-scratch/tree/main/' + lessonPath + '" target="_blank" rel="noopener">View lesson on GitHub</a></div>';
+          if (!el) return;
+          var assets = currentLessonAssets(manifest);
+          var outputs = assets && Array.isArray(assets.outputs) ? assets.outputs : [];
+          if (!manifest) {
+            el.innerHTML = '<div class="panel-fallback">' + escapeHtml(t('localAssetsMissing')) + '</div>';
+            return;
+          }
+          if (!outputs.length) {
+            el.innerHTML = '<div class="panel-fallback">' + escapeHtml(t('noOutputs')) + '</div>';
             return;
           }
 
           var html = '<div class="output-cards">';
-          data.forEach(function (file, idx) {
-            var type = classifyOutput(file.name);
+          outputs.forEach(function (file, idx) {
+            var type = file.kind || classifyOutput(file.name || '');
             var badgeClass = type;
-            var badgeText = type === 'prompt' ? 'Prompt' : type === 'skill' ? 'Skill' : 'Output';
+            var badgeText = type === 'prompt' ? 'Prompt' : type === 'skill' ? 'Skill' : 'Artifact';
             var installId = 'install-hint-' + idx;
             var installHint = '';
             if (type === 'prompt') {
-              installHint = 'Paste into Claude, Cursor, Codex, OpenClaw, Hermes, or any agent that reads prompts';
+              installHint = t('promptInstallHint');
             } else if (type === 'skill') {
-              var skillName = file.name.replace(/\.md$/, '').replace(/^skill-/, '');
+              var skillName = (file.name || '').replace(/\.md$/, '').replace(/^skill-/, '');
               installHint = 'npx skills add rohitg00/ai-engineering-from-scratch --skill ' + skillName;
             }
 
             html += '<div class="output-card">';
             html += '<div class="output-badge ' + badgeClass + '">' + badgeText + '</div>';
-            html += '<div class="output-card-name">' + escapeHtml(file.name) + '</div>';
-            html += '<div class="output-desc" id="desc-' + idx + '">Loading description...</div>';
+            html += '<div class="output-card-name">' + escapeHtml(file.name || '') + '</div>';
+            html += '<div class="output-desc">' + escapeHtml(file.description || file.name || '') + '</div>';
             html += '<div class="output-actions">';
-            html += '<a class="output-btn" href="' + file.html_url + '" target="_blank" rel="noopener">View on GitHub</a>';
+            html += '<a class="output-btn" href="' + escapeAttr(file.url || '') + '" target="_blank" rel="noopener">' + escapeHtml(t('openFile')) + '</a>';
             if (installHint) {
-              html += '<button class="output-btn" onclick="var h=document.getElementById(\'' + installId + '\');h.classList.toggle(\'visible\')">Install</button>';
+              html += '<button class="output-btn output-install-toggle" data-install-id="' + escapeAttr(installId) + '">' + escapeHtml(t('install')) + '</button>';
             }
             html += '</div>';
             if (installHint) {
               html += '<div class="output-install-hint" id="' + installId + '">' + escapeHtml(installHint) + '</div>';
             }
             html += '</div>';
-
-            fetch(file.download_url).then(function (r) { return r.text(); }).then(function (content) {
-              var descEl = document.getElementById('desc-' + idx);
-              if (descEl) {
-                var desc = extractFrontmatterDesc(content);
-                descEl.textContent = desc || file.name;
-              }
-            }).catch(function () {
-              var descEl = document.getElementById('desc-' + idx);
-              if (descEl) descEl.textContent = file.name;
-            });
           });
           html += '</div>';
           el.innerHTML = html;
+          el.querySelectorAll('.output-install-toggle').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var hint = document.getElementById(btn.getAttribute('data-install-id'));
+              if (hint) hint.classList.toggle('visible');
+            });
+          });
         });
       }
 
       function renderCodePanel(container) {
         var panel = document.createElement('div');
         panel.className = 'ai-panel';
-        panel.innerHTML = '<div class="ai-panel-header"><div class="ai-panel-icon">C</div><div class="ai-panel-title">Run the Code</div></div><div class="ai-panel-subtitle">Executable files from this lesson</div><div id="codeContent" class="panel-loading">Loading code files...</div>';
+        panel.innerHTML = '<div class="ai-panel-header"><div class="ai-panel-icon">C</div><div class="ai-panel-title">' + escapeHtml(t('runtimeTitle')) + '</div></div><div class="ai-panel-subtitle">' + escapeHtml(t('runtimeLoading')) + '</div><div id="codeContent" class="panel-loading">' + escapeHtml(t('runtimeLoading')) + '</div>';
         container.appendChild(panel);
 
-        ghApiFetch(lessonPath + '/code', function (err, data) {
+        Promise.all([loadRuntimeManifest(), loadLessonAssets()]).then(function (results) {
+          var manifest = results[0];
+          var assetManifest = results[1];
           var el = document.getElementById('codeContent');
-          if (err || !data || !Array.isArray(data) || data.length === 0) {
-            el.innerHTML = '<div class="panel-fallback"><a href="https://github.com/rohitg00/ai-engineering-from-scratch/tree/main/' + lessonPath + '" target="_blank" rel="noopener">View lesson on GitHub</a></div>';
+          if (!el) return;
+          var record = manifest && manifest.lessons ? manifest.lessons[lessonPath] : null;
+          var assets = currentLessonAssets(assetManifest);
+          var codeFiles = assets && Array.isArray(assets.code) ? assets.code : [];
+          if (!record && !codeFiles.length) {
+            el.innerHTML = '<div class="panel-fallback">' + escapeHtml(t('runtimeNoCode')) + '</div>';
             return;
           }
 
           var html = '<div class="code-cards">';
-          data.forEach(function (file) {
-            var icon = langIcon(file.name);
-            var cmd = langCommand(file.name);
-            var runCmd = cmd + ' ' + lessonPath + '/code/' + file.name;
+          if (record) {
+            var runtime = record.runtime || 'static-only';
+            var language = record.language || ((record.languages && record.languages[0]) || '');
+            var icon = langIconFromLanguage(language);
+            var entry = record.entry || '';
+            var runCmd = entry ? (langCommandFromLanguage(language) + ' ' + entry) : '';
+            var notes = Array.isArray(record.notes) && record.notes.length ? record.notes : [runtimeDefaultNote(runtime)];
+            var packages = Array.isArray(record.packages) ? record.packages : [];
+
             html += '<div class="code-card">';
-            html += '<div class="code-card-header"><span class="code-lang-icon">' + icon + '</span><span class="code-card-name">' + escapeHtml(file.name) + '</span></div>';
-            html += '<div class="code-card-size">' + formatSize(file.size) + '</div>';
-            html += '<div class="code-card-run">' + escapeHtml(runCmd) + '</div>';
+            html += '<div class="runtime-badge ' + escapeAttr(runtime) + '">' + escapeHtml(runtimeLabel(runtime)) + '</div>';
+            html += '<div class="code-card-header"><span class="code-lang-icon">' + escapeHtml(icon) + '</span><span class="code-card-name">' + escapeHtml(entry || runtimeLabel(runtime)) + '</span></div>';
+            if (entry) html += '<div class="runtime-meta"><strong>' + escapeHtml(t('runtimeEntry')) + ':</strong> ' + escapeHtml(entry) + '</div>';
+            if (packages.length) html += '<div class="runtime-meta"><strong>' + escapeHtml(t('runtimePackages')) + ':</strong> ' + escapeHtml(packages.join(', ')) + '</div>';
+            if (runCmd) {
+              html += '<div class="code-card-run">' + escapeHtml(runCmd) + '</div>';
+              html += '<div class="code-card-actions">';
+              html += '<button class="code-card-btn code-card-copy" data-command="' + escapeAttr(runCmd) + '">' + escapeHtml(t('copyCommand')) + '</button>';
+              if (record.lab) {
+                html += '<a class="code-card-btn" href="' + escapeAttr(record.lab) + '" target="_blank" rel="noopener">' + escapeHtml(t('openLab')) + '</a>';
+              }
+              if (record.notebook) {
+                html += '<a class="code-card-btn" href="' + escapeAttr(record.notebook) + '" target="_blank" rel="noopener">' + escapeHtml(t('openNotebook')) + '</a>';
+              }
+              html += '</div>';
+            } else {
+              html += '<div class="runtime-meta">' + escapeHtml(t('runtimeNoCode')) + '</div>';
+            }
+            if (record.notebook) {
+              html += '<div class="runtime-meta"><strong>' + escapeHtml(t('notebookReady')) + ':</strong> ' + escapeHtml(record.notebook) + '</div>';
+            }
+            html += '<ul class="runtime-notes">';
+            notes.slice(0, 4).forEach(function (note) {
+              html += '<li>' + escapeHtml(note) + '</li>';
+            });
+            html += '</ul>';
+            html += '</div>';
+          }
+
+          codeFiles.slice(0, 8).forEach(function (file) {
+            var fileCommand = file.command || '';
+            html += '<div class="code-card">';
+            html += '<div class="runtime-badge static-only">' + escapeHtml(t('sourceFiles')) + '</div>';
+            html += '<div class="code-card-header"><span class="code-lang-icon">' + escapeHtml(langIconFromLanguage(file.language || '')) + '</span><span class="code-card-name">' + escapeHtml(file.name || '') + '</span></div>';
+            if (file.size) html += '<div class="code-card-size">' + escapeHtml(formatSize(file.size)) + '</div>';
+            if (fileCommand) html += '<div class="code-card-run">' + escapeHtml(fileCommand) + '</div>';
             html += '<div class="code-card-actions">';
-            html += '<a class="code-card-btn" href="' + file.html_url + '" target="_blank" rel="noopener">View on GitHub</a>';
-            html += '<button class="code-card-btn code-card-copy" data-command="' + escapeAttr(runCmd) + '">Copy command</button>';
+            html += '<a class="code-card-btn" href="' + escapeAttr(file.url || '') + '" target="_blank" rel="noopener">' + escapeHtml(t('viewSource')) + '</a>';
+            if (fileCommand) {
+              html += '<button class="code-card-btn code-card-copy" data-command="' + escapeAttr(fileCommand) + '">' + escapeHtml(t('copyCommand')) + '</button>';
+            }
             html += '</div>';
             html += '</div>';
           });
+
+          if (codeFiles.length > 8) {
+            html += '<div class="code-card"><div class="runtime-meta">+' + escapeHtml(String(codeFiles.length - 8)) + ' ' + escapeHtml(t('sourceFiles')) + '</div></div>';
+          }
           html += '</div>';
           el.innerHTML = html;
           el.querySelectorAll('.code-card-copy').forEach(function (btn) {
             btn.addEventListener('click', function () {
               var command = btn.getAttribute('data-command');
               navigator.clipboard.writeText(command).then(function () {
-                btn.textContent = 'Copied!';
-                setTimeout(function () { btn.textContent = 'Copy command'; }, 1500);
+                btn.textContent = t('copied');
+                setTimeout(function () { btn.textContent = t('copyCommand'); }, 1500);
               });
             });
           });
@@ -3341,7 +3735,7 @@
           }
 
           if (item.flat.isReadable) {
-            html += '<a class="timeline-item ' + cls + '" href="lesson.html?path=' + item.flat.path + '" title="' + escapeAttr(item.flat.lessonName) + '">';
+            html += '<a class="timeline-item ' + cls + '" href="' + lessonHref(item.flat.path) + '" title="' + escapeAttr(item.flat.lessonName) + '">';
           } else {
             html += '<span class="timeline-item ' + cls + ' disabled" title="' + escapeAttr(item.flat.lessonName) + '">';
           }
@@ -3396,7 +3790,7 @@
 
         var phaseSlug = extractPhaseSlug(phase, phaseIdx);
         var firstLesson = phase.lessons[0] ? extractLessonSlug(phase.lessons[0], 0) : '';
-        html += '<a class="continue-link" href="lesson.html?path=phases/' + phaseSlug + '/' + firstLesson + '">Browse all Phase ' + String(phase.id).padStart(2, '0') + ' lessons</a>';
+        html += '<a class="continue-link" href="' + lessonHref('phases/' + phaseSlug + '/' + firstLesson) + '">Browse all Phase ' + String(phase.id).padStart(2, '0') + ' lessons</a>';
         html += '<a class="continue-link" href="catalog.html">Full course catalog</a>';
         html += '</div>';
 
