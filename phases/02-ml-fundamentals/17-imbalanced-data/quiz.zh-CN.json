@@ -1,0 +1,67 @@
+[
+  {
+    "id": "imbalanced-pre-1",
+    "stage": "pre",
+    "question": "一个欺诈检测数据集包含 99.9% 的合法交易和 0.1% 的欺诈交易。某个模型把每一笔交易都预测为“合法”。它的准确率是多少？",
+    "options": [
+      "50%",
+      "0.1%",
+      "99.9%",
+      "100%"
+    ],
+    "correct": 2,
+    "explanation": "Accuracy = 999/1000 = 99.9%。模型抓住了零个欺诈，却在准确率上看起来很棒。这正是不平衡数据集中准确率很危险的原因。"
+  },
+  {
+    "id": "imbalanced-pre-2",
+    "stage": "pre",
+    "question": "哪个指标会正确识别出永远预测负类的模型毫无用处？",
+    "options": [
+      "Accuracy (99.9%)",
+      "Recall (0%) 或 F1 score (0%)",
+      "Specificity (100%)",
+      "True negative rate (100%)"
+    ],
+    "correct": 1,
+    "explanation": "Recall = TP/(TP+FN) = 0/total_positives = 0%。F1 = 2*0*0/(0+0) = 0。两者都正确显示模型没有抓住正类中的任何样本。准确率掩盖了这种失败。"
+  },
+  {
+    "id": "imbalanced-post-1",
+    "stage": "post",
+    "question": "SMOTE 如何生成合成少数类样本？",
+    "options": [
+      "通过精确复制已有少数类样本",
+      "通过在特征空间中的任意位置随机生成点",
+      "通过在一个少数类样本与它的 K 个最近少数类邻居之一之间插值",
+      "通过翻转多数类样本的标签"
+    ],
+    "correct": 2,
+    "explanation": "SMOTE 会选择一个少数类点，选择它的 K 个最近少数类邻居之一，然后在它们之间的线段上创建一个新点：new = x + rand(0,1) * (neighbor - x)。这会产生合理的、非重复的样本。"
+  },
+  {
+    "id": "imbalanced-post-2",
+    "stage": "post",
+    "question": "你在一个不平衡数据集上把分类阈值从 0.5 降到 0.3。precision 和 recall 会发生什么？",
+    "options": [
+      "precision 和 recall 都会增加",
+      "Recall 增加（抓住更多正类），但 precision 下降（更多 false positives）",
+      "Precision 增加，但 recall 下降",
+      "两者都不变 -- 阈值只影响速度"
+    ],
+    "correct": 1,
+    "explanation": "降低阈值意味着更多样本会被预测为正类。这会抓住更多 true positives（recall 上升），但也会增加更多 false positives（precision 下降）。阈值调优是在 precision 和 recall 之间做权衡。"
+  },
+  {
+    "id": "imbalanced-post-3",
+    "stage": "post",
+    "question": "为什么对于高度不平衡的数据集，AUPRC（Area Under Precision-Recall Curve）比 AUC-ROC 更有信息量？",
+    "options": [
+      "AUPRC 总是高于 AUC-ROC",
+      "随机分类器的 AUPRC 等于正类比例（例如 0.001），让改进可见；而 AUC-ROC 无论不平衡程度如何都从 0.5 开始",
+      "AUPRC 不需要阈值",
+      "AUC-ROC 无法用于不平衡数据"
+    ],
+    "correct": 1,
+    "explanation": "对于不平衡数据，AUC-ROC 可能看起来具有欺骗性地好，因为大量 true negatives 会抬高 true negative rate。AUPRC 的基线等于正类比例，使检测少数类方面的真实改进更明显。"
+  }
+]
