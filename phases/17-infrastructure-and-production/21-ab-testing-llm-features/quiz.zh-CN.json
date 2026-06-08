@@ -1,0 +1,78 @@
+{
+  "lesson": "21-ab-testing-llm-features",
+  "title": "LLM 功能的 A/B Testing — GrowthBook、Statsig 与 Vibes 问题",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课中 evals 与 A/B tests 的精确区别是什么？",
+      "options": [
+        "Evals 在带标签集合上回答“模型能完成任务吗？”；A/B tests 用真实随机流量回答“用户在意吗？”",
+        "只有 A/B tests 是必需的",
+        "Evals 面向用户；A/B tests 是 offline 的",
+        "它们可以互换"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "CUPED 对实验有什么作用？",
+      "options": [
+        "禁用 multiple-comparison correction",
+        "完全取代 sequential testing",
+        "在比较 post-period 之前回归掉 pre-period variance，通常降低 30-70% variance，并提升 effective sample size",
+        "通过招募更多用户来增加 sample size"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "运行许多 A/Bs 时，为什么需要 multiple-comparison corrections（Bonferroni 或 Benjamini-Hochberg）？",
+      "options": [
+        "GDPR 要求它们",
+        "只有 sequential tests 才需要它们",
+        "以 95% confidence 跑 20 个 tests，纯靠概率也会产生一个 false positive；corrections 会控制 family-wise error 或 false discovery rate",
+        "它们会加速实验"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "SRM（sample ratio mismatch）检测什么？",
+      "options": [
+        "缓慢的 tokenizer 性能",
+        "assignment-hash bug，它会让实际交付 split 偏离预期（例如目标 50/50，却交付成 47/53）",
+        "实验平台中的 memory leaks",
+        "PII 泄漏"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 LLM non-determinism 要求给 sample size 留 buffer？",
+      "options": [
+        "它违反 IID assumptions；effective sample size 会下降，所以把所需规模乘以大约 1.3-1.5x 作为安全余量",
+        "它与 power calculations 无关",
+        "Non-determinism 会减少所需样本",
+        "它只在 offline 时重要"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课如何对比 Statsig 和 GrowthBook？",
+      "options": [
+        "功能集完全相同",
+        "Statsig 只支持 warehouse-native",
+        "GrowthBook 是 closed source",
+        "Statsig 是 all-in-one SaaS（2025 年 9 月被 OpenAI 以 $1.1B 收购）；GrowthBook 是 open-source MIT、warehouse-native，具备 Bayesian/Frequentist/Sequential engines 以及 CUPED/SRM/BH"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
