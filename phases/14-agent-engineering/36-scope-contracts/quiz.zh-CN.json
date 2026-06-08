@@ -1,0 +1,90 @@
+{
+  "lesson": "36-scope-contracts",
+  "title": "Scope Contracts 与任务边界",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 scope creep 被称为最缺乏监控的失败模式？",
+      "options": [
+        "它会让代理大声崩溃",
+        "每一次触及在当时都有看似合理的理由；合在一起却形成了不同于已评审内容的改动",
+        "它太少见，不值得监控",
+        "测试会自动捕获它"
+      ],
+      "correct": 1,
+      "explanation": "Agents 会真诚地叙述每一步；静默累积起来的总和就是 creep。"
+    },
+    {
+      "stage": "pre",
+      "question": "本课称哪个 contract 字段是契约的一半？",
+      "options": [
+        "goal",
+        "forbidden_files（负空间）",
+        "task_id",
+        "approvals_required"
+      ],
+      "correct": 1,
+      "explanation": "没有 forbidden_files 的契约是不完整的；负空间是契约的一半。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么把 allowed/forbidden 固定到 globs，而不是 raw paths？",
+      "options": [
+        "Globs 更快",
+        "真实 repo 会移动文件；globs 能承受会话之间的 refactors",
+        "Globs 加密效果更好",
+        "Raw paths 不能 JSON-serializable"
+      ],
+      "correct": 1,
+      "explanation": "Globs（app/**/*.py）让契约在 refactor 后仍然有效。"
+    },
+    {
+      "stage": "check",
+      "question": "'violation budget' 模式做了什么？",
+      "options": [
+        "为代理设置月度预算",
+        "允许预算内的轻微 scope slips 作为 warnings；只有超额才触发 merge refusal，这是一道能交付的 gate 和一道会被禁用的 gate 之间的区别",
+        "限流 model calls",
+        "按 violation 收费"
+      ],
+      "correct": 1,
+      "explanation": "agent-guardrails 使用 violationBudget，让 gate 在日常流程中可用。"
+    },
+    {
+      "stage": "check",
+      "question": "specsmaxxing 实践者报告了什么？",
+      "options": [
+        "Latency 下降 90%",
+        "三周内 rabbit-hole rate 从 52% 降到 21%，且没有改变代理；起作用的是契约，不是模型",
+        "Cost 上升 5 倍",
+        "测试变慢"
+      ],
+      "correct": 1,
+      "explanation": "调用代理前用 YAML 编写 scope contracts，在没有改变模型的情况下将 rabbit-hole rate 减半。"
+    },
+    {
+      "stage": "post",
+      "question": "multi-contract merge semantics（least privilege）是什么？",
+      "options": [
+        "最后一个 contract 胜出",
+        "allowed_files 取交集；forbidden_files 取并集；time_budget 取最小；approvals 累积；deny-all 保持；None 的 merge 让位给另一边",
+        "第一个 contract 胜出",
+        "随机打破平局"
+      ],
+      "correct": 1,
+      "explanation": "Least-privilege merge：allows 取交集，forbids 取并集，time 取最严格值，approvals 累积。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 time 和 network budgets 也属于 contract？",
+      "options": [
+        "Wall clock 和 external-host access 是 scope 维度；只有 file globs 是必要但不充分的",
+        "Providers 要求它们",
+        "它们让 JSON 更小",
+        "Apache 2.0 要求如此"
+      ],
+      "correct": 0,
+      "explanation": "time_budget_minutes 和 network_egress allowlists 是 file globs 之上的 scope 维度。"
+    }
+  ]
+}
