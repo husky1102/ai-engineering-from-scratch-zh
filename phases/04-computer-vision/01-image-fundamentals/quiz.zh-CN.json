@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "磁盘上的文件被解码成一个 shape 为 (224, 224, 3)、dtype 为 uint8 的 NumPy array。每个数字代表什么？",
+      "options": ["某个 pixel 是该颜色的概率，位于 0 到 1 之间", "每个 detector 的一次 photon count，并已按传感器完整动态范围 normalized", "一个网格位置上的光强样本，并在每个 channel 上 quantized 到 256 个级别之一", "可以直接喂给 convolutional network 的 floating-point brightness value"],
+      "correct": 2,
+      "explanation": "uint8 image 存储的是 [0, 255] 范围内的 8-bit integer。每个 integer 都是在一个 (row, column, channel) 位置上的一次 quantized light intensity sample。它既不是概率，也不是 float；喂给 pretrained model 前，你必须先除以 255 并 standardize。"
+    },
+    {
+      "stage": "pre",
+      "question": "你用 Pillow 加载一张图像，得到 shape 为 (480, 640, 3) 的 array。你把它作为 batched tensor (1, 480, 640, 3) 传给一个 in_channels=3 的 PyTorch Conv2d。会发生什么？",
+      "options": ["什么都不会发生，PyTorch 会自动检测 layout", "第一层 conv 会把 height 当成 channel axis，产生无意义的 feature map", "PyTorch 会抛出 RuntimeError：Conv2d 期望 NCHW，却看到 480 个 channel，而 weight 期望 3 个，因此拒绝运行", "准确率会下降几个百分点，但 inference 仍然工作"],
+      "correct": 2,
+      "explanation": "PyTorch Conv2d 会根据 weight tensor 严格检查 channel count。batched HWC input (1, 480, 640, 3) 会被解释为 C=480 的 NCHW，这与 weight 期望的 3 个 channel 不匹配，因此 PyTorch 会在任何计算前抛出 RuntimeError。这种响亮的失败是好事，它迫使你修正 layout。喂给 PyTorch 前必须先 permute 到 NCHW（`.permute(0, 3, 1, 2)`）。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 ImageNet pretrained model 期望输入用 mean=[0.485, 0.456, 0.406] 和 std=[0.229, 0.224, 0.225] standardize？",
+      "options": ["这些是平均自然场景的 RGB 值", "这些是在 [0, 1] 空间中 ImageNet training set 的 per-channel mean 和 standard deviation，减去它们能把分布居中到模型训练时看到的分布", "它们会让任何图像的输入都严格变成 zero-mean unit-variance", "它们是 ReLU activation function 要求的"],
+      "correct": 1,
+      "explanation": "这些数字是在 pixel 除以 255 后，对 ImageNet training corpus 计算得到的统计量。使用它们会让你的 input distribution 与网络训练时看到的分布对齐。对于在不同 dataset 上训练的模型，你应该在那个 dataset 上重新计算 stats。"
+    },
+    {
+      "stage": "post",
+      "question": "你要把一个 segmentation mask（integer class IDs 0..20）从 500x500 resize 到 224x224。哪种 interpolation method 是正确的？",
+      "options": ["Bilinear，因为它能平滑 class boundary", "Bicubic，因为它能保留 sharpness", "Lanczos，因为它质量最高", "Nearest neighbour，因为它会保留有效的 integer class ID，而不是发明 fractional ID"],
+      "correct": 3,
+      "explanation": "Bilinear、bicubic 和 lanczos 都会对相邻值求平均。在 class-ID mask 上，这会在 class 4 和 class 5 之间产生 4.7 这样的非整数值，而它们并不是真实类别。Nearest neighbour 会选择最近的原始 pixel，并保持 label space 完整。这个规则也适用于任何编码 ID 或 index 的 channel。"
+    },
+    {
+      "stage": "post",
+      "question": "RGB grayscale conversion 使用权重 0.299 R + 0.587 G + 0.114 B，而不是 0.333 R + 0.333 G + 0.333 B。为什么？",
+      "options": ["为了补偿每个 channel 中的 JPEG compression artifact", "因为绿色光子的能量比红色或蓝色光子更高", "因为人类视觉对绿色最敏感、对蓝色最不敏感，所以 weighted sum 匹配 perceived luminance", "为了匹配 camera sensor 上 Bayer filter 的行为"],
+      "correct": 2,
+      "explanation": "ITU-R BT.601 权重 0.299/0.587/0.114 来自人眼的 luminous efficiency。等权平均会让带绿色调的图像在人类观察者看来太暗、红色图像太亮。大多数 classical computer-vision grayscale code 都使用这些权重；BT.709（0.2126/0.7152/0.0722）是用于 linear-light input 的现代 HDTV 变体。"
+    }
+  ]
+}
