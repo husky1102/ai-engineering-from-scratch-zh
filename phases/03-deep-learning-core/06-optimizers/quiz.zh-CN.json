@@ -1,0 +1,37 @@
+[
+  {
+    "question": "Momentum 解决了 gradient descent 中的什么问题？",
+    "options": ["它减少内存使用", "它通过累积过去梯度来抑制振荡，并加速一致方向上的移动", "它消除了对学习率的需要", "它防止过拟合"],
+    "correct": 1,
+    "explanation": "在狭窄山谷中，梯度会横穿山谷振荡，同时沿山谷方向进展缓慢。Momentum 会累积过去梯度：一致方向被放大，振荡方向互相抵消，从而更平滑、更快地收敛。",
+    "stage": "pre"
+  },
+  {
+    "question": "Adam 和 AdamW 的关键区别是什么？",
+    "options": ["AdamW 使用更高学习率", "AdamW 直接对权重应用 weight decay，而不是通过梯度应用，从而给出正确正则化", "AdamW 不使用 momentum", "AdamW 只适用于 transformers"],
+    "correct": 1,
+    "explanation": "在 Adam + L2 中，自适应学习率会对每个参数不同地缩放 regularization 项。AdamW 将 weight decay 从梯度更新中解耦，不管梯度统计如何都施加统一收缩。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么 Adam 在训练早期使用 bias correction？",
+    "options": ["防止过拟合", "moment estimates 初始化为零，因此早期值偏向零；correction 会补偿这个冷启动", "裁剪大梯度", "加速收敛"],
+    "correct": 1,
+    "explanation": "在第 1 步且 beta1=0.9 时，m_1 = 0.1 * gradient（小了 10 倍）。除以 (1 - 0.9^1) = 0.1 会把它修正为真实梯度。约 50 步之后，这个 correction 会变得可以忽略。",
+    "stage": "post"
+  },
+  {
+    "question": "Adam 的标准默认超参数是什么？",
+    "options": ["lr=0.1, beta1=0.5, beta2=0.5", "lr=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8", "lr=0.01, beta1=0.99, beta2=0.99", "lr=0.0001, beta1=0.8, beta2=0.9"],
+    "correct": 1,
+    "explanation": "Adam 原始论文（Kingma & Ba, 2014）推荐 lr=0.001、beta1=0.9、beta2=0.999、epsilon=1e-8。这些默认值适用于大多数问题。",
+    "stage": "post"
+  },
+  {
+    "question": "训练 transformers 和 LLMs 的现代默认优化器是哪一个？",
+    "options": ["Vanilla SGD", "带 momentum 的 SGD", "RMSProp", "AdamW"],
+    "correct": 3,
+    "explanation": "AdamW（带 decoupled weight decay 的 Adam）被用于训练 BERT、GPT、LLaMA 和几乎所有现代 transformers。它结合了自适应学习率和正确的 weight decay regularization。",
+    "stage": "post"
+  }
+]
