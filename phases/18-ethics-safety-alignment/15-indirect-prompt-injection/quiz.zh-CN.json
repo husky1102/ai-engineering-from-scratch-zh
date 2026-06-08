@@ -1,0 +1,78 @@
+{
+  "lesson": "15-indirect-prompt-injection",
+  "title": "Indirect Prompt Injection - 生产攻击面",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Indirect prompt injection（IPI）与 direct prompt injection 的区别是什么？",
+      "options": [
+        "IPI 需要 fine-tuning 目标模型",
+        "IPI 把指令嵌入外部内容（web pages、emails、tool outputs）中，让 agent 在正常运行中消费，而攻击者不触碰用户的 prompt",
+        "IPI 是 jailbreaking 的同义词",
+        "IPI 只对 multimodal models 有效"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "以下哪一项不是本课列出的三种 IPI delivery vectors 之一？",
+      "options": [
+        "Retrieval-augmented generation（poisoned retrieval）",
+        "用户直接编辑 system prompt",
+        "Tool output",
+        "Inbox / document workflows"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 user-input filters 会漏掉 IPI？",
+      "options": [
+        "Filters 无法读取 JSON",
+        "User-input filters 是 case-sensitive 的",
+        "Payload 从不出现在用户输入中；它出现在 retrieved content 或 tool-supplied content 中",
+        "Filters 只在模型回应后运行"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "面向 AI agents 的 Information Flow Control（IFC）核心原则是什么？",
+      "options": [
+        "加密所有 retrieved content",
+        "只使用 single-turn prompts",
+        "默认禁用所有 tools",
+        "按来源将内容标记为 trusted 或 untrusted；由 untrusted content 触发的 actions 必须在执行前由 trusted input ratify"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Nasr et al.（2025 年 10 月，“The Attacker Moves Second”）用 adaptive attacks 测试 12 个已发表 IPI defenses 时发现了什么？",
+      "options": [
+        "Adaptive attacks 太昂贵，无法评估",
+        "它们报告的 near-zero ASR 在 adaptive attack 下仍然成立",
+        "只有一个 defense 被攻破",
+        "Adaptive attacks（gradient、RL、random search、human red-team）攻破了其中 >90%，尽管它们原本声称 near-zero ASR"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Prompt injection 在 2025 OWASP LLM Top 10 中排在哪里？",
+      "options": [
+        "未列出",
+        "LLM01（最高，#1 application-layer threat）",
+        "LLM05",
+        "LLM10（最低）"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
