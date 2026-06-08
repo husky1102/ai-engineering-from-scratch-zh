@@ -1,0 +1,37 @@
+[
+  {
+    "question": "一个 7B parameter model 在 FP16 下仅 weights 需要多少 VRAM？",
+    "options": ["7 GB", "14 GB", "28 GB", "56 GB"],
+    "correct": 1,
+    "explanation": "FP16 中每个 parameter 是 2 bytes。7 billion * 2 bytes = 14 GB。加上 Adam optimizer states（2 份副本）和 gradients，在计入 activations 前 total training memory 约为 56 GB。",
+    "stage": "pre"
+  },
+  {
+    "question": "Distributed training 中使用的三种 parallelism 是什么？",
+    "options": ["CPU、GPU 和 TPU parallelism", "Data parallelism、tensor parallelism 和 pipeline parallelism", "Batch、sequence 和 token parallelism", "Forward、backward 和 optimizer parallelism"],
+    "correct": 1,
+    "explanation": "Data parallelism 在每张 GPU 上复制模型并拆分数据。Tensor parallelism 把单个 layers 拆到多张 GPUs。Pipeline parallelism 把模型 layers 拆成跨 GPUs 的 stages。",
+    "stage": "pre"
+  },
+  {
+    "question": "FSDP（Fully Sharded Data Parallel）做了什么标准 DDP 不做的事？",
+    "options": ["它使用不同 optimizer", "它把 model parameters、gradients 和 optimizer states shard 到多张 GPUs，而不是在每张 GPU 上复制完整模型", "它更快处理数据", "它支持更多 GPUs"],
+    "correct": 1,
+    "explanation": "标准 DDP 在每张 GPU 上复制整个模型（浪费内存）。FSDP 把 parameters shard 到 GPUs 上，因此每张只持有一部分。Parameters 会按需 gather 用于 computation，并在之后释放。",
+    "stage": "post"
+  },
+  {
+    "question": "DeepSpeed ZeRO Stage 3 是什么？",
+    "options": ["一种 quantization method", "它把 optimizer states、gradients 以及 model parameters 都 partition 到多张 GPUs，从而获得最大 memory efficiency", "一种 learning rate schedule", "一种 data preprocessing pipeline"],
+    "correct": 1,
+    "explanation": "ZeRO Stage 1 shard optimizer states，Stage 2 加入 gradient sharding，Stage 3 加入 parameter sharding。Stage 3 提供最大 memory savings，使训练远超单卡内存的模型成为可能。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么 data-parallel training 中需要 gradient synchronization？",
+    "options": ["为了防止 overfitting", "每张 GPU 在不同数据上计算 gradients；跨 GPUs 平均 gradients 可确保所有 replicas 以相同方式更新", "为了减少 memory usage", "为了加快 forward pass"],
+    "correct": 1,
+    "explanation": "在 data parallelism 中，每张 GPU 处理不同 batch 并计算不同 gradients。AllReduce 会跨所有 GPUs 平均这些 gradients，使每个 replica 应用相同 update 并保持同步。",
+    "stage": "post"
+  }
+]
