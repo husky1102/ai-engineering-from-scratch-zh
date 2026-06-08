@@ -1,0 +1,37 @@
+[
+  {
+    "question": "RAG 代表什么，它解决什么问题？",
+    "options": ["Random Augmented Generation——生成随机输出", "Retrieval-Augmented Generation——让 LLMs 访问它们未被训练过的外部知识", "Recurrent Attention Generation——改进 attention mechanisms", "Reduced Architecture Generation——让模型更小"],
+    "correct": 1,
+    "explanation": "RAG 会从 external knowledge base 检索 relevant documents，并把它们加入 prompt。这让 LLM 无需 retraining 就能访问 up-to-date、domain-specific information。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么对多数 knowledge-grounded applications，RAG 优于 fine-tuning？",
+    "options": ["RAG 产生更好的 models", "RAG 更便宜，documents 变化时可立即更新，并提供 source attribution；fine-tuning 昂贵且会变 stale", "Fine-tuning 不起作用", "RAG 使用更少 memory"],
+    "correct": 1,
+    "explanation": "Fine-tuning 花费数千美元，产生一个会随 documents 变化而 stale 的静态模型，并且不提供 source attribution。RAG 可即时更新（只需更新 document store），成本只有 embedding + storage，并且能 cite sources。",
+    "stage": "pre"
+  },
+  {
+    "question": "basic RAG pipeline 的正确步骤顺序是什么？",
+    "options": ["Generate, retrieve, embed, chunk", "Chunk documents, embed chunks, store in vector DB, embed query, retrieve similar chunks, generate answer with context", "Embed query, generate answer, retrieve documents", "Store documents, query the LLM, add documents to response"],
+    "correct": 1,
+    "explanation": "Ingestion：chunk documents -> embed chunks -> store in vector DB。Query time：embed user's query -> retrieve top-K similar chunks -> add chunks to prompt -> generate answer grounded in retrieved context。",
+    "stage": "post"
+  },
+  {
+    "question": "basic RAG systems 的常见 failure mode 是什么？",
+    "options": ["LLM 拒绝回答", "retrieved chunks 在语义上与 query 相似，但不包含真实答案（例如问 'Q3 revenue numbers' 却返回 'revenue strategy'）", "vector database 崩溃", "embeddings 太大"],
+    "correct": 1,
+    "explanation": "Semantic search 找的是听起来像 query 的文本，不一定是回答 query 的文本。关于 revenue 的 query 可能检索到讨论 revenue strategy 的 chunks，而不是包含真实 number 的 chunk。",
+    "stage": "post"
+  },
+  {
+    "question": "如何评估 RAG quality？",
+    "options": ["检查 LLM 是否产生任何输出", "同时使用 retrieval metrics（是否找到正确 chunks？）和 generation metrics（答案是否忠实于 retrieved context？）", "只测量 response time", "统计 retrieved documents 数量"],
+    "correct": 1,
+    "explanation": "RAG evaluation 有两部分：retrieval quality（retrieved chunks 相对 ground truth 的 precision/recall）和 generation quality（faithfulness to context、relevance to query、不超出 retrieved information 幻觉）。",
+    "stage": "post"
+  }
+]
