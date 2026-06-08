@@ -1,0 +1,78 @@
+{
+  "lesson": "24-chaos-engineering-llm",
+  "title": "LLM Production 的 Chaos Engineering",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课要求在 production 中运行 chaos 前具备哪五个 prerequisites？",
+      "options": [
+        "Slack channel、sticker pack、mascot、hashtag、blog post",
+        "SLI/SLO、observability、automated rollback、structured runbooks、on-call",
+        "只有 vector database",
+        "三个 frontier models"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Chaos architecture 有哪四个 planes，以及哪个 feedback loop？",
+      "options": [
+        "Ingest、transform、store、serve",
+        "Train、eval、deploy、archive",
+        "Control、target、safety、observability —— 并 feedback into SLO adjustments",
+        "Frontend、backend、mobile、web"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Chaos experiments 期间 burn-rate alert guardrail 做什么？",
+      "options": [
+        "禁用 observability",
+        "Auto-promotes the experiment to production",
+        "加速 experiment",
+        "当 daily error-budget burn 超过大约 2x expected 时暂停 experiment"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪一个是本课列出的 LLM-specific chaos experiment？",
+      "options": [
+        "Drop all DNS",
+        "Random fan-speed reduction",
+        "强制 vLLM block-budget saturation 的 KV eviction storm",
+        "Reboot the entire datacenter"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课推荐什么 chaos exercises cadence？",
+      "options": [
+        "Weekly small canary、monthly game day with postmortem、quarterly cross-team resilience audit",
+        "Daily full-prod outages",
+        "永不运行",
+        "只每年一次"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Malformed-prompt experiment 揭示哪种 LLM-specific failure mode？",
+      "options": [
+        "像 deeply nested unicode 或 huge UTF-8 codepoints 这样的 inputs 导致 tokenizer stalls，并锁死 worker",
+        "Disk I/O contention",
+        "GPU undervolt",
+        "Network packet loss"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
