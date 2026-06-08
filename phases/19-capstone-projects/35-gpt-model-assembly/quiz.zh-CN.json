@@ -1,0 +1,78 @@
+{
+  "lesson": "35-gpt-model-assembly",
+  "title": "GPT 模型组装",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课复现的参考 GPT-2 small 配置是什么？",
+      "options": [
+        "vocab 30000，context 512，d_model 512，6 heads，6 layers",
+        "vocab 50257，context 1024，d_model 768，12 heads，12 layers，参数量接近 1.24 亿",
+        "vocab 100000，context 2048，d_model 1024，16 heads，24 layers",
+        "vocab 50000，context 4096，d_model 4096，32 heads，32 layers"
+      ],
+      "correct": 1,
+      "explanation": "GPT-2 small 是 124M 参数配置；匹配它可以确认连线是正确的。"
+    },
+    {
+      "stage": "check",
+      "question": "在模型组装中，weight tying 是什么意思？",
+      "options": [
+        "Token embedding 和 LM head 共享完全相同的 parameter tensor；optimizer 更新一个同时服务于 lookup 和输出投影的矩阵",
+        "两个形状相同、但每一步都会被复制的不同 tensor",
+        "跨层共享的 bias term",
+        "对 attention heads 的一种约束"
+      ],
+      "correct": 0,
+      "explanation": "设置 lm_head.weight = tok_embed.weight 会共享存储；复制不会。它能节省 vocab times d_model 个参数。"
+    },
+    {
+      "stage": "check",
+      "question": "Generation 如何滑动它的 context window？",
+      "options": [
+        "每一步都截断到 context 的一半",
+        "每一步都取运行中 sequence（prompt 加 generated）的最后 context_length 个 tokens，并把它们送入模型",
+        "用零 pad 到最大 context",
+        "每一步都从 prompt 重新开始"
+      ],
+      "correct": 1,
+      "explanation": "Sliding window 会在运行中的 sequence 溢出 context length 后丢弃最旧的 tokens。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么要用比其他层更小的 std 初始化 attention output projection 和 MLP 的第二个 linear？",
+      "options": [
+        "它能节省内存",
+        "二者都直接流入 residual add。把它们的 std 缩放为 1 over sqrt of 2 times num_layers，可以让 residual stream 在十二层中保持尺度",
+        "数据集要求这样做",
+        "Top-k sampling 需要更小的权重"
+      ],
+      "correct": 1,
+      "explanation": "没有这个缩放时，residual stream 会随深度增长，把最终 LayerNorm 推到高热区。"
+    },
+    {
+      "stage": "post",
+      "question": "Temperature 在 sampling 时做什么？",
+      "options": [
+        "选择 optimizer learning rate",
+        "在 softmax 前除以 logits。T 小于 1 会把分布推向 greedy，T 等于 1 保持模型自然分布，T 大于 1 会使分布更平",
+        "给 head 添加 dropout",
+        "缩放 embeddings"
+      ],
+      "correct": 1,
+      "explanation": "Temperature 是最简单的旋钮；与 top-k 结合时，它控制 generation 的探索程度。"
+    },
+    {
+      "stage": "post",
+      "question": "Top-k filtering 在 sampling 前做什么？",
+      "options": [
+        "选择最低的 k 个 logits",
+        "保留值最高的 k 个 logits，把其余 mask 成 negative infinity，然后对保留项 softmax，让 multinomial sampling 只看到 top k tokens",
+        "移除所有低于零的 logits",
+        "把 logits cap 在 k"
+      ],
+      "correct": 1,
+      "explanation": "Top-k 会在 softmax 前截断长尾；top_k=1 是 greedy，较大的 k 保留更多多样性。"
+    }
+  ]
+}
