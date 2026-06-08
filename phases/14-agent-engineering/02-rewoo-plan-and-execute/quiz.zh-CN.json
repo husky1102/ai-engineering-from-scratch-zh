@@ -1,0 +1,90 @@
+{
+  "lesson": "02-rewoo-plan-and-execute",
+  "title": "ReWOO 与 Plan-and-Execute：解耦规划",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 ReAct 的 prompt 会随 depth 二次增长？",
+      "options": [
+        "模型每一步都会重新 tokenize 自己",
+        "每一步都携带完整 prior context，包括每个 previous thought 和 observation",
+        "Tool schemas 会在每次 call 中重复",
+        "Provider 按 byte 而不是 token 收费"
+      ],
+      "correct": 1,
+      "explanation": "ReAct 在每一步重新包含 prior thoughts 和 observations，使总 prompt length 随 depth 的平方增长。"
+    },
+    {
+      "stage": "pre",
+      "question": "定义 ReWOO 的三角色拆分是什么？",
+      "options": [
+        "Reader, Writer, Reviewer",
+        "Planner, Workers, Solver",
+        "Actor, Evaluator, Reflector",
+        "Generator, Critic, Optimizer"
+      ],
+      "correct": 1,
+      "explanation": "ReWOO 分离出发出 DAG 的 Planner、获取 evidence 的 Workers，以及组合最终答案的 Solver。"
+    },
+    {
+      "stage": "check",
+      "question": "论文报告 ReWOO 相比 ReAct 在 HotpotQA 上的 headline numbers 是什么？",
+      "options": [
+        "约 5 倍更少 tokens，且 absolute accuracy +4",
+        "约 2 倍更多 tokens，且 accuracy +10",
+        "相同 tokens，且 accuracy +1",
+        "10 倍更少 tokens，但 accuracy -2"
+      ],
+      "correct": 0,
+      "explanation": "ReWOO 报告相比 ReAct 在 HotpotQA 上 token 约减少 5 倍，absolute accuracy +4。"
+    },
+    {
+      "stage": "check",
+      "question": "ReWOO plan node 中类似 #E1 的 placeholder 表示什么？",
+      "options": [
+        "Worker 1 返回的 error code",
+        "Dispatch 时用 earlier worker node 输出替换的 reference",
+        "Evidence fetching 的 retry counter",
+        "Planner version identifier"
+      ],
+      "correct": 1,
+      "explanation": "Plan nodes 使用 #E1、#E2 这样的 evidence references，executor 会用 upstream workers 的输出替换它们。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 ReWOO 比 ReAct 更好地 localize failures？",
+      "options": [
+        "Workers 在任何 error 上都会 crash 整个 run",
+        "Worker 中的 error 会变成 Solver 与 original plan 一起看到的字符串，因此 degrade 是 per-node 而不是 per-step",
+        "ReWOO 会对每个 failed call retry 最多十次",
+        "Planner 会在每次 error 后重新发出 fresh DAG"
+      ],
+      "correct": 1,
+      "explanation": "Per-node failure 加上 context 中的 original plan，让 Solver 可以 graceful degrade，而不是在 mid-stream 中从 error 推理出来。"
+    },
+    {
+      "stage": "post",
+      "question": "哪种 task shape 比 plain ReWOO 更适合 Plan-and-Act？",
+      "options": [
+        "两步 factoid lookup",
+        "40 步 web 或 mobile navigation trajectory",
+        "单 turn classification",
+        "纯 arithmetic question"
+      ],
+      "correct": 1,
+      "explanation": "Plan-and-Act 面向 long-horizon（超过 30 步）web 和 mobile agents，在这类任务中单条 ReAct trajectory 会失去 coherence。"
+    },
+    {
+      "stage": "post",
+      "question": "ReWOO 的 planner distillation 结果对 production agents 意味着什么？",
+      "options": [
+        "每一步都必须使用 frontier models",
+        "小 planner（约 7B）可以匹配 large teacher，因为 planner 永远看不到 observations",
+        "Planning quality 会在低于 7B 参数时下降",
+        "Distillation 需要 gradient-based RL data"
+      ],
+      "correct": 1,
+      "explanation": "因为 planner 不看 observations，large teacher 的 plan traces 可以干净迁移到 fine-tuned small planner。"
+    }
+  ]
+}
