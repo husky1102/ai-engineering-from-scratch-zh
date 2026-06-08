@@ -1,0 +1,78 @@
+{
+  "lesson": "phase-19/27-eval-harness-fixture-tasks",
+  "title": "带 Fixture Tasks 的 Eval Harness",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "阅读本课前：一个好的 agent eval verifier 最需要哪种属性？",
+      "options": [
+        "毫秒级速度。",
+        "跨 runs 的 determinism。",
+        "对 verdict 的 natural-language explanation。",
+        "覆盖 candidate code 的每一行。"
+      ],
+      "correct": 1,
+      "explanation": "Determinism 让 regression 可被检测。Non-deterministic verifier 会把每个 red 都变成 coin flip。"
+    },
+    {
+      "stage": "check",
+      "question": "某个 candidate 在单个 task 的 5 个 samples 中 pass 3 次。本课的 pass@5 formula 返回多少（四舍五入到两位小数）？",
+      "options": [
+        "0.60",
+        "0.99",
+        "0.75",
+        "1.00"
+      ],
+      "correct": 1,
+      "explanation": "pass@k = 1 - (1 - p)^k = 1 - (1 - 0.6)^5 = 1 - 0.4^5 = 1 - 0.01024 = 0.98976，四舍五入为 0.99。Raw per-sample rate（0.6）是选项 (a)，但公式会跨 k samples 放大它。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么本课在 report 中同时包含 pass@1 和 pass@k？",
+      "options": [
+        "pass@1 是用户在 dashboard 中看到的值；pass@k 用于 internal debugging。",
+        "pass@k 会隐藏一个只在许多 samples 中偶尔正确的模型，因此 pass@1 把结果锚定在 first-attempt quality。",
+        "对 k > 1，pass@k 和 pass@1 在数学上相同。",
+        "pass@1 是 verifier registry 支持的版本；pass@k 留给 future verifiers。"
+      ],
+      "correct": 1,
+      "explanation": "pass@k 会让许多次尝试中只对一次的模型看起来很强；pass@1 是 first-attempt floor。同时报告二者可以避免 over-claiming。"
+    },
+    {
+      "stage": "check",
+      "question": "Harness 在每个 sample 前调用 _prepare_scratch。为什么这对 pass@k > 1 很重要？",
+      "options": [
+        "它避免 shared temp directories 上的 race conditions。",
+        "它确保每个 sample 都从 buggy setup 开始，而不是从上一个 sample 的 output 开始。",
+        "这只是 performance optimisation。",
+        "它只和 shell verifiers 有关。"
+      ],
+      "correct": 1,
+      "explanation": "没有 fresh scratch，sample N+1 会从 sample N 的 output 开始。Harness 测到的会是 'second-attempt cleanup'，而不是 first-attempt success。"
+    },
+    {
+      "stage": "post",
+      "question": "你添加一个运行 pytest 的新 verifier 'pytest_passes'，它在 scratch dir 中运行 pytest。它应该基于哪个现有 verifier？",
+      "options": [
+        "file_equals，因为 pytest 会写 results file。",
+        "regex_match，因为 pytest output 包含 'passed'。",
+        "shell_exit_zero，因为 pytest 通过 exit code 0 表示 pass。",
+        "无法把 pytest 表示成 verifier。"
+      ],
+      "correct": 2,
+      "explanation": "pytest pass 时 exit 0，failure 时 non-zero。shell_exit_zero 是正确 primitive。Production wiring 会通过第 26 课的 sandbox 路由这次 call。"
+    },
+    {
+      "stage": "post",
+      "question": "Reviewer 问：'这个 regression 是在 model 里，还是在 harness 里？' 哪个 artifact 能回答这个问题？",
+      "options": [
+        "Agent 的 chain-of-thought transcript。",
+        "Per-task、per-sample 的 SampleResult 加 verifier detail message。",
+        "Verifier registry source code。",
+        "Fixture JSON files。"
+      ],
+      "correct": 1,
+      "explanation": "Per-sample latency、verifier detail 和 pass/fail 让你能 triage：same fixtures、different verdicts，说明 model 变了；same verdicts 但 different latency，说明别处动了。"
+    }
+  ]
+}
