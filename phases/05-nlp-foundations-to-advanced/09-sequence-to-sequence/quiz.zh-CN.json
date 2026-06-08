@@ -1,0 +1,102 @@
+{
+  "lesson": "09-sequence-to-sequence",
+  "title": "Sequence-to-Sequence Models",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "2014-style seq2seq model 中 encoder 的作用是什么？",
+      "options": [
+        "计算 attention weights",
+        "执行 beam search",
+        "读取 source，并产生一个总结它的 fixed-size context vector",
+        "生成 target tokens"
+      ],
+      "correct": 2,
+      "explanation": "encoder RNN 将 source 压缩成 final hidden state，供 decoder 使用。"
+    },
+    {
+      "stage": "pre",
+      "question": "seq2seq training 中的 teacher forcing 是什么？",
+      "options": [
+        "inference 时添加 teacher network",
+        "将 batch size 翻倍",
+        "把 ground-truth previous token（而不是 model prediction）作为 decoder input",
+        "手动标注每个 decoder step"
+      ],
+      "correct": 2,
+      "explanation": "Teacher forcing 通过使用真实 previous tokens 来稳定训练；没有它，早期错误会 cascade。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 fixed context-vector seq2seq 的 accuracy 会随 input length 增长而下降？",
+      "options": [
+        "Padding tokens 会累积",
+        "Cross-entropy 会发散",
+        "source 的所有信息都必须塞进单个 fixed-size encoder hidden state，长 inputs 会丢细节",
+        "Vocabulary 变得太大"
+      ],
+      "correct": 2,
+      "explanation": "fixed context-vector bottleneck 意味着 long inputs 无法被无损 summary。"
+    },
+    {
+      "stage": "check",
+      "question": "什么是 exposure bias？",
+      "options": [
+        "class imbalance 造成的 bias",
+        "encoder embeddings 中的 bias",
+        "annotator disagreement",
+        "训练时使用 ground-truth tokens，但 inference 时从 model 自己的 predictions 生成所造成的 train/inference gap"
+      ],
+      "correct": 3,
+      "explanation": "模型训练期间从未练习过从自己的错误中恢复，所以 inference 时 errors 会 cascade。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 beam search 在 generation 中通常优于 greedy decoding？",
+      "options": [
+        "Beam search 每一步保留 top-k partial sequences，而不是不可撤回地提交到一个 token",
+        "Beam search 避免 exposure bias",
+        "Beam search 更快",
+        "Beam search 降低 loss"
+      ],
+      "correct": 0,
+      "explanation": "Greedy 每一步都提交；beam search 探索多个 hypotheses，然后选择最佳 complete one。"
+    },
+    {
+      "stage": "post",
+      "question": "哪类 architectural family 替代了 RNN seq2seq，成为 general generation tasks 的主流？",
+      "options": [
+        "Transformer encoder-decoder models（BART、T5、mBART、NLLB）",
+        "Graph neural networks",
+        "Naive Bayes",
+        "1D CNNs"
+      ],
+      "correct": 0,
+      "explanation": "Transformer encoder-decoders 去掉 recurrence，并主导了 generation tasks。"
+    },
+    {
+      "stage": "post",
+      "question": "scheduled sampling 做什么？",
+      "options": [
+        "训练期间向下 anneal teacher-forcing ratio，让模型学会从自己的 predictions 中恢复",
+        "安排 learning-rate decay",
+        "重新排序 training set",
+        "向 embeddings 添加 random noise"
+      ],
+      "correct": 0,
+      "explanation": "Scheduled sampling 会逐渐混入 model predictions，以缩小 train/inference gap。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么只用 greedy decoding 常常会在 user-facing generation 中失败？",
+      "options": [
+        "它不能使用 embeddings",
+        "它总是先选择 <EOS>",
+        "Greedy 可能 repeat 或 loop，并且无法从 locally good 但 globally poor 的 token choice 中回退",
+        "它需要更多 memory"
+      ],
+      "correct": 2,
+      "explanation": "Greedy decoding 每一步的不可撤回选择会造成 loops 和 repetition，除非使用 beam search 或 sampling。"
+    }
+  ]
+}
