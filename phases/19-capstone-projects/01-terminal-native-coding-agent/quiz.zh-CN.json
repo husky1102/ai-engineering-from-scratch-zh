@@ -1,0 +1,90 @@
+{
+  "lesson": "01-terminal-native-coding-agent",
+  "title": "Capstone 01 — Terminal-Native Coding Agent",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "2026 年 terminal coding agents 共享哪种 loop shape？",
+      "options": [
+        "Plan、act、observe、recover",
+        "Encode、decode、sample、stream",
+        "Train、evaluate、deploy、monitor",
+        "Fetch、embed、rank、synthesize"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 harness 要在 E2B 或 Daytona sandbox 中运行每个 task？",
+      "options": [
+        "为了把 filesystem 和 tool execution 与 host 隔离，使 worktree 可在完成后被 tear down",
+        "为了绕过 model-provider rate limits",
+        "为了在 cold caches 上 benchmark token throughput",
+        "为了给 agent loop 启用 GPU access"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪个内置 hook 最适合在 destructive shell commands 执行前阻止它们？",
+      "options": [
+        "PreToolUse",
+        "SessionStart",
+        "Stop",
+        "PostToolUse"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本 capstone 把每个 tool result 大致限制在 4k tokens。它主要防止哪种 failure mode？",
+      "options": [
+        "通过 malicious shell metacharacters 逃逸 sandbox",
+        "当 tool 返回 large dump 时发生 context poisoning 和 runaway cost",
+        "恢复会话中的 stale plan state",
+        "模型过拟合 tool-call traces"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "PreCompact hook 在 150k-token mark 做什么？",
+      "options": [
+        "取消 run 并退还 user budget",
+        "把 older turns 总结成 prior-state block，让 plan 和 new observations 仍能放入 context",
+        "Force-push 当前 branch 来备份进度",
+        "把 backing model 切换到更小的 draft model"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本 capstone 在 30-issue SWE-bench Pro subset 上把自己的 harness 与哪个 baseline 比较？",
+      "options": [
+        "OpenCode",
+        "mini-swe-agent",
+        "Live-SWE-agent",
+        "Aider"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Deliverable 用哪组 metrics 衡量？",
+      "options": [
+        "WER、MOS 和 first-audio-out",
+        "Perplexity、BLEU 和 ROUGE",
+        "pass@1、turns-per-task 和 dollar-per-task",
+        "MRR@10 和 nDCG@10"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
