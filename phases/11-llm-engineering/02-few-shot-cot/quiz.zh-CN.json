@@ -1,0 +1,37 @@
+[
+  {
+    "question": "zero-shot prompting 和 few-shot prompting 的关键区别是什么？",
+    "options": ["Zero-shot 更快", "Zero-shot 只给指令；few-shot 会在真实查询前包含 example input-output demonstrations", "Few-shot 使用不同模型", "Zero-shot 不使用 system prompt"],
+    "correct": 1,
+    "explanation": "Few-shot prompting 包含 worked examples（demonstrations），向模型展示期望模式。这就像先给人看如何填写表格，再让他填写自己的表格。",
+    "stage": "pre"
+  },
+  {
+    "question": "'Chain of Thought' prompting 会做什么？",
+    "options": ["它把多个 API calls 串起来", "它指示模型在给出 final answer 前展示中间 reasoning steps，从而提高多步问题准确率", "它按顺序连接多个模型", "它生成更长的回答"],
+    "correct": 1,
+    "explanation": "CoT prompting（例如 'Let's think step by step'）给模型提供“草稿纸”来处理问题。在 GSM8K 数学题上，仅此一项就把 GPT-4o 准确率从 78% 提升到 91%。",
+    "stage": "pre"
+  },
+  {
+    "question": "Tree-of-Thought 与 Chain-of-Thought 有何不同？",
+    "options": ["它使用 tree data structure 来存储", "它并行探索多条 reasoning paths，并评估哪条路径通向最佳答案", "它只是更长的 chain of thought", "它使用不同模型"],
+    "correct": 1,
+    "explanation": "CoT 沿着一条 reasoning path 前进。Tree-of-Thought 生成多条 candidate paths，对它们进行评估（可能用 LLM 自己评估），并选择最佳路径。这有助于处理第一条 reasoning path 可能错误的问题。",
+    "stage": "post"
+  },
+  {
+    "question": "选择 few-shot examples 时，最重要的是什么？",
+    "options": ["使用尽可能多的 examples", "选择覆盖不同情况、并演示你想要的确切格式和 reasoning pattern 的多样 examples", "使用最短 examples", "使用来自 test set 的 examples"],
+    "correct": 1,
+    "explanation": "Example quality 胜过 quantity。3-5 个覆盖不同 edge cases 的、格式良好的 examples，比 20 个重复且浪费 context window tokens 的 examples 更能教会模型模式。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么 CoT prompting 能提高准确率，即使模型在有无 CoT 时拥有相同知识？",
+    "options": ["它激活隐藏的模型能力", "生成中间 tokens 会为 final answer 创建更大的有效 context，让模型能以自己的 reasoning 为条件继续生成", "它使用更多 compute", "它改变模型权重"],
+    "correct": 1,
+    "explanation": "没有 CoT 时，模型必须在一个 token 中直接跳到答案。有 CoT 时，每个中间步骤都是模型下一步可条件化的 token。模型本质上是在“大声思考”，逐步构建答案。",
+    "stage": "post"
+  }
+]
