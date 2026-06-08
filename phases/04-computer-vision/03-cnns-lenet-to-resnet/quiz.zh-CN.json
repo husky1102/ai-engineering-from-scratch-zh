@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "AlexNet (2012) 引入的哪一个架构想法，让在 GPU 上训练 deep CNN 变得实用？",
+      "options": ["Residual connections", "用 ReLU 替代 tanh；ReLU 不会饱和，并让收敛速度大约提升 6x", "Batch normalization", "Depthwise separable convolutions"],
+      "correct": 1,
+      "explanation": "AlexNet 最大的训练加速来自 ReLU。Tanh 在很大的正输入或负输入上会饱和，这会杀死 gradient，并限制你能训练的深度。ReLU 是 piecewise linear 的，对正输入不会饱和，是把训练时间从数周降到数天的单一关键改变。Dropout 和 GPU parallelism 也重要，但 ReLU 才是解锁深度的那个想法。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 VGG 更偏好堆叠 3x3 convolution，而不是使用单个更大的 kernel？",
+      "options": ["更小的 kernel 在 CPU 上运行更快", "两个 3x3 conv 覆盖与 5x5 相同的 receptive field，但参数更少（18C^2 vs 25C^2），并且中间多一个 ReLU", "3x3 conv 是 rotation-invariant 的，而 5x5 不是", "更大的 kernel 无法用 SGD 训练"],
+      "correct": 1,
+      "explanation": "两个堆叠的 3x3 conv 能看到与一个 5x5 conv 相同的 5x5 patch，但参数更少（2 * 3 * 3 * C^2 = 18C^2，相比 25C^2），并包含额外的 non-linearity。这个额外的 ReLU 增加了表达能力。VGG 把这个观察变成了一整套 architecture：完全重复一种 block type。"
+    },
+    {
+      "stage": "post",
+      "question": "ResNet 将 residual connection 表示为 y = F(x) + x。它解决了什么问题？",
+      "options": ["Classifier head 中的 overfitting", "带 ReLU 的层中的 vanishing activations", "Degradation problem：超过约 20 个 plain conv layer 后，training loss 开始变差，因为 optimizer 很难穿过许多 non-linear layer 学到 identity mapping", "Backprop 期间的 memory consumption"],
+      "correct": 2,
+      "explanation": "在 ResNet 之前，超过约 20 层后 training loss 会开始上升，即使网络容量更大，这就是 degradation problem。Residual block 可以通过把 F 推到零而轻易表示 identity，给 optimizer 一个安全默认值。有了这个 escape hatch，每个额外 block 都能让网络略微变好，这就是 100+ layer network 变得可训练的方式。"
+    },
+    {
+      "stage": "post",
+      "question": "在一个 in_channels=64、out_channels=128、stride=2 的 ResNet BasicBlock 中，shortcut branch 的作用是什么？",
+      "options": ["它永远是 identity；shape change 由 main branch 处理", "它是一个 stride 2 的 1x1 conv，用来匹配 main branch 的 output channel 和 spatial size，使两者可以相加", "它是一个把 spatial dimension 减半的 max-pool", "它是 inference 时会移除的 placeholder"],
+      "correct": 1,
+      "explanation": "当 block 改变 channel count 或 spatial stride 时，identity path 无法直接加到 main branch，因为 shape 不同。shortcut 会变成一个 stride=2、C_out output channel 的 1x1 conv，并可选接 batch norm。只有 in_c == out_c 且 stride == 1 时，才使用 pass-through identity。"
+    },
+    {
+      "stage": "post",
+      "question": "ResNet-18 约有 11.7M 参数，并且在 ImageNet 上匹配或超过 VGG-16（138M 参数）。这说明 VGG 有什么问题？",
+      "options": ["VGG 的 kernel 太小，无法学习好 feature", "VGG 的大多数参数浪费在 fully connected head，以及在没有 residual connection 时每层都难以贡献价值的冗余深度上", "VGG 使用了更差的 optimizer 训练", "VGG 在 ImageNet 上的 accuracy 测量有误"],
+      "correct": 1,
+      "explanation": "VGG-16 的 parameter count 主要由巨大的 fully connected classifier 主导（三个 dense layer 作用在 25088 个 activation 上），而它的 plain deep stack 无法像 residual stack 那样高效加层。ResNet-18 用 global average pool 加一个 linear layer 替代 FC head，并使用 residual block，两者共同在相近 accuracy 下带来约 12x 的 parameter efficiency。"
+    }
+  ]
+}
