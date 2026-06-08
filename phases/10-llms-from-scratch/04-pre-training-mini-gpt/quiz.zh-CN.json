@@ -1,0 +1,37 @@
+[
+  {
+    "question": "GPT 在 pre-training 期间使用什么 training objective？",
+    "options": ["Masked language modeling（预测 masked tokens）", "Next-token prediction：给定 previous tokens，预测下一个 token", "Sentence classification", "Image-text alignment"],
+    "correct": 1,
+    "explanation": "GPT 是 causal（autoregressive）language model，使用 next-token prediction 训练。给定 tokens [t1, t2, ..., tn]，它学习预测 tn+1。Loss 是 predicted 与 actual next tokens 之间的 cross-entropy。",
+    "stage": "pre"
+  },
+  {
+    "question": "GPT-2 Small（124M）有多少 transformer layers、attention heads 和 embedding dimensions？",
+    "options": ["6 layers, 6 heads, 512 dims", "12 layers, 12 heads, 768 dims", "24 layers, 16 heads, 1024 dims", "48 layers, 25 heads, 1600 dims"],
+    "correct": 1,
+    "explanation": "GPT-2 Small 有 12 个 transformer layers、每层 12 个 attention heads，以及 768-dimensional embeddings。这个架构有 124 million parameters，可以在单张 GPU 上几个小时内训练。",
+    "stage": "pre"
+  },
+  {
+    "question": "GPT 中 causal attention mask 的作用是什么？",
+    "options": ["防止 attention to padding tokens", "防止每个 token attend to future tokens，确保模型只能用 past context 做预测", "Mask 掉 low-confidence attention scores", "减少 training 期间的 memory usage"],
+    "correct": 1,
+    "explanation": "Causal mask 是一个 triangular matrix，在 softmax 前把 future positions 设为 -infinity。位置 5 的 token 可以 attend to positions 1-5，但不能 attend to 6+。这确保模型从左到右生成 tokens。",
+    "stage": "post"
+  },
+  {
+    "question": "文本生成期间，temperature 控制什么？",
+    "options": ["生成速度", "Token selection 的随机性：较低 temperature 让输出更 deterministic，较高 temperature 让输出更多样", "生成 token 数量", "模型的 confidence threshold"],
+    "correct": 1,
+    "explanation": "Temperature 在 softmax 前除以 logits。Temperature=0.1 让分布非常尖锐（几乎 deterministic）。Temperature=1.0 是训练分布。Temperature>1.0 会 flatten 分布，增加随机性。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么 pre-training 比 fine-tuning 需要多得多的 compute？",
+    "options": ["Pre-training 使用更大的 batch sizes", "Pre-training 从零处理 trillions of tokens 来学习通用语言模式，而 fine-tuning 只是在已有能力模型上用 thousands of examples 做调整", "Pre-training 使用不同 architecture", "Fine-tuning 不使用 gradients"],
+    "correct": 1,
+    "explanation": "Pre-training 从 random weights 开始，用 trillions of tokens 构建所有语言知识。Fine-tuning 从这些已学习 weights 开始，在小得多的 dataset（thousands 到 millions examples）上调整它们。",
+    "stage": "post"
+  }
+]
