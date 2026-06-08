@@ -1,0 +1,37 @@
+[
+  {
+    "question": "Embeddings 解决了 keyword search 无法解决的什么问题？",
+    "options": ["Embeddings 更快", "Embeddings 捕捉 semantic meaning，即使没有共享词，也能把 'payment didn't go through' 与 'charge was declined' 匹配起来", "Embeddings 使用更少 storage", "Embeddings 可以离线工作"],
+    "correct": 1,
+    "explanation": "Keyword search 把 words 当作独立符号。Embeddings 把 text 映射到 high-dimensional vectors，其中 semantic similarity = geometric proximity。含义相同的文本会聚在一起，不受 word choice 影响。",
+    "stage": "pre"
+  },
+  {
+    "question": "cosine similarity 衡量两个 embedding vectors 之间的什么？",
+    "options": ["Euclidean distance", "vectors 之间的夹角，表示它们方向有多相似，不考虑 magnitude", "它们 components 的总和", "matching dimensions 的数量"],
+    "correct": 1,
+    "explanation": "Cosine similarity = dot(A,B) / (|A|*|B|)。范围从 -1（相反）到 1（相同方向）。含义相同的两段文本，其 vectors 通常指向几乎相同方向，因此 cosine similarity 接近 1。",
+    "stage": "pre"
+  },
+  {
+    "question": "现代 text embedding models 的典型 dimensionality 是多少？",
+    "options": ["2-10 dimensions", "50-100 dimensions", "768-3072 dimensions", "100,000+ dimensions"],
+    "correct": 2,
+    "explanation": "现代 embedding models（OpenAI text-embedding-3、BGE、E5）会生成 768 到 3072 dimensions 的 vectors。更高 dimensions 能捕捉更多 nuance，但存储和搜索成本更高。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么应该用 retrieval benchmarks 评估 embedding quality，而不是只 inspect similarity scores？",
+    "options": ["Similarity scores 总是错误的", "绝对 similarity values 会随 model 变化；重要的是 relevant documents 是否排在 irrelevant documents 前面（precision@k、recall）", "Retrieval benchmarks 更快", "Similarity scores 不使用 cosine distance"],
+    "correct": 1,
+    "explanation": "cosine similarity 0.85 在某个模型中可能意味着“非常相似”，在另一个模型中可能只是“有点相似”。Retrieval metrics（precision@k、recall）衡量真正重要的事：正确 document 是否被返回。",
+    "stage": "post"
+  },
+  {
+    "question": "什么时候会使用 local/open-source embedding model，而不是 API-based embedding model？",
+    "options": ["Local models 永远更好", "当你需要 data privacy、offline operation、大规模 lower cost，或 domain-specific fine-tuning 时", "Local models 生成更高质量 embeddings", "API models 不支持 batching"],
+    "correct": 1,
+    "explanation": "API embeddings（OpenAI、Cohere）易用，但会把数据发到外部。Local models（BGE、E5、Nomic）能保持数据私密，消除规模化 per-call costs，并可在 domain-specific data 上 fine-tune。",
+    "stage": "post"
+  }
+]
