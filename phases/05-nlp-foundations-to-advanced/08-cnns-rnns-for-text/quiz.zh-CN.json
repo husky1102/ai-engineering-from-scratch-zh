@@ -1,0 +1,102 @@
+{
+  "lesson": "08-cnns-rnns-for-text",
+  "title": "面向文本的 CNNs 和 RNNs",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "在 word embeddings 上宽度为 3 的 1D convolutional filter 实际上在学习什么？",
+      "options": [
+        "learnable bigram detector",
+        "position embedding",
+        "learnable trigram（n-gram）detector",
+        "unigram count"
+      ],
+      "correct": 2,
+      "explanation": "宽度为 3 的 filter 跨越三个连续 tokens，作用类似 learnable trigram detector。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 LSTM 使用主要为 additive interactions 的 cell state？",
+      "options": [
+        "Additive flow 让 gradients 能穿过长序列传播而不 vanishing 或 exploding",
+        "更快 softmax",
+        "节省 memory",
+        "避免 matrix inversion"
+      ],
+      "correct": 0,
+      "explanation": "cell-state highway 让 gradients 在数百步中保持稳定，修复 vanishing-gradient 问题。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 TextCNN 在 convolutional layer 后使用 global max-pooling？",
+      "options": [
+        "为了启用 backpropagation",
+        "为了移除 embeddings",
+        "为了减少 vocabulary",
+        "Max-pool 通过为每个 filter 选择最强 activation，给出 fixed-size、position-invariant representation"
+      ],
+      "correct": 3,
+      "explanation": "Global max-pool 产生 fixed-size feature vector，与 input length 无关，并具有 position invariance。"
+    },
+    {
+      "stage": "check",
+      "question": "对 sequence labeling 来说，bidirectional RNN 相比 one-way RNN 的主要优势是什么？",
+      "options": [
+        "更快 training",
+        "每个 token 的 representation 都能看到左右 context，这对 tagging 很关键",
+        "避免 embeddings",
+        "更便宜 memory"
+      ],
+      "correct": 1,
+      "explanation": "Bidirectional networks concatenate forward + backward hidden states，因此 labels 能使用完整 context。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么在 LSTM outputs 上做 max-pooling，经常比只用 last hidden state 做 classification 更好？",
+      "options": [
+        "Max-pool 可微；last-state 不可微",
+        "长序列末尾的信息往往会主导 last state，从而隐藏更早的证据",
+        "Max-pool 移除 capitalization",
+        "Last-state pool 忽略 padding"
+      ],
+      "correct": 1,
+      "explanation": "Max-pool 会聚合所有 positions 上的最强信号；last-state 可能丢失较早证据。"
+    },
+    {
+      "stage": "post",
+      "question": "LSTM/RNN encoder-decoders 的哪一项限制推动了 attention？",
+      "options": [
+        "它们需要 subword tokenizers",
+        "它们不能使用 embeddings",
+        "decoder 只看到 fixed-size encoder state，长 inputs 会丢细节；recurrence 也让训练串行化",
+        "它们不能 embed tokens"
+      ],
+      "correct": 2,
+      "explanation": "fixed-size summarization 加 serial training，是 attention 移除的两个失败点。"
+    },
+    {
+      "stage": "post",
+      "question": "2026 年，TextCNN 或 BiLSTM 什么时候仍能胜过 transformer？",
+      "options": [
+        "在 image inputs 上",
+        "Edge / on-device、streaming token-by-token inputs，或 tiny-data baselines",
+        "只要 dataset 是 multilingual",
+        "当 latency requirements 极其宽松时"
+      ],
+      "correct": 1,
+      "explanation": "小 architectures 仍然在 edge inference、streaming inputs 和快速 baselines 上胜出。"
+    },
+    {
+      "stage": "post",
+      "question": "plain RNNs 中的 vanishing gradient problem 是什么？",
+      "options": [
+        "反复乘以小于 1 的 recurrent weights，使流向早期 steps 的 gradients 缩小到接近零",
+        "Embedding matrix 变成 singular",
+        "Inputs 变成 zero",
+        "Loss 变成 negative"
+      ],
+      "correct": 0,
+      "explanation": "没有 gating 时，长乘积 gradients 会 vanish（或 explode）；这就是 LSTMs 和 GRUs 存在的原因。"
+    }
+  ]
+}
