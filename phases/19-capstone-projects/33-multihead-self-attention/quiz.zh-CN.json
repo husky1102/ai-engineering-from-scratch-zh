@@ -1,0 +1,78 @@
+{
+  "lesson": "33-multihead-self-attention",
+  "title": "多头自注意力",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么高效 self-attention block 使用一个输出 3*D 个特征的线性层？",
+      "options": [
+        "它强制 Q、K、V 之间共享权重",
+        "它在数学上等价于三个 Linear(D, D) 层，并作为一次 matmul 运行",
+        "它避免了 causal mask 的需要",
+        "它减少模型参数量"
+      ],
+      "correct": 1,
+      "explanation": "把三个 (D, D) projection matrices 堆成一个 (3D, D) matrix 会产生相同输出，但 forward pass 是一次适合加速器的 matmul。"
+    },
+    {
+      "stage": "check",
+      "question": "d_model、n_heads 和 d_head 之间是什么关系？",
+      "options": [
+        "d_head = d_model * n_heads",
+        "d_head = d_model + n_heads",
+        "d_head = d_model // n_heads，并且 d_model 必须能被 n_heads 整除",
+        "d_head 与 d_model 无关"
+      ],
+      "correct": 2,
+      "explanation": "block 会把 d_model 均匀拆分到各个 head。构造时会强制 d_model % n_heads == 0。"
+    },
+    {
+      "stage": "check",
+      "question": "scaled dot-product attention 的缩放因子中使用什么值？",
+      "options": [
+        "sqrt(d_model)",
+        "sqrt(d_head)",
+        "sqrt(n_heads)",
+        "sqrt(seq_len)"
+      ],
+      "correct": 1,
+      "explanation": "scores 会除以 sqrt(d_head)，也就是 matmul 收缩的 head 维度。这会在 d_head 增长时保持 scores 方差有界。"
+    },
+    {
+      "stage": "check",
+      "question": "causal mask 如何强制位置 t 不能关注位置 t+1？",
+      "options": [
+        "把未来位置的 keys 乘以零",
+        "在 softmax 之前把对角线以上的 score 条目设为负无穷",
+        "从输入中移除未来 token",
+        "为未来使用另一个 attention head"
+      ],
+      "correct": 1,
+      "explanation": "把未来条目设为 -inf 会强制 softmax 给它们零权重。过去和当前位置仍保留有效权重分布。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 block 在合并 heads 后以 Linear(D, D) 输出投影结束？",
+      "options": [
+        "为了让模型能够跨 heads 混合信息",
+        "为了匹配模型的词表大小",
+        "为了把激活归一化到均值为零",
+        "这是 autograd 跟踪梯度所必需的"
+      ],
+      "correct": 0,
+      "explanation": "没有输出投影时，head 输出只能在后续层组合。这个投影给 block 一个在同一步混合 heads 的位置。"
+    },
+    {
+      "stage": "post",
+      "question": "形状为 (B, H, T, T) 的 attention-weight 矩阵告诉你什么？",
+      "options": [
+        "每个 head 有多少参数",
+        "每个 batch 元素中、每个 head 上，每个 query 位置关注哪些 key 位置",
+        "query 和 value 向量之间的余弦相似度",
+        "下一个 token 的输出 logits"
+      ],
+      "correct": 1,
+      "explanation": "per-head 矩阵的第 t 行是 query 位置 t 使用的 key 位置分布。检查它可以看到每个 head 看向哪里。"
+    }
+  ]
+}
