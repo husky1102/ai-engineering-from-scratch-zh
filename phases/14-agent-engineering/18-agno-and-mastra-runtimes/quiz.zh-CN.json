@@ -1,0 +1,90 @@
+{
+  "lesson": "18-agno-and-mastra-runtimes",
+  "title": "Agno 与 Mastra：生产运行时",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课为每个 runtime 推荐的语言配对是什么？",
+      "options": [
+        "Agno 用于 TypeScript，Mastra 用于 Python",
+        "Agno 用于 Python，Mastra 用于 TypeScript",
+        "二者都是 Rust-first",
+        "二者都是 Go-first"
+      ],
+      "correct": 1,
+      "explanation": "Agno 是 Python（FastAPI-shaped）；Mastra 是 TypeScript（Vercel AI SDK-shaped）。"
+    },
+    {
+      "stage": "pre",
+      "question": "Agno 推荐的 production deployment shape 是什么？",
+      "options": [
+        "一个 long-lived stateful daemon",
+        "Stateless session-scoped FastAPI backend；每个 request 启动 fresh agent，session state 存在 DB 中",
+        "只用 serverless cron worker",
+        "只用 WebSocket server"
+      ],
+      "correct": 1,
+      "explanation": "每个 request 使用 stateless FastAPI；session state 外置到 DB。"
+    },
+    {
+      "stage": "check",
+      "question": "Mastra 的三个 primitives 是什么？",
+      "options": [
+        "Agents、Tools、Workflows",
+        "Actor、Message、Inbox",
+        "Plan、Worker、Solver",
+        "Node、Edge、State"
+      ],
+      "correct": 0,
+      "explanation": "Agents（LLM + role）、Tools（Zod-typed）和 Workflows 是 Mastra 的三个 primitives。"
+    },
+    {
+      "stage": "check",
+      "question": "根据文档，Agno 大致瞄准怎样的 agent-instantiation cost？",
+      "options": [
+        "约 2 microseconds，且每个 agent 约 3.75 KiB",
+        "约 200 milliseconds，且每个 agent 100 MiB",
+        "约 1 second，且每个 agent 1 GiB",
+        "约 10 minutes，且每个 agent 4 GiB"
+      ],
+      "correct": 0,
+      "explanation": "Agno 文档引用约 2 microseconds 和每个 agent 约 3.75 KiB。"
+    },
+    {
+      "stage": "check",
+      "question": "Mastra 的 Unified Model Router 提供什么？",
+      "options": [
+        "一个面向许多 providers 上数千 models 的单一 client surface",
+        "一个 tool calls 队列",
+        "一个 vector DB layer",
+        "一个 graph checkpointer"
+      ],
+      "correct": 0,
+      "explanation": "Mastra 的 Unified Model Router 引用的是跨 94 个 providers 的 3,300+ models。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候 perf-for-perf's-sake 是选择 Agno 的错误理由？",
+      "options": [
+        "当 workload 是每个 request 一个 slow agent call，overhead 不是 bottleneck 时",
+        "当使用 Python 3.13 时",
+        "当部署到 AWS 时",
+        "当使用 Langfuse 时"
+      ],
+      "correct": 0,
+      "explanation": "2 microseconds 在 chat fan-in 规模下重要，而不是对每个 request 的单次 slow call 重要。"
+    },
+    {
+      "stage": "post",
+      "question": "Fork Mastra 前应该仔细阅读哪一块 licensing surface？",
+      "options": [
+        "没有 license file",
+        "ee/ directories 是 source-available 而不是 Apache 2.0，并限制 commercial use",
+        "Mastra 全部都是 GPL",
+        "Mastra 要求 CLA，但不需要 license review"
+      ],
+      "correct": 1,
+      "explanation": "Mastra 除 ee/ 外是 Apache 2.0；ee/ 是 source-available。Fork 前检查限制。"
+    }
+  ]
+}
