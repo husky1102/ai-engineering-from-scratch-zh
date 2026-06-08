@@ -1,0 +1,78 @@
+{
+  "lesson": "49-lm-eval-harness",
+  "title": "语言模型评估 Harness",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "在 harness 的 JSONL 格式中，哪四个字段定义一个任务样例？",
+      "options": [
+        "name、score、payload、vendor",
+        "id、prompt、targets、metric，以及一个可选的 extras dict，用于承载指标需要的旁路数据",
+        "input 和 output",
+        "weights 和 bias"
+      ],
+      "correct": 1,
+      "explanation": "JSONL 行就是契约。extras 字段让 code_exec 指标可以传入 io_pairs，而不污染 prompt。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么指标函数签名是 (prediction, targets, extras) -> float？",
+      "options": [
+        "随机选择",
+        "这是能同时处理单目标字符串匹配、多参考 rouge-l、带旁路数据的 code_exec 的最小签名，同时让分数保持在可比较的 [0.0, 1.0] 范围内",
+        "它返回一个整数",
+        "它需要模型对象"
+      ],
+      "correct": 1,
+      "explanation": "[0,1] 中的浮点数意味着每个任务和总体分数都是可解释的平均值。extras 槽位就是 code_exec 获取 io_pairs 的方式。"
+    },
+    {
+      "stage": "check",
+      "question": "code_exec 指标如何抵抗恶意 prediction？",
+      "options": [
+        "它不会抵抗",
+        "它使用剥离过的 __builtins__ dict 运行 prediction，所以命名空间只暴露少量安全名称；import 语句会失败，因为 importer 不在作用域中",
+        "它使用 sandbox containers",
+        "它拒绝任何包含 def 的内容"
+      ],
+      "correct": 1,
+      "explanation": "本课的安全命名空间把 builtins 剥到只剩少量名称。测试会断言 import os 返回 0.0 分，而不是执行。"
+    },
+    {
+      "stage": "check",
+      "question": "模型 adapter 抽象给你带来什么？",
+      "options": [
+        "什么也没有",
+        "它是 harness 中唯一的模型特定代码；把 adapter 换到新供应商，任务、指标、运行器和 leaderboard 格式都保持不变",
+        "它让模型更快",
+        "它是 torch 要求的"
+      ],
+      "correct": 1,
+      "explanation": "本课中的 ToyAdapter 是一个确定性的模式匹配器。真实供应商的 HttpAdapter 也有相同的 generate(prompts) -> list[str] 表面。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 leaderboard JSON 携带类似 leaderboard.v1 的 schema 字符串？",
+      "options": [
+        "为了 SEO",
+        "这样未来格式变化时可以提升版本，下游 dashboard 能根据它分发处理，而不是悄悄坏掉",
+        "它是随机的",
+        "它会压缩文件"
+      ],
+      "correct": 1,
+      "explanation": "这和第 47 课的 checkpoint payload 是同一个技巧。schema 字段是迁移钩子。"
+    },
+    {
+      "stage": "post",
+      "question": "阅读 leaderboard 时，overall_score 是如何计算的？比较两次运行时还应该注意什么？",
+      "options": [
+        "正确数之和",
+        "每个任务分数（每个都在 [0,1] 中）的平均值；比较时还要对分数发生变化的任务 diff 逐样例 prediction，因为单看分数会隐藏哪些样例回归了",
+        "最佳任务分数",
+        "随机样本"
+      ],
+      "correct": 1,
+      "explanation": "每个任务平均值的均值会给每个任务相同权重。使用 --include-per-example，把 prediction 级证据和分数放在一起，让回归可见。"
+    }
+  ]
+}
