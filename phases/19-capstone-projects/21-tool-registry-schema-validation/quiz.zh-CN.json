@@ -1,0 +1,78 @@
+{
+  "lesson": "21-tool-registry-schema-validation",
+  "title": "带 Schema Validation 的 Tool Registry",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么要把 tool 的 schema 与 handler 分开注册？",
+      "options": [
+        "因为 schemas 必须放在 YAML 中",
+        "这样 validator 保持为纯 data，而 handler 保持为 opaque code",
+        "因为 handlers 不能返回 JSON",
+        "因为 schemas 必须被 compiled"
+      ],
+      "correct": 1,
+      "explanation": "把 schema 保持为 data、handler 保持为 code，可以让 validator 成为作用于 schema tree 的 pure function。"
+    },
+    {
+      "stage": "check",
+      "question": "哪些 keywords 被有意排除在本课实现的 subset 之外？",
+      "options": [
+        "type, properties, required",
+        "minLength, maxLength, pattern",
+        "oneOf, anyOf, $ref, allOf",
+        "items, enum"
+      ],
+      "correct": 2,
+      "explanation": "被省略的 keywords 会引入 cycles 和 reference resolution。我们保持 subset 线性，让 validator 维持单次 recursive walk。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 register() 默认拒绝 duplicates？",
+      "options": [
+        "因为 registry 每个 name 只能存一个 record",
+        "Silent overwrites 是 production tool catalog drift 的原因",
+        "因为 schema 不能被重新 validate",
+        "因为 handlers 不能被替换"
+      ],
+      "correct": 1,
+      "explanation": "强制 `override=True` 会暴露两个代码部分都打算拥有同一个 tool name 的情况。"
+    },
+    {
+      "stage": "check",
+      "question": "当 schema 指定 type integer，但收到值 True 时，validator 会怎么做？",
+      "options": [
+        "把它当作 1 并通过",
+        "返回 type error，因为在这个 validator 中 bool 不是 integer",
+        "抛出未处理 exception",
+        "静默 coerce 为 integer"
+      ],
+      "correct": 1,
+      "explanation": "Python bool 是 int 的 subclass，但 validator 会从 integer check 中过滤 bool。JSON booleans 和 integers 是不同的。"
+    },
+    {
+      "stage": "post",
+      "question": "当 input object 是 {'user': {'email': 0}}，而 schema 要求 user.email 是 string 时，error path 是什么？",
+      "options": [
+        "/",
+        "/user",
+        "/user/email",
+        "user.email"
+      ],
+      "correct": 2,
+      "explanation": "JSON pointer 把先进入 user 再进入 email 的下降路径编码为 /user/email。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 registry 不是 security boundary？",
+      "options": [
+        "因为 validation 通过后 handlers 仍然可能 misbehave",
+        "因为 handlers 是 async",
+        "因为 schema 是 JSON",
+        "因为 registry 是 in-process"
+      ],
+      "correct": 0,
+      "explanation": "Registry 检查 shape。行为、timeouts 和 isolation 属于 dispatcher 与 sandbox。"
+    }
+  ]
+}
