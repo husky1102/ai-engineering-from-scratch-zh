@@ -1,0 +1,37 @@
+[
+  {
+    "question": "LLM 真的能执行函数或访问外部系统吗？",
+    "options": ["能，LLM 可以直接调用 API", "不能 -- LLM 只生成文本（通常是 JSON）来描述要调用哪个函数；必须由你的代码执行它", "只有 GPT-4 可以执行函数", "LLM 通过 embeddings 执行函数"],
+    "correct": 1,
+    "explanation": "LLM 生成 tokens。当它在 'calling a function' 时，模型输出 JSON，指定函数名和参数。你的应用代码解析这个 JSON，执行真正的函数，并把结果发回模型。",
+    "stage": "pre"
+  },
+  {
+    "question": "在 function calling 语境中，tool schema 是什么？",
+    "options": ["模型的架构图", "对函数名称、参数、类型和用途的 JSON 描述，用来告诉模型有哪些可用工具", "数据库 schema", "API endpoint URL"],
+    "correct": 1,
+    "explanation": "Tool schemas 向模型描述可用函数：function name、parameter names and types、每个 parameter 的作用说明，以及 function 返回什么。模型用这些信息决定何时以及如何调用工具。",
+    "stage": "pre"
+  },
+  {
+    "question": "multi-turn function calling loop 的标准模式是什么？",
+    "options": ["一次性调用全部函数", "发送消息 -> 模型请求 tool call -> 执行函数 -> 发送结果回来 -> 模型生成最终回复（需要时重复）", "模型在内部执行函数", "把整个对话作为 batch 解析"],
+    "correct": 1,
+    "explanation": "Loop 是：(1) 发送 user message + tool schemas，(2) 模型以 tool call request 响应，(3) 执行函数，(4) 把结果作为 tool response 发回，(5) 模型生成下一条回复或另一个 tool call。",
+    "stage": "post"
+  },
+  {
+    "question": "如何防止无限 tool calling loops？",
+    "options": ["使用更快的模型", "设置最大 tool call iterations 并实现 timeout，到达限制时打断 loop", "function calling 不会发生无限循环", "第一次调用后移除全部 tool schemas"],
+    "correct": 1,
+    "explanation": "没有限制时，模型可能重复调用工具（例如不停搜索永远找不到的信息）。max iteration count（例如 10 轮）和 total timeout 可以在生产中防止 runaway loops。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么清晰、描述性的 parameter names 和 descriptions 对 tool schemas 很重要？",
+    "options": ["它们让代码更可读", "模型使用 descriptions 决定调用哪个工具以及如何填充 parameters -- 含糊描述会导致错误的工具选择和错误参数", "API 要求必须这样", "它们提升响应时间"],
+    "correct": 1,
+    "explanation": "模型会读取 tool descriptions 来决定调用什么以及怎么调用。把 parameter 描述为 'q'，和描述为 'search_query: The user's search terms to look up in the knowledge base'，会得到截然不同的结果。",
+    "stage": "post"
+  }
+]
