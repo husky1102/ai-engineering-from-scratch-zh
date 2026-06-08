@@ -1,0 +1,67 @@
+[
+  {
+    "id": "pipeline-pre-1",
+    "stage": "pre",
+    "question": "在 ML pipelines 的语境中，什么是 data leakage？",
+    "options": [
+      "数据在 preprocessing 期间被意外删除",
+      "来自 test set 或 future data 的信息污染了 training process",
+      "模型处理数据的速度太慢",
+      "Features 在 encoding 期间被丢弃"
+    ],
+    "correct": 1,
+    "explanation": "Data leakage 指 training 时使用了 prediction time 不可获得的信息。例如：在包含 test data 的完整数据集上计算 scaler 的 mean/std。"
+  },
+  {
+    "id": "pipeline-pre-2",
+    "stage": "pre",
+    "question": "为什么在划分 train/test 之前先在完整数据集上拟合 scaler 会被认为是 leaky？",
+    "options": [
+      "Scaling 会改变数据分布",
+      "Scaler 的统计量（mean、std）包含 test data，所以模型在 training 期间间接看到了 test information",
+      "Scaling 应该只在 test set 上完成",
+      "在大数据集上拟合 scaler 太耗时"
+    ],
+    "correct": 1,
+    "explanation": "当 scaler 在所有数据上拟合时，它的 mean 和 standard deviation 编码了来自 test samples 的信息。Training features 随后会用 test statistics 做平移，把未来信息泄漏进 training。"
+  },
+  {
+    "id": "pipeline-post-1",
+    "stage": "post",
+    "question": "在 sklearn 中，对 pipeline step 调用 fit_transform 和 transform 有什么区别？",
+    "options": [
+      "它们完全相同 -- 都会 fit 并 transform",
+      "fit_transform 会从数据中学习参数并应用 transform；transform 只应用此前学到的参数",
+      "transform 用于 training data；fit_transform 用于 test data",
+      "fit_transform 更慢但更准确"
+    ],
+    "correct": 1,
+    "explanation": "fit_transform 会从数据中计算统计量（例如 mean、std）并转换数据。transform 会应用已经学到的统计量，不重新计算。对 test data 必须使用 transform，以避免 leakage。"
+  },
+  {
+    "id": "pipeline-post-2",
+    "stage": "post",
+    "question": "为什么真实世界数据集需要 ColumnTransformer？",
+    "options": [
+      "它让 pipeline 在多个 CPU 上并行运行",
+      "它在同一个 pipeline 中对数值列和类别列应用不同的 preprocessing steps",
+      "它会自动移除带有缺失值的列",
+      "它把所有列转换为同一种数据类型"
+    ],
+    "correct": 1,
+    "explanation": "真实数据集包含混合类型。数值列需要 scaling，类别列需要 encoding。ColumnTransformer 会在单个 pipeline 中把每个列子集路由到合适的 transformer。"
+  },
+  {
+    "id": "pipeline-post-3",
+    "stage": "post",
+    "question": "一个 production model 收到了 training 期间从未见过的类别值（'new_category'）。Pipeline 应该处理什么？",
+    "options": [
+      "完全忽略这一行并且不返回 prediction",
+      "从头重新训练整个模型",
+      "优雅地处理 unknown categories，例如使用 'unknown' bucket，或在 target encoding 中使用 global mean",
+      "把 unknown category 转换成数字 zero"
+    ],
+    "correct": 2,
+    "explanation": "稳健的 pipelines 会预判生产中可能出现未见过的类别。解决方案包括为 one-hot encoding 设置 'unknown' fallback，或在 target encoding 中默认使用 global mean。"
+  }
+]
