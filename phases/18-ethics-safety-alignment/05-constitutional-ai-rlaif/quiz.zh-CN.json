@@ -1,0 +1,78 @@
+{
+  "lesson": "05-constitutional-ai-rlaif",
+  "title": "Constitutional AI 与 RLAIF",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "与标准 RLHF 相比，Constitutional AI 的核心替代是什么？",
+      "options": [
+        "它用会阅读原则列表的 AI labeler 替换人类偏好标注者",
+        "它用 DPO 替换 PPO",
+        "它使用合成 prompt 而不是真实 prompt",
+        "它完全移除 reward model"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Constitutional AI 的第一个（SFT）阶段做什么？",
+      "options": [
+        "只在 AI 生成偏好上训练 reward model",
+        "生成初始回答，在采样的 constitution principle 下批判它，然后修订并把修订结果作为 SFT target",
+        "通过聚类标注者评论生成合成原则",
+        "用 constitution 派生的 reward 执行 PPO"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "第二个（RLAIF）阶段做什么？",
+      "options": [
+        "跳过 PPO，并应用一个单一监督 loss",
+        "让人类重新标注 SFT 输出",
+        "把 constitution 蒸馏进 tokenizer",
+        "在 feedback model 生成的 AI 偏好上训练 reward model，并用 PPO 优化它"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Anthropic 2026 年 1 月四层 Claude constitution 的优先级顺序是什么？",
+      "options": [
+        "Platform rules > avoid catastrophe > helpful > broadly ethical",
+        "Broadly ethical > helpful > platform rules > avoid catastrophe",
+        "Avoid catastrophic outcomes > follow Anthropic guidelines > broadly ethical > helpful and candid",
+        "Helpful > broadly ethical > platform rules > avoid catastrophe"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "从 RLHF 切换到 RLAIF 并不一定修复哪种失败模式？",
+      "options": [
+        "标注者心理不一致",
+        "Reward hacking / Goodhart 定律",
+        "标注者成本",
+        "标注者稀缺"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Constitutional Classifiers v1 与 v2（2026）之间的 headline shift 是什么？",
+      "options": [
+        "v2 把 compute overhead 从 1% 提高到 23.7%",
+        "v2 移除 classifier，只依赖 constitution",
+        "v2 只在输入上运行，不在输出上运行",
+        "v2 把 compute overhead 从 23.7% 降到约 1%，并保持低成功攻击率"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
