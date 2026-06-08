@@ -1,0 +1,90 @@
+{
+  "lesson": "15-crewai-role-based-crews",
+  "title": "CrewAI：基于角色的 Crews 与 Flows",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "CrewAI 的四个 primitives 是什么？",
+      "options": [
+        "Agent、Task、Crew、Process",
+        "Node、Edge、Reducer、Checkpointer",
+        "Actor、Message、Inbox、Runtime",
+        "Tool、Prompt、Model、Memory"
+      ],
+      "correct": 0,
+      "explanation": "Agent、Task、Crew 和 Process 是四个 primitives。"
+    },
+    {
+      "stage": "pre",
+      "question": "根据 CrewAI 文档，推荐的 production 起点是什么？",
+      "options": [
+        "Crew",
+        "Flow",
+        "Sequential process",
+        "Hierarchical process"
+      ],
+      "correct": 1,
+      "explanation": "文档说 production apps 应从 Flows 开始；当 autonomy 值得其成本时，把 Crews 折入 sub-steps。"
+    },
+    {
+      "stage": "check",
+      "question": "Crew 和 Flow 的区别是什么？",
+      "options": [
+        "Crew 是付费的，Flow 是免费的",
+        "Crew 是 autonomous 且 LLM-driven；Flow 是 event-driven、code-owned、deterministic 且 testable",
+        "Crew 只能在 GPU 上运行",
+        "Flow 没有 agents"
+      ],
+      "correct": 1,
+      "explanation": "Crew 优先 autonomy；Flow 优先 determinism。"
+    },
+    {
+      "stage": "check",
+      "question": "以下哪一项不是 CrewAI 内置的四种 memory types 之一？",
+      "options": [
+        "Short-term",
+        "Long-term",
+        "Entity",
+        "Quantized"
+      ],
+      "correct": 3,
+      "explanation": "四种是 short-term、long-term、entity 和 contextual。Quantized memory 不是 CrewAI 概念。"
+    },
+    {
+      "stage": "check",
+      "question": "什么是 backstory bloat，本课建议如何处理？",
+      "options": [
+        "存储了太多 crews；归档旧 crews",
+        "2000-word agent backstories 会挤占 context budget；保持简洁",
+        "Tools 太多；删除一些",
+        "Bedrock 调用太慢；切换区域"
+      ],
+      "correct": 1,
+      "explanation": "Backstories 会塑造 tone 和 judgment，但过大时会吞掉 context。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候 Hierarchical process 比 Sequential 更值得选择？",
+      "options": [
+        "总是如此",
+        "当你有 4+ specialists，需要 manager Agent 在它们之间 routing 时",
+        "当你只有一个 task 时",
+        "当你没有任何 tools 时"
+      ],
+      "correct": 1,
+      "explanation": "Hierarchical 会增加 manager Agent；只有多个 specialists 需要 dynamic routing 时才值得。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课提醒不要在生产中使用 free-form Crew？",
+      "options": [
+        "Crews 不受支持",
+        "Output variability 高；没有 Flow wrapper 时 debugging 很痛苦",
+        "Crews 比 Flows 更贵",
+        "Crews 缺少 memory"
+      ],
+      "correct": 1,
+      "explanation": "Crew autonomy 让生产 replay 和 audit 很痛苦；上线时用 Flow 包住。"
+    }
+  ]
+}
