@@ -1,0 +1,65 @@
+{
+  "lesson": "phase-11/16-langgraph-state-machines",
+  "questions": [
+    {
+      "stage": "post",
+      "question": "为什么 LangGraph State TypedDict 中的 `messages` 字段需要 `Annotated[list, add_messages]`？",
+      "options": [
+        "它启用来自模型的 token delta streaming。",
+        "没有这个 reducer，节点更新会覆盖列表而不是追加，所以每一轮都会丢失之前的历史。",
+        "它在 checkpoint 写入磁盘时压缩 message list。",
+        "它会在运行时把普通 dict 转换成 LangChain message objects。"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "`interrupt_before=['tools']` 和 `interrupt_after=['tools']` 有什么区别？",
+      "options": [
+        "没有区别；它们是别名。",
+        "`interrupt_before` 会在模型发出 tool_calls 后、工具执行前暂停；`interrupt_after` 会在工具已经运行后暂停。",
+        "`interrupt_before` 会先在 sandbox 中运行工具；`interrupt_after` 会在生产中运行它。",
+        "`interrupt_before` 用于单元测试；`interrupt_after` 用于生产。"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "给定某个 thread 的 checkpoint history，如何 time-travel 到先前状态并探索不同分支？",
+      "options": [
+        "调用 `graph.reset(thread_id)`，然后调用 `graph.invoke(new_input, config)`。",
+        "删除 checkpoint 目录，并用同一个 thread_id 重新 invoke。",
+        "在 config 中带上想要的旧 `checkpoint_id` 来 invoke graph；输入 `None` 会从该 checkpoint 回放，传入新值会先追加到它再继续。",
+        "设置 `graph.rewind = True` 并重新 invoke。"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "在四节点 ReAct graph（agent、tools、conditional edge、返回 agent 的 static edge）中，conditional edge 位于哪里？",
+      "options": [
+        "从 `tools` 返回 `agent`，根据 tool output 是否为空进行路由。",
+        "从 `agent` 出发，如果最后一条消息有 tool_calls 就路由到 `tools`，否则路由到 `END`。",
+        "从 `START` 出发，基于输入长度路由到 `agent` 或 `END`。",
+        "没有 conditional edge；两条边都是 static。"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该使用 `Send(node_name, state)` 而不是普通边？",
+      "options": [
+        "在失败后重试一个节点。",
+        "把一个节点推迟到计时器过期后执行。",
+        "派发目标节点的 N 次并行执行，并让输出通过 state reducer 合并回来。",
+        "为了隔离而在另一个进程中调用节点。"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
