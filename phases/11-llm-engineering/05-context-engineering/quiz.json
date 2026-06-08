@@ -11,7 +11,21 @@
     "options": ["It doesn't -- LLMs process all tokens equally", "LLMs have recency and primacy biases, paying more attention to the beginning and end of the context window", "Alphabetical order helps the model search faster", "Order only matters for code"],
     "correct": 1,
     "explanation": "Research shows LLMs attend more to the start and end of the context window ('lost in the middle' phenomenon). Placing the most important information at the beginning or end of context improves utilization.",
-    "stage": "pre"
+    "stage": "check"
+  },
+  {
+    "question": "What is the sliding window strategy for conversation history?",
+    "options": ["Moving the model to a different server", "Keeping only the N most recent turns in context and dropping older turns, optionally summarizing them first", "Processing the conversation in fixed-size chunks", "Expanding the context window dynamically"],
+    "correct": 1,
+    "explanation": "Sliding window keeps the K most recent conversation turns in full context. Older turns are either dropped or replaced with a summary. This bounds memory usage while preserving the most relevant recent context.",
+    "stage": "check"
+  },
+  {
+    "question": "How should a context assembler allocate tokens across components?",
+    "options": ["Equal allocation to each component", "Dynamically based on query type: a simple question needs less retrieval context; a complex question needs more, with generation headroom always reserved", "Maximize retrieval context always", "Minimize system prompt tokens"],
+    "correct": 1,
+    "explanation": "A simple factual question might need 500 tokens of retrieved context. A complex analysis might need 10,000. A good context assembler adjusts allocation dynamically while always reserving headroom for the model's response.",
+    "stage": "check"
   },
   {
     "question": "A coding assistant uses 22,700 tokens of a 128K context window. Why is budget management still important?",
@@ -21,17 +35,10 @@
     "stage": "post"
   },
   {
-    "question": "What is the sliding window strategy for conversation history?",
-    "options": ["Moving the model to a different server", "Keeping only the N most recent turns in context and dropping older turns, optionally summarizing them first", "Processing the conversation in fixed-size chunks", "Expanding the context window dynamically"],
+    "question": "How should long-term memory enter a context window?",
+    "options": ["Every stored memory should be loaded every time", "Relevant memories should be retrieved from storage and inserted only when they match the current query or session need", "It should replace the system prompt", "It should be appended after the generation budget"],
     "correct": 1,
-    "explanation": "Sliding window keeps the K most recent conversation turns in full context. Older turns are either dropped or replaced with a summary. This bounds memory usage while preserving the most relevant recent context.",
-    "stage": "post"
-  },
-  {
-    "question": "How should a context assembler allocate tokens across components?",
-    "options": ["Equal allocation to each component", "Dynamically based on query type: a simple question needs less retrieval context; a complex question needs more, with generation headroom always reserved", "Maximize retrieval context always", "Minimize system prompt tokens"],
-    "correct": 1,
-    "explanation": "A simple factual question might need 500 tokens of retrieved context. A complex analysis might need 10,000. A good context assembler adjusts allocation dynamically while always reserving headroom for the model's response.",
+    "explanation": "Long-term memory is useful when retrieval is selective. Loading every memory wastes tokens and distracts the model; retrieving relevant facts, preferences, or episodes keeps context focused.",
     "stage": "post"
   }
 ]

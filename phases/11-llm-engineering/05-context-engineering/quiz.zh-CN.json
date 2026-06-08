@@ -1,37 +1,44 @@
 [
   {
     "question": "prompt engineering 和 context engineering 的区别是什么？",
-    "options": ["它们是同一件事", "prompt 是用户 query；context 是模型 window 中的一切：system prompt、tools、retrieved docs、history，以及 prompt 本身", "Context engineering 是关于 database design 的", "Prompt engineering 更高级"],
+    "options": ["它们是同一件事", "prompt 是用户 query；context 是模型 window 中的一切：system prompt、tools、retrieved docs、history，以及 prompt 本身", "Context engineering 是关于数据库设计的", "Prompt engineering 更高级"],
     "correct": 1,
     "explanation": "Prompt engineering 聚焦于打磨 user instruction。Context engineering 管理模型的整个输入：什么放进去、什么留在外面、按什么顺序，以及如何分配有限的 context window。",
     "stage": "pre"
   },
   {
-    "question": "为什么 context window 的顺序会影响 LLM performance？",
-    "options": ["不会影响——LLMs 平等处理所有 tokens", "LLMs 有 recency 和 primacy biases，会更多关注 context window 的开头和结尾", "Alphabetical order 能帮助模型更快搜索", "顺序只对 code 有影响"],
+    "question": "为什么 context window 的顺序会影响 LLM 表现？",
+    "options": ["不会影响，LLM 会平等处理所有 token", "LLM 有 recency 和 primacy bias，会更多关注 context window 的开头和结尾", "按字母顺序能帮助模型更快搜索", "顺序只对 code 有影响"],
     "correct": 1,
-    "explanation": "研究显示，LLMs 对 context window 的开头和结尾 attention 更多（'lost in the middle' phenomenon）。把最重要信息放在 context 的开头或结尾能提升利用率。",
-    "stage": "pre"
+    "explanation": "研究显示，LLM 对 context window 的开头和结尾 attention 更多，也就是 lost-in-the-middle phenomenon。把最重要信息放在 context 的开头或结尾，通常能提升利用率。",
+    "stage": "check"
   },
   {
-    "question": "一个 coding assistant 使用了 128K context window 中的 22,700 tokens。为什么 budget management 仍然重要？",
-    "options": ["128K 应该足够任何 use case", "长对话、大型 code files 和 retrieved documentation 会快速填满 window；没有 budget management，critical context 会被截断", "Token counting 不准确", "只有 prompt 重要"],
+    "question": "conversation history 的 sliding window strategy 是什么？",
+    "options": ["把模型移动到不同 server", "只在 context 中保留最近 N 个 turns，并丢弃更旧 turns，可选地先总结它们", "以固定大小 chunk 处理 conversation", "动态扩展 context window"],
+    "correct": 1,
+    "explanation": "Sliding window 会在 full context 中保留最近 K 个 conversation turns。更旧 turns 要么被丢弃，要么被 summary 替代。这限制 memory usage，同时保留最相关的 recent context。",
+    "stage": "check"
+  },
+  {
+    "question": "context assembler 应该如何在各组件之间分配 tokens？",
+    "options": ["每个 component 等量分配", "根据 query type 动态分配：简单问题需要较少 retrieval context；复杂问题需要更多，同时始终保留 generation headroom", "始终最大化 retrieval context", "最小化 system prompt token"],
+    "correct": 1,
+    "explanation": "一个简单事实问题可能只需要 500 tokens retrieved context。复杂分析可能需要 10,000。好的 context assembler 会动态调整 allocation，同时始终为模型 response 预留 headroom。",
+    "stage": "check"
+  },
+  {
+    "question": "一个 coding assistant 使用了 128K context window 中的 22,700 tokens。为什么预算管理仍然重要？",
+    "options": ["128K 应该足够任何用例", "长对话、大型 code files 和 retrieved documentation 会快速填满 window；没有预算管理，关键 context 会被截断", "Token 计数不准确", "只有 prompt 重要"],
     "correct": 1,
     "explanation": "22,700 tokens 只是 baseline。50-turn conversation 会增加 30K+ tokens。检索大型 codebase 会增加 50K+。Tool call results 还会继续增加。没有主动管理，window 会被填满，最旧 context 会丢失。",
     "stage": "post"
   },
   {
-    "question": "conversation history 的 sliding window strategy 是什么？",
-    "options": ["把模型移动到不同 server", "只在 context 中保留最近 N 个 turns，并丢弃更旧 turns，可选地先总结它们", "以 fixed-size chunks 处理 conversation", "动态扩展 context window"],
+    "question": "long-term memory 应该怎样进入 context window？",
+    "options": ["每次都加载所有已保存 memory", "从存储中检索相关 memory，只在匹配当前 query 或 session 需求时放入 context", "用它替换 system prompt", "把它追加在 generation budget 后面"],
     "correct": 1,
-    "explanation": "Sliding window 会在 full context 中保留最近 K 个 conversation turns。更旧 turns 要么被丢弃，要么被 summary 替代。这限制 memory usage，同时保留最相关的 recent context。",
-    "stage": "post"
-  },
-  {
-    "question": "context assembler 应该如何在 components 之间分配 tokens？",
-    "options": ["每个 component 等量分配", "根据 query type 动态分配：simple question 需要较少 retrieval context；complex question 需要更多，同时始终保留 generation headroom", "始终最大化 retrieval context", "最小化 system prompt tokens"],
-    "correct": 1,
-    "explanation": "一个简单事实问题可能只需要 500 tokens retrieved context。复杂分析可能需要 10,000。好的 context assembler 会动态调整 allocation，同时始终为模型 response 预留 headroom。",
+    "explanation": "Long-term memory 的价值在于选择性 retrieval。加载所有 memory 会浪费 token 并分散模型注意力；只检索相关事实、偏好或历史事件，才能让 context 保持聚焦。",
     "stage": "post"
   }
 ]
