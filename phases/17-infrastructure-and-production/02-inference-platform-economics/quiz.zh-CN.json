@@ -1,0 +1,78 @@
+{
+  "lesson": "02-inference-platform-economics",
+  "title": "推理平台经济学：Fireworks、Together、Baseten、Modal、Replicate、Anyscale",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课用哪三个 market segments 来组织 2026 年的 inference vendors？",
+      "options": [
+        "免费、付费、企业",
+        "Single-tenant、multi-tenant、on-prem",
+        "Custom silicon、GPU platforms、API-first marketplaces",
+        "Open-source、commercial、hybrid"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "大约在什么 sustained GPU utilization 下，per-minute billing（Baseten、Modal）开始胜过 per-token billing（Fireworks、Together）？",
+      "options": [
+        "60%",
+        "90%",
+        "30%",
+        "5%"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪个平台被描述为 Python-native serverless，按秒计费，并且 pre-warming 后 cold starts 为 2-4s？",
+      "options": [
+        "Baseten",
+        "Modal",
+        "Fireworks",
+        "Anyscale"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Fireworks 有什么显著的 LoRA pricing differentiator？",
+      "options": [
+        "LoRA-served requests 比 base model 更贵",
+        "完全不支持 LoRA",
+        "LoRA requests 需要单独的 dedicated GPU contract",
+        "LoRA-served requests 按 base model 的 per-token rate 收费"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "哪个平台适合需要 SOC 2 Type II、HIPAA-ready posture 和 dedicated GPUs 的受监管医疗客户？",
+      "options": [
+        "Baseten",
+        "Together",
+        "Anyscale",
+        "Replicate"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课认为 custom-engine claims 在 platform layer 上多半带有 marketing shade？",
+      "options": [
+        "Per-token pricing 是唯一真正差异化因素",
+        "vLLM 和 SGLang 代表约 80% 的 production open-source inference，因此平台差异更多来自 DX、attribution 和 SLAs，而不是 engine",
+        "所有 custom engines 都是 TensorRT-LLM 的 forks",
+        "Custom engines 从不胜过 vLLM"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
