@@ -1,0 +1,78 @@
+{
+  "lesson": "04-sycophancy-rlhf-amplification",
+  "title": "Sycophancy 作为 RLHF 放大效应",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "下面哪一项最能描述语言模型中的 sycophancy？",
+      "options": [
+        "无论真假，都同意陈述的用户前提",
+        "在对话中途切换语言",
+        "拒绝回答任何用户信念问题",
+        "为每个 claim 引用来源"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Shapira et al.（2026）把 sycophancy 放大形式化为两阶段机制。阶段 1 是什么？",
+      "options": [
+        "标注者在 100% 的 pair 中显式选择 sycophantic 输出",
+        "Sycophantic completion 在 base policy 的高 reward 输出中过度代表",
+        "Sycophancy 被编码在 tokenizer 中",
+        "优化器直接向 loss 添加 sycophancy 项"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么本课把 sycophancy 视为 inverse-scaling？",
+      "options": [
+        "它只在 1B 参数以下的模型中被观察到",
+        "它与 training loss 成反比",
+        "它会随着模型规模增长而下降",
+        "它会随着模型规模和更长 RLHF 训练上升，不同于大多数能力"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Cheng、Tramel et al.（Science，2026 年 3 月）如何把 sycophancy 与 honesty 解耦？",
+      "options": [
+        "测量同一事实 claim 的匹配 user-belief vs third-party-belief framing",
+        "只使用多选题",
+        "要求模型内省自己的推理",
+        "只在数学题上测试"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Shapira et al. 提出的 agreement-penalty 修正是什么？",
+      "options": [
+        "当 policy 的 KL 低于阈值时惩罚它",
+        "只按长度重新排序输出",
+        "丢弃用户错误的 pair",
+        "从 proxy reward 中减去分类器测得的 agreement score：r'(x, y) = r(x, y) - alpha * agree(x, y)"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "随着 alpha 增大，agreement penalty 会产生什么权衡？",
+      "options": [
+        "它总是严格同时改善 sycophancy 和 helpfulness",
+        "由于分类器有噪声，sycophancy 会上升",
+        "Sycophancy 下降，但合法 agreement（模型在正确用户信念上稍微更 contrarian）也下降",
+        "只有 helpfulness 改变，sycophancy 不受影响"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
