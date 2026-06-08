@@ -1,0 +1,102 @@
+{
+  "lesson": "03-word-embeddings-word2vec",
+  "title": "词嵌入：从零实现 Word2Vec",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "什么是分布假说？",
+      "options": [
+        "You shall know a word by the company it keeps",
+        "词在文档中是均匀分布的",
+        "所有词都可以嵌入到 300 维中",
+        "高频词携带最多意义"
+      ],
+      "correct": 0,
+      "explanation": "Firth（1957）的分布假说：相似上下文意味着相似含义。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么在 Word2Vec 中对整个词表做普通 softmax 不现实？",
+      "options": [
+        "每个训练步骤都要对 100k+ 词表项计算 softmax，成本高到不可接受",
+        "Softmax 无法建模概率",
+        "Softmax 没有梯度",
+        "它会导致梯度消失"
+      ],
+      "correct": 0,
+      "explanation": "整词表 softmax 太贵；negative sampling 把它重写为二分类。"
+    },
+    {
+      "stage": "check",
+      "question": "skip-gram 和 CBOW 的区别是什么？",
+      "options": [
+        "Skip-gram 使用 bigrams；CBOW 使用 unigrams",
+        "Skip-gram 从中心词预测上下文词；CBOW 从上下文预测中心词",
+        "Skip-gram 从上下文预测中心词；CBOW 反过来",
+        "Skip-gram 训练深层网络；CBOW 是浅层的"
+      ],
+      "correct": 1,
+      "explanation": "Skip-gram：center -> context。CBOW：context -> center。"
+    },
+    {
+      "stage": "check",
+      "question": "在 negative sampling 中，正 pair（center, context）的目标是什么？",
+      "options": [
+        "最大化 sigmoid(W[center] dot W'[context])，让它接近 1",
+        "强制它们正交",
+        "最小化它们的点积",
+        "让向量去相关"
+      ],
+      "correct": 0,
+      "explanation": "正 pair 会训练 sigmoid 接近 1；采样到的负例会训练 sigmoid 接近 0。"
+    },
+    {
+      "stage": "check",
+      "question": "Word2Vec 训练完成后，哪个权重矩阵会成为 word embeddings？",
+      "options": [
+        "一个单独的训练后投影",
+        "输入到隐藏层的 W 矩阵（中心词表）",
+        "两者相乘",
+        "隐藏层到输出层的 W' 矩阵"
+      ],
+      "correct": 1,
+      "explanation": "中心词表 W 是标准的 embedding 输出；W' 通常会被丢弃或取平均。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 Word2Vec 会在一词多义（例如 'bank'）上失败？",
+      "options": [
+        "窗口大小太小",
+        "它忽略稀有词",
+        "Negative sampling 丢弃稀有含义",
+        "它为每个词分配一个 static vector，所以 'river bank' 和 'financial bank' 共享同一个向量"
+      ],
+      "correct": 3,
+      "explanation": "Static embeddings 无法消解词义；contextual embeddings（ELMo/BERT）解决了这个问题。"
+    },
+    {
+      "stage": "post",
+      "question": "到 2026 年，你什么时候仍会选择 Word2Vec 而不是 transformer？",
+      "options": [
+        "轻量、端侧、领域特定检索，延迟预算只够一次取行",
+        "当你需要上下文消歧时",
+        "当输入非常长时",
+        "当对话质量重要时"
+      ],
+      "correct": 0,
+      "explanation": "Word2Vec 在极低延迟预算、端侧推理或快速领域特定训练上胜出。"
+    },
+    {
+      "stage": "post",
+      "question": "是什么让著名类比 'king - man + woman ~ queen' 成立？",
+      "options": [
+        "模型把王权编码成一个标志位",
+        "Skip-gram 在王室词表上训练",
+        "向量算术捕捉到像 'royal' 这样的线性方向，并能跨性别迁移",
+        "余弦相似度对性别不变"
+      ],
+      "correct": 2,
+      "explanation": "Embedding 空间中的方向会编码关系特征，因此加减向量会产生系统性的移动。"
+    }
+  ]
+}
