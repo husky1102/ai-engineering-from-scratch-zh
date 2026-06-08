@@ -1,0 +1,90 @@
+{
+  "lesson": "10-multi-agent-software-team",
+  "title": "Capstone 10 — 多 Agent 软件工程团队",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么即便有 200k-token context，single-agent harness 在大型任务上也会碰到天花板？",
+      "options": [
+        "single agents 不能进行 tool calls",
+        "sandboxes 拒绝托管超过一个 process",
+        "context 无法同时容纳 architecture plan、四个 parallel codebase slices、reviewer commentary 和 test output",
+        "models 不支持 git"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "在这种 factory shape 中，architect role 负责什么？",
+      "options": [
+        "review merged diff 中的 hallucinations",
+        "读取 issue，并输出带 explicit interfaces 的 subtasks plan",
+        "在 clean sandbox 中运行 test suite",
+        "当 coders 意见不一致时 force-merge branches"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么每个 coder 都在自己的 git worktree 加 Daytona sandbox 中工作？",
+      "options": [
+        "worktrees 比 branches clone 更快",
+        "Daytona 是唯一支持 SSH 的 sandbox",
+        "隔离 working trees 让 N 个 coders 可以并行实现 subtasks，而不会踩到 shared files",
+        "architect 需要 worktree IDs"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为了让 reviewer 保持诚实，对它施加了什么约束？",
+      "options": [
+        "它只能在 tester sign off 后运行",
+        "它不能 approve 自己 authored 或 proposed 的 diffs",
+        "它必须 approve 读到的每个 diff",
+        "它必须和 architect 使用同一个 model"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 rubric 要将 token efficiency 与 single-agent baseline 对比？",
+      "options": [
+        "multi-agent 总是更便宜",
+        "role boundaries 会增加 summary 和 handoff context，所以真正的问题是 factory 是否按 dollar 取胜",
+        "single-agent 没有 observability story",
+        "token cost 与 performance 无关"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "post-mortem 中会从每个 failed issue 产出什么 artifact？",
+      "options": [
+        "新的 architect plan template",
+        "更新后的 A2A protocol spec",
+        "force-push log",
+        "handoff-failure histogram，用来识别哪个 role boundary 断了（plan、merge、review、test）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "这个 capstone 使用哪个 evaluation set 来跨 roles 评分 pass@1？",
+      "options": [
+        "SWE-bench Pro 50-issue subset",
+        "HumanEval-Java",
+        "MT-Bench-v2",
+        "MigrationBench"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
