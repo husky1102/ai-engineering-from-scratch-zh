@@ -1,0 +1,78 @@
+{
+  "lesson": "21-fairness-criteria-group-individual-counterfactual",
+  "title": "公平性准则：群体、个体、反事实",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "哪一项最符合群体 A=a 和 A=a' 的人口统计均等定义？",
+      "options": [
+        "各群体的真阳性率和假阳性率相等",
+        "各群体的预测值相等",
+        "各群体的 Lipschitz 常数相等",
+        "接受率相等：P(Y=1 | A=a) = P(Y=1 | A=a')"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Chouldechova / Kleinberg-Mullainathan-Raghavan 2017 的不可能性结果说明了什么？",
+      "options": [
+        "群体公平性总能通过重加权实现",
+        "在基础率不相等时，人口统计均等、均等化机会和条件使用准确性均等无法同时成立",
+        "反事实公平性蕴含人口统计均等",
+        "对任意 DAG，个体公平性都蕴含反事实公平性"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Dwork 等 2012 通过什么定义个体公平性？",
+      "options": [
+        "个体层面的人口统计均等",
+        "受保护群体之间的准确率相等",
+        "相对于任务特定相似度量的决策映射 Lipschitz 条件，使相似个体获得相似决策",
+        "带有敏感属性干预的因果 DAG"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "反事实公平性（Kusner 等 2017）要求什么？",
+      "options": [
+        "不需要因果假设",
+        "所有群体的 Lipschitz 常数相等",
+        "只需要群体层面统计量",
+        "一个因果 DAG；当个体的敏感属性被反事实改变时，决策保持不变"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么回溯反事实（arXiv:2401.13935）对法律合规很重要？",
+      "options": [
+        "它们不是干预受保护属性（这在法律上有问题），而是询问实际特征的哪种组合会产生反事实结果",
+        "它们消除了对任何因果模型的需要",
+        "它们替代了基于 embedding 的偏见指标",
+        "它们证明不可能性定理是错的"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "ICLR Blogposts 2024 的哲学调和观点主张什么？",
+      "options": [
+        "不可能性定理可以通过重加权解决",
+        "在显式因果图下，满足某些群体公平性度量会蕴含反事实公平性，因此这些家族之间的表面对立部分源于把因果模型留作隐含",
+        "群体公平性和反事实公平性无关",
+        "只有个体公平性是正当的"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
