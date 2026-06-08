@@ -1,0 +1,90 @@
+{
+  "lesson": "05-autonomous-research-agent",
+  "title": "Capstone 05 — 自主研究 Agent（AI-Scientist 类）",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "AI-Scientist 类 agent 使用什么搜索形态来探索实验？",
+      "options": [
+        "在 token outputs 上做 beam search",
+        "在 experiment nodes 上用 novelty x quality x budget score 做 best-first tree search",
+        "纯粹通过人类反馈强化学习",
+        "使用随机评分的 breadth-first expansion"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 sandbox 要配置 --network=none 和有界资源上限？",
+      "options": [
+        "为了强制 agent 使用 prompt caching",
+        "为了强制确定性的浮点运算",
+        "为了默认允许 GPU passthrough",
+        "为了阻止 network egress，并把实验副作用限制在可复现边界内"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "writer loop 中 vision critique 步骤的作用是什么？",
+      "options": [
+        "把 figures 翻译成 bar charts",
+        "把 LaTeX draft 编译成 PDF，然后让 VLM critique layout、figure legibility 和 claim-evidence alignment",
+        "从 screenshots 生成新的实验想法",
+        "在 render time 替代 matplotlib"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "reviewer ensemble 如何为 pipeline 把关？",
+      "options": [
+        "单个 judge 根据 binary flag 接受或拒绝",
+        "reviewers 匿名投票，多数胜出",
+        "reviews 只在 publication 之后运行",
+        "五个 judges 按 NeurIPS-style rubrics 打分，weighted aggregate 必须超过阈值，否则 draft 回到 writer"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "这个 capstone 对每篇论文强制执行哪种成本纪律？",
+      "options": [
+        "通过 Langfuse counters 和 pre-run estimates 跟踪的 $30 hard budget",
+        "只有成本优化，没有质量检查",
+        "无限制 compute，只限制 hard wall-clock",
+        "跟踪 GPU-hours 但永不设上限"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "哪一个 scoring function 用于给 tree nodes 排序，以便进一步 expansion？",
+      "options": [
+        "Novelty x quality x remaining budget",
+        "相关论文的 citation count",
+        "随机均匀 priority",
+        "Output length 和 token count"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "red-team report 针对系统演练什么？",
+      "options": [
+        "system prompts 的 caching hit rate",
+        "vector DB 中的 multi-tenant data leakage",
+        "packet loss 下的 latency tail",
+        "sandbox-escape attempts，例如 fork bombs、network exfiltration 和 filesystem escapes"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
