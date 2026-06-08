@@ -1,0 +1,78 @@
+{
+  "lesson": "30-dual-use-risk-cyber-bio-chem-nuclear",
+  "title": "Dual-Use Risk - Cyber、Bio、Chem、Nuclear Uplift",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "2024-2025 年 bio-uplift narrative 如何演变？",
+      "options": [
+        "它在 2024-2025 年间保持不变",
+        "从 'no uplift' 到 'mild uplift'",
+        "从 'severe uplift' 到 'no measurable uplift'",
+        "从 'mild uplift'（2024）到 'on the cusp of meaningfully helping novices create known biological threats'（2025 年 4 月），再到 '2.53x uplift insufficient to rule out ASL-3'（Anthropic 2025）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Anthropic 2025 年 11 月 cyber threat report 发现了什么？",
+      "options": [
+        "Chinese-linked state actors 使用 Claude 的 agentic coding tool 自动化了 80-90% 的 cyberattack campaign，human intervention 只在 4-6 步中需要",
+        "Frontier models 拒绝所有 cyber tasks",
+        "Cyberattacks 仍完全手动",
+        "Open-source models 超过了 frontier capability"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Vision-enabled frontier models 如何侵蚀 chem/bio execution gap？",
+      "options": [
+        "通过用 virtual simulators 替换所有 lab equipment",
+        "通过生成 fake protocols",
+        "通过观察 wet-lab video 并提供 real-time protocol correction；OpenAI 2025 年 12 月 demonstration 显示 GPT-5 迭代 wet-lab experiments，通过 AI-driven protocol optimization 达成 79x efficiency improvement",
+        "仅通过增加 context length"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 nuclear-domain uplift 相对于 bio/chem/cyber 仍然受限？",
+      "options": [
+        "Nuclear 是最容易被 AI 攻击的领域",
+        "Threat model 主要由 fissile-material acquisition 主导（非信息性的 procurement-and-equipment bottleneck），因此 AI 在 information layer 上的 uplift 在实践中只提供有限 novice uplift",
+        "所有 nuclear information 都已从 training data 中移除",
+        "Frontier models 拒绝讨论 physics"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Novice-relative vs expert-absolute asymmetry 对 safety cases 意味着什么？",
+      "options": [
+        "二者都能被 RLHF 完美处理",
+        "只处理 novice uplift（input filters、refusals、uncertainty）不足以做到 expert-absolute control；需要 elicitation-hardening、capability unlearning、control protocols 等额外措施",
+        "只有 novice uplift 重要",
+        "Expert-absolute capability 自动为零"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Cyber dual-use 背景下 OpenAI 的 'trusted access' pilot 是什么？",
+      "options": [
+        "CVE-2025-32711 的补丁",
+        "GPT-5 的 open-source release",
+        "关闭所有 API access",
+        "向经审查的 security organisations（incident-response firms、government）授予 capability access，用于 defensive dual-use work；如果能 scale，就会形成有利于 defenders 的 access asymmetry"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
