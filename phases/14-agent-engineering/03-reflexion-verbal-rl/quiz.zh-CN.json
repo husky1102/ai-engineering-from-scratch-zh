@@ -1,0 +1,90 @@
+{
+  "lesson": "03-reflexion-verbal-rl",
+  "title": "Reflexion：语言形式的强化学习",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Reflexion 替代了标准 reinforcement learning 中的什么？",
+      "options": [
+        "用 constant reward 替代 reward shaping",
+        "用 trials 之间保存的自然语言 reflections 替代 gradient updates",
+        "用 random search 替代 policy networks",
+        "用 parametric memory 替代 episodic memory"
+      ],
+      "correct": 1,
+      "explanation": "Reflexion 使用 episodic memory 中的自然语言 reflections，而不是 weight updates。"
+    },
+    {
+      "stage": "pre",
+      "question": "哪三个组件定义了 Reflexion system？",
+      "options": [
+        "Planner, Worker, Solver",
+        "Actor, Evaluator, Self-Reflector",
+        "Generator, Critic, Optimizer",
+        "Selector, Expander, Backpropagator"
+      ],
+      "correct": 1,
+      "explanation": "Reflexion 把 agent 分解为运行 trajectories 的 Actor、给它们打分的 Evaluator，以及写 lessons 的 Self-Reflector。"
+    },
+    {
+      "stage": "check",
+      "question": "哪种 evaluator type 使用 unit test 或已知正确答案这样的外部 binary signal？",
+      "options": [
+        "Heuristic",
+        "Scalar",
+        "Self-evaluated",
+        "Vote-based"
+      ],
+      "correct": 1,
+      "explanation": "Scalar evaluators 从 ground truth 读取 pass/fail signals（ALFWorld success、HumanEval tests）。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 self-evaluation 比 scalar feedback 信号更弱？",
+      "options": [
+        "它计算更慢",
+        "模型评判自己时没有 external grounding，因此可能给自己的答案盖章放行",
+        "它总是需要更大的模型",
+        "它不能在 tools 上运行"
+      ],
+      "correct": 1,
+      "explanation": "Self-eval 缺少外部检查，所以自信幻觉也会得高分；应搭配 tool-grounded verification。"
+    },
+    {
+      "stage": "check",
+      "question": "本课列出的 Reflexion 无效场景是哪一个？",
+      "options": [
+        "可由 tests 打分的 code generation",
+        "网络宕机这样的外部 transient failure",
+        "ALFWorld navigation tasks",
+        "HotpotQA multi-hop questions"
+      ],
+      "correct": 1,
+      "explanation": "反思一次 transient external outage 会产生对未来 runs 无帮助的 reflection。"
+    },
+    {
+      "stage": "post",
+      "question": "Reflexion pattern 中的 memory rot 是什么？",
+      "options": [
+        "Process restart 时丢失 reflections",
+        "Episodic buffer 填满过时或错误 reflections，拖慢或偏置未来 trials",
+        "Reflections 被 provider 加密",
+        "Reflection prompt 超过 context window"
+      ],
+      "correct": 1,
+      "explanation": "累积的 stale 或 wrong reflections 会降低行为质量；可用 compaction 或 TTL 缓解。"
+    },
+    {
+      "stage": "post",
+      "question": "本课中哪个生产 pattern 最清楚地对应 Reflexion？",
+      "options": [
+        "Cursor 的 apply-edits flow",
+        "Claude Code 的 CLAUDE.md learnings，会 prepend 到 future sessions",
+        "OpenAI 的 batch API",
+        "Anthropic 的 prompt caching"
+      ],
+      "correct": 1,
+      "explanation": "CLAUDE.md learnings、pro-workflow 的 learn-rule 和 Letta 的 sleep-time compute 都把 episodic reflection buffer 外部化。"
+    }
+  ]
+}
