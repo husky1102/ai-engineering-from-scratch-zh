@@ -1,0 +1,102 @@
+{
+  "lesson": "22-embedding-models-deep-dive",
+  "title": "嵌入模型：2026 深度解析",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "什么是稠密嵌入？",
+      "options": [
+        "文档之间的一张图",
+        "词表中每个 token 一个稀疏权重",
+        "token 级对齐矩阵",
+        "每段文本一个固定大小向量，其中余弦相似度按语义接近程度排序段落"
+      ],
+      "correct": 3,
+      "explanation": "稠密嵌入为每段文本给出一个向量（通常 384-3072 维）；余弦相似度用于排序相似性。"
+    },
+    {
+      "stage": "pre",
+      "question": "Matryoshka Representation Learning 带来了什么能力？",
+      "options": [
+        "多语言训练",
+        "更快的 softmax",
+        "把训练好的嵌入截断到前 N 维，并得到仍然有用的更小嵌入",
+        "Cross-encoder 重新打分"
+      ],
+      "correct": 2,
+      "explanation": "Matryoshka 训练让向量的前 N 维本身也有用，从而支持低成本截断。"
+    },
+    {
+      "stage": "check",
+      "question": "多向量（ColBERT）嵌入如何为 query-doc 对打分？",
+      "options": [
+        "mean-pooled token vectors 的余弦相似度",
+        "交叉熵",
+        "Earth-mover's distance",
+        "MaxSim：对每个查询 token 找到最相似的文档 token，然后把最大值相加"
+      ],
+      "correct": 3,
+      "explanation": "ColBERT 风格的 late interaction 使用每个 token 向量之间的 MaxSim。"
+    },
+    {
+      "stage": "check",
+      "question": "BGE-M3 会同时输出什么？",
+      "options": [
+        "只有一个稀疏向量",
+        "只有一个稠密向量",
+        "一个模型一次推理输出 dense、sparse 和 multi-vector（colbert）表示",
+        "只有一个 colbert 向量"
+      ],
+      "correct": 2,
+      "explanation": "BGE-M3 从一个模型输出三种检索模式，适合做融合式 hybrid scoring。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么在做余弦相似度前必须重新归一化 Matryoshka 截断后的向量？",
+      "options": [
+        "截断会破坏训练",
+        "截断会改变向量范数；不重新归一化时，点积不再等于余弦相似度",
+        "余弦会忽略归一化",
+        "这只是 FAISS 的要求"
+      ],
+      "correct": 1,
+      "explanation": "截断后重新归一化会恢复单位范数，让点积再次等于余弦相似度。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 BGE 模型通常需要查询侧前缀字符串？",
+      "options": [
+        "为了压缩查询",
+        "FAISS 要求如此",
+        "BGE 训练时使用了显式查询 prompt；省略它会损失 3-5 点召回",
+        "前缀会改变 tokenizer 行为"
+      ],
+      "correct": 2,
+      "explanation": "BGE 模型期望查询带有 'Represent this sentence for searching...' 前缀。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么说 MTEB 对选择嵌入模型是必要但不充分的？",
+      "options": [
+        "MTEB 只覆盖英文",
+        "MTEB 忽略延迟",
+        "排行榜名次是在许多任务上的平均结果；你的具体领域可能不同，所以一定要在自己的数据上 benchmark",
+        "MTEB 奖励更大的模型"
+      ],
+      "correct": 2,
+      "explanation": "MTEB 对多个任务取平均；领域专用评估可能会颠倒排名。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该在稠密嵌入旁边加入 SPLADE 稀疏检索？",
+      "options": [
+        "每当 encoder 是多语言时",
+        "每当使用 Matryoshka 时",
+        "当查询关键词密集，或包含会被稠密嵌入模糊掉的标识符/代码时",
+        "只在小语料上"
+      ],
+      "correct": 2,
+      "explanation": "SPLADE 捕获稠密模型可能漏掉的词法/关键词匹配；用 RRF 与 dense 融合。"
+    }
+  ]
+}
