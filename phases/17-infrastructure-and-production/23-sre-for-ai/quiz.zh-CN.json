@@ -1,0 +1,78 @@
+{
+  "lesson": "23-sre-for-ai",
+  "title": "AI 的 SRE — 多 Agent 事故响应、Runbooks、预测性检测",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课为 AI SRE 推荐什么样的 multi-agent 形态？",
+      "options": [
+        "在三个 agents 中随机选择一个",
+        "两个 agents 串联且没有 supervisor",
+        "一个 monolithic agent 掌管一切",
+        "Supervisor agent 将 incident 拆成给 specialized log、metric 和 runbook agents 的 sub-queries，然后综合并呈现给 human"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课称哪组 auto-remediation 是安全的？",
+      "options": [
+        "Re-architecting service topology",
+        "Altering databases",
+        "Modifying IAM policies",
+        "Restart pod、revert specific deploy、在预先批准的边界内 scale pool、enable pre-approved feature flag"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "NeuBird Hawkeye 如何使用 adversarial evaluation 来过滤 hallucinated root causes？",
+      "options": [
+        "两个模型独立分析同一 incident；agreement = high confidence，disagreement = escalate to human with both hypotheses",
+        "使用 GAN-style training",
+        "永远选择 confidence 更高的模型答案",
+        "在相同 input 上运行同一模型两次"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Operational memory 在 AI SRE 中解决什么问题？",
+      "options": [
+        "Inference pods 的 cold start",
+        "Network egress filtering",
+        "团队更替时 tribal knowledge 流失 —— runbooks 和 post-mortems 存在 vector DB 中，agents 在每次 incident 中检索",
+        "Token cost attribution"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课引用的 MIT 2025 pre-incident prediction 结果是什么？",
+      "options": [
+        "提前 1 秒实现 100% prediction",
+        "使用 logs + GPU temps + API error patterns 提前 10-15 分钟预测 89% outages",
+        "Predictions 仍未解决",
+        "没有 lead time 时达到 10%"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课强调 predictive detection 有什么 operational constraint？",
+      "options": [
+        "Predictions 会替代 runbooks",
+        "Predictions 永远不应该接入 action",
+        "没有 actuation 的 predictions 只是 dashboards —— operational question 是 prediction 触发什么 action（pre-drain、page、auto-scale）",
+        "Predictions 总是准确"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
