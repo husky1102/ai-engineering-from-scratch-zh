@@ -1,0 +1,90 @@
+{
+  "lesson": "06-devops-troubleshooting-agent",
+  "title": "Capstone 06 — 面向 Kubernetes 的 DevOps 故障排查 Agent",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "故障排查 agent 的 RBAC surface 默认权限姿态是什么？",
+      "options": [
+        "默认 read-only，destructive verbs 位于独立 server 后，并由人类 approval gate 保护",
+        "只在 affected namespace 中拥有 namespace-admin",
+        "等同于 on-call engineer",
+        "cluster-admin，这样它可以 self-heal"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "agent 在 root cause analysis 期间遍历的 knowledge graph 是什么？",
+      "options": [
+        "Nodes 是 K8s objects 加 telemetry sources；edges 编码 ownership、scheduling 和 observation",
+        "最近重启过的 pods 的 flat list",
+        "按 team 组织的 Prometheus metric names",
+        "GitHub commits 和 PR reviews 的图"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "root-cause hypotheses 如何为 Slack brief 排序？",
+      "options": [
+        "通过结合 recency、specificity、graph-path length 和 citation count 的 evidence score",
+        "只按 model log-probability",
+        "按 alphabetic alert name",
+        "按它们被生成的顺序"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么 audit log 要记录 agent considered 的 commands 以及 executed 的 commands？",
+      "options": [
+        "reviewers 可以捕捉 agent 差点运行 destructive command 的 near-misses",
+        "ArgoCD 只接受 considered commands",
+        "Slack API 需要两者才能 delivery",
+        "Replay attacks 需要两个列表"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪个机制防止 agent 在 bad deploy 上单方面 rolling back？",
+      "options": [
+        "destructive tools 位于一个独立 MCP server 上，并由 Slack card 的 approval token gate 保护",
+        "第二个 LLM-judge 对 rollback 投票",
+        "GitOps repo 上的 branch protection",
+        "PagerDuty 自动暂停 deployment"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "rubric 衡量的 p50 time-to-hypothesis 目标是什么？",
+      "options": [
+        "低于下一个 on-call shift",
+        "低于 1 hour",
+        "从 alert 到 Slack brief 低于 5 minutes",
+        "低于 30 seconds"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "用于评分 RCA accuracy 的 synthetic incident suite 有多大？",
+      "options": [
+        "1 个 scripted demo incident",
+        "5 个 scenarios",
+        "100 个随机采样的 production alerts",
+        "20 个 scenarios，覆盖 OOMKill、DNS flap、HPA thrash、PVC fill 等"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
