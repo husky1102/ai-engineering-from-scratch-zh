@@ -1,0 +1,37 @@
+[
+  {
+    "question": "为什么 constant learning rate 通常不是神经网络训练的最优选择？",
+    "options": ["它占用太多内存", "它要么对训练后期太高（导致振荡），要么对训练早期太低（浪费计算）", "constant learning rates 会导致 overfitting", "它们只适用于 SGD"],
+    "correct": 1,
+    "explanation": "最佳步长会在训练期间变化。早期，大步能快速覆盖空间。后期，需要小步来安定到最小值。constant rate 无法同时满足这两种需求。",
+    "stage": "pre"
+  },
+  {
+    "question": "learning rate warmup 的目的是什么？",
+    "options": ["防止 overfitting", "让 adaptive optimizer statistics（momentum、variance）在采取大步之前稳定下来", "逐渐增加 batch size", "正确初始化权重"],
+    "correct": 1,
+    "explanation": "Adam 的 moment estimates 初始化为零。早期梯度更新基于不可靠统计量。Warmup 从很小的 LR 开始并逐步升高，让 Adam 有时间积累有意义的估计。",
+    "stage": "pre"
+  },
+  {
+    "question": "Llama 3、GPT-3 和大多数现代 LLM 使用什么 learning rate schedule？",
+    "options": ["Constant learning rate", "每 30 个 epochs 做 step decay", "Linear warmup 后接 cosine decay", "Exponential decay"],
+    "correct": 2,
+    "explanation": "Linear warmup + cosine decay 是 transformer training 的标准。Llama 3 使用 2000 warmup steps，并让学习率从 3e-4 cosine decay 到 3e-5。这个 schedule 不需要调 milestone。",
+    "stage": "post"
+  },
+  {
+    "question": "1cycle policy 与其他 schedules 有什么不同？",
+    "options": ["它使用 constant learning rate", "它在训练前半段把 learning rate 提高，然后再降下来——高 LR 阶段起到 regularization 作用", "它只适用于 SGD", "它不需要任何超参数调整"],
+    "correct": 1,
+    "explanation": "Leslie Smith 的 1cycle 会先把 LR 从低升到高（前半段），再从高降到很低（后半段）。高 LR 阶段帮助模型在安定到最佳盆地之前探索更多 loss landscape。",
+    "stage": "post"
+  },
+  {
+    "question": "如果 training loss 突然尖峰并发散，最可能的学习率问题是什么？",
+    "options": ["Learning rate 太低", "Learning rate 太高，导致 optimizer 越过最小值", "warmup period 太长", "schedule 衰减太慢"],
+    "correct": 1,
+    "explanation": "过高的 learning rate 会导致 optimizer 的步子大于 loss basin，越过最小值并让 loss 上升。这表现为突然发散。",
+    "stage": "post"
+  }
+]
