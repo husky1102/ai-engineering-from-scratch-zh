@@ -1,0 +1,90 @@
+{
+  "lesson": "13-langgraph-stateful-graphs",
+  "title": "LangGraph：状态图与持久执行",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "LangGraph 把 agent 的核心单元视为什么？",
+      "options": [
+        "一次自由形式的 LLM 调用",
+        "一个包含 typed state、function nodes 和 conditional edges 的状态机",
+        "一个单独的 tool registry",
+        "一个 vector index"
+      ],
+      "correct": 1,
+      "explanation": "LangGraph 将 agent 建模为 state graph：nodes 是纯函数，edges 是 transitions，state 是 typed 且 immutable 的。"
+    },
+    {
+      "stage": "pre",
+      "question": "Durable execution 解决了什么问题？",
+      "options": [
+        "降低推理成本",
+        "当 40 步运行在第 38 步失败时，用精确 state 从第 38 步恢复，而不是从头开始",
+        "更快生成 embeddings",
+        "在 providers 之间翻译"
+      ],
+      "correct": 1,
+      "explanation": "每个 node 后的 checkpoints 让 runtime 能从最后成功的步骤恢复。"
+    },
+    {
+      "stage": "check",
+      "question": "以下哪一项不是 LangGraph 支持的三种拓扑之一？",
+      "options": [
+        "Supervisor",
+        "Swarm（peer-to-peer）",
+        "Hierarchical（nested subgraphs）",
+        "Gradient ring"
+      ],
+      "correct": 3,
+      "explanation": "拓扑是 supervisor、swarm 和 hierarchical。Gradient ring 不是 LangGraph 拓扑。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 nodes 必须是 deterministic，resume 才能干净工作？",
+      "options": [
+        "Providers 要求 determinism",
+        "Resume 假设同样的 inputs 会产生同样的 state update；random seeds、wall-clock 和 external APIs 必须被捕获",
+        "Determinism 会降低 token cost",
+        "这是 GIL 的要求"
+      ],
+      "correct": 1,
+      "explanation": "如果 node 依赖未捕获的 nondeterminism，resume 就无法重建步骤后的 state。"
+    },
+    {
+      "stage": "check",
+      "question": "什么是 conditional edge？",
+      "options": [
+        "由 training loss 加权的 edge",
+        "由 state 函数选择、用于让 graph 分支的 edge",
+        "只在 GPU 上运行的 edge",
+        "带 TTL 的 edge"
+      ],
+      "correct": 1,
+      "explanation": "Conditional edges 基于 state 分支；过度使用会让 graph 难以推理。"
+    },
+    {
+      "stage": "post",
+      "question": "当 checkpoints 太小时会出什么问题？",
+      "options": [
+        "Tool state 和 memory writes 无法恢复；full state 必须可序列化",
+        "磁盘会被填满",
+        "Graph 无法到达 END",
+        "模型会生成更短答案"
+      ],
+      "correct": 0,
+      "explanation": "只 checkpoint conversation turns 会让 tool state 和 memory writes 落在 resume 能力之外。"
+    },
+    {
+      "stage": "post",
+      "question": "Human-in-the-loop 如何嵌入 LangGraph 的设计？",
+      "options": [
+        "它需要 fork runtime",
+        "在关键 node 前暂停，把 serialized state 展示给人类，接受修改后 resume；checkpointer 让这件事成本很低",
+        "只在 START 和 END",
+        "通过单独的 provider API"
+      ],
+      "correct": 1,
+      "explanation": "因为 state 已经在 nodes 之间被序列化，所以人类 review 和 edit 是自然的 pause-and-resume 模式。"
+    }
+  ]
+}
