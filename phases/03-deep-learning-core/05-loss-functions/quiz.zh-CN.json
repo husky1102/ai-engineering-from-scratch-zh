@@ -1,0 +1,37 @@
+[
+  {
+    "question": "损失函数在神经网络训练中表示什么？",
+    "options": ["错误预测的数量", "模型预测错得有多离谱的可微度量，也是优化器要最小化的对象", "训练数据集的大小", "学习率调度"],
+    "correct": 1,
+    "explanation": "损失函数会把 predictions 和 targets 映射成一个标量，优化器通过梯度下降最小化它。它必须可微，这样才能计算梯度。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么分类任务更偏好 cross-entropy，而不是 MSE？",
+    "options": ["Cross-entropy 计算更快", "Cross-entropy 通过 -log(p) 指数级惩罚自信但错误的预测，而 MSE 在接近 0 和 1 时给出弱梯度", "MSE 只适用于回归", "Cross-entropy 不需要标签"],
+    "correct": 1,
+    "explanation": "当模型自信地预测错误类别时（真实类别的 p 接近 0），-log(p) 会产生巨大 loss 和强梯度。MSE 在同样情况下会产生弱梯度，因为 sigmoid 在接近 0 和 1 时很平坦。",
+    "stage": "pre"
+  },
+  {
+    "question": "如果你用 MSE loss 做二分类，会发生什么？",
+    "options": ["训练立刻发散", "模型可能通过对所有东西预测 0.5 来最小化 loss，在没有学习的情况下达到 MSE=0.25", "模型正常训练", "梯度爆炸"],
+    "correct": 1,
+    "explanation": "在平衡二分类数据集上使用 MSE，对每个输入都预测 0.5 会得到 MSE=0.25——这是没有区分能力时可以达到的最小值。模型满足了 loss，却没有学到任何有用模式。",
+    "stage": "post"
+  },
+  {
+    "question": "Label smoothing 做什么，为什么有用？",
+    "options": ["它从数据集中移除噪声标签", "它用 0.1/0.9 这样的软值替换硬 0/1 targets，防止过度自信预测并改善泛化", "它对 loss 应用 moving average", "它平滑学习率 schedule"],
+    "correct": 1,
+    "explanation": "Label smoothing 会把 targets 从 [0,0,1,0] 改成 [0.025,0.025,0.925,0.025]（当 alpha=0.1 时）。这会防止模型为了达成硬 targets 而把 logits 推向 infinity，从而降低过度自信。",
+    "stage": "post"
+  },
+  {
+    "question": "在 contrastive loss（InfoNCE）中，temperature 参数起什么作用？",
+    "options": ["它控制学习率", "它控制 similarity 分布有多尖锐 -- 更低 temperature 意味着 positives 和 negatives 之间更硬的分离", "它设置 negative samples 的数量", "它决定 embedding 维度"],
+    "correct": 1,
+    "explanation": "Temperature 会在 softmax 之前除以 similarity scores。更低的 temperature（例如 0.07）会创建更尖锐的分布，要求模型清晰地区分 positives 和 negatives。更高的 temperature 更宽容。",
+    "stage": "post"
+  }
+]
