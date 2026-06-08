@@ -1,0 +1,78 @@
+{
+  "lesson": "16-model-routing",
+  "title": "Model Routing 作为 Cost-Reduction Primitive",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "model cascading 的核心想法是什么？",
+      "options": [
+        "并行运行两个模型并平均输出",
+        "始终按 random weight route",
+        "每个 request 都先在最贵模型上运行",
+        "先运行 cheap model，只有在 low confidence 或 refusal 时才 escalate 到 frontier model"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "本课列出哪四个 signals 用于 routing decisions？",
+      "options": [
+        "Task classification、prompt length、embedding similarity to known-hard set，以及 first-pass self-confidence",
+        "只看 token count",
+        "只看 user tier",
+        "GPU temperature、fan speed、room humidity、time of day"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "cascade router 的 expected latency profile 是什么？",
+      "options": [
+        "总是慢 10x",
+        "与 frontier model 完全相同",
+        "约 1.2x median latency（cheap run plus verify），escalated requests 上约 2x（约 10% traffic）",
+        "总是比 pre-route 更快"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "哪种 routing pattern upfront 增加 5-10ms latency，并且 overall 最快？",
+      "options": [
+        "带 classifier 的 Pre-route",
+        "Ensemble route",
+        "Cascade",
+        "Random round-robin"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "routing 中的 cheap-model drift 是什么？",
+      "options": [
+        "cheap model 变得更贵",
+        "cascade 100% fall through 到 frontier",
+        "task distribution shifts，但 trained router 仍把 requests 发给 cheap model，静默降低 quality",
+        "cheap model 中的 latency drift"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "本课推荐用什么 guard 捕获 routing drift？",
+      "options": [
+        "只用 offline eval sets",
+        "在 production 中禁用 routing",
+        "只做 quarterly engineering review",
+        "Online quality metrics：每个 route 的 thumbs-up/down、held-out samples 上的 LLM-judge、escalation rate、refusal rate"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
