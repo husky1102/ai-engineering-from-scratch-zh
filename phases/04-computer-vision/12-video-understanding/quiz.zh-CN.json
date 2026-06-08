@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 2D+pool video model 会在 Something-Something V2 数据集上失败？",
+      "options": [
+        "图像太小",
+        "模型架构不兼容",
+        "这个数据集的标签由运动方向定义（“pushing something from left to right”），而不是由外观定义；对逐帧特征做 order-invariant average pooling 无法区分运动方向",
+        "类别太多"
+      ],
+      "correct": 2,
+      "explanation": "Something-Something 的标签字面上就是“X 从左移到右”与“X 从右移到左”。两者在任何单帧中看起来都相同，而 frame embeddings 的平均是 order-invariant，因此 pool(f1, f2, ..., fT) == pool(fT, ..., f2, f1)。由运动定义的标签需要能关注时间顺序的模型。"
+    },
+    {
+      "stage": "pre",
+      "question": "I3D 的 inflation trick 是什么？",
+      "options": [
+        "一种在更多图像上预训练的方法",
+        "取一个 2D CNN 的预训练 kernels，沿新的时间轴复制每个 kernel（除以 kernel_T 以保持激活尺度），并用它们初始化 3D CNN，从而让 3D 模型无需 3D 预训练就获得强权重",
+        "一种学习率 scheduler",
+        "一种压缩视频的方法"
+      ],
+      "correct": 1,
+      "explanation": "Inflation 用强 2D ImageNet 权重启动 3D video models。一个 3x3 2D kernel 通过沿 T 复制并用 1/kernel_T 缩放，变成 3x3x3 3D kernel。它把 ImageNet 上学到的对象和纹理特征直接迁移到视频模型中，这就是 I3D 成为第一个真正明显超过 2D+pool baselines 的 3D 模型的原因。"
+    },
+    {
+      "stage": "post",
+      "question": "(2+1)D factorised convolution 把 3D conv 拆成哪两个操作？",
+      "options": [
+        "一个 temporal conv 后接一个 depthwise conv",
+        "一个 grouped conv 和一个 1x1 conv",
+        "两个 stride 不同的 3D conv",
+        "一个 spatial 1x3x3 conv 后接一个 temporal 3x1x1 conv，中间有 BN+ReLU，以加入 full 3D conv 没有的 non-linearity"
+      ],
+      "correct": 3,
+      "explanation": "(2+1)D 把 3x3x3 kernel factorise 为 (1x3x3) 再接 (3x1x1)。两个 conv 之间有一个 non-linearity（BN+ReLU），这会提高每个参数的表达力。在 Kinetics 上，R(2+1)D-34 以更少参数超过等价的 R3D-34，说明额外 non-linearity 确实在发挥作用。"
+    },
+    {
+      "stage": "post",
+      "question": "在 video transformer 中，'divided attention' 是什么意思？",
+      "options": [
+        "只在一半 tokens 上做 attention",
+        "每个 transformer block 有两个 attention modules：一个对同一空间位置跨时间的 tokens 做 attention（temporal attention），然后一个对同一 timestep 跨空间的 tokens 做 attention（spatial attention），从而把 O((T*H*W)^2) 的 full attention 拆成 O(T^2) + O((H*W)^2)",
+        "只在训练期间应用 attention",
+        "跳过某些层的 attention"
+      ],
+      "correct": 1,
+      "explanation": "Full joint spatio-temporal attention 是 O((T*H*W)^2)，对长视频不可行。Divided attention（TimeSformer）在每个 block 内交替 temporal 和 spatial attention，把成本降到 O(T^2 + (H*W)^2)。它牺牲一些理论表达力来换取可训练性；实践中 divided attention 在多数 benchmark 上匹配或超过 joint。"
+    },
+    {
+      "stage": "post",
+      "question": "你的 Kinetics-400 模型报告 76% clip accuracy 和 82% video accuracy。这个差距说明什么？",
+      "options": [
+        "逐 clip 预测有噪声；跨同一视频的多个 sampled clips 平均预测（test-time augmentation）会稳定结果。较大差距说明模型特征对采样到哪个 8-frame window 很敏感，而更长 clips 或训练时更强的 spatial augmentation 会缩小这个差距",
+        "模型坏了",
+        "测试集太小",
+        "Clip accuracy 按定义总是低于 video accuracy"
+      ],
+      "correct": 0,
+      "explanation": "Clip accuracy 用单个 sampled window 评估模型；video accuracy 会跨多个 windows 平均预测。6 个点的差距意味着模型对采样到哪个 window 很敏感。缩小差距意味着模型更好地泛化到了每个视频的时间分布，这正是部署时想要的。始终报告两个数字。"
+    }
+  ]
+}
