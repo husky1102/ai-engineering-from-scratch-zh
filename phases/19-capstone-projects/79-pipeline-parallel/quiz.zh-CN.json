@@ -1,0 +1,78 @@
+{
+  "lesson": "79-pipeline-parallel",
+  "title": "Pipeline Parallel 与 Bubble 分析",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "什么是 pipeline bubble？",
+      "options": [
+        "NCCL 中的一个 bug",
+        "Pipeline 开始和结束时的空闲时间：在第一个 microbatch 到达之前、以及最后一个 microbatch 离开之后，某些 stage 没有工作",
+        "内存泄漏",
+        "一个网络包"
+      ],
+      "correct": 1,
+      "explanation": "有 M 个 microbatch 和 N 个 stage 时，每个 stage 的 bubble 是 (N-1)/(M+N-1)。选择远大于 N 的 M 可以缩小它。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 GPipe 的 activation memory 与 M 成正比？",
+      "options": [
+        "Bug",
+        "所有 M 个 microbatch 的 activation 都必须保留到对应 backward；在 drain 开始前没有任何东西释放",
+        "编译器限制",
+        "硬件限制"
+      ],
+      "correct": 1,
+      "explanation": "GPipe 会先用所有 forward 填满 pipeline，然后才开始 backward。每个在途 microbatch 都携带 activation，直到它的 backward 开始。"
+    },
+    {
+      "stage": "check",
+      "question": "1F1B 相比 GPipe 如何改进？",
+      "options": [
+        "更低的 bubble",
+        "Bubble 相同，但 activation memory 有上界；一旦 mb 0 的 forward 到达最后一个 stage，它的 backward 就开始，activation 会释放",
+        "更高的 throughput",
+        "更小的模型"
+      ],
+      "correct": 1,
+      "explanation": "Megatron-LM 和 PipeDream 使用 1F1B，将 activation memory 约束到 pipeline depth，而不是 microbatch count。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么每个 stage 的 compute 均衡比 parameter count 均衡更重要？",
+      "options": [
+        "审美原因",
+        "最慢 stage 会卡住每个 cycle；其他 stage 会空等它。Embedding layers 参数很多但计算很少，因此按 parameter count partition 会让 pipeline 失衡",
+        "内存对齐",
+        "更容易编码"
+      ],
+      "correct": 1,
+      "explanation": "Megatron-LM 将 --num-layers-per-stage 暴露为 list，以便在每层成本不同的时候允许不均匀 layer count。"
+    },
+    {
+      "stage": "check",
+      "question": "如果每个 stage 都先调用 send 再调用 recv，会出什么问题？",
+      "options": [
+        "内存泄漏",
+        "在线路上 deadlock；标准修复是交错执行偶数 rank send-first、奇数 rank recv-first",
+        "变慢",
+        "更高的 bubble"
+      ],
+      "correct": 1,
+      "explanation": "同步 send/recv 对需要一侧在接收时另一侧发送。本课显式调度 rank，让这种模式可见。"
+    },
+    {
+      "stage": "post",
+      "question": "Pipeline 加 ZeRO-1 组合了哪两个内存收益？",
+      "options": [
+        "压缩和量化",
+        "Per-stage parameter sharding（每个 rank 只持有一个 stage 的层）加 per-rank optimiser sharding（每个 rank 只持有其 stage 优化器状态的 1/N）",
+        "只有 activation",
+        "没有收益"
+      ],
+      "correct": 1,
+      "explanation": "Pipeline 把层切分到各 rank；ZeRO 在每个 pipeline rank 的 data-parallel group 内切分优化器状态。两个收益会叠加。"
+    }
+  ]
+}
