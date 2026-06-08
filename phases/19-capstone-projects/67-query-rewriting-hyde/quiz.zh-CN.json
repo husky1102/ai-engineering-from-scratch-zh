@@ -1,0 +1,78 @@
+{
+  "lesson": "67-query-rewriting-hyde",
+  "title": "Query Rewriting: HyDE、Multi-Query 和 Decomposition",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "HyDE (Hypothetical Document Embeddings) 的核心机制是什么？",
+      "options": [
+        "通过更大的模型 embed 用户 query",
+        "用 LLM 生成一个假答案，embed 这个 hypothetical document，并用它的 vector 而不是 query vector 做 retrieval",
+        "让 query 通过多个 retrievers 并选择最好的一个",
+        "hash query 并在 cache 中查找"
+      ],
+      "correct": 1,
+      "explanation": "HyDE 用 corpus voice 写出 document-shaped passage，并在这个 embedding 上 retrieval；query vector 被替换。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 HyDE 中 LLM 生成的 hypothetical document 即使事实错误也可以接受？",
+      "options": [
+        "reranker 会修复事实错误",
+        "retriever 关心 token distribution，而不是事实正确性；hypothetical 的 vector 会落在真实 passage 附近",
+        "用户永远看不到 hypothetical",
+        "LLM call 出错时会回滚"
+      ],
+      "correct": 1,
+      "explanation": "Retrieval 是 embedding space 中的 similarity；如果 hypothetical 的 vocabulary 匹配 corpus，vector 会落在正确区域。"
+    },
+    {
+      "stage": "check",
+      "question": "multi-query expansion 和 query decomposition 有什么区别？",
+      "options": [
+        "Multi-query 产出同一问题的 N 个 paraphrases；decomposition 产出共同覆盖 multi-topic question 的 sub-questions",
+        "Multi-query 使用 cosine；decomposition 使用 BM25",
+        "Decomposition 本地运行；multi-query 需要 remote model",
+        "它们完全相同"
+      ],
+      "correct": 0,
+      "explanation": "Paraphrases 保留 intent；sub-questions 把 multi-topic query 拆成可独立回答的 pieces。"
+    },
+    {
+      "stage": "check",
+      "question": "query decomposition 什么时候会 over-split 并伤害 retrieval？",
+      "options": [
+        "当 query 是 atomic（single-topic）时，decomposer 会发明假 sub-questions，而 retrievals 都以较低 rank 返回同一 document",
+        "当 query 对 LLM 来说太长时",
+        "当 corpus 太小时",
+        "当 BM25 被禁用时"
+      ],
+      "correct": 0,
+      "explanation": "decompose atomic query 会把它拆成假 sub-questions；它们的 retrievals 会稀释 merge，让正确 document 排得更低。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么三种 rewriting strategies 使用 RRF 融合，而不是 score interpolation？",
+      "options": [
+        "RRF 是 Python 唯一支持的操作",
+        "Score interpolation 需要 per-corpus calibration；RRF 无需 calibration 就能组合 rank-based contributions，这在融合来自不同 rewrites 的 N 次 retrieval 时是必需的",
+        "RRF 在 GPU 上运行而 score interpolation 不行",
+        "Score interpolation 无法处理两个以上 lists"
+      ],
+      "correct": 1,
+      "explanation": "与 lesson 65 相同的论点；rank-based fusion 不需要 per-corpus alpha tuning，并且在 rewriter outputs 间保持稳定。"
+    },
+    {
+      "stage": "post",
+      "question": "并行运行三种 rewriters 时，latency floor 是什么？",
+      "options": [
+        "最慢的单次 retrieval",
+        "一次 LLM call（rewriters 和 retrievals 并行运行；LLM call 是 floor）",
+        "串行的三次 LLM calls",
+        "zero，因为 rewriters 会缓存所有东西"
+      ],
+      "correct": 1,
+      "explanation": "三种 rewriters 都 fan out 到一次 model call；如果并行运行，floor 是一次 model call latency，然后 retrievals 并行运行。"
+    }
+  ]
+}
