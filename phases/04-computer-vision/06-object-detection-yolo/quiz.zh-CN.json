@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "一个 YOLO detector 使用 13x13 grid、每个 cell 3 个 anchor、20 个 classes，产生 shape 为 (N, 13, 13, 3, 25) 的 head output。为什么最后一个 dimension 是 25？",
+      "options": ["4 box coords + 1 bias + 20 classes", "4 box coords + 1 objectness + 20 classes = 5 + C", "25 是 COCO 的 class 数量", "这是填充到下一个 2 的幂"],
+      "correct": 1,
+      "explanation": "每个 anchor 会发出四个 box regression target（tx, ty, tw, th）、一个 objectness score，以及 C 个 class logits。对 YOLO-style detector 来说，per-anchor dimension 永远是 5 + C。在有 80 个 classes 的 COCO 上是 85；在有 20 个 classes 的 PASCAL VOC 上是 25。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 YOLO 会在加上 grid cell 前，对 tx、ty 通过 sigmoid 进行预测？",
+      "options": ["为了把它们 normalise 到 [0, 1]，让 centre 保持在 cell 内，不能逃到相邻 cell 的区域", "Sigmoid 是 convolution 要求的", "为了防止训练期间出现 NaN", "为了让 box 更大"],
+      "correct": 0,
+      "explanation": "sigmoid(tx) 位于 [0, 1]，因此 (sigmoid(tx) + cell_x) * stride 会把 centre 放在 column cell_x 对应 cell 内的某处。这个约束让每个 cell 只负责 centred within its own area 的 object，而这正是让 grid-based training 稳定的假设。"
+    },
+    {
+      "stage": "post",
+      "question": "你的 detector 在 head 后围绕单个 object 预测了 15 个 boxes。你使用 iou_threshold=0.45 的 NMS，最终得到 1 个 box。NMS 做了什么？",
+      "options": ["它平均了全部 15 个 prediction", "它按 score 对 15 个 boxes 排序，保留最高分，并删除所有与它 IoU 超过 0.45 的 box；其他 14 个都与胜者重叠超过阈值，所以只剩一个", "它随机选择了一个幸存者", "它在几何上合并了 boxes"],
+      "correct": 1,
+      "explanation": "NMS 是 greedy deduplication：按 score 排序，保留 top，移除所有与它很近的 box（IoU > threshold），然后重复。它不 merge，也不 average。这也是 detection latency benchmark 会包含 NMS time，以及 RT-DETR 这样的现代模型用 learned alternative 替代它的原因。"
+    },
+    {
+      "stage": "post",
+      "question": "你的模型 mAP@0.5 = 0.75，但 mAP@0.5:0.95 = 0.32。最准确的解释是什么？",
+      "options": ["模型坏了；mAP@0.5 必须等于 mAP@0.5:0.95", "模型找到了正确 object，但 box localization 不够紧；IoU 0.5 下没问题，IoU 0.7+ 下失败", "Dataset 的 class 太多", "Inference threshold 太高"],
+      "correct": 1,
+      "explanation": "mAP@0.5 对 localization 较宽松；mAP@0.5:0.95 会在严格到 0.95 的 threshold 上平均。两者差距很大，说明 box 大致在正确位置，但不够紧。典型修复：CIoU/DIoU box loss、更高 resolution 的 feature、以及更贴合 dataset 的 anchor set。"
+    },
+    {
+      "stage": "post",
+      "question": "YOLO loss weights lambda_coord=5.0 和 lambda_noobj=0.5 大致映射原始论文。这些 ratio 编码了什么？",
+      "options": ["GPU memory trade-offs", "大多数 cell 没有 object，所以 no-object cells 必须 downweight，否则会主导 total loss；而 box regression 的 loss scale 比 cross-entropy 小，因此需要 upweight 才能产生相近 gradient", "作者从未解释的随机选择", "每个 cell 的 anchor 数量"],
+      "correct": 1,
+      "explanation": "在 13x13 grid 中有 169 个 cell，通常只有一到五个 object。160+ empty cell 都会贡献 objectness loss；如果没有较小的 lambda_noobj，它们会压倒 positive signal。相反，MSE box loss 在数值上小于 cross-entropy，所以 lambda_coord > 1 能让其 gradient 保持可比。两个 ratio 都是在平衡 per-component gradient magnitude。"
+    }
+  ]
+}
