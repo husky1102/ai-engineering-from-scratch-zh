@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "对于 queries 是 text、gallery items 是 images 的 visual search product，你首先选择哪个 backbone？",
+      "options": ["supervised ResNet-50", "CLIP 或 SigLIP model——它们学习 shared text-image embedding space，因此 text query 与 image gallery 之间的 cosine similarity 开箱就有意义", "self-supervised DINOv2 model", "handcrafted ORB descriptor"],
+      "correct": 1,
+      "explanation": "带 text queries 的 retrieval 需要让 text 和 image 落在同一空间的 embeddings。CLIP/SigLIP 正是用 Lesson 18 的 contrastive loss 训练这个。Supervised ImageNet features 只适用于 image。DINOv2 很强，但也是 image-only。Text queries 要求 vision-language encoder。"
+    },
+    {
+      "stage": "pre",
+      "question": "triplet-loss training 中的 'semi-hard mining' 是什么意思？",
+      "options": ["随机选择 triplets", "对每个 anchor，选择一个比 positive 更远但仍在 margin 内的 negative；easy negatives 不贡献 gradient，而 hardest negatives 会让训练不稳定，所以 semi-hard 是 sweet spot", "只使用最难的 negatives", "为 training examples 挖 cryptocurrency"],
+      "correct": 1,
+      "explanation": "只有当 d(a, n) < d(a, p) + margin 时，Triplet loss gradient 才非零。Easy negatives（已经很远）给出零 gradient。Hardest negatives 可能让训练 collapse。Semi-hard——d(a, p) < d(a, n) < d(a, p) + margin——提供有信息量且不太不稳定的 loss。FaceNet 在 2015 年提出这个 recipe，至今仍是 triplet fine-tuning 默认做法。"
+    },
+    {
+      "stage": "post",
+      "question": "你的 retrieval system 报告 recall@10 = 0.95，但 recall@1 = 0.42。应该得出什么结论？",
+      "options": ["evaluation 坏了", "embedding space 有正确结构——相关 items 通常在 top 10 中——但 top 10 内排序有噪声；re-ranking model（cross-encoder、second-stage scorer）或更长 metric-learning fine-tune 能修复 recall@1，且不损害 recall@10", "model 在 overfitting", "Data 从 gallery 泄漏到 queries"],
+      "correct": 1,
+      "explanation": "recall@K vs @1 会告诉你信息在哪里。高 recall@10 加低 recall@1 表示 retrieval 大致正确，但模型对前几个结果的排序不够 confident。Re-ranking——用单独模型对每个 top-K candidate 与 query 评分——是 production fix，Pinterest 和 Google Photos 这样的 search engines 都会这样做。"
+    },
+    {
+      "stage": "post",
+      "question": "在 unnormalised embeddings 上做 cosine similarity 并不是真正的 cosine similarity——会出什么问题？",
+      "options": ["没问题", "它混合了 direction 和 magnitude；只有两个 vectors 都经过 L2-normalised 时，cos(a, b) 才正确。在 unnormalised embeddings 上，大 norm items 会不管 direction 如何都占优，使排名偏向大 magnitude vectors", "PyTorch 会报错", "matmul 会 overflow"],
+      "correct": 1,
+      "explanation": "cos(a, b) = (a . b) / (||a|| * ||b||)。跳过 normalisation 得到的是 raw inner product，它按 direction 加 magnitude 加权排序。在典型 neural embeddings 上，sample 间 magnitudes 可能相差 2-3 倍，仅这一点就会主导 ranking。计算 cosine 或索引到 FAISS IndexFlatIP 前，始终先 L2-normalise。"
+    },
+    {
+      "stage": "post",
+      "question": "instance-level retrieval（find this exact car）和 category-level retrieval（find cars）之间，哪一个需要 metric-learning fine-tuning？",
+      "options": ["都不需要", "Instance-level。Off-the-shelf DINOv2 和 CLIP embeddings 很擅长区分类别，但不擅长区分同一类别下视觉相似的 instances。对 (same instance, different instance) pairs 做 triplet 或 contrastive fine-tune，能围绕每个 instance 收紧 embedding", "Category-level", "二者需要同样多 fine-tuning"],
+      "correct": 1,
+      "explanation": "Category-level retrieval 是 pretrained models 已经会做的：cats 聚在 cats 附近，dogs 聚在 dogs 附近。Instance-level——同一辆车、同一张脸、同一件 product SKU——需要 metric learning，因为同一产品的两个 instances 在 general embedding space 中看起来非常相似。用 triplet 或 InfoNCE 在 instance-labelled pairs 上 fine-tuning，会缩小 intra-instance distance 并扩大 inter-instance distance。"
+    }
+  ]
+}
