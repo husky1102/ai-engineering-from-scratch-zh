@@ -1,0 +1,90 @@
+{
+  "lesson": "04-tree-of-thoughts-lats",
+  "title": "Tree of Thoughts 与 LATS：刻意搜索",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 chain-of-thought 在 Game of 24 上表现吃力？",
+      "options": [
+        "模型不能做整数乘法",
+        "线性行走在早期步骤错误时无法 backtrack，因此后续步骤会累积错误",
+        "Prompt 太短",
+        "CoT 需要 GPT-4 没有的 calculator tool"
+      ],
+      "correct": 1,
+      "explanation": "没有 branching 时，错误的早期 subexpression 会污染后续整条 chain；论文测得 CoT 只有 4%。"
+    },
+    {
+      "stage": "pre",
+      "question": "Tree of Thoughts search 中的 node 是什么？",
+      "options": [
+        "模型产生的一个 token",
+        "一个 coherent intermediate step 或 thought，并有 K 个可能 child expansions",
+        "Fine-tuning 期间的一次 weight update",
+        "Runtime 注册的一个 tool"
+      ],
+      "correct": 1,
+      "explanation": "ToT 把 reasoning 视为一棵树，其中每个 node 是一个 intermediate thought，可扩展成 K 个 children。"
+    },
+    {
+      "stage": "check",
+      "question": "以下哪一个不是 LATS 中 LLM 的角色？",
+      "options": [
+        "提出 next actions 的 Policy",
+        "给 partial trajectories 打分的 Value function",
+        "失败时写 reflections 的 Self-reflector",
+        "在 rollouts 之间更新模型权重的 Optimizer"
+      ],
+      "correct": 3,
+      "explanation": "LATS 是 gradient-free；三个 LLM roles 是 policy、value 和 self-reflector。没有 weight updates。"
+    },
+    {
+      "stage": "check",
+      "question": "说出本课列出的四个 MCTS phases。",
+      "options": [
+        "Sample, Score, Sort, Submit",
+        "Select, Expand, Simulate, Backpropagate",
+        "Plan, Execute, Reflect, Stop",
+        "Search, Synthesize, Synthesize-Again, Stop"
+      ],
+      "correct": 1,
+      "explanation": "MCTS 每次 iteration 按 select、expand、simulate、backpropagate 进行。"
+    },
+    {
+      "stage": "check",
+      "question": "在 UCT 中，exploration constant c 的作用是什么？",
+      "options": [
+        "缩放 value estimate Q",
+        "把 exploration term sqrt(ln N / n) 相对于 exploitation term Q 加权",
+        "设置最大 tree depth",
+        "控制 rollouts 数量"
+      ],
+      "correct": 1,
+      "explanation": "c 平衡 exploitation（Q）和 exploration term；需要按任务调节。"
+    },
+    {
+      "stage": "post",
+      "question": "与单条 trajectory 相比，什么时候 search 会主动有害？",
+      "options": [
+        "Evaluator 很 noisy 且只有一个正确答案时，search 会收敛到 good-scoring wrong answer",
+        "任务有多个正确答案时",
+        "只要 tokens 便宜时",
+        "任务是 code generation 时"
+      ],
+      "correct": 0,
+      "explanation": "Noisy value function 加单一正确答案，正是 search 会 overfit 到噪声的情况。"
+    },
+    {
+      "stage": "post",
+      "question": "相较 CoT，你应为 Game of 24 上的 ToT 大致预算多少额外 token usage？",
+      "options": [
+        "约 2x",
+        "约 10x",
+        "100x 到 1000x",
+        "低于 CoT，因为有 pruning"
+      ],
+      "correct": 2,
+      "explanation": "本课引用 Game of 24 上 ToT 相比 CoT 的 token cost 为 100-1000x。"
+    }
+  ]
+}
