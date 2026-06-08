@@ -1,0 +1,90 @@
+{
+  "lesson": "20-benchmarks-webarena-osworld",
+  "title": "Benchmarks：WebArena 与 OSWorld",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "WebArena 为什么 self-host 四个 target apps？",
+      "options": [
+        "为了省钱",
+        "为了 pin 可复现版本，使 evaluation 是 execution-based 且不 flaky",
+        "为了运行在 GPUs 上",
+        "为了避免 TLS"
+      ],
+      "correct": 1,
+      "explanation": "Pinned self-hosted apps 让 execution-based evaluation 随时间保持可靠且可比较。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么 OSWorld 使用真实 OS screenshots，而不是 accessibility APIs？",
+      "options": [
+        "Accessibility APIs 太快",
+        "Screenshots 强制 agent 在 1920x1080 中做真实 GUI grounding，匹配 production constraints",
+        "Accessibility APIs 会泄漏 PII",
+        "Screenshots 成本更低"
+      ],
+      "correct": 1,
+      "explanation": "Screenshot-driven evaluation 强制 pixel-to-element grounding，这是实际 production constraint。"
+    },
+    {
+      "stage": "check",
+      "question": "OSWorld 暴露了哪两个 primary failure modes？",
+      "options": [
+        "Latency 和 bandwidth",
+        "GUI grounding 和 operational knowledge",
+        "Embedding drift 和 token leakage",
+        "Hallucination 和 refusal"
+      ],
+      "correct": 1,
+      "explanation": "Grounding（pixel-to-element）和 operational knowledge（menus、shortcuts）是 headline blockers。"
+    },
+    {
+      "stage": "check",
+      "question": "OSWorld-Human 在 base benchmark 之上增加了什么？",
+      "options": [
+        "更多 tasks",
+        "人工 curated gold action trajectories，暴露 1.4-2.7x agent step-inefficiency gap",
+        "更大的 screen resolution",
+        "一个新 OS"
+      ],
+      "correct": 1,
+      "explanation": "Gold trajectories 让 trajectory efficiency 不只 success rate，而是可测量。"
+    },
+    {
+      "stage": "check",
+      "question": "本课引用了 WebArena 发布时的哪个数字？",
+      "options": [
+        "最佳 GPT-4 agent 14.41% success vs human 78.24%",
+        "最佳 agent 99%，human 100%",
+        "最佳 agent 50%，human 50%",
+        "最佳 agent 全面 0%"
+      ],
+      "correct": 0,
+      "explanation": "14.41% vs 78.24% 差距是 WebArena 发布时数字。"
+    },
+    {
+      "stage": "post",
+      "question": "本课警告，当 agent 使用 DOM 或 accessibility APIs 时，screenshot-only evaluation 会发生什么？",
+      "options": [
+        "没有变化",
+        "你会错过 OSWorld 设计用来测量的 grounding challenge",
+        "你会超过 rate limit",
+        "Tests 会 trivially pass"
+      ],
+      "correct": 1,
+      "explanation": "在 screenshot-only benchmarks 上评估 accessibility-API agent，会跳过 grounding test。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么忽略 trajectory length 是 benchmarking failure？",
+      "options": [
+        "它隐藏 success rate alone 看不到的 cost 和 inefficiency（OSWorld-Human 暴露的 1.4-2.7x gap）",
+        "Trajectory length 总是匹配 gold",
+        "Trajectories 无法测量",
+        "Length 是唯一重要指标"
+      ],
+      "correct": 0,
+      "explanation": "两个 60% success 的 agents 可能在 steps 上相差 2-3 倍；只有测 trajectory length 才能看到 cost 和 efficiency。"
+    }
+  ]
+}
