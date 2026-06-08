@@ -1,0 +1,90 @@
+{
+  "lesson": "03-realtime-voice-assistant",
+  "title": "Capstone 03 — Real-Time Voice Assistant (ASR to LLM to TTS)",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 voice agent 不能通过拼接三个 blocking REST calls 来构建？",
+      "options": [
+        "REST endpoints 有 30 秒 hard timeout",
+        "REST 与 WebRTC 不兼容",
+        "JSON serialization 对 audio data 太慢",
+        "低于 800ms 的 end-to-end latency 要求每个 stage 都是 pipelined streaming"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "Turn-detector 与 VAD 一起使用时的作用是什么？",
+      "options": [
+        "为 agent 训练 custom voice clone",
+        "读取 partial transcripts，并给用户是否真的完成 utterance 打分",
+        "检测 multi-party call 中哪个 speaker 在说话",
+        "把 background music 混入 output stream"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "当用户在 agent 回复中途开始说话时，为了让 barge-in 感觉正确，必须发生什么？",
+      "options": [
+        "TTS 先说完当前句子再让出",
+        "Pipeline buffer user audio 直到 TTS 完成",
+        "TTS 立即取消，剩余 LLM output 被丢弃，ASR 重新 arm",
+        "Agent 提高 TTS volume 来宣示优先级"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么当 tool 超过约 300ms 时，会输出类似 \"one second, let me check\" 的短 filler？",
+      "options": [
+        "它避免沉默，使 side-channel tool 运行时 conversation 不会 stall",
+        "它触发 fallback ASR model",
+        "它重置 WebRTC jitter buffer",
+        "它改善下一次 utterance 的 WER"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "第一个 audio chunk 必须大约在第一个 LLM token 后多久离开 server？",
+      "options": [
+        "20ms",
+        "800ms",
+        "2 seconds",
+        "200ms"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "哪个 metric 直接衡量不合适的 barge-in 或过早 turn closure？",
+      "options": [
+        "WER",
+        "MOS",
+        "Acceptance rate",
+        "False-cutoff rate"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "在 3% packet loss 下，pipeline 依赖哪两种 adaptive behaviors？",
+      "options": [
+        "切换到更大的 LLM 并禁用 TTS",
+        "Fallback 到 PSTN audio codecs",
+        "Holding partial transcripts 并提高 VAD speech-gate threshold",
+        "重启 LiveKit room"
+      ],
+      "correct": 2,
+      "explanation": ""
+    }
+  ]
+}
