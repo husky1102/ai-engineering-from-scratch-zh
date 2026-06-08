@@ -1,0 +1,78 @@
+{
+  "lesson": "72-code-exec-metric",
+  "title": "代码执行指标",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 runner 要为每个 candidate 启动一个新的 Python subprocess，而不是 inline 调用 exec？",
+      "options": [
+        "它比 exec 更快",
+        "它避免污染 builtins",
+        "它把 timeouts、output overruns 和 dangerous imports 与 host eval process 隔离开",
+        "exec 在现代 Python 中已 deprecated"
+      ],
+      "correct": 2,
+      "explanation": "candidate code 中的 infinite loop 或 runaway memory allocation 只会 crash subprocess。host eval 会继续前进。"
+    },
+    {
+      "stage": "pre",
+      "question": "一个有三条 assertions 的 task，如果两条通过、一条失败，score 是多少？",
+      "options": [
+        "1.0",
+        "0.667",
+        "0.0",
+        "0.5"
+      ],
+      "correct": 1,
+      "explanation": "score 是 passed divided by total。三条中两条是 0.667。exit code 是 assertion_fail。"
+    },
+    {
+      "stage": "check",
+      "question": "当 candidate code 无法 parse 时，runner 返回哪个 exit code？",
+      "options": [
+        "error",
+        "assertion_fail",
+        "timeout",
+        "syntax_error"
+      ],
+      "correct": 3,
+      "explanation": "compile() 在 runner 内部 raise SyntaxError，inner script 捕获它并写出 exit_code=syntax_error。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 wall-clock timeout 是承重 control，而不是 import denylist？",
+      "options": [
+        "Python 中无法 deny imports",
+        "大多数失败是 infinite loops，而且坚决对抗者可以绕过任何 in-process denylist",
+        "subprocess.run 不支持 denylists",
+        "Wall-clock 在 compile time 检查"
+      ],
+      "correct": 1,
+      "explanation": "Denylists 捕获偷懒的危险代码，timeouts 捕获 infinite loops。denylist 是 backstop，timeout 是地基。"
+    },
+    {
+      "stage": "check",
+      "question": "当 `n - c < k` 时，`pass_at_k(n, c, k)` 返回什么？",
+      "options": [
+        "Zero，因为 sample 未定义",
+        "One，因为 sample 必然包含至少一个 passing solution",
+        "c / n，即 empirical pass rate",
+        "Raises ValueError"
+      ],
+      "correct": 1,
+      "explanation": "如果 fail 的数量少于 sample size，那么每个大小为 k 的样本必然至少包含一个 pass，因此概率为 1。"
+    },
+    {
+      "stage": "post",
+      "question": "runner 如何呈现 output overflow，为什么 cap 是 256 KB？",
+      "options": [
+        "subprocess 的 stdout 会被 streamed；一旦 256 KB running total 被越过，child 就会被 kill，该 task 记录为 exit_code=error，detail 为 \"output overflow\"",
+        "只看 stderr；大小匹配 OS pipe default",
+        "candidate source size，设置上限是为了让 generated code 保持小",
+        "score value，以百分比形式保留两位小数"
+      ],
+      "correct": 0,
+      "explanation": "cap 保护 host。刷爆 stdout 的 candidate code 会在 stream 中途被 kill；runner 把结果规范化为 exit_code=error，detail 为 \"output overflow\"，而不是创造新 exit code。"
+    }
+  ]
+}
