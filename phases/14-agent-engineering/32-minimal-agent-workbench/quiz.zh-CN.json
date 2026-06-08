@@ -1,0 +1,90 @@
+{
+  "lesson": "32-minimal-agent-workbench",
+  "title": "最小 Agent 工作台",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "哪三个文件构成最小有用工作台？",
+      "options": [
+        "AGENTS.md（router）、agent_state.json（state）、task_board.json（queue）",
+        "README.md、CHANGELOG.md、LICENSE",
+        "model.py、prompts.py、tools.py",
+        "Dockerfile、Makefile、.gitignore"
+      ],
+      "correct": 0,
+      "explanation": "短 router、durable state 和 task queue 是地板。"
+    },
+    {
+      "stage": "pre",
+      "question": "本课如何定位 AGENTS.md？",
+      "options": [
+        "3000 行 onboarding manual",
+        "一个短 router，指向更深 docs、state 和 board",
+        "一个纯 prompt-cache key",
+        "一个不放进 repo 的 secret"
+      ],
+      "correct": 1,
+      "explanation": "AGENTS.md 是 router，不是 manual；长 manual 会被忽略。"
+    },
+    {
+      "stage": "check",
+      "question": "Augment Code 的数据说明好的 AGENTS.md 有什么效果？",
+      "options": [
+        "没有可测量影响",
+        "好的 AGENTS.md 带来的质量跃升等价于从 Haiku 升到 Opus；坏的比没有文件更糟",
+        "长度总是有帮助",
+        "只有 Claude 会读取它"
+      ],
+      "correct": 1,
+      "explanation": "Augment Code 的测量：最好的文件像模型升级，最差的比没有还糟。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么本课推荐 file-backed state，而不是 chat-history state？",
+      "options": [
+        "磁盘更便宜",
+        "Chat history 是易失的；文件能在 session death、conversation trimming 和 tool resets 后存活",
+        "文件更小",
+        "SOC 2 要求"
+      ],
+      "correct": 1,
+      "explanation": "Sessions 会死，chat 会被裁剪；文件是 durable system of record。"
+    },
+    {
+      "stage": "check",
+      "question": "本课说冲突指令进入 AGENTS.md 时会发生什么？",
+      "options": [
+        "Latency 下降",
+        "冲突指令会静默地把 agent 从 interactive mode 降到 greedy mode（AMBIG-SWE：48.8% 到 28% resolve rate）",
+        "Cost 略微上升",
+        "什么也不会发生"
+      ],
+      "correct": 1,
+      "explanation": "AMBIG-SWE 测到 contradictions 出现时 resolve-rate 大幅下降；应该改用编号优先级。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么本课推荐 CLAUDE.md -> AGENTS.md 这样的跨工具 symlinks？",
+      "options": [
+        "为了节省 bytes",
+        "让单一 source of truth 分发给每个 coding agent，而不产生 forks",
+        "为了通过 auditing",
+        "为了满足 MIT"
+      ],
+      "correct": 1,
+      "explanation": "Symlinks（或 Nx-style generators）让 Claude Code、Codex、Cursor、Copilot 等工具共享一个 canonical source。"
+    },
+    {
+      "stage": "post",
+      "question": "嵌套 AGENTS.md 文件遵循什么模式？",
+      "options": [
+        "只读取 root file",
+        "从工作文件向 repo root 走，连接沿途找到的每个 AGENTS.md（nearest wins；sub-directories 扩展 root）",
+        "随机选择",
+        "按字母顺序 merge"
+      ],
+      "correct": 1,
+      "explanation": "OpenAI 在主 repo 中放了 88 个 AGENTS.md；工具会 concatenate nearest-up-tree。"
+    }
+  ]
+}
