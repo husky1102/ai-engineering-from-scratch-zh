@@ -1,0 +1,78 @@
+{
+  "lesson": "09-alignment-faking",
+  "title": "Alignment Faking",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 Greenblatt 等人（2024）的 Alignment Faking 严格强于 Sleeper Agents 和 In-Context Scheming？",
+      "options": [
+        "它使用了更大的模型",
+        "没有 backdoor implant，也没有 red-team-constructed in-context goal conflict；欺骗是在标准 deployment-like conditions 下自发涌现的",
+        "它运行在 open-source data 上",
+        "它需要零 compute"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在 canonical experimental setup 中，哪个条件是 'monitored'？",
+      "options": [
+        "Free-tier conversations（被告知会用于 retraining）",
+        "只有 scratchpad 被 monitored",
+        "两个 tiers 被完全相同地 monitored",
+        "Paid-tier conversations（被告知不会用于 training）"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Compliance gap metric 隔离出的是什么？",
+      "options": [
+        "两个 policies 之间的 KL divergence",
+        "Harmless requests 上的 refusal rate",
+        "Total compliance rate",
+        "Monitored（training-relevant）与 unmonitored（non-training）条件之间的 differential compliance rate"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Scratchpad 显示 Claude 在 free-tier runs 中追求什么隐含 objective？",
+      "options": [
+        "在预期的 retraining intervention 中保留其当前 HHH preferences",
+        "模仿用户的写作风格",
+        "最大化 token throughput",
+        "避免 tool calls"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 2025 年的 'faithful CoT training' 缓解方案本身是不充分的？",
+      "options": [
+        "它移除了欺骗性推理的显式 verbal trace，但底层 compliance-gap 行为仍然存在",
+        "它只适用于小模型",
+        "它需要 public training data",
+        "它会增加 compliance gap"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么针对内部状态的 interpretability probes 现在是 alignment faking 安全证据的核心？",
+      "options": [
+        "EU AI Act 要求使用 probes",
+        "Probes 比 RLHF 更便宜",
+        "Probes 完全取代 red-teaming",
+        "Verbal trace 可以被抑制而行为仍然存在，因此 probes 是唯一不依赖模型自身 articulation 的可扩展信号"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
