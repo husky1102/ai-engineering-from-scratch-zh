@@ -1,0 +1,90 @@
+{
+  "lesson": "14-speculative-decoding-server",
+  "title": "综合项目 14 — Speculative-Decoding Inference Server",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "speculative decoding 背后的两层机制是什么？",
+      "options": [
+        "两个 target models 按 token 交替运行",
+        "一个 embedding model 和一个 synthesizer",
+        "一个 retrieval cache 和一个 reranker",
+        "draft model 提出 k 个候选 tokens；target model 在一次 pass 中验证它们"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "pre",
+      "question": "EAGLE-3 做了什么是 ngram drafts 不做的？",
+      "options": [
+        "它替代 target model",
+        "它在 target model 的 hidden states 上训练 draft heads，以获得更高 acceptance rates",
+        "它完全避免 tokenization",
+        "它只在 CPUs 上运行"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "为什么要跨 batch sizes 1、8、32 报告 p99 tail latency？",
+      "options": [
+        "steady-state tokens-per-second 可能掩盖拒绝时 verify pass 比普通 decoding 更昂贵这一点",
+        "vLLM 无法服务低于 8 的 batch sizes",
+        "p99 只在 batch size 32 时重要",
+        "tail latency 与 batch size 无关"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "当流量分布变化时，为什么 acceptance rate 会漂移？",
+      "options": [
+        "vLLM 每小时轮换 models",
+        "Draft alignment 取决于输入分布：ShareGPT、code 和 domain data 会触发不同模式",
+        "OS scheduler 会重新排列 GPU memory",
+        "Quantization 会在运行时变化"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "这个 deployment 基于哪个 Kubernetes HPA signal 扩缩？",
+      "options": [
+        "Cluster autoscaler nodes",
+        "CPU utilization",
+        "Disk IOPS",
+        "Inference requests 的 queue-wait time"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "相比 serial EAGLE-3，P-EAGLE 增加了什么？",
+      "options": [
+        "量化到 FP4 weights",
+        "移除 target model",
+        "跨 draft branches 树进行 parallel speculation，并在一次 target pass 中验证",
+        "自动 dataset curation"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "评分标准要求相对非 speculative baseline 达到什么 throughput target？",
+      "options": [
+        "在两个模型上质量匹配时至少 2.5x",
+        "任何高于 baseline 的提升",
+        "质量匹配时约 1.1x",
+        "任意质量下正好 10x throughput"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
