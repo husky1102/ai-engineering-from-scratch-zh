@@ -1,0 +1,90 @@
+{
+  "lesson": "09-hybrid-memory-mem0",
+  "title": "混合记忆：Vector + Graph + KV（Mem0）",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "KV store 最擅长处理哪一类 query？",
+      "options": [
+        "长对话上的 semantic similarity",
+        "按 (user, type, entity) keyed 的 direct fact lookup",
+        "跨共享 billing entity 的 customers 的 reachability",
+        "valid-at-time 的 temporal queries"
+      ],
+      "correct": 1,
+      "explanation": "KV 在 exact keys 上是 O(1)；vector 用于 similarity，graph 用于 relationships。"
+    },
+    {
+      "stage": "pre",
+      "question": "每次 `add()` 时，Mem0 并行写入哪三个 stores？",
+      "options": [
+        "Vector、KV、graph",
+        "Cache、queue、log",
+        "Postgres、Redis、ClickHouse",
+        "Embedding、attention、FFN"
+      ],
+      "correct": 0,
+      "explanation": "Mem0 会把每次 write fan out 到 vector、KV 和 graph stores。"
+    },
+    {
+      "stage": "check",
+      "question": "Mem0 的 fusion score 由哪三个维度组成？",
+      "options": [
+        "Relevance、importance、recency",
+        "Precision、recall、F1",
+        "Latency、throughput、cost",
+        "Confidence、perplexity、BLEU"
+      ],
+      "correct": 0,
+      "explanation": "Score 是 relevance、importance 和 recency 的 weighted sum；weights 按产品调优。"
+    },
+    {
+      "stage": "check",
+      "question": "当 incoming fact 与已有 edge 矛盾时，Mem0g 会做什么？",
+      "options": [
+        "删除 edge",
+        "把已有 edge 标记为 invalid 但不删除，这样 temporal queries 仍可遍历",
+        "抛出 exception",
+        "重写 user_id"
+      ],
+      "correct": 1,
+      "explanation": "Soft invalidation 会保留 history，以支持 temporal（valid-at-time）queries。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么本课建议按产品调优 fusion weights？",
+      "options": [
+        "Providers 要求这样做",
+        "chat agents 中 recency 占主导，compliance agents 中 importance 占主导，retrieval agents 中 relevance 占主导",
+        "Vector libraries 拒绝 equal weights",
+        "Apache 2.0 要求这样做"
+      ],
+      "correct": 1,
+      "explanation": "不同产品想在 relevance/importance/recency 上施加不同偏置；一组 weights 不适用于所有场景。"
+    },
+    {
+      "stage": "post",
+      "question": "Mem0 使用的 scope taxonomy 是什么？",
+      "options": [
+        "Public、private、secret",
+        "User、session、agent",
+        "Local、regional、global",
+        "Read、write、admin"
+      ],
+      "correct": 1,
+      "explanation": "Scopes 是 user（cross-session）、session（one thread）、agent（per-instance state）。"
+    },
+    {
+      "stage": "post",
+      "question": "这个模式中的 embedding drift 是什么，本课建议如何缓解？",
+      "options": [
+        "Vectors 被加密；轮换 keys",
+        "随着 corpus 增长，vector retrieval quality 会退化；定期 re-embed top-N most used records",
+        "Embeddings 发生 integer overflow；切换到 float64",
+        "Embedding API 改了 URL；固定 domain"
+      ],
+      "correct": 1,
+      "explanation": "对 hot records 做 periodic re-embedding，可以在 corpus 增长时保持 retrieval quality 稳定。"
+    }
+  ]
+}
