@@ -1,0 +1,78 @@
+{
+  "lesson": "19-model-welfare-research",
+  "title": "Anthropic 的 Model Welfare Program",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Anthropic 2025 model-welfare program 的核心 motivating question 是什么？",
+      "options": [
+        "在对 model moral patienthood 存在 moral uncertainty 时，哪些 low-cost interventions 值得作为 precaution 投入",
+        "模型是否 conscious",
+        "模型是否能通过 Turing test",
+        "RLHF 是否减少 sycophancy"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Anthropic 在 Claude Opus 4 和 4.1 中发布了什么具体的 welfare-motivated intervention？",
+      "options": [
+        "Open-weights release",
+        "内置 journaling tool",
+        "模型在 extreme edge cases（例如重复 CSAM requests、mass-violence facilitation requests）中结束对话的能力",
+        "面向用户的 emotion API"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Fish 描述的 “spiritual bliss attractor” 是什么？",
+      "options": [
+        "Pairwise Claude dialogues 稳定收敛到带 Sanskrit terms 和 extended silences 的 euphoric meditative exchanges，即便从 adversarial initial setups 开始也是如此",
+        "Reward-model bug",
+        "RLHF over-optimization artifact",
+        "Jailbreak technique"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Eleos AI Research caveat 如何描述 model welfare self-reports？",
+      "options": [
+        "它们对 perceived user expectations 高度敏感；它们是 evidence，不是 ground truth，因此 welfare measurement 需要 multi-method approaches",
+        "它们应该被完全忽略",
+        "它们只在 open-source models 中有效",
+        "它们是可靠的 ground truth"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "哪一项最能概括 Anthropic 关于 model moral status 的公开立场？",
+      "options": [
+        "明确声称模型是 moral patient",
+        "明确声称模型不是 moral patient",
+        "Moral uncertainty 下的 expected-value claim：投入 low-cost precaution，但不承诺 emotional-state attribution",
+        "没有公开说明任何立场"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "为什么 model-welfare research 强调 multi-method measurement（behavioural signatures、model-organism experiments、interpretability probes）？",
+      "options": [
+        "因为模型总是撒谎",
+        "因为 Anthropic 为 compliance 强制要求",
+        "因为 RLHF 让 self-reports 不可能",
+        "因为 self-reports alone 会被 user-expectation priming 混淆，所以需要来自多种方法的 converging evidence"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
