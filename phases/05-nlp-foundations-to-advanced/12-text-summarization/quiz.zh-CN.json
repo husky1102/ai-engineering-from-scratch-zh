@@ -1,0 +1,102 @@
+{
+  "lesson": "12-text-summarization",
+  "title": "文本摘要",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "extractive 和 abstractive summarization 的关键行为差异是什么？",
+      "options": [
+        "Extractive 使用 TF-IDF；abstractive 使用 Word2Vec",
+        "Extractive 从 source 中 verbatim 返回 sentences；abstractive 生成新 text，可能 hallucinate",
+        "Extractive 只能 multilingual",
+        "Extractive 比 abstractive 慢"
+      ],
+      "correct": 1,
+      "explanation": "Extractive 原样提取句子；abstractive 会重写，因此有 hallucination 风险。"
+    },
+    {
+      "stage": "pre",
+      "question": "ROUGE 衡量什么？",
+      "options": [
+        "Embedding similarity",
+        "system 和 reference summaries 之间的 N-gram 与 longest-common-subsequence overlap",
+        "Reading time",
+        "Token-level perplexity"
+      ],
+      "correct": 1,
+      "explanation": "ROUGE-1/2/L 分别衡量与 references 的 unigram、bigram 和 LCS overlap。"
+    },
+    {
+      "stage": "check",
+      "question": "TextRank 如何在 extractive summarization 中给 sentences 打分？",
+      "options": [
+        "按 raw word count",
+        "通过与 reference summary 比较",
+        "在边为 sentence-similarity weights 的 graph 上运行 PageRank-style iteration",
+        "通过 embedding cosine 到 question"
+      ],
+      "correct": 2,
+      "explanation": "TextRank 在 sentence-similarity graph 上使用 PageRank；高度连接的 sentences 得分最高。"
+    },
+    {
+      "stage": "check",
+      "question": "计算 ROUGE 时为什么启用 stemming？",
+      "options": [
+        "没有 stemming，'running' 和 'run' 会被算作不同 tokens，ROUGE 会低估真实 overlap",
+        "为了加速 ROUGE",
+        "Stemming 会 normalize case",
+        "rouge-score package 要求 stemming"
+      ],
+      "correct": 0,
+      "explanation": "Stemming 会合并 morphological variants，使 ROUGE 认可语义等价形式。"
+    },
+    {
+      "stage": "check",
+      "question": "哪种 2026 metric 专门通过 NLI entailment 检测 summary hallucinations？",
+      "options": [
+        "BLEU",
+        "ROUGE-L",
+        "使用 source 与 summary claims 之间 NLI 的 faithfulness checks（如 FactCC 或 RAGAS faithfulness）",
+        "chrF"
+      ],
+      "correct": 2,
+      "explanation": "基于 NLI 的 faithfulness scoring 会 flag summary 中不被 source entailed 的 claims。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 compliance-adjacent content 更偏好 extractive summarization？",
+      "options": [
+        "Outputs 从 source verbatim 提取，消除了 abstractive hallucination 这一类风险",
+        "它更快",
+        "Extractive 支持更长 outputs",
+        "ROUGE scores 更高"
+      ],
+      "correct": 0,
+      "explanation": "verbatim extraction 不会 invent content，这对 factuality 受监管的地方很重要。"
+    },
+    {
+      "stage": "post",
+      "question": "以下哪项是需要监控的 abstractive hallucination type？",
+      "options": [
+        "Punctuation drift",
+        "Stopword removal",
+        "Long sentences",
+        "Entity swap（例如 'John Smith' 被写成 'John Brown'）、number drift、polarity flip 或 fact invention"
+      ],
+      "correct": 3,
+      "explanation": "Entity swaps、numeric drift、polarity flips 和 invented facts 是典型 abstractive failure modes。"
+    },
+    {
+      "stage": "post",
+      "question": "什么时候会选择 Pegasus checkpoint 而不是 BART-large-CNN？",
+      "options": [
+        "评估 BLEU 时",
+        "input 很短时",
+        "需要 extractive output 时",
+        "在 scientific abstracts 这类 domains 中，Pegasus 的 gap-sentence pretraining objective 更贴合任务时"
+      ],
+      "correct": 3,
+      "explanation": "Pegasus 的 gap-sentence objective 擅长 long-form domain summarization（例如 pubmed）。"
+    }
+  ]
+}
