@@ -1,0 +1,78 @@
+{
+  "lesson": "15-batch-apis",
+  "title": "Batch APIs：作为行业标准的 50% Discount",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "2026 年 OpenAI、Anthropic 和 Google 共同的 batch-API offer 是什么？",
+      "options": [
+        "1-hour turnaround 下 10% discount",
+        "7-day turnaround 下 90% discount",
+        "低于 1k tokens 免费",
+        "24-hour turnaround 下 50% discount"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在本课 framing 中，“24-hour turnaround” 实际保证什么？",
+      "options": [
+        "24h 是 cache TTL",
+        "batch 一定花 24 小时",
+        "provider 承诺在 24 小时内返回，typical P50 约 2-6 小时",
+        "只有低于 1k requests 的 batch 才 qualify"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在 shared-system-prompt workload 上，叠加 batch 和 cached input 相比 synchronous uncached 会如何改变账单？",
+      "options": [
+        "没有效果，因为 caching 是 automatic",
+        "只有模型在 Vertex 上才有帮助",
+        "可以降到 synchronous-uncached baseline 的约 10%",
+        "会增加 50% 成本"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "2026 年，对 content pipelines 和 offline labeling 默认选择哪条 workload-triage lane 是错误的？",
+      "options": [
+        "Interactive，因为它听起来紧急",
+        "Batch，因为用户看不到 24h delay",
+        "Hybrid batch-and-cache",
+        "带 async queue 的 Semi-interactive"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "providers 之间的 output-schema trap 是什么？",
+      "options": [
+        "Anthropic 不支持 JSONL",
+        "所有 providers 都使用同一种 OpenAI JSONL format",
+        "Vertex 只要求 Parquet",
+        "Batch file formats 因 provider 而异（OpenAI JSONL、Anthropic JSONL、Vertex BigQuery/GCS），所以 portable client 需要 per-provider adapters"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "根据本课，将 workload triage 到 batch 的最简单 decision rule 是什么？",
+      "options": [
+        "如果 prompt 低于 1k tokens，就 batch it",
+        "如果使用 tools，就 batch it",
+        "只有 gateway 要求时才 batch",
+        "如果用户不会注意到 24-hour delivery，就 always batch（并叠加 caching）"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
