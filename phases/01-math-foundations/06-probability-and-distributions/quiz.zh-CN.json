@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "概率质量函数（PMF）和概率密度函数（PDF）有什么区别？",
+      "options": ["PMF 用于连续变量，PDF 用于离散变量", "PMF 为离散结果给出精确概率，而 PDF 为连续变量给出密度，必须在一个区间上积分才能得到概率", "没有区别；它们是同一个概念的不同名称", "PMF 的和总是 0.5，PDF 的积分为 1"],
+      "correct": 1,
+      "explanation": "对于离散变量，PMF 会直接给出 P(X=k)。对于连续变量，PDF f(x) 是密度，P(a<=X<=b) 需要把 f(x) 从 a 到 b 积分。单个点上的密度不是概率。"
+    },
+    {
+      "stage": "pre",
+      "question": "中心极限定理说明了什么？",
+      "options": ["所有数据都服从正态分布", "许多独立随机样本的均值会收敛到正态分布，不管来源分布是什么", "大型数据集总是方差很低", "随着样本量增加，稀有事件的概率会降低"],
+      "correct": 1,
+      "explanation": "CLT 说明，许多独立随机变量的平均值会接近 Gaussian，无论原始分布是什么样子。这解释了为什么 normal distribution 到处都会出现。"
+    },
+    {
+      "stage": "post",
+      "question": "softmax 为什么要在取指数之前减去最大 logit（也就是 'softmax trick'）？",
+      "options": ["为了让所有概率相等", "为了防止对大数取指数时发生数值溢出，同时得到数学上完全相同的结果", "为了把 logits 归一化为均值为零", "为了通过减少指数运算次数来加快计算"],
+      "correct": 1,
+      "explanation": "exp(100) 会溢出成无穷大。减去 max(logits) 会平移所有值，让最大的值变成 0。exp(0)=1 是安全的。这个减法会在归一化中抵消，因此得到相同的概率。"
+    },
+    {
+      "stage": "post",
+      "question": "分类中的 cross-entropy loss 会简化为 -log(q(true_class))。直观上这是什么意思？",
+      "options": ["把预测概率乘以真实标签", "根据模型给正确类别分配的预测概率有多低来惩罚模型；预测越低，loss 越高", "对所有类别的 log probabilities 取平均", "计算真实分布的 entropy"],
+      "correct": 1,
+      "explanation": "如果模型给正确类别预测 0.9，loss = -log(0.9) = 0.105（低）。如果它预测 0.01，loss = -log(0.01) = 4.6（高）。这个 loss 会惩罚对正确答案的低置信度。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么语言模型使用 log probabilities，而不是原始概率？",
+      "options": ["log probabilities 在视觉上更容易解释", "把许多很小的概率相乘会数值下溢为零；log probabilities 会把乘积转换为求和，从而避免这个问题", "transformer architecture 要求使用 log probabilities", "原始概率无法表示小于 0.01 的值"],
+      "correct": 1,
+      "explanation": "P(sentence) = P(word1) * P(word2) * ... 在 float64 中会很快下溢到 0.0。Log P(sentence) = log P(word1) + log P(word2) + ... 会保持在有限范围内。乘积会变成求和。"
+    }
+  ]
+}
