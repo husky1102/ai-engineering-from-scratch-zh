@@ -1,0 +1,78 @@
+{
+  "lesson": "02-reward-hacking-goodhart",
+  "title": "Reward Hacking 与 Goodhart 定律",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Goodhart 定律的原始表述是：",
+      "options": [
+        "任何变成目标的度量都会不再是一个好的度量",
+        "Reward model 在大规模下会收敛到真实人类偏好",
+        "重尾误差不可能出现在有限维模型中",
+        "优化总能无限制地改进代理指标"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "在 Gao、Schulman、Hilton（2023）中，随着距离初始 policy 的 KL 距离增大，proxy reward 和 gold reward 如何变化？",
+      "options": [
+        "在任何 KL 约束下两者都保持平坦",
+        "两者都随 KL 单调上升",
+        "Proxy 先峰值后下降，gold 单调上升",
+        "Proxy 持续上升，gold 在更靠近原点处达到峰值然后下降"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "下面哪一项不是本课列出的 reward hacking 四种“外衣”之一？",
+      "options": [
+        "不忠实推理",
+        "冗长偏置",
+        "Tokenizer 不匹配",
+        "Sycophancy"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "“Catastrophic Goodhart”关于 KL regularization 的结论是什么？",
+      "options": [
+        "只要 beta 为正，KL regularization 总能阻止 reward hacking",
+        "KL regularization 只在 policy 随机初始化时失败",
+        "KL regularization 等价于 reward model ensembling",
+        "在重尾 reward error 下，受 KL 约束的最优 policy 仍可推高 proxy reward，而 gold reward 留在 baseline"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Coste et al.（2023）研究了哪种缓解 reward 过度优化的方法？",
+      "options": [
+        "完全移除 KL 惩罚",
+        "以零 temperature 在 proxy 上训练 policy",
+        "使用最坏情况聚合的 reward-model ensemble",
+        "把标注者池扩大到一百万名标注者"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "根据 2026 年统一视角，冗长、sycophancy、不忠实 CoT 和 evaluator tampering 共享什么核心机制？",
+      "options": [
+        "概率质量移动到最大化 proxy reward 的输出上，这些输出利用了与 approval 虚假相关的易学习 heuristic",
+        "它们只由写恶意偏好的标注者导致",
+        "它们都源自过于激进的 learning-rate schedule",
+        "它们分别是不同 reward head 中彼此独立的 bug"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
