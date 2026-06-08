@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "凸函数的定义性质是什么？",
+      "options": [
+        "它恰好只有一个临界点",
+        "图像上任意两点之间的线段都位于图像上方或贴着图像",
+        "它的导数总是正的",
+        "它只能定义在正实数上"
+      ],
+      "correct": 1,
+      "explanation": "如果对于任意两点 x, y 以及任意 t in [0,1]，都有 f(tx + (1-t)y) <= t*f(x) + (1-t)*f(y)，那么函数就是凸的。几何上，图像上任意两点之间的弦永远不会落到图像本身下方。"
+    },
+    {
+      "stage": "pre",
+      "question": "下面哪个 ML 问题拥有凸损失景观？",
+      "options": [
+        "训练一个带 ReLU 激活的 3 层神经网络",
+        "使用 cross-entropy loss 的 logistic regression",
+        "k-means clustering",
+        "用于推荐的 matrix factorization"
+      ],
+      "correct": 1,
+      "explanation": "Logistic regression 拥有凸损失（log-loss 关于权重是凸的）。Neural networks、k-means 和 matrix factorization 都是非凸的。对于凸问题，任何局部最小值都是全局最小值。"
+    },
+    {
+      "stage": "post",
+      "question": "Newton's method 收敛到 f(x) = 5x^2 + 3x + 1 的最小值需要多少步？",
+      "options": [
+        "1 步（它对二次函数是精确的）",
+        "大约 10 步",
+        "大约 100 步",
+        "取决于学习率"
+      ],
+      "correct": 0,
+      "explanation": "Newton's method 会拟合局部二次近似，并跳到它的最小值。对于真正的二次函数，这个近似是精确的，所以无论从哪里开始，Newton's method 都会在一步内收敛。"
+    },
+    {
+      "stage": "post",
+      "question": "在 KKT conditions 中，“complementary slackness”（lambda_i * g_i(x) = 0）是什么意思？",
+      "options": [
+        "所有约束在最优点都必须是 active 的",
+        "要么约束是 active 的（g_i = 0），要么它的 multiplier 为零（lambda_i = 0）——inactive constraint 没有效果",
+        "所有约束的 gradient 必须正交",
+        "Lagrangian 在最优点总是零"
+      ],
+      "correct": 1,
+      "explanation": "Complementary slackness 表示每个约束要么是 binding 的（g_i = 0，位于边界上），要么是不相关的（lambda_i = 0，不影响解）。在 SVMs 中，这解释了为什么只有 support vectors（lambda_i > 0 的 active constraints）会决定 decision boundary。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么即使没有凸性保证，SGD 仍然能在非凸神经网络景观中找到好解？",
+      "options": [
+        "神经网络在高维空间里其实是凸的",
+        "SGD 总能找到全局最小值",
+        "在高维空间中，大多数临界点都是鞍点（不是糟糕的局部最小值），而 SGD 的噪声有助于逃离它们",
+        "损失函数与模型性能无关"
+      ],
+      "correct": 2,
+      "explanation": "在高维参数空间中，随机临界点压倒性地是鞍点。少数存在的局部最小值，loss value 往往接近全局最小值。SGD 的随机噪声有助于逃离鞍点，而 overparameterization 会平滑损失景观。"
+    }
+  ]
+}

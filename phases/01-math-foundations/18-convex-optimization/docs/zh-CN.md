@@ -1,0 +1,551 @@
+# 凸优化
+
+> 凸问题只有一个山谷。神经网络有数百万个。知道两者的区别很重要。
+
+**类型：** 构建
+**语言：** Python
+**先修：** Phase 1, Lessons 04（Calculus for ML）、08（Optimization）
+**时间：** ~90 分钟
+
+## 学习目标
+
+- 使用定义、二阶导数和 Hessian 判据测试函数是否凸
+- 实现 Newton's method，并将它的二次收敛与 gradient descent 对比
+- 使用 Lagrange multipliers 求解带约束的优化问题，并解释 KKT conditions
+- 解释为什么神经网络损失景观是非凸的，但 SGD 仍然能找到好解
+
+## 要解决的问题
+
+Lesson 08 教过你 gradient descent、momentum 和 Adam。这些优化器会在任意曲面上沿坡向下走。但它们没有保证。在非凸景观上运行 gradient descent，可能会落到糟糕的局部最小值，卡在鞍点，或者永远振荡。你仍然使用它，是因为神经网络是非凸的，而且没有真正的替代方案。
+
+但机器学习中的许多问题是凸的。Linear regression、logistic regression、SVMs、LASSO、ridge regression。对这些问题，存在更强的工具：带有数学保证的优化。一个凸问题恰好只有一个山谷。任何沿坡向下走的算法都会到达全局最小值。不需要随机重启。不需要学习率调度。不需要祈祷。
+
+理解凸性会带来三件事。第一，它告诉你什么时候问题是容易的（凸），什么时候是困难的（非凸）。第二，它给你更快的凸问题工具，比如 Newton's method。第三，它解释了整个机器学习里反复出现的概念：把 regularization 看成 constraint、SVMs 里的 duality，以及为什么 deep learning 虽然违反了凸性给出的每一条优雅性质，却仍然有效。
+
+## 核心概念
+
+### 凸集
+
+如果对于集合 S 中任意两个点，它们之间的线段也完全位于 S 内，那么集合 S 就是凸的。
+
+| 凸集 | 非凸 |
+|---|---|
+| **矩形**：内部任意两点都可以用一条仍留在内部的线段连接 | **星形/新月形**：两个内部点之间的线段可能穿出集合 |
+| **三角形**：所有内部点都满足同样性质 | **甜甜圈/环形**：中间的洞会让某些线段离开集合 |
+| 任意两点之间的线段都留在集合内 | 某些点对之间的线段会离开集合 |
+
+形式化测试：对于 S 中任意点 x, y，以及任意 t in [0, 1]，点 tx + (1-t)y 也在 S 中。
+
+凸集示例：
+- 一条线、一个平面、整个 R^n
+- 一个球（circle、sphere、hypersphere）
+- 一个 halfspace：{x : a^T x <= b}
+- 任意数量凸集的交集
+
+非凸集示例：
+- 一个甜甜圈（annulus）
+- 两个不相交圆的并集
+- 任何带有“凹陷”或“洞”的集合
+
+### 凸函数
+
+如果函数 f 的定义域是凸集，并且对于定义域中任意两点 x, y 以及任意 t in [0, 1]，都满足下面的不等式，那么 f 就是凸函数：
+
+```text
+f(tx + (1-t)y) <= t*f(x) + (1-t)*f(y)
+```
+
+几何上：图像上任意两点之间的线段，都位于图像的上方或正好贴着图像。
+
+| 性质 | 凸函数 | 非凸函数 |
+|---|---|---|
+| **线段测试** | 图像上任意两点之间的线段都在曲线**上方或贴着**曲线 | 图像上某些点之间的线段会落到曲线**下方** |
+| **形状** | 单个向上弯曲的碗/山谷 | 多个峰和谷，曲率混杂 |
+| **局部最小值** | 每个局部最小值都是全局最小值 | 可能存在多个高度不同的局部最小值 |
+
+常见凸函数：
+- f(x) = x^2（抛物线）
+- f(x) = |x|（绝对值）
+- f(x) = e^x（指数）
+- f(x) = max(0, x)（ReLU，虽然是分段线性的）
+- x > 0 时 f(x) = -log(x)（负对数）
+- 任意线性函数 f(x) = a^T x + b（既凸又凹）
+
+### 测试凸性
+
+三个实用测试，从最容易到最严格。
+
+**测试 1：二阶导数测试（1D）。** 如果对所有 x 都有 f''(x) >= 0，那么 f 是凸的。
+
+- f(x) = x^2：f''(x) = 2 >= 0。凸。
+- f(x) = x^3：f''(x) = 6x。x < 0 时为负。非凸。
+- f(x) = e^x：f''(x) = e^x > 0。凸。
+
+**测试 2：Hessian 测试（多变量）。** 如果 Hessian 矩阵 H(x) 对所有 x 都是 positive semidefinite，那么 f 是凸的。Hessian 是由二阶偏导数组成的矩阵。
+
+**测试 3：定义测试。** 直接检查不等式 f(tx + (1-t)y) <= t*f(x) + (1-t)*f(y)。当导数难以计算时，这个测试很有用。
+
+### 为什么凸性重要
+
+凸优化的中心定理：
+
+**对于凸函数，每个局部最小值都是全局最小值。**
+
+这意味着 gradient descent 不会被困住。任何向下的路径都会导向同一个答案。算法保证收敛到最优解。
+
+```mermaid
+graph LR
+    subgraph "Convex: ONE answer"
+        direction TB
+        C1["Loss surface has a single valley"] --> C2["Gradient descent ALWAYS finds the global minimum"]
+    end
+    subgraph "Non-convex: MANY traps"
+        direction TB
+        N1["Loss surface has multiple valleys and peaks"] --> N2["Gradient descent may get stuck in a local minimum"]
+        N2 --> N3["Global minimum might be missed"]
+    end
+```
+
+推论：
+- 不需要随机重启
+- 不需要复杂的学习率调度
+- 可以证明收敛性（速率取决于函数性质）
+- 解是唯一的（不计平坦区域）
+
+### 机器学习中的凸与非凸
+
+| 问题 | 凸吗？ | 原因 |
+|---------|---------|-----|
+| Linear regression (MSE) | 是 | 损失关于权重是二次的 |
+| Logistic regression | 是 | Log-loss 关于权重是凸的 |
+| SVM (hinge loss) | 是 | 线性函数的最大值 |
+| LASSO (L1 regression) | 是 | 凸函数之和仍是凸函数 |
+| Ridge regression (L2) | 是 | 二次 + 二次 = 凸 |
+| Neural network（任意 loss） | 否 | 非线性激活会产生非凸景观 |
+| k-means clustering | 否 | 离散分配步骤 |
+| Matrix factorization | 否 | 未知量的乘积 |
+
+带凸损失的线性模型是凸的。一旦加入带非线性激活的隐藏层，凸性就会破裂。
+
+### Hessian 矩阵
+
+函数 f: R^n -> R 的 Hessian H 是由二阶偏导数组成的 n x n 矩阵。
+
+```text
+H[i][j] = d^2 f / (dx_i dx_j)
+```
+
+对于 f(x, y) = x^2 + 3xy + y^2：
+
+```text
+df/dx = 2x + 3y       d^2f/dx^2 = 2      d^2f/dxdy = 3
+df/dy = 3x + 2y       d^2f/dydx = 3      d^2f/dy^2 = 2
+
+H = [ 2  3 ]
+    [ 3  2 ]
+```
+
+Hessian 告诉你曲率信息：
+- 特征值全为正：函数在每个方向都向上弯曲（该点处凸）
+- 特征值全为负：函数在每个方向都向下弯曲（凹，局部最大值）
+- 符号混杂：鞍点（某些方向向上弯，某些方向向下弯）
+- 零特征值：该方向是平坦的（退化）
+
+对于凸性，Hessian 必须在每一点都是 positive semidefinite（所有特征值 >= 0），而不只是某一个点。
+
+### Newton's method
+
+Gradient descent 使用一阶信息（gradient）。Newton's method 使用二阶信息（Hessian）。它在当前点拟合一个二次近似，然后直接跳到这个二次函数的最小值。
+
+```text
+Update rule:
+  x_new = x - H^(-1) * gradient
+
+Compare to gradient descent:
+  x_new = x - lr * gradient
+```
+
+Newton's method 用 inverse Hessian 取代标量学习率。这样会根据局部曲率自动调整步长和方向。
+
+```mermaid
+graph TD
+    subgraph "Gradient Descent"
+        GD1["Start"] --> GD2["Step 1"]
+        GD2 --> GD3["Step 2"]
+        GD3 --> GD4["..."]
+        GD4 --> GD5["Step ~500: Converged"]
+        GD_note["Follows gradient blindly — many small steps"]
+    end
+    subgraph "Newton's Method"
+        NM1["Start"] --> NM2["Step 1"]
+        NM2 --> NM3["..."]
+        NM3 --> NM4["Step ~5: Converged"]
+        NM_note["Uses curvature for optimal steps"]
+    end
+```
+
+优点：
+- 在最小值附近二次收敛（误差每一步都会平方级缩小）
+- 没有需要调的学习率
+- 尺度不变（不依赖你如何参数化问题）
+
+缺点：
+- 计算 Hessian 需要 O(n^2) 内存，求逆需要 O(n^3) 时间
+- 对于拥有 100 万个权重的神经网络，这意味着 10^12 个条目和 10^18 次运算
+- 对深度学习不实际
+
+### 带约束优化
+
+无约束优化：在所有 x 上最小化 f(x)。
+带约束优化：在满足约束的前提下最小化 f(x)。
+
+真实问题都有约束。你想最小化成本，但预算有限。你想最小化误差，但模型复杂度有上限。
+
+```mermaid
+graph LR
+    subgraph "Unconstrained"
+        U1["Loss function"] --> U2["Free minimum: lowest point of the loss surface"]
+    end
+    subgraph "Constrained"
+        C1["Loss function"] --> C2["Constrained minimum: lowest point within the feasible region"]
+        C3["Constraint boundary limits the search space"]
+    end
+```
+
+### Lagrange multipliers
+
+Lagrange multipliers 方法把带约束问题转换成无约束问题。
+
+问题：在 g(x) = 0 的约束下最小化 f(x)。
+
+解法：引入一个新变量（Lagrange multiplier lambda），并求解下面这个无约束问题：
+
+```text
+L(x, lambda) = f(x) + lambda * g(x)
+```
+
+在解处，L 的 gradient 为零：
+
+```text
+dL/dx = df/dx + lambda * dg/dx = 0
+dL/dlambda = g(x) = 0
+```
+
+几何直觉：在带约束最小值处，f 的 gradient 必须与 constraint g 的 gradient 平行。如果它们不平行，你就可以沿约束曲面继续移动，让 f 进一步降低。
+
+```mermaid
+graph LR
+    A["Contours of f(x,y): concentric ellipses"] --- S["Solution point"]
+    B["Constraint curve g(x,y) = 0"] --- S
+    S --- C["At the solution, gradient of f is parallel to gradient of g"]
+```
+
+示例：在 x + y = 1 的约束下，最小化 f(x,y) = x^2 + y^2。
+
+```text
+L = x^2 + y^2 + lambda(x + y - 1)
+
+dL/dx = 2x + lambda = 0  =>  x = -lambda/2
+dL/dy = 2y + lambda = 0  =>  y = -lambda/2
+dL/dlambda = x + y - 1 = 0
+
+From first two: x = y
+Substituting: 2x = 1, so x = y = 0.5, lambda = -1
+```
+
+直线 x + y = 1 上离原点最近的点是 (0.5, 0.5)。
+
+### KKT conditions
+
+Karush-Kuhn-Tucker conditions 把 Lagrange multipliers 扩展到不等式约束。
+
+问题：在 g_i(x) <= 0，i = 1, ..., m 的约束下，最小化 f(x)。
+
+KKT conditions（最优性的必要条件）：
+
+```text
+1. Stationarity:    df/dx + sum(lambda_i * dg_i/dx) = 0
+2. Primal feasibility:  g_i(x) <= 0  for all i
+3. Dual feasibility:    lambda_i >= 0  for all i
+4. Complementary slackness:  lambda_i * g_i(x) = 0  for all i
+```
+
+Complementary slackness 是关键洞察：要么约束是 active 的（g_i = 0，解位于边界上），要么 multiplier 为零（该约束不起作用）。不影响解的约束，其 lambda = 0。
+
+KKT conditions 是 SVMs 的核心。Support vectors 就是约束 active 的数据点（lambda > 0）。所有其他数据点的 lambda = 0，不影响 decision boundary。
+
+### Regularization 作为带约束优化
+
+L1 和 L2 regularization 不是随意的技巧。它们是伪装成无约束形式的带约束优化问题。
+
+**L2 regularization (Ridge)：**
+
+```text
+minimize  Loss(w)  subject to  ||w||^2 <= t
+
+Equivalent unconstrained form:
+minimize  Loss(w) + lambda * ||w||^2
+```
+
+约束 ||w||^2 <= t 定义了一个 ball（2D 中是 circle，3D 中是 sphere）。解位于损失等高线第一次接触这个 ball 的地方。
+
+**L1 regularization (LASSO)：**
+
+```text
+minimize  Loss(w)  subject to  ||w||_1 <= t
+
+Equivalent unconstrained form:
+minimize  Loss(w) + lambda * ||w||_1
+```
+
+约束 ||w||_1 <= t 定义了一个 diamond（2D 中旋转 45 度的 square）。
+
+| 性质 | L2 约束（circle） | L1 约束（diamond） |
+|---|---|---|
+| **约束形状** | Circle（高维中是 sphere） | Diamond（2D 中旋转后的 square） |
+| **损失等高线接触位置** | 光滑边界：circle 上任意点 | 角点：与某个坐标轴对齐 |
+| **解的行为** | 权重很小但非零 | 某些权重恰好为零（稀疏） |
+| **结果** | 权重收缩 | 特征选择 |
+
+这解释了为什么 L1 会产生稀疏模型（feature selection），而 L2 只会缩小权重。Diamond 有与坐标轴对齐的角点。损失等高线更可能接触到角点，从而把一个或多个权重精确设为零。
+
+### Duality
+
+每个带约束优化问题（primal）都有一个伴随问题（dual）。对于凸问题，primal 和 dual 有相同的最优值。这叫 strong duality。
+
+Lagrangian dual function：
+
+```text
+Primal: minimize f(x) subject to g(x) <= 0
+Lagrangian: L(x, lambda) = f(x) + lambda * g(x)
+Dual function: d(lambda) = min_x L(x, lambda)
+Dual problem: maximize d(lambda) subject to lambda >= 0
+```
+
+为什么 duality 重要：
+- Dual problem 有时比 primal 更容易求解
+- SVMs 在 dual form 中求解，问题只依赖数据点之间的 dot products（这启用了 kernel trick）
+- Dual 会给 primal optimum 一个下界，可用于检查解的质量
+
+对 SVMs 来说：
+
+```text
+Primal: find w, b that maximize the margin 2/||w|| subject to
+        y_i(w^T x_i + b) >= 1 for all i
+
+Dual:   maximize sum(alpha_i) - 0.5 * sum_ij(alpha_i * alpha_j * y_i * y_j * x_i^T x_j)
+        subject to alpha_i >= 0 and sum(alpha_i * y_i) = 0
+
+The dual only involves dot products x_i^T x_j.
+Replace x_i^T x_j with K(x_i, x_j) to get the kernel trick.
+```
+
+### 为什么深度学习即使非凸也能工作
+
+神经网络损失函数极其非凸。按每一种经典度量来看，优化它们都应该失败。但 stochastic gradient descent 可靠地找到了好解。几个因素可以解释这一点。
+
+**大多数局部最小值已经足够好。** 在高维空间中，随机临界点（gradient 为零的点）压倒性地是鞍点，而不是局部最小值。少数存在的局部最小值，loss value 往往接近全局最小值。当参数空间拥有数百万维时，陷入糟糕局部最小值的概率极低。
+
+**真正的障碍是鞍点，不是局部最小值。** 在一个有 n 个参数的函数中，鞍点同时拥有正曲率和负曲率方向。对高维中的随机临界点来说，所有 n 个特征值都为正（局部最小值）的概率大约是 2^(-n)。几乎所有临界点都是鞍点。SGD 的噪声帮助它逃离这些点。
+
+**Overparameterization 会平滑景观。** 参数数量超过训练样本数量的网络，拥有更平滑、更连通的损失曲面。更宽的网络有更少的坏局部最小值。这很反直觉，但与经验结果一致。
+
+**损失景观结构：**
+
+| 性质 | 低维空间 | 高维空间 |
+|---|---|---|
+| **景观** | 许多孤立的峰和谷 | 平滑连通的山谷 |
+| **最小值** | 许多孤立局部最小值 | 很少有坏局部最小值；大多数接近最优 |
+| **导航** | 很难找到全局最小值 | 许多路径都通向好解 |
+| **临界点** | 局部最小值和鞍点混合 | 压倒性地是鞍点，而不是局部最小值 |
+
+**随机噪声充当隐式正则化。** Mini-batch SGD 加入的噪声会防止优化停在 sharp minima。Sharp minima 容易过拟合；flat minima 泛化更好。这种噪声会让优化偏向损失景观中的平坦区域。
+
+### 实践中的二阶方法
+
+纯 Newton's method 对大模型不实际。几种近似方法让二阶信息变得可用。
+
+**L-BFGS (Limited-memory BFGS)：** 用最近 m 次 gradient differences 近似 inverse Hessian。它需要 O(mn) 内存，而不是 O(n^2)。适合最多约 10,000 个参数的问题。用于经典 ML（logistic regression、CRFs），但不用于 deep learning。
+
+**Natural gradient：** 使用 Fisher information matrix（log-likelihood 的期望 Hessian）取代标准 Hessian。这会考虑概率分布的几何结构。K-FAC (Kronecker-Factored Approximate Curvature) 把 Fisher matrix 近似成 Kronecker product，让它能用于神经网络。
+
+**Hessian-free optimization：** 使用 conjugate gradient 求解 Hx = g，而不显式构造 H。只需要 Hessian-vector products，这可以通过 automatic differentiation 以 O(n) 时间计算。
+
+**Diagonal approximations：** Adam 的 second moment 是 Hessian diagonal 的一种 diagonal approximation。AdaHessian 用 Hutchinson's estimator 获取真实 Hessian diagonal elements，扩展了这个想法。
+
+| Method | Memory | Per-step cost | When to use |
+|--------|--------|--------------|-------------|
+| Gradient descent | O(n) | O(n) | Baseline, large models |
+| Newton's method | O(n^2) | O(n^3) | Small convex problems |
+| L-BFGS | O(mn) | O(mn) | Medium convex problems |
+| Adam | O(n) | O(n) | Deep learning default |
+| K-FAC | O(n) | O(n) per layer | Research, large-batch training |
+
+## 动手实现
+
+### Step 1：Convexity checker
+
+构建一个通过采样点并检查定义来经验性测试凸性的函数。
+
+```python
+import random
+import math
+
+def check_convexity(f, dim, bounds=(-5, 5), samples=1000):
+    violations = 0
+    for _ in range(samples):
+        x = [random.uniform(*bounds) for _ in range(dim)]
+        y = [random.uniform(*bounds) for _ in range(dim)]
+        t = random.uniform(0, 1)
+        mid = [t * xi + (1 - t) * yi for xi, yi in zip(x, y)]
+        lhs = f(mid)
+        rhs = t * f(x) + (1 - t) * f(y)
+        if lhs > rhs + 1e-10:
+            violations += 1
+    return violations == 0, violations
+```
+
+### Step 2：2D Newton's method
+
+使用显式 Hessian 实现 Newton's method。将收敛速度与 gradient descent 对比。
+
+```python
+def newtons_method(f, grad_f, hessian_f, x0, steps=50, tol=1e-12):
+    x = list(x0)
+    history = [x[:]]
+    for _ in range(steps):
+        g = grad_f(x)
+        H = hessian_f(x)
+        det = H[0][0] * H[1][1] - H[0][1] * H[1][0]
+        if abs(det) < 1e-15:
+            break
+        H_inv = [
+            [H[1][1] / det, -H[0][1] / det],
+            [-H[1][0] / det, H[0][0] / det],
+        ]
+        dx = [
+            H_inv[0][0] * g[0] + H_inv[0][1] * g[1],
+            H_inv[1][0] * g[0] + H_inv[1][1] * g[1],
+        ]
+        x = [x[0] - dx[0], x[1] - dx[1]]
+        history.append(x[:])
+        if sum(gi ** 2 for gi in g) < tol:
+            break
+    return history
+```
+
+### Step 3：Lagrange multiplier solver
+
+通过在 Lagrangian 上运行 gradient descent，求解带约束优化。
+
+```python
+def lagrange_solve(f_grad, g_val, g_grad, x0, lr=0.01,
+                   lr_lambda=0.01, steps=5000):
+    x = list(x0)
+    lam = 0.0
+    history = []
+    for _ in range(steps):
+        fg = f_grad(x)
+        gv = g_val(x)
+        gg = g_grad(x)
+        x = [
+            xi - lr * (fgi + lam * ggi)
+            for xi, fgi, ggi in zip(x, fg, gg)
+        ]
+        lam = lam + lr_lambda * gv
+        history.append((x[:], lam, gv))
+    return history
+```
+
+### Step 4：比较一阶与二阶
+
+在同一个二次函数上运行 gradient descent 和 Newton's method。统计收敛所需步数。
+
+```python
+def quadratic(x):
+    return 5 * x[0] ** 2 + x[1] ** 2
+
+def quadratic_grad(x):
+    return [10 * x[0], 2 * x[1]]
+
+def quadratic_hessian(x):
+    return [[10, 0], [0, 2]]
+```
+
+Newton's method 会在 1 步内收敛（它对二次函数是精确的）。Gradient descent 会花费数百步，因为 Hessian 的特征值相差 5 倍，形成了一个狭长山谷。
+
+## 实际使用
+
+在选择 ML 模型和求解器时，凸性分析可以直接派上用场。
+
+对于凸问题（logistic regression、SVMs、LASSO）：
+- 使用专门的求解器（liblinear、CVXPY、scipy.optimize.minimize with method='L-BFGS-B'）
+- 预期得到唯一的全局解
+- 二阶方法实际且快速
+
+对于非凸问题（neural networks）：
+- 使用一阶方法（SGD、Adam）
+- 接受解依赖初始化和随机性这一事实
+- 把 overparameterization、noise 和 learning rate schedules 用作隐式正则化
+- 不要浪费时间寻找全局最小值。一个好的局部最小值就足够。
+
+```python
+from scipy.optimize import minimize
+
+result = minimize(
+    fun=lambda w: sum((y - X @ w) ** 2) + 0.1 * sum(w ** 2),
+    x0=np.zeros(d),
+    method='L-BFGS-B',
+    jac=lambda w: -2 * X.T @ (y - X @ w) + 0.2 * w,
+)
+```
+
+对于 SVMs，dual formulation 让你可以使用 kernel trick：
+
+```python
+from sklearn.svm import SVC
+
+svm = SVC(kernel='rbf', C=1.0)
+svm.fit(X_train, y_train)
+print(f"Support vectors: {svm.n_support_}")
+```
+
+## 练习
+
+1. **凸性图库。** 使用 checker 测试这些函数是否凸：f(x) = x^4、f(x) = sin(x)、f(x,y) = x^2 + y^2、f(x,y) = x*y、f(x) = max(x, 0)。解释为什么每个结果都合理。
+
+2. **Newton vs gradient descent 比赛。** 从起点 (10, 10) 出发，在 f(x,y) = 50*x^2 + y^2 上运行两种方法。每种方法需要多少步才能达到 loss < 1e-10？当 condition number（Hessian 最大特征值与最小特征值之比）增加时，gradient descent 会发生什么？
+
+3. **Lagrange multiplier 几何。** 在 x + 2y = 4 的约束下最小化 f(x,y) = (x-3)^2 + (y-3)^2。通过检查解处 f 的 gradient 与 g 的 gradient 平行，验证这个解。
+
+4. **Regularization constraint。** 实现 L1-constrained optimization：在 |x| + |y| <= 1 的约束下，最小化 (x-3)^2 + (y-2)^2。展示解中有一个坐标等于零（来自 diamond constraint 的 sparsity）。
+
+5. **Hessian eigenvalue analysis。** 计算 Rosenbrock function 在 (1,1) 和 (-1,1) 处的 Hessian。计算两处的特征值。这些特征值告诉你最小值处与远离最小值处的曲率有什么不同？
+
+## 关键术语
+
+| 术语 | 含义 |
+|------|---------------|
+| Convex set | 集合中任意两点之间的线段都留在集合内部 |
+| Convex function | 图像上任意两点之间的线段都位于图像上方或贴着图像的函数。等价地，Hessian 处处 positive semidefinite |
+| Local minimum | 比附近所有点都低的点。对凸函数来说，每个局部最小值都是全局最小值 |
+| Global minimum | 函数在整个定义域上的最低点 |
+| Hessian matrix | 由所有二阶偏导数组成的矩阵。编码曲率信息 |
+| Positive semidefinite | 所有特征值都非负的矩阵。它是“second derivative >= 0”的多维类比 |
+| Condition number | Hessian 最大特征值与最小特征值之比。高 condition number 意味着狭长山谷和缓慢的 gradient descent |
+| Newton's method | 使用 inverse Hessian 决定步长方向和大小的二阶优化器。在最小值附近二次收敛 |
+| Lagrange multiplier | 为了把带约束优化问题转换为无约束问题而引入的变量 |
+| KKT conditions | 带不等式约束时的最优性必要条件。推广了 Lagrange multipliers |
+| Complementary slackness | 在解处，要么约束是 active 的，要么它的 multiplier 为零。两者不会同时非零 |
+| Duality | 每个带约束问题都有一个伴随的 dual problem。对于凸问题，两者拥有相同的最优值 |
+| Strong duality | Primal 与 dual 的最优值相等。对满足 Slater's condition 的凸问题成立 |
+| L-BFGS | 近似二阶方法，存储最近 m 次 gradient differences，而不是完整 Hessian |
+| Saddle point | gradient 为零，但在某些方向是最小值、另一些方向是最大值的点 |
+| Overparameterization | 使用比训练样本更多的参数。它会平滑损失景观，并减少坏局部最小值 |
+
+## 延伸阅读
+
+- [Boyd & Vandenberghe: Convex Optimization](https://web.stanford.edu/~boyd/cvxbook/) - 标准教材，可在线免费阅读
+- [Bottou, Curtis, Nocedal: Optimization Methods for Large-Scale Machine Learning (2018)](https://arxiv.org/abs/1606.04838) - 连接凸优化理论与深度学习实践
+- [Choromanska et al.: The Loss Surfaces of Multilayer Networks (2015)](https://arxiv.org/abs/1412.0233) - 解释为什么非凸神经网络景观没有看起来那么糟
+- [Nocedal & Wright: Numerical Optimization](https://link.springer.com/book/10.1007/978-0-387-40065-5) - Newton's method、L-BFGS 和带约束优化的综合参考
