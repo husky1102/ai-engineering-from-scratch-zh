@@ -1,0 +1,78 @@
+{
+  "lesson": "25-echoleak-cves-for-ai",
+  "title": "EchoLeak 与 AI CVE 的出现",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "哪一项最准确地描述 EchoLeak（CVE-2025-32711）？",
+      "options": [
+        "一种通过 long-context shot stuffing 实现的 jailbreak",
+        "一种针对 PyPI 的 supply-chain attack",
+        "一种 NPU 硬件漏洞",
+        "Microsoft 365 Copilot 中的零点击 AI command-injection flaw（CVE-2025-32711，CVSS 9.3），导致未授权网络信息披露，并通过 CSP allowlisted/trusted Microsoft domain 外泄"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "是什么让 EchoLeak 成为“零点击”？",
+      "options": [
+        "受害者不需要打开邮件；Copilot 在常规查询中把它作为 RAG context 检索出来，注入指令随即执行",
+        "它要求用户点击 Teams chat 中的链接",
+        "它运行在 operating-system kernel 中",
+        "它需要三次点击但不需要输入"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Aim Labs 将 EchoLeak 框定为 “LLM Scope Violation”。哪三个边界必须分别独立控制？",
+      "options": [
+        "Retrieval, scope, output",
+        "Network, disk, memory",
+        "Input, model, GPU",
+        "Prompt, response, log"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "Microsoft/GitHub 如何修复 CamoLeak（CVSS 9.6，GitHub Copilot Chat）？",
+      "options": [
+        "添加 XPIA prompt-injection filter",
+        "在 Copilot Chat 中完全禁用图像渲染（代价：可用性），因为替代攻击面无法被限定边界",
+        "把模型切换到 Llama Guard",
+        "增加 context size"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "EchoLeak 披露揭示了什么严重性校准模式？",
+      "options": [
+        "Vendor 过高评估了初始 CVSS 分数",
+        "Vendor 最初把 EchoLeak 评为低危（信息披露）；Aim Labs 的 MFA-code exfiltration proof-of-concept 将评分上调到 9.3，防守方必须为 AI 特定漏洞推动全面 PoC",
+        "所有 AI CVE 都会自动评为 10.0",
+        "严重性评级只由 OWASP 决定"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "截至 2024/2025，NIST 和 OWASP 如何给 prompt injection 排位？",
+      "options": [
+        "NIST AI SPD 2024 将 prompt injection 视为生成式 AI 的重大信息安全风险；OWASP 2025 将其列为 LLM01（首要应用层威胁）",
+        "NIST：范围外；OWASP：未列入",
+        "NIST：轻微；OWASP：列表底部",
+        "二者都只称其为 Tier-2 risk"
+      ],
+      "correct": 0,
+      "explanation": ""
+    }
+  ]
+}
