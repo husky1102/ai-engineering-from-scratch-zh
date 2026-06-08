@@ -1,0 +1,66 @@
+{
+  "lesson": "14-model-context-protocol",
+  "title": "模型上下文协议",
+  "questions": [
+    {
+      "stage": "post",
+      "question": "MCP server 会暴露哪三种原语？",
+      "options": [
+        "函数、类型、类",
+        "工具、资源、提示词",
+        "端点、webhook、队列",
+        "Agent、skill、workflow"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "MCP 使用什么线格式？",
+      "options": [
+        "基于 HTTP 的 GraphQL",
+        "使用 protobuf 的 gRPC",
+        "JSON-RPC 2.0",
+        "带 OpenAPI 的 REST"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "哪个元数据字段表示某个工具会修改状态，因此应要求人工审批？",
+      "options": [
+        "readonly: false",
+        "mutating: true",
+        "destructiveHint: true",
+        "requiresAuth: true"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "取代早期 SSE-only 远程传输的 2025-06-18 传输是什么？",
+      "options": [
+        "WebTransport",
+        "Streamable HTTP",
+        "WebSocket-only",
+        "gRPC bidi"
+      ],
+      "correct": 1,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "什么时候应该把工具拆成自己的 MCP server，而不是继续保留为内联逻辑？",
+      "options": [
+        "当它每天被调用少于 10 次时",
+        "当它会被两个或更多 host 调用，并且是只读/可缓存时",
+        "当它返回超过 1KB 数据时",
+        "永远不应该；MCP 只用于本地开发"
+      ],
+      "correct": 1,
+      "explanation": ""
+    }
+  ]
+}
