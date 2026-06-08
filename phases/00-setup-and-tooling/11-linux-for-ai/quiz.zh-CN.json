@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Linux 文件路径中的 '~' 符号表示什么？",
+      "options": [
+        "文件系统的根目录",
+        "当前用户的 home 目录",
+        "临时文件目录",
+        "安装系统程序的目录"
+      ],
+      "correct": 1,
+      "explanation": "波浪号（~）是当前用户 home 目录的快捷写法，在 Linux 上通常是 /home/username。'cd ~' 可以从任何位置回到 home 目录。"
+    },
+    {
+      "stage": "pre",
+      "question": "在命令前加上 'sudo' 的作用是什么？",
+      "options": [
+        "加快命令执行速度",
+        "以 root（管理员）权限运行命令",
+        "在沙盒环境中运行命令",
+        "把命令输出记录到系统文件"
+      ],
+      "correct": 1,
+      "explanation": "sudo（superuser do）会为单条命令临时提升到 root 级权限。使用 apt 安装包这类系统级操作需要它。"
+    },
+    {
+      "stage": "post",
+      "question": "尝试运行 shell 脚本时遇到 'Permission denied'。应该用哪个命令修复？",
+      "options": [
+        "sudo rm script.sh",
+        "chmod +x script.sh",
+        "chown root script.sh",
+        "mv script.sh /usr/bin/"
+      ],
+      "correct": 1,
+      "explanation": "chmod +x 会给文件添加执行权限。如果没有设置执行位，即使文件归你所有，shell 也会拒绝运行这个脚本。"
+    },
+    {
+      "stage": "post",
+      "question": "在远程 GPU 机器上，你的训练数据把磁盘填满了。哪个命令可以显示占用空间最大的目录？",
+      "options": [
+        "ls -la /",
+        "du -h --max-depth=1 / | sort -hr | head -20",
+        "cat /proc/meminfo",
+        "free -h"
+      ],
+      "correct": 1,
+      "explanation": "du -h 会按目录显示磁盘用量，--max-depth=1 会限制在顶层目录，sort -hr 会按大小降序排序。这能看出哪些目录占用了最多空间。"
+    },
+    {
+      "stage": "post",
+      "question": "macOS 和 Linux 版本的 'sed -i' 有什么关键区别？",
+      "options": [
+        "Linux sed 比 macOS sed 更快",
+        "macOS sed 需要在 -i 后加一个空字符串参数（'sed -i \"\"'），而 Linux 不需要",
+        "Linux sed 不支持正则表达式",
+        "macOS sed 不能原地修改文件"
+      ],
+      "correct": 1,
+      "explanation": "macOS 使用 BSD sed，需要写成 'sed -i \"\" pattern file'，而 Linux 使用 GNU sed，可以接受 'sed -i pattern file'。这是在系统之间迁移脚本时很常见的坑。"
+    }
+  ]
+}
