@@ -1,0 +1,90 @@
+{
+  "lesson": "34-repo-memory-and-state",
+  "title": "Repo Memory 与持久状态",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "用于决定一条信息是否属于 repo memory 的持久性测试是什么？",
+      "options": [
+        "它是否是 JSON",
+        "三个月后在 CI 重新运行时是否仍然有用；如果有，放进 repo；如果没有，归入 telemetry",
+        "用户是否把它标为重要",
+        "它是否能放进 4 kB"
+      ],
+      "correct": 1,
+      "explanation": "Repo memory 用于三个月后仍然有用的持久状态；临时数据属于 telemetry。"
+    },
+    {
+      "stage": "pre",
+      "question": "哪个 schema 字段携带代理的契约版本？",
+      "options": [
+        "schema_version",
+        "build_hash",
+        "model_id",
+        "session_uuid"
+      ],
+      "correct": 0,
+      "explanation": "schema_version 是整数契约；管理器会拒绝从未知版本加载。"
+    },
+    {
+      "stage": "check",
+      "question": "原子写入如何工作？",
+      "options": [
+        "在同一目录中 tempfile.mkstemp、写入、fsync，然后用 os.replace（原子 rename）覆盖目标",
+        "先 truncate 再写入目标",
+        "带 CRC 的 append-only",
+        "加密并覆盖"
+      ],
+      "correct": 0,
+      "explanation": "POSIX 和 Windows 上的原子 rename 可以防止部分写入造成损坏。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么非幂等工具调用需要 idempotency keys？",
+      "options": [
+        "为了计费",
+        "如果代理在工具调用之后、checkpoint 结果之前崩溃，可以安全重试；执行前记录 call ID，并在重试时跳过该调用",
+        "为了去重日志",
+        "为了缩短输出"
+      ],
+      "correct": 1,
+      "explanation": "pending_calls.jsonl 携带 call IDs；恢复过程会检查并跳过已经执行的工作。"
+    },
+    {
+      "stage": "check",
+      "question": "大型 artifact（CSV、长 transcript、生成文件）相对于 state 应该存放在哪里？",
+      "options": [
+        "内联放在 agent_state.json 中",
+        "作为单独文件（或 object storage）存放，只在 state 中保留路径，让 checkpoint 保持小而快",
+        "放在环境变量中",
+        "拼接到一个巨大的 log 中"
+      ],
+      "correct": 1,
+      "explanation": "独立 artifact 会与 state 分开增长；checkpoint 的读写成本保持低廉。"
+    },
+    {
+      "stage": "post",
+      "question": "event sourcing 用于审计、snapshot 用于恢复，会带来什么？",
+      "options": [
+        "更低的磁盘使用量",
+        "通过读取 snapshot，再 replay 其后的事件，逐字 replay 代理决策；形状与 Postgres WAL 相同",
+        "更快的推理",
+        "原生语音支持"
+      ],
+      "correct": 1,
+      "explanation": "每次 mutation 都追加到 state.events.jsonl；定期 snapshot 到 state.json；replay snapshot timestamp 之后的事件。"
+    },
+    {
+      "stage": "post",
+      "question": "本课说 schema_version 不匹配时会发生什么？",
+      "options": [
+        "管理器静默升级",
+        "管理器拒绝加载，直到 tools/migrate_state.py 中的迁移脚本运行",
+        "state 被删除",
+        "代理重试"
+      ],
+      "correct": 1,
+      "explanation": "要么做 schema migrations，要么拒绝加载；绝不静默升级。"
+    }
+  ]
+}
