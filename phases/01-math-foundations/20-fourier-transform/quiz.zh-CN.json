@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "傅里叶变换会对信号做什么？",
+      "options": [
+        "压缩信号以减少存储空间",
+        "把信号分解成不同频率、振幅和相位的正弦波",
+        "从信号中移除噪声",
+        "把信号从模拟转换为数字"
+      ],
+      "correct": 1,
+      "explanation": "傅里叶变换会把信号从时域转换到频域。每个频率系数 X[k] 都告诉你频率 k 上某个正弦波的振幅和相位。信号会被重新表达为这些正弦波的和。"
+    },
+    {
+      "stage": "pre",
+      "question": "Fast Fourier Transform (FFT) 与直接 DFT 相比，时间复杂度是多少？",
+      "options": [
+        "两者都是 O(N^2)",
+        "FFT 是 O(N log N)，DFT 是 O(N^2)",
+        "FFT 是 O(N)，DFT 是 O(N log N)",
+        "FFT 是 O(log N)，DFT 是 O(N)"
+      ],
+      "correct": 1,
+      "explanation": "直接 DFT 会计算 N 个输出，每个输出都对 N 个输入求和：O(N^2)。Cooley-Tukey FFT 会递归地把信号拆成偶数/奇数两半，在 log2(N) 层中的每一层做 O(N) 工作，因此得到 O(N log N)。当 N = 100 万时，这相当于 2000 万次操作，而不是 1 万亿次。"
+    },
+    {
+      "stage": "post",
+      "question": "卷积定理说明了什么？",
+      "options": [
+        "时域中的卷积等于频域中的加法",
+        "时域中的卷积等于频域中的逐点乘法",
+        "卷积总是会增加信号长度",
+        "卷积和相关是完全相同的操作"
+      ],
+      "correct": 1,
+      "explanation": "卷积定理说明，时域中的卷积等于频域中的逐点乘法：x * h = IFFT(FFT(x) . FFT(h))。这就是为什么对大 kernel，基于 FFT 的卷积是 O(N log N)，而不是 O(N*M)。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么在 FFT 前给信号补零并不会提高真正的频率分辨率？",
+      "options": [
+        "补零会引入噪声，从而抵消提升",
+        "补零只是在已有 frequency bins 之间插值，但无法揭示原始样本中不存在的频率细节",
+        "补零只适用于长度为 2 的幂的信号",
+        "FFT 算法会忽略补零样本"
+      ],
+      "correct": 1,
+      "explanation": "真正的频率分辨率取决于观察时间 T = N/fs。补零会增加 frequency bins（更细的网格），但只是对已有频谱做插值；它会让结果看起来更平滑，却无法分辨间隔小于 1/T Hz 的频率。"
+    },
+    {
+      "stage": "post",
+      "question": "在原始 Transformer 的 sinusoidal positional encodings 中，为什么不同维度对会被分配按几何间隔排列的频率？",
+      "options": [
+        "这样可以降低 attention 的计算成本",
+        "每个频率提供不同分辨率：高频编码精细位置，低频编码粗略位置，从而为每个位置提供唯一指纹",
+        "几何间隔是 FFT 算法所必需的",
+        "这样可以确保所有编码值都位于 0 和 1 之间"
+      ],
+      "correct": 1,
+      "explanation": "高频维度会随位置快速变化（精细分辨率），而低频维度会缓慢变化（粗略分辨率）。多频率编码结合起来，会为每个位置提供唯一模式，类似于 Fourier coefficients 能唯一标识一个信号。"
+    }
+  ]
+}
