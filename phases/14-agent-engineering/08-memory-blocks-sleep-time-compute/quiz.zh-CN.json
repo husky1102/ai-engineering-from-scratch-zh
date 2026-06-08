@@ -1,0 +1,90 @@
+{
+  "lesson": "08-memory-blocks-sleep-time-compute",
+  "title": "Memory Blocks 和 Sleep-Time Compute（Letta）",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "Letta 的三层 memory tiers 是什么？",
+      "options": [
+        "Cache、KV、archival",
+        "Core、recall、archival",
+        "RAM、swap、disk",
+        "Working、episodic、semantic"
+      ],
+      "correct": 1,
+      "explanation": "Letta 使用 core（always visible）、recall（conversation history）和 archival（external）三层。"
+    },
+    {
+      "stage": "pre",
+      "question": "Sleep-time compute 针对哪个 production problem？",
+      "options": [
+        "在 critical path 上做 memory consolidation 导致的 tail latency",
+        "数学题准确率更高",
+        "更低的 embedding cost",
+        "更快的 JSON parsing"
+      ],
+      "correct": 0,
+      "explanation": "Sleep-time 把 prune/summarize/reconcile 移出 user-facing path，让 primary responses 保持快速。"
+    },
+    {
+      "stage": "check",
+      "question": "哪一项不是 Letta 中的 memory block field？",
+      "options": [
+        "label",
+        "value",
+        "limit",
+        "embedding_model_version"
+      ],
+      "correct": 3,
+      "explanation": "Blocks 携带 id、label、value、limit、description；embedding model version 不是 block schema 的一部分。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 sleep-time agent 可以运行比 primary 更强的模型？",
+      "options": [
+        "它收到 private API key",
+        "它位于 critical path 之外，所以不受 latency 约束",
+        "它不受 rate limits 限制",
+        "Memory ops 的 tokens 费用减半"
+      ],
+      "correct": 1,
+      "explanation": "因为它不会阻塞用户响应，sleep-time agent 可以更慢、更昂贵。"
+    },
+    {
+      "stage": "check",
+      "question": "Human 和 Persona blocks 泛化成了什么模式？",
+      "options": [
+        "Vector embeddings",
+        "任意 user-defined typed editable blocks（Task、Project、Safety 等）",
+        "JSON-RPC channels",
+        "OS processes"
+      ],
+      "correct": 1,
+      "explanation": "Letta 把两个 MemGPT blocks 泛化为任何带 id、label、value、limit、description 的 user-defined block。"
+    },
+    {
+      "stage": "post",
+      "question": "这个模式中的 silent drift 是什么？",
+      "options": [
+        "primary agent 没看到 sleep-time agent 在它下面改写了 block；用 versioning 和 visible diffs 修复",
+        "缓慢的 disk writes",
+        "Embedding model upgrades",
+        "Rate-limit jitter"
+      ],
+      "correct": 0,
+      "explanation": "给 blocks 做 versioning，并在 trace 中暴露 diffs，可以让 sleep-time rewrites 对 primary loop 可见。"
+    },
+    {
+      "stage": "post",
+      "question": "Letta V1 中，什么替代了 inline `Thought:` tokens 和 send_message/heartbeat pattern？",
+      "options": [
+        "在单独 channel 上发出并跨 turns 传递的 native reasoning",
+        "专门负责 thoughts 的第二个 LLM",
+        "更大的 system prompt",
+        "用户手动输入的 thoughts"
+      ],
+      "correct": 0,
+      "explanation": "Letta V1（letta_v1_agent）使用 provider-level native reasoning，而不是 prompt-shaped thoughts。"
+    }
+  ]
+}
