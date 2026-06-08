@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "为什么 SimCLR 需要 512-8192 的 batch sizes，而 supervised ImageNet training 用 batch 256 就能工作？",
+      "options": ["SimCLR 更慢", "每个 sample 都需要大量 negative examples 来产生有用的 contrastive signal；batch 本身就是 negatives 的池子。小 batches 会让 InfoNCE loss 缺少 negatives，导致训练 collapse 或 stall", "Batch norm 要求这样", "Contrastive loss 会除以 batch size"],
+      "correct": 1,
+      "explanation": "InfoNCE loss 会将 positive pair 与 batch 中所有其他 samples 排名比较。batch 32 每个 positive 有 30 个 negatives；1024 则有 2046 个。更多 negatives = 更尖锐的 contrastive signal。MoCo 引入了过去 features 的 momentum queue，使 effective negatives 能超过 batch size；这是 GPU memory 限制 batch size 时的标准技巧。"
+    },
+    {
+      "stage": "pre",
+      "question": "是什么防止 DINO collapse 到 constant output？",
+      "options": ["只靠 strong augmentation", "centring（从 teacher output 减去 per-dimension EMA mean）和 sharpening（低 teacher temperature）的组合；centring 阻止某个 dimension 主导，sharpening 阻止 output collapse 到 uniform", "Large batch size", "momentum schedule"],
+      "correct": 1,
+      "explanation": "DINO 不使用显式 negatives。没有 centring，一个 output dimension 可能主导，student 会学会总是预测它。没有 sharpening（低 teacher temperature），teacher output 会接近 uniform，student 学会匹配 uniform，这同样是 collapse。二者结合能让 output 在 dimensions 上保持多样，并对每个 sample 保持尖锐。"
+    },
+    {
+      "stage": "post",
+      "question": "MAE mask 75% 的 patches。BERT mask 15% 的 tokens。为什么有这个差异？",
+      "options": ["75% 是随意选择", "Image patches 的 entropy 低——neighbours 高度相关——所以只 mask 15% 会被 local extrapolation 轻松解决。mask 75% 会迫使 encoder 学习 global semantic features 来 reconstruct missing patches", "BERT 设计上要求 15%", "Text tokens 比 image patches 更大"],
+      "correct": 1,
+      "explanation": "mask ratio 应该匹配 modality 的 information density。Text：15% 已经足够，因为每个 token 有很多 plausible completions。Images：neighbouring pixels 几乎相互决定，所以低 mask ratios 不需要真正 representation learning 就能解决。MAE 的 75% 是为了迫使 semantic understanding。"
+    },
+    {
+      "stage": "post",
+      "question": "self-supervised pretraining 之后，'linear probe' evaluation 只训练什么？",
+      "options": ["整个 encoder", "frozen encoder features 上方的一个 single linear classifier；这能将 feature quality 与 fine-tuning dynamics 隔离开", "完整 MLP classifier head", "positional embedding"],
+      "correct": 1,
+      "explanation": "Linear probe 会冻结 encoder，并在 labelled downstream dataset 上拟合 Linear(features -> num_classes)。accuracy 是 feature space linear separability 的直接度量，也就是 feature quality 的 proxy。fine-tuning 整个 backbone 会添加 nonlinear capacity，通常提升几个点，但也混入 optimisation effects。SSL papers 会报告两个数字。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 MAE 使用 asymmetric encoder-decoder design（大 encoder 处理 25% visible patches，小 decoder 处理所有 tokens）？",
+      "options": ["Memory constraints", "encoder 永远不处理 mask tokens；小 decoder 只负责 reconstruction。这让 encoder FLOPs 与 visible patches 成比例（完整 input 的 1/4），并使 pretraining 比那些让 full encoder 处理所有 tokens 的 naive designs 快 3 倍", "Masked tokens 会 confuse self-attention", "decoder 需要自己的 backbone"],
+      "correct": 1,
+      "explanation": "MAE 的关键效率收益是：昂贵 encoder 只看 visible patches，也就是 input 的 25%。Mask tokens 只出现在 shallow decoder 中。这让 pretraining 比 BEiT（让 encoder 处理所有 tokens）大约快 3 倍，同时 downstream accuracy 相等或更好。"
+    }
+  ]
+}
