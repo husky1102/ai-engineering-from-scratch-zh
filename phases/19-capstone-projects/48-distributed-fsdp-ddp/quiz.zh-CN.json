@@ -1,0 +1,78 @@
+{
+  "lesson": "48-distributed-fsdp-ddp",
+  "title": "从零实现 Distributed Data Parallel 和 FSDP",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "从零实现 DDP wrapper 的核心是哪两个 collective ops？",
+      "options": [
+        "send and recv",
+        "构造时 broadcast，让每个 rank 从相同 parameters 开始；backward 后 all_reduce，让每个 rank 得到 averaged gradient",
+        "只有 reduce_scatter",
+        "barrier and barrier"
+      ],
+      "correct": 1,
+      "explanation": "init 时 broadcast 让 ranks 在 step zero 同步。backward 后 all-reduce 让它们在之后每一步保持同步。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么本课不需要 CUDA 也能在 CPU 上工作？",
+      "options": [
+        "它是 stub",
+        "torch.distributed 带有一个通过普通 sockets 运行 collectives 的 gloo backend，所以 CPU 上的 torch.multiprocessing workers 能形成真实 process group；GPU 机器上只改变 device tag",
+        "它使用模拟 tensors",
+        "它完全不使用 torch.distributed"
+      ],
+      "correct": 1,
+      "explanation": "Gloo 是 CPU collective backend。同样调用点在 GPU 上使用 nccl；API surface 完全相同。"
+    },
+    {
+      "stage": "check",
+      "question": "manual_all_reduce_matches_single_process test 证明了什么？",
+      "options": [
+        "什么都没有",
+        "对 per-rank gradients 求和并除以 world_size，会在 floating point noise 内恢复单进程在 concatenated input 上计算的 gradient",
+        "optimizer 会收敛",
+        "CUDA 不必要"
+      ],
+      "correct": 1,
+      "explanation": "full batch 上 cross entropy mean reduction 等于 per-rank means 的平均。sum-and-divide 是正确操作；测试让它可见。"
+    },
+    {
+      "stage": "check",
+      "question": "本课中的 FSDP sketch 在每次 forward pass 上对每个 parameter 做什么？",
+      "options": [
+        "什么都不做",
+        "把 flat parameter pad 到 world_size 的倍数、slice，在每个 rank 上 all_gather slices，丢掉 padding，并验证 reconstruction 匹配原始值",
+        "重新初始化 parameter",
+        "计算 hash"
+      ],
+      "correct": 1,
+      "explanation": "每个 rank 拥有每个 parameter 的 1/world_size。gather 为计算重建 full tensor；生产 FSDP 会把 gather 与上一层工作 overlap。"
+    },
+    {
+      "stage": "check",
+      "question": "即使 parameter length 不能被 world_size 整除，为什么 gloo all_gather 也要使用 world_size 个等大小 shards？",
+      "options": [
+        "Gloo 的 all_gather 要求每个 rank 的 output tensor size 相同，所以 flat parameter 会在 slicing 前 right-pad 到 world_size 的倍数，gather 后再丢掉 padding",
+        "这是 bug",
+        "它加速网络",
+        "随机选择"
+      ],
+      "correct": 0,
+      "explanation": "Gloo（以及 nccl）的 all_gather 期待 same-size outputs。Padding 是最便宜的修复；sketch 会把结果 trim 回原始长度。"
+    },
+    {
+      "stage": "post",
+      "question": "读取 demo output 时，跨 ranks 的 param_sum_spread 接近 zero 说明什么？",
+      "options": [
+        "loss 很低",
+        "每个 rank 都以相同 parameter values 结束运行，说明构造时 broadcast 和每次 backward 后 all-reduce 都工作了；任何一个坏掉，spread 都会随 steps 增长",
+        "网络很快",
+        "没有意义"
+      ],
+      "correct": 1,
+      "explanation": "DDP 的不变量是 ranks 间 parameter parity。spread 是审计；demo 断言它保持在 1e-3 以下。"
+    }
+  ]
+}
