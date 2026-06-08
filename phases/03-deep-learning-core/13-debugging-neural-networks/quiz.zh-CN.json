@@ -1,0 +1,37 @@
+[
+  {
+    "question": "为什么 neural network debugging 比传统软件调试更难？",
+    "options": ["神经网络使用不同的编程语言", "网络可以在没有任何错误消息或崩溃的情况下产生错误输出——代码能运行，但结果静默地不正确", "神经网络不能被测试", "没有神经网络调试工具"],
+    "correct": 1,
+    "explanation": "传统 bug 会崩溃或抛异常。神经网络 bug 会产生一个只是错误的数字——不下降的 loss、plateau 的 accuracy，或微妙错误的 outputs。没有错误消息告诉你哪里出了问题。",
+    "stage": "pre"
+  },
+  {
+    "question": "什么是 'overfit one batch' 调试技巧？",
+    "options": ["在完整数据集上训练直到它 overfits", "在单个小 batch 上训练，直到 loss 接近零，以验证模型至少能记住少量 examples", "使用非常大的 batch size", "overfitting validation set"],
+    "correct": 1,
+    "explanation": "如果你的模型不能把一个 tiny batch（例如 4-8 samples）记到接近零 loss，说明有根本问题：architecture 错、loss function 坏了，或 training loop 不正确。这是第一个要运行的诊断。",
+    "stage": "pre"
+  },
+  {
+    "question": "你的 loss 在训练几步后变成 NaN。最可能的原因是什么？",
+    "options": ["dataset 太小", "Exploding gradients 或 numerical overflow，通常来自过高 learning rate 或缺少 gradient clipping", "model 参数太少", "activation function 错误"],
+    "correct": 1,
+    "explanation": "NaN loss 通常来自 numerical overflow：gradients 爆炸、weights 无界增长，log(0) 或 exp(1000) 这类操作产生 infinity/NaN。降低 learning rate 或添加 gradient clipping。",
+    "stage": "post"
+  },
+  {
+    "question": "training loss 下降，但 validation loss 从一开始就保持平坦。这说明什么？",
+    "options": ["model 正在 overfitting", "model 学到了 training data patterns，但它们不能泛化——可能是 data pipeline issue（train/val data mismatch）或严重 overfitting", "learning rate 太低", "model 需要更多 layers"],
+    "correct": 1,
+    "explanation": "如果 validation loss 从不改善，模型要么在记忆 training noise（overfitting），要么有 data pipeline bug，使 train 和 validation distributions 根本不同。",
+    "stage": "post"
+  },
+  {
+    "question": "当 loss curve 完全平坦（loss 根本不下降）时，首先应该检查什么？",
+    "options": ["尝试不同 architecture", "验证 gradients 非零、learning rate 足够高，并且 loss function 确实依赖 model predictions", "添加更多 training data", "切换到不同 optimizer"],
+    "correct": 1,
+    "explanation": "flat loss 意味着 model 没有更新。常见原因：zero gradients（dead neurons、detached tensors）、learning rate 太小，或 loss function 没有把 gradients 传回 model（例如在 .backward() 前使用 .item()）。",
+    "stage": "post"
+  }
+]
