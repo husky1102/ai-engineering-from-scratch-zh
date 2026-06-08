@@ -1,0 +1,102 @@
+{
+  "lesson": "11-machine-translation",
+  "title": "机器翻译",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "BLEU 衡量什么？",
+      "options": [
+        "Language identification accuracy",
+        "hypothesis 与 reference 之间的 N-gram precision（通常 1-4），并带有 brevity penalty",
+        "Character-level F-score",
+        "Embedding cosine similarity"
+      ],
+      "correct": 1,
+      "explanation": "BLEU 是相对于 references 的 1-4-gram precision 的 geometric mean，再加上 brevity penalty。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么用 sacrebleu，而不是自己实现 BLEU？",
+      "options": [
+        "它更 accurate",
+        "它在 GPU 上运行",
+        "它标准化 tokenization，使 scores 能跨 papers 和 runs 比较",
+        "它支持 streaming"
+      ],
+      "correct": 2,
+      "explanation": "sacrebleu 固定 tokenization，移除了 BLEU numbers 不可比较的常见来源。"
+    },
+    {
+      "stage": "check",
+      "question": "哪个 NLLB-specific setting 控制 decoding 期间的 target language？",
+      "options": [
+        "length_penalty",
+        "forced_bos_token_id 设置为 target language code 的 token id",
+        "num_beams",
+        "src_lang"
+      ],
+      "correct": 1,
+      "explanation": "NLLB 通过 forced_bos_token_id 强制第一个 decoded token 为 target-language code。"
+    },
+    {
+      "stage": "check",
+      "question": "在有 labeled data 且 quality 重要的 production MT 中，2026 年默认使用哪类 metric family？",
+      "options": [
+        "只用 BLEU",
+        "Token edit distance",
+        "在 human judgment 上训练的 learned metrics，如 COMET（以及 BERTScore/BLEURT）",
+        "Latency"
+      ],
+      "correct": 2,
+      "explanation": "COMET 这样的 learned metrics 与 human judgment 的相关性强于单独 BLEU/chrF。"
+    },
+    {
+      "stage": "check",
+      "question": "什么时候 chrF 往往比 BLEU 更有信息量？",
+      "options": [
+        "对 morphologically rich languages，character-level matches 能捕获 BLEU 漏掉的 inflectional variants",
+        "使用 beam search 时",
+        "在非常短的 sentences 上",
+        "只要有 reference"
+      ],
+      "correct": 0,
+      "explanation": "Character F-score 会捕获 word-level BLEU 低估的 partial morphological matches。"
+    },
+    {
+      "stage": "post",
+      "question": "multilingual MT 中的 off-target generation 是什么？",
+      "options": [
+        "output 丢掉 named entities",
+        "output 漏掉 punctuation",
+        "模型解码成错误 target language（例如要求 French 时 NLLB 输出 Spanish）",
+        "output 太短"
+      ],
+      "correct": 2,
+      "explanation": "Off-target generation 在 rare language pairs 上很常见；post-translation language-ID check 可以捕获它。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么在几千条 high-quality domain pairs 上 fine-tuning，常常胜过大得多的 noisy web data？",
+      "options": [
+        "更大 data 会 overflow GPU memory",
+        "更小 datasets 训练更快",
+        "Web data 使用不合法",
+        "Quality 和 domain match 比 volume 更重要；noisy parallel data 会引入 drift 和 hallucination"
+      ],
+      "correct": 3,
+      "explanation": "干净、domain-aligned pairs 是最大的 production lever；noisy data 会降低 adaptation 质量。"
+    },
+    {
+      "stage": "post",
+      "question": "2026 年什么时候 LLM（如 GPT-4）可能胜过 specialized MT model？",
+      "options": [
+        "最高 throughput batch translation",
+        "Latency-critical browser translation",
+        "Idiomatic content、long context、通过 prompting 做 stylistic adaptation，或需要 tone control 的内容",
+        "有数百万 parallel sentences 的 small-language pairs"
+      ],
+      "correct": 2,
+      "explanation": "LLMs 在 idiomatic、long-context 或 style-controlled translation 上胜出；specialized MT 在 throughput 和 latency 上胜出。"
+    }
+  ]
+}
