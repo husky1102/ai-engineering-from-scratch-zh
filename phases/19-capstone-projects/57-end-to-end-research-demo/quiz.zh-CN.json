@@ -1,0 +1,78 @@
+{
+  "lesson": "57-end-to-end-research-demo",
+  "title": "端到端 Research Demo",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "本课中 demo 的职责是什么？",
+      "options": [
+        "用一个新的 framework 替换早前 lessons",
+        "通过普通 Python imports 组合早前 lessons 的 primitives",
+        "用 baseline benchmark scheduler",
+        "在每个 branch 上调用真实语言模型"
+      ],
+      "correct": 1,
+      "explanation": "demo 是一个 composition test。每个 stage 都存在于自己的 lesson 中。demo import 它们并接好 report。没有新 framework，也没有新 abstractions。"
+    },
+    {
+      "stage": "pre",
+      "question": "为什么本课使用 importlib 加载早前 lessons，而不是普通 package import？",
+      "options": [
+        "因为 importlib 更快",
+        "因为每个早前 lesson 都是 standalone code/ folder，不是已安装 package；importlib 会按 file path 加载它们",
+        "因为 asyncio 要求 importlib",
+        "因为 lessons 共享 module name，会发生冲突"
+      ],
+      "correct": 1,
+      "explanation": "这些 lessons 不是已安装 packages。每个 lesson 都在自己的 code/ folder 中提供 main.py。importlib.util.spec_from_file_location 可以按路径加载它们，而不会污染 global module namespace。"
+    },
+    {
+      "stage": "check",
+      "question": "当多个 branches 都触发 paper 时，best-result picker 如何在它们之间做决定？",
+      "options": [
+        "它选择运行 experiments 最多的 branch",
+        "它选择 mean reward 最高的 branch，并按 branch id 字母序打破 ties",
+        "它为了公平随机选择",
+        "它选择第一个 triggered branch"
+      ],
+      "correct": 1,
+      "explanation": "最高 mean 获胜。ties 按 branch id 打破，因此 demo 是 deterministic 的。random 会破坏 determinism test。"
+    },
+    {
+      "stage": "check",
+      "question": "当 scheduler 报告 paper triggers 为零时，picker 会抛出什么错误？",
+      "options": [
+        "ValueError",
+        "NoTriggerError，它会在 writer 运行前短路 demo",
+        "PaperValidationError",
+        "它返回 None"
+      ],
+      "correct": 1,
+      "explanation": "NoTriggerError 是 typed failure mode。返回 None 会让 writer 在 malformed input 上运行，并在更晚的时候抛出更难处理的错误。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么 determinism test 会用相同 seed 运行 demo 两次？",
+      "options": [
+        "为了运行 asyncio 两次",
+        "为了断言 picked branch、reward 和 paper section ids 在两次运行中完全相同",
+        "为了捕获 memory leak",
+        "为了证明 scheduler 是公平的"
+      ],
+      "correct": 1,
+      "explanation": "Determinism 是 contract 的一部分。使用相同 seed 的两次运行必须产生相同 artifacts。test 会固定这一点。"
+    },
+    {
+      "stage": "post",
+      "question": "一次成功运行后，demo report 包含什么？",
+      "options": [
+        "只有最终 LaTeX 文件",
+        "scheduler_report、best_branch、best_reward、critic_result、paper_manifest 和 stop_reason",
+        "只有 experiment count 和一个 status string",
+        "一个 model prompt 和 completion log"
+      ],
+      "correct": 1,
+      "explanation": "每个 stage 的输出都会被保留。report 是 upstream outputs 的组合，而不是转换后的摘要。下游 tooling 读取 manifest；debuggers 读取 scheduler_report 中的 trace。"
+    }
+  ]
+}
