@@ -1,0 +1,78 @@
+{
+  "lesson": "24-regulatory-frameworks-eu-us-uk-korea",
+  "title": "监管框架：欧盟、美国、英国、韩国",
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "EU AI Act 什么时候生效，最先适用的是哪一类？",
+      "options": [
+        "2024 年 8 月；禁止实践和 AI 素养于 2025 年 2 月 2 日适用",
+        "2026 年 8 月；只有 GPAI 在生效日适用",
+        "2025 年 8 月；所有类别同时适用",
+        "2024 年 1 月；高风险系统当天适用"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "EU AI Act 自 2026 年 8 月 2 日起适用的最高金钱处罚是多少？",
+      "options": [
+        "无限额",
+        "最高 100 万 EUR 或全球营业额的 0.1%",
+        "最高 1500 万 EUR 或全球营业额的 3%",
+        "最高 500 万 EUR 或全球营业额的 1%"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "GPAI Code of Practice（2025 年 7 月 10 日）由哪三个章节组成？",
+      "options": [
+        "Training, Inference, Deployment",
+        "Capability, Control, Compliance",
+        "Privacy, Bias, Watermarking",
+        "Transparency, Copyright, Safety and Security"
+      ],
+      "correct": 3,
+      "explanation": ""
+    },
+    {
+      "stage": "check",
+      "question": "2025 年 2 月 UK AISI 更名为 “AI Security Institute” 传递了什么信号？",
+      "options": [
+        "范围收窄，聚焦前沿能力安全，放弃算法偏见和言论自由框架",
+        "与 EU AI Office 合并",
+        "关闭英国前沿评估",
+        "扩展到算法偏见"
+      ],
+      "correct": 0,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "US CAISI 更名（2025 年 6 月）在政策方向上传递了什么信号？",
+      "options": [
+        "与 FDA 合并",
+        "更严格的部署前安全评估",
+        "转向 “pro-growth AI policies”，强调标准和创新支持，并降低对部署前评估的强调",
+        "强制开源前沿模型"
+      ],
+      "correct": 2,
+      "explanation": ""
+    },
+    {
+      "stage": "post",
+      "question": "Korea AI Framework Act（2026 年 1 月生效）的标题性义务是什么？",
+      "options": [
+        "完全照搬 EU AI Act",
+        "所有生成式模型必须开放权重",
+        "全面禁止外国 AI provider",
+        "Article 12 在 MSIT 下设立 AISI，并要求本地代表、风险评估，以及面向高影响和生成式 AI 的安全措施"
+      ],
+      "correct": 3,
+      "explanation": ""
+    }
+  ]
+}
