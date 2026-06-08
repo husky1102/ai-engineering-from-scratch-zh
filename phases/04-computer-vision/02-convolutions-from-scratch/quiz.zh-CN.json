@@ -1,0 +1,39 @@
+{
+  "questions": [
+    {
+      "stage": "pre",
+      "question": "你把一张 224x224 RGB 图像喂给一个 kernel_size=3、stride=1、padding=0 的 conv。输出空间尺寸是多少？",
+      "options": ["224x224", "222x222", "112x112", "74x74"],
+      "correct": 1,
+      "explanation": "Output size = (H - K + 2P) / S + 1 = (224 - 3 + 0) / 1 + 1 = 222。没有 padding 时，每个 3x3 convolution 都会让 feature map 在每个轴上缩小 2 个 pixel，也就是每个 border 少一个 pixel。"
+    },
+    {
+      "stage": "pre",
+      "question": "一个 conv layer 有 in_channels=3、out_channels=64、kernel_size=3，并带 bias。有多少个 learnable parameter？",
+      "options": ["1,728", "1,792", "576", "192"],
+      "correct": 1,
+      "explanation": "C_out * C_in * K * K + C_out = 64 * 3 * 3 * 3 + 64 = 1,728 + 64 = 1,792。+C_out 是每个 output channel 一个 bias。把它和同一输入上的 dense layer（224*224*3 -> 64，约 9.6M params）比较，你就会看到为什么 convolution 是图像的正确先验。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么现代 CNN 更偏好堆叠 3x3 convolution，而不是使用单个 5x5 或 7x7 conv？",
+      "options": ["3x3 convolution 有硬件加速，更大的没有", "两个 3x3 conv 覆盖与 5x5 相同的 receptive field，但参数更少（2 * 9 vs 25），并且在中间增加一次 non-linearity", "大 kernel 会溢出 GPU register", "3x3 是唯一支持 padding 的 kernel size"],
+      "correct": 1,
+      "explanation": "堆叠 3x3 conv 可以获得与一个大 conv 相同的 receptive field，但参数更少、non-linearity 更多，因此表达能力更强。VGG 用实验证明了这一点，之后每个现代家族（ResNet、ConvNeXt）都继承了这个设计。"
+    },
+    {
+      "stage": "post",
+      "question": "im2col transformation 实际做了什么？",
+      "options": ["它压缩图像以适配 GPU cache", "它从输入中提取每个 kernel-sized receptive window，并把它们堆成列，使 convolution 变成一次 matrix multiply", "它把 float32 pixel 转成 int8 以加速算术运算", "它把 batch 中所有图像拼接成一个 2D matrix"],
+      "correct": 1,
+      "explanation": "im2col 会重排输入，使每一列都是一个 flattened receptive field。把 kernel 展平成一行后，convolution 就变成 cols @ w_flat.T，也就是一次 GEMM 调用，GPU 执行它比四重 Python loop 快成千上万倍。每个生产 conv library 都是这一思路的某种变体。"
+    },
+    {
+      "stage": "post",
+      "question": "你堆叠四个 3x3 convolution（全都是 stride 1，没有 pooling）。最终层中一个 neuron 的 receptive field 是多少？",
+      "options": ["3x3，因为每个 conv 都是 3x3", "5x5，因为两个 conv 得到 5x5，depth 不再有帮助", "9x9，因为每个 conv 在每边增加 2：1 + 4*(3-1) = 9", "15x15，因为每个 conv 都会让 receptive field 变成三倍"],
+      "correct": 2,
+      "explanation": "对于 L 个堆叠的 K x K conv 且 stride 1，receptive field = 1 + L * (K - 1)。当 L=4 且 K=3 时，就是 1 + 4*2 = 9。同一公式可以推广到 stride：receptive field 会穿过 strided layer 乘性增长，所以带 downsampling 的深层网络能在十几个 block 内覆盖整张图像。"
+    }
+  ]
+}
