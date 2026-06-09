@@ -3399,6 +3399,21 @@
         return t('runtimeStaticNote');
       }
 
+      function displayRuntimePackages(packages) {
+        var stdlib = {
+          '__future__': true,
+          'os': true,
+          'shlex': true,
+          'subprocess': true,
+          'sys': true,
+          'uuid': true
+        };
+        if (!Array.isArray(packages)) return [];
+        return packages.filter(function (pkg) {
+          return !stdlib[String(pkg || '').toLowerCase()];
+        });
+      }
+
       function formatSize(bytes) {
         if (bytes < 1024) return bytes + ' B';
         return (bytes / 1024).toFixed(1) + ' KB';
@@ -3495,7 +3510,7 @@
             if (runtime === 'static-only' && notes.length === 1 && notes[0] === 'non-Python lesson; browser execution not enabled yet') {
               notes = [runtimeDefaultNote(runtime)];
             }
-            var packages = Array.isArray(record.packages) ? record.packages : [];
+            var packages = displayRuntimePackages(record.packages);
 
             html += '<div class="code-card">';
             html += '<div class="runtime-badge ' + escapeAttr(runtime) + '">' + escapeHtml(runtimeLabel(runtime)) + '</div>';
