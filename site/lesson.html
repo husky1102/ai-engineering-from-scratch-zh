@@ -3553,6 +3553,7 @@
         var panel = document.createElement('div');
         panel.className = 'ai-panel';
         panel.innerHTML = '<div class="ai-panel-header"><div class="ai-panel-icon">C</div><div class="ai-panel-title">' + escapeHtml(t('runtimeTitle')) + '</div></div><div class="ai-panel-subtitle">' + escapeHtml(t('runtimeLoading')) + '</div><div id="codeContent" class="panel-loading">' + escapeHtml(t('runtimeLoading')) + '</div>';
+        var codePanelSubtitle = panel.querySelector('.ai-panel-subtitle');
         container.appendChild(panel);
 
         Promise.all([loadRuntimeManifest(), loadLessonAssets()]).then(function (results) {
@@ -3563,6 +3564,9 @@
           var record = manifest && manifest.lessons ? manifest.lessons[lessonPath] : null;
           var assets = currentLessonAssets(assetManifest);
           var codeFiles = assets && Array.isArray(assets.code) ? assets.code : [];
+          if (codePanelSubtitle) {
+            codePanelSubtitle.textContent = record ? runtimeLabel(record.runtime || 'static-only') : (codeFiles.length ? t('sourceFiles') : t('runtimeStatic'));
+          }
           el.classList.remove('panel-loading');
           if (!record && !codeFiles.length) {
             el.innerHTML = '<div class="panel-fallback">' + escapeHtml(t('runtimeNoCode')) + '</div>';

@@ -15,3 +15,13 @@ test('lesson runtime notes are localized before rendering', () => {
   assert.equal(zhCn.runtimeNoteOutsideBrowserAllowlist, 'Python 使用浏览器运行器尚未启用的包。');
   assert.match(fallback, /runtimeNoteOutsideBrowserAllowlist: 'Python 使用浏览器运行器尚未启用的包。'/);
 });
+
+test('code panel subtitle leaves the loading state after manifests resolve', () => {
+  const lessonHtml = readFileSync('site/lesson.html', 'utf8');
+
+  assert.match(lessonHtml, /var codePanelSubtitle = panel\.querySelector\('\.ai-panel-subtitle'\);/);
+  assert.match(
+    lessonHtml,
+    /codePanelSubtitle\.textContent = record \? runtimeLabel\(record\.runtime \|\| 'static-only'\) : \(codeFiles\.length \? t\('sourceFiles'\) : t\('runtimeStatic'\)\);/,
+  );
+});
