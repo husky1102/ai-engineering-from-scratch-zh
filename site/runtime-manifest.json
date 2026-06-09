@@ -30,7 +30,7 @@
       "runtime": "static-only"
     },
     "phases/00-setup-and-tooling/03-gpu-setup-and-cloud": {
-      "entry": "phases/00-setup-and-tooling/03-gpu-setup-and-cloud/code/gpu_check.py",
+      "entry": "phases/00-setup-and-tooling/03-gpu-setup-and-cloud/code/main.py",
       "lab": null,
       "language": "python",
       "languages": [
@@ -42,7 +42,6 @@
         "imports torch"
       ],
       "packages": [
-        "sys",
         "torch"
       ],
       "runtime": "local-kernel"

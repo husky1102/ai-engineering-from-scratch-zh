@@ -72,8 +72,17 @@
           "language": "python",
           "name": "gpu_check.py",
           "path": "phases/00-setup-and-tooling/03-gpu-setup-and-cloud/code/gpu_check.py",
-          "size": 1592,
+          "size": 80,
           "url": "content/phases/00-setup-and-tooling/03-gpu-setup-and-cloud/code/gpu_check.py"
+        },
+        {
+          "command": "python main.py",
+          "is_entry_candidate": true,
+          "language": "python",
+          "name": "main.py",
+          "path": "phases/00-setup-and-tooling/03-gpu-setup-and-cloud/code/main.py",
+          "size": 4201,
+          "url": "content/phases/00-setup-and-tooling/03-gpu-setup-and-cloud/code/main.py"
         }
       ],
       "outputs": []
