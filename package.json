@@ -1,0 +1,17 @@
+{
+  "name": "aefs-learn-cli",
+  "version": "0.1.0",
+  "description": "Local launcher for AI Engineering from Scratch course materials.",
+  "type": "module",
+  "bin": {
+    "aefs": "./bin/aefs.mjs",
+    "learnAI": "./bin/aefs.mjs"
+  },
+  "scripts": {
+    "test:cli": "node --test cli/tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

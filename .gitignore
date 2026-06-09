@@ -40,6 +40,7 @@ Thumbs.db
 .idea/
 .vscode/
 *.log
+*.command
 
 data/
 models/
@@ -60,6 +61,7 @@ mlruns/
 .codegraph/
 .codex/
 cowork/
+.aefs/
 catalog.json
 i18n/manifest.jsonl
 
