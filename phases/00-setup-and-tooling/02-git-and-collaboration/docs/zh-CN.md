@@ -24,10 +24,10 @@ Git 是工具。GitHub 是代码所在的地方。本课只覆盖你完成这门
 
 ```mermaid
 sequenceDiagram
-    participant WD as Working Directory
-    participant SA as Staging Area
-    participant LR as Local Repo
-    participant R as Remote (GitHub)
+    participant WD as 工作目录
+    participant SA as 暂存区
+    participant LR as 本地仓库
+    participant R as 远端（GitHub）
     WD->>SA: git add
     SA->>LR: git commit
     LR->>R: git push
@@ -104,7 +104,7 @@ git push origin my-progress
 
 | 术语 | 人们常说 | 实际含义 |
 |------|----------------|----------------------|
-| Commit | “保存” | 项目在某个时间点的完整快照 |
-| Branch | “一份副本” | 一个指向提交的指针，会随着你的工作继续向前移动 |
-| Merge | “合并代码” | 把一个分支上的变更拿过来，应用到另一个分支 |
-| Remote | “云端” | 托管在其他地方的一份仓库副本（GitHub、GitLab） |
+| 提交（commit） | “保存” | 项目在某个时间点的完整快照 |
+| 分支（branch） | “一份副本” | 一个指向提交的指针，会随着你的工作继续向前移动 |
+| 合并（merge） | “合并代码” | 把一个分支上的变更拿过来，应用到另一个分支 |
+| 远端（remote） | “云端” | 托管在其他地方的一份仓库副本（GitHub、GitLab） |
