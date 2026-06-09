@@ -12,7 +12,7 @@ class BuildLessonAssetsTest(unittest.TestCase):
         self.assertGreater(len(lesson["outputs"]), 0)
 
         first_output = lesson["outputs"][0]
-        self.assertTrue(first_output["url"].startswith("../" + lesson_path + "/outputs/"))
+        self.assertTrue(first_output["url"].startswith("content/" + lesson_path + "/outputs/"))
         self.assertNotIn("download_url", first_output)
         self.assertNotIn("html_url", first_output)
         self.assertIn(first_output["kind"], {"prompt", "skill", "artifact"})
@@ -24,7 +24,12 @@ class BuildLessonAssetsTest(unittest.TestCase):
         lesson = manifest["lessons"][lesson_path]
         code_paths = {record["path"] for record in lesson["code"]}
 
+        self.assertIn(lesson_path + "/code/main.py", code_paths)
         self.assertIn(lesson_path + "/code/verify.py", code_paths)
+        self.assertNotIn(lesson_path + "/code/tests/test_verify.py", code_paths)
+        main_record = next(record for record in lesson["code"] if record["path"].endswith("/main.py"))
+        self.assertEqual(main_record["language"], "python")
+        self.assertEqual(main_record["command"], "python main.py")
         verify_record = next(record for record in lesson["code"] if record["path"].endswith("/verify.py"))
         self.assertEqual(verify_record["language"], "python")
         self.assertEqual(verify_record["command"], "python verify.py")

@@ -137,7 +137,9 @@ def lesson_record(lesson: Path) -> dict[str, object]:
     code_files = sorted(
         path
         for path in code_dir.rglob("*")
-        if path.is_file() and not path.name.startswith(".")
+        if path.is_file()
+        and not path.name.startswith(".")
+        and (not path.relative_to(code_dir).parts or path.relative_to(code_dir).parts[0] != "tests")
     ) if code_dir.is_dir() else []
     output_files = sorted(
         path

@@ -2,7 +2,7 @@
   "generated_by": "scripts/detect_runtimes.py",
   "lessons": {
     "phases/00-setup-and-tooling/01-dev-environment": {
-      "entry": "phases/00-setup-and-tooling/01-dev-environment/code/verify.py",
+      "entry": "phases/00-setup-and-tooling/01-dev-environment/code/main.py",
       "lab": null,
       "language": "python",
       "languages": [
@@ -12,15 +12,9 @@
       ],
       "notebook": null,
       "notes": [
-        "uses subprocess",
-        "mentions GPU/CUDA",
-        "imports subprocess"
+        "mentions GPU/CUDA"
       ],
-      "packages": [
-        "shutil",
-        "subprocess",
-        "sys"
-      ],
+      "packages": [],
       "runtime": "local-kernel"
     },
     "phases/00-setup-and-tooling/02-git-and-collaboration": {

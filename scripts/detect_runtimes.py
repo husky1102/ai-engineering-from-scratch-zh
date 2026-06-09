@@ -42,6 +42,7 @@ CODE_SUFFIXES = {
 
 PYODIDE_PACKAGES = {"numpy"}
 STDLIB_LIKE = {
+    "__future__",
     "abc",
     "argparse",
     "ast",
@@ -57,6 +58,7 @@ STDLIB_LIKE = {
     "hashlib",
     "heapq",
     "hmac",
+    "importlib",
     "itertools",
     "json",
     "math",
@@ -64,8 +66,10 @@ STDLIB_LIKE = {
     "pathlib",
     "random",
     "re",
+    "shutil",
     "statistics",
     "string",
+    "sys",
     "textwrap",
     "time",
     "typing",
@@ -152,6 +156,14 @@ def python_imports(path: Path) -> set[str]:
     return imports
 
 
+def local_python_modules(files: list[Path]) -> set[str]:
+    return {
+        path.stem
+        for path in files
+        if code_language(path) == "python" and path.stem != "__init__"
+    }
+
+
 def choose_entry(files: list[Path], language: str) -> str | None:
     candidates = [path for path in files if code_language(path) == language]
     if not candidates:
@@ -200,16 +212,18 @@ def detect_lesson(lesson: Path) -> dict[str, object]:
             if pattern.search(text) and reason not in heavy_reasons:
                 heavy_reasons.append(reason)
 
-    heavy_import_hits = sorted(imports & HEAVY_IMPORTS)
+    external_imports = imports - local_python_modules(files)
+
+    heavy_import_hits = sorted(external_imports & HEAVY_IMPORTS)
     for name in heavy_import_hits:
         heavy_reasons.append(f"imports {name}")
-    if imports & NETWORK_OR_PROCESS_IMPORTS:
-        for name in sorted(imports & NETWORK_OR_PROCESS_IMPORTS):
+    if external_imports & NETWORK_OR_PROCESS_IMPORTS:
+        for name in sorted(external_imports & NETWORK_OR_PROCESS_IMPORTS):
             reason = f"imports {name}"
             if reason not in heavy_reasons:
                 heavy_reasons.append(reason)
 
-    packages = sorted(name for name in imports if name not in STDLIB_LIKE)
+    packages = sorted(name for name in external_imports if name not in STDLIB_LIKE)
 
     if not files:
         runtime = "static-only"

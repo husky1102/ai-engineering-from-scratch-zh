@@ -4,13 +4,31 @@
     "phases/00-setup-and-tooling/01-dev-environment": {
       "code": [
         {
+          "command": "python main.py",
+          "is_entry_candidate": true,
+          "language": "python",
+          "name": "main.py",
+          "path": "phases/00-setup-and-tooling/01-dev-environment/code/main.py",
+          "size": 521,
+          "url": "content/phases/00-setup-and-tooling/01-dev-environment/code/main.py"
+        },
+        {
           "command": "rustc --edition 2021 main.rs",
           "is_entry_candidate": true,
           "language": "rust",
           "name": "main.rs",
           "path": "phases/00-setup-and-tooling/01-dev-environment/code/main.rs",
-          "size": 4866,
+          "size": 5116,
           "url": "content/phases/00-setup-and-tooling/01-dev-environment/code/main.rs"
+        },
+        {
+          "command": "npx tsx main.ts",
+          "is_entry_candidate": true,
+          "language": "typescript",
+          "name": "main.ts",
+          "path": "phases/00-setup-and-tooling/01-dev-environment/code/main.ts",
+          "size": 316,
+          "url": "content/phases/00-setup-and-tooling/01-dev-environment/code/main.ts"
         },
         {
           "command": "python verify.py",
@@ -18,7 +36,7 @@
           "language": "python",
           "name": "verify.py",
           "path": "phases/00-setup-and-tooling/01-dev-environment/code/verify.py",
-          "size": 2122,
+          "size": 3405,
           "url": "content/phases/00-setup-and-tooling/01-dev-environment/code/verify.py"
         },
         {
@@ -27,7 +45,7 @@
           "language": "typescript",
           "name": "verify.ts",
           "path": "phases/00-setup-and-tooling/01-dev-environment/code/verify.ts",
-          "size": 2983,
+          "size": 3155,
           "url": "content/phases/00-setup-and-tooling/01-dev-environment/code/verify.ts"
         }
       ],
