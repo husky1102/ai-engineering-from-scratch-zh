@@ -56,6 +56,7 @@ STDLIB_LIKE = {
     "functools",
     "hashlib",
     "heapq",
+    "hmac",
     "itertools",
     "json",
     "math",
@@ -125,7 +126,15 @@ def list_code_files(lesson: Path) -> list[Path]:
     code_dir = lesson / "code"
     if not code_dir.is_dir():
         return []
-    return sorted(path for path in code_dir.rglob("*") if path.is_file() and code_language(path))
+    files: list[Path] = []
+    for path in code_dir.rglob("*"):
+        if not path.is_file() or not code_language(path):
+            continue
+        rel_parts = path.relative_to(code_dir).parts
+        if rel_parts and rel_parts[0] == "tests":
+            continue
+        files.append(path)
+    return sorted(files)
 
 
 def python_imports(path: Path) -> set[str]:

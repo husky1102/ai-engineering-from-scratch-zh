@@ -12,6 +12,17 @@ class DetectRuntimesTest(unittest.TestCase):
         self.assertIn("notebook", record)
         self.assertIn("lab", record)
 
+    def test_tests_and_hmac_do_not_pollute_runtime_packages(self):
+        lesson = detect_runtimes.ROOT / "phases/14-agent-engineering/38-verification-gates"
+
+        record = detect_runtimes.detect_lesson(lesson)
+
+        self.assertEqual("local-kernel", record["runtime"])
+        self.assertNotIn("hmac", record["packages"])
+        self.assertNotIn("main", record["packages"])
+        self.assertNotIn("tempfile", record["packages"])
+        self.assertIn("uses API key or secret", record["notes"])
+
 
 if __name__ == "__main__":
     unittest.main()
