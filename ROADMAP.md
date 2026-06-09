@@ -269,7 +269,7 @@ Total estimated time: ~314 hours, at your own pace.
 | 25 | [Speculative Decoding and EAGLE](phases/10-llms-from-scratch/25-speculative-decoding) | ✅ | ~75 min |
 | 34 | [Gradient Checkpointing and Activation Recomputation](phases/10-llms-from-scratch/34-gradient-checkpointing) | ✅ | ~70 min |
 
-## Phase 11: LLM Engineering — ✅ (~17 hours)
+## Phase 11: LLM Engineering — ✅ (~19 hours)
 
 | # | Lesson | Status | Est. |
 |---|--------|--------|------|
@@ -288,6 +288,8 @@ Total estimated time: ~314 hours, at your own pace.
 | 13 | [Building a Production LLM Application](phases/11-llm-engineering/13-production-app) | ✅ | ~120 min |
 | 14 | [Model Context Protocol (MCP)](phases/11-llm-engineering/14-model-context-protocol) | ✅ | ~75 min |
 | 15 | [Prompt Caching & Context Caching](phases/11-llm-engineering/15-prompt-caching) | ✅ | ~60 min |
+| 16 | [LangGraph: State Machines for Agents](phases/11-llm-engineering/16-langgraph-state-machines) | ✅ | ~75 min |
+| 17 | [Agent Framework Tradeoffs](phases/11-llm-engineering/17-agent-framework-tradeoffs) | ✅ | ~45 min |
 
 ## Phase 12: Multimodal AI — ✅ (~65 hours)
 

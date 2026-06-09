@@ -50,23 +50,17 @@
   function computeStats() {
     var totalLessons = 0;
     var completeLessons = 0;
-    var hasProgress = !!window.AIFSProgress;
+    var completePhases = 0;
     for (var i = 0; i < PHASES.length; i++) {
       var lessons = PHASES[i].lessons;
+      var phaseComplete = lessons.length > 0;
       totalLessons += lessons.length;
       for (var j = 0; j < lessons.length; j++) {
-        var staticDone = lessons[j].status === 'complete';
-        var userDone = false;
-        if (hasProgress && lessons[j].url) {
-          var lp = window.AIFSProgress.extractPath(lessons[j].url);
-          if (lp) userDone = window.AIFSProgress.isLessonComplete(lp);
-        }
-        if (staticDone || userDone) completeLessons++;
+        var userDone = isUserLessonComplete(lessons[j]);
+        if (userDone) completeLessons++;
+        if (!userDone) phaseComplete = false;
       }
-    }
-    var completePhases = 0;
-    for (var p = 0; p < PHASES.length; p++) {
-      if (PHASES[p].status === 'complete') completePhases++;
+      if (phaseComplete) completePhases++;
     }
     return {
       lessons: totalLessons,
@@ -111,7 +105,6 @@
   function renderPhases() {
     var grid = document.getElementById('phasesGrid');
     if (!grid) return;
-    var hasProgress = !!window.AIFSProgress;
     var html = '';
     for (var i = 0; i < PHASES.length; i++) {
       var p = PHASES[i];
@@ -119,13 +112,7 @@
       var total = p.lessons.length;
       var done = 0;
       for (var j = 0; j < p.lessons.length; j++) {
-        var staticDone = p.lessons[j].status === 'complete';
-        var userDone = false;
-        if (hasProgress && p.lessons[j].url) {
-          var lp = window.AIFSProgress.extractPath(p.lessons[j].url);
-          if (lp) userDone = window.AIFSProgress.isLessonComplete(lp);
-        }
-        if (staticDone || userDone) done++;
+        if (isUserLessonComplete(p.lessons[j])) done++;
       }
       var statusClass = p.status.replace(/ /g, '-');
       var roman = toRoman(p.id);
@@ -156,6 +143,12 @@
         newRows[r].classList.add('in-view', 'visible');
       }
     }
+  }
+
+  function isUserLessonComplete(lesson) {
+    if (!window.AIFSProgress || !lesson || !lesson.url) return false;
+    var lp = window.AIFSProgress.extractPath(lesson.url);
+    return !!(lp && window.AIFSProgress.isLessonComplete(lp));
   }
 
   function lessonPathFromUrl(url) {

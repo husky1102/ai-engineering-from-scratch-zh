@@ -56,6 +56,19 @@ test('homepage modal chrome is Chinese and lesson title links are local', () => 
   assert.match(app, /标记完成/);
 });
 
+test('homepage progress counts initialize from local user progress only', () => {
+  const app = readFileSync('site/app.js', 'utf8');
+
+  assert.match(app, /function isUserLessonComplete\(lesson\)/);
+  assert.match(app, /window\.AIFSProgress\.isLessonComplete\(lp\)/);
+  assert.match(app, /if \(userDone\) completeLessons\+\+/);
+  assert.match(app, /if \(phaseComplete\) completePhases\+\+/);
+  assert.match(app, /if \(isUserLessonComplete\(p\.lessons\[j\]\)\) done\+\+/);
+  assert.doesNotMatch(app, /staticDone/);
+  assert.doesNotMatch(app, /PHASES\[p\]\.status === 'complete'/);
+  assert.doesNotMatch(app, /lessons\[j\]\.status === 'complete'/);
+});
+
 test('build data exposes Chinese phase and lesson titles for homepage and lesson sidebar', () => {
   const build = readFileSync('site/build.js', 'utf8');
   const lesson = readFileSync('site/lesson.html', 'utf8');
