@@ -15,18 +15,6 @@
       "explanation": "The runner closes the gap between 'tests passed' (imagined) and 'tests actually ran and exited zero' (recorded)."
     },
     {
-      "stage": "pre",
-      "question": "How does feedback differ from telemetry?",
-      "options": [
-        "Telemetry is paid",
-        "Feedback is for the next turn of this run; telemetry is for operators reviewing runs across time (different files, different retention)",
-        "Telemetry uses OTel; feedback uses GraphQL",
-        "They are the same thing"
-      ],
-      "correct": 1,
-      "explanation": "Both share fields but live in different files with different retention; feedback is intra-run, telemetry is cross-run."
-    },
-    {
       "stage": "check",
       "question": "Which field MUST appear in every feedback record?",
       "options": [
@@ -60,7 +48,7 @@
         "It is faster"
       ],
       "correct": 1,
-      "explanation": "Redact lines matching Bearer, password=, api_key=, AKIA..., xox[baprs]- before append; auditing the patterns quarterly."
+      "explanation": "Redact lines matching Bearer, password=, api_key=, AKIA..., xox[baprs]- before appending the record."
     },
     {
       "stage": "post",
@@ -72,7 +60,7 @@
         "Lower memory"
       ],
       "correct": 1,
-      "explanation": "Parent linkage makes retry chains visible to the reviewer (Lesson 39) and the verification gate."
+      "explanation": "Parent linkage makes retry chains visible to the reviewer and the verification gate."
     },
     {
       "stage": "post",
@@ -84,7 +72,7 @@
         "The provider charges per byte"
       ],
       "correct": 1,
-      "explanation": "Bounded current file + rotated history is the same pattern logrotate uses; predictable cost in the hot loop."
+      "explanation": "Bounded current file plus rotated history is the same pattern logrotate uses; predictable cost in the hot loop."
     }
   ]
 }

@@ -66,7 +66,7 @@ If the runner errors before capturing exit, the record carries `exit_code: null`
 
 Run it:
 
-```
+```bash
 python3 code/main.py
 ```
 

@@ -1,30 +1,18 @@
 {
   "lesson": "37-runtime-feedback-loops",
-  "title": "Runtime Feedback Loops",
+  "title": "运行时反馈循环",
   "questions": [
     {
       "stage": "pre",
       "question": "feedback runner 会强制代理做什么？",
       "options": [
         "响应想象出来的输出",
-        "响应事实：每个命令都把结构化 stdout/stderr/exit/duration records 捕获进循环",
+        "响应事实：每个命令都把结构化 stdout/stderr/exit/duration record 捕获进循环",
         "跳过验证",
         "使用不同的模型"
       ],
       "correct": 1,
       "explanation": "runner 会关闭“测试通过”（想象的）与“测试确实运行并以零退出”（记录的）之间的空隙。"
-    },
-    {
-      "stage": "pre",
-      "question": "feedback 与 telemetry 有何不同？",
-      "options": [
-        "Telemetry 是付费的",
-        "Feedback 服务于本次运行的下一轮；telemetry 服务于 operators 跨时间审查运行（不同文件，不同 retention）",
-        "Telemetry 使用 OTel；feedback 使用 GraphQL",
-        "它们是同一件事"
-      ],
-      "correct": 1,
-      "explanation": "二者共享字段，但存在不同文件中，并有不同 retention；feedback 是 run 内的，telemetry 是跨 run 的。"
     },
     {
       "stage": "check",
@@ -43,48 +31,48 @@
       "question": "runner 如何截断大型输出？",
       "options": [
         "随机采样",
-        "确定性的 head + tail，并带有 'truncated N lines' marker，使相同输出始终产生相同 record",
+        "确定性的 head + tail，并带有 `truncated N lines` marker，使相同输出始终产生相同 record",
         "只取前 10 行",
         "用 gzip 压缩"
       ],
       "correct": 1,
-      "explanation": "确定性截断在限制 token 成本的同时保持 records 可 replay；tails 携带 failure summary。"
+      "explanation": "确定性截断在限制 token 成本的同时保持 record 可重放；tail 携带失败摘要。"
     },
     {
       "stage": "check",
       "question": "为什么要在写入时 redact，而不是读取时 redact？",
       "options": [
         "为了压缩",
-        "磁盘上的文件才是 attacker 能接触到的东西；只在读取时 redact 会把 secrets 留在 JSONL files 中",
+        "磁盘上的文件才是攻击者能接触到的东西；只在读取时 redact 会把 secret 留在 JSONL 文件中",
         "读取时 redaction 会破坏 JSON",
         "它更快"
       ],
       "correct": 1,
-      "explanation": "在 append 之前 redact 匹配 Bearer、password=、api_key=、AKIA...、xox[baprs]- 的行；并每季度审计这些 patterns。"
+      "explanation": "在 append 之前 redact 匹配 Bearer、password=、api_key=、AKIA...、xox[baprs]- 的行。"
     },
     {
       "stage": "post",
       "question": "parent_command_id 给工作台带来了什么？",
       "options": [
         "更便宜的推理",
-        "retries 链接到其 parent attempt，使 reviewer 和 audit 能看到 failure chain；没有它，retries 看起来像独立 successes",
+        "retry 会链接到 parent attempt，让 reviewer 和 audit 能看到失败链；没有它，retry 看起来像彼此独立的成功",
         "更快的 file I/O",
         "更低的 memory"
       ],
       "correct": 1,
-      "explanation": "Parent linkage 让 retry chains 对 reviewer（Lesson 39）和 verification gate 可见。"
+      "explanation": "父链接让 retry chain 对 reviewer 和 verification gate 可见。"
     },
     {
       "stage": "post",
       "question": "为什么要用 rotation 将 feedback_record.jsonl 限制为 1 MB？",
       "options": [
         "JSON 无法处理更大的文件",
-        "代理只读取当前文件；rotation 在 CI artifacts 捕获完整集合的同时保持 runtime cost 有界",
+        "代理只读取当前文件；rotation 在 CI artifact 捕获完整集合的同时保持运行时成本有界",
         "磁盘太慢",
         "provider 按 byte 收费"
       ],
       "correct": 1,
-      "explanation": "有界当前文件 + rotated history 与 logrotate 的模式相同；热循环中的成本可预测。"
+      "explanation": "有界当前文件加 rotated history 与 logrotate 的模式相同；热循环中的成本可预测。"
     }
   ]
 }
