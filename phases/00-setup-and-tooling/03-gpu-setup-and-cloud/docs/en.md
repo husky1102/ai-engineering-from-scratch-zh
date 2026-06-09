@@ -22,7 +22,7 @@ You have three options: local GPU, cloud GPU, or Google Colab (free).
 
 ## The Concept
 
-```
+```text
 Your options:
 
 1. Local NVIDIA GPU
@@ -52,6 +52,14 @@ nvidia-smi
 ```
 
 Install PyTorch with CUDA:
+
+Run the lesson checker:
+
+```bash
+python3 main.py
+```
+
+It exits 0 even when PyTorch or CUDA is missing, so you can use it as a quick environment diagnostic.
 
 ```python
 import torch
@@ -92,6 +100,12 @@ print(f"Using: {device}")
 ```
 
 ## Build It: GPU vs CPU benchmark
+
+The local checker keeps this heavier benchmark behind an explicit flag:
+
+```bash
+python3 main.py --benchmark --size 1024
+```
 
 ```python
 import torch

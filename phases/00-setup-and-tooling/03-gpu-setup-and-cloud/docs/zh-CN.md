@@ -23,22 +23,22 @@
 ## 核心概念
 
 ```text
-Your options:
+你的选择：
 
-1. Local NVIDIA GPU
-   Cost: $0 (you already have it)
-   Setup: Install CUDA + cuDNN
-   Best for: Regular use, large datasets
+1. 本地 NVIDIA GPU
+   成本：$0（如果你已经拥有它）
+   配置：安装 CUDA + cuDNN
+   最适合：经常使用、大数据集
 
-2. Google Colab (free tier)
-   Cost: $0
-   Setup: None
-   Best for: Quick experiments, no GPU at home
+2. Google Colab（免费层）
+   成本：$0
+   配置：无需本地配置
+   最适合：快速实验、家里没有 GPU
 
-3. Cloud GPU (Lambda, RunPod, Vast.ai)
-   Cost: $0.20-2.00/hr
-   Setup: SSH + install
-   Best for: Serious training, large models
+3. 云端 GPU（Lambda、RunPod、Vast.ai）
+   成本：$0.20-2.00/小时
+   配置：SSH 登录 + 安装依赖
+   最适合：正式训练、大模型
 ```
 
 ## 动手实现
@@ -53,6 +53,14 @@ nvidia-smi
 
 安装带 CUDA 的 PyTorch：
 
+运行本课检查器：
+
+```bash
+python3 main.py
+```
+
+即使没有安装 PyTorch 或没有 CUDA，它也会以 0 退出，因此适合作为快速环境诊断。
+
 ```python
 import torch
 
@@ -66,7 +74,7 @@ if torch.cuda.is_available():
 ### 选项 2：Google Colab
 
 1. 前往 [colab.research.google.com](https://colab.research.google.com)
-2. Runtime > Change runtime type > T4 GPU
+2. 选择“运行时 > 更改运行时类型 > T4 GPU”（Runtime > Change runtime type）
 3. 运行 `!nvidia-smi` 进行验证
 
 可以把本课程中的 notebook 直接上传到 Colab。
@@ -92,6 +100,12 @@ print(f"Using: {device}")
 ```
 
 ## 动手实现：GPU 与 CPU 基准测试
+
+本地检查器默认只做轻量诊断；这个较重的基准测试需要显式开启：
+
+```bash
+python3 main.py --benchmark --size 1024
+```
 
 ```python
 import torch

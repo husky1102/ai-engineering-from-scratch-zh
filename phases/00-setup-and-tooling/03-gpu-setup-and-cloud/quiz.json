@@ -1,39 +1,78 @@
 {
+  "lesson": "03-gpu-setup-and-cloud",
+  "title": "GPU Setup & Cloud",
   "questions": [
     {
       "stage": "pre",
-      "question": "Why is a GPU faster than a CPU for training neural networks?",
-      "options": ["GPUs have higher clock speeds than CPUs", "GPUs can perform thousands of parallel matrix operations simultaneously", "GPUs have more RAM than CPUs", "GPUs use a more efficient programming language"],
+      "question": "Why are GPUs useful for training neural networks?",
+      "options": [
+        "They have higher clock speeds than CPUs",
+        "They can run many matrix operations in parallel",
+        "They automatically choose better model architectures",
+        "They store source code more efficiently"
+      ],
       "correct": 1,
-      "explanation": "GPUs have thousands of cores optimized for parallel computation, making them ideal for the matrix multiplications that dominate neural network training."
+      "explanation": "Neural network training is dominated by matrix operations. GPUs contain many parallel cores designed to run those operations at the same time."
     },
     {
-      "stage": "pre",
-      "question": "What does VRAM refer to?",
-      "options": ["Virtual RAM used by the operating system for swap space", "Video RAM on the GPU, separate from system RAM", "The total RAM available across all devices", "A type of CPU cache memory"],
+      "stage": "check",
+      "question": "Which command is the standard first check for an NVIDIA GPU on a local machine?",
+      "options": [
+        "gpu --status",
+        "nvidia-smi",
+        "torch.cuda.list_devices()",
+        "python --gpu"
+      ],
       "correct": 1,
-      "explanation": "VRAM (Video RAM) is the dedicated memory on a GPU. It limits the size of models and batch sizes you can use during training, separate from your system's main RAM."
+      "explanation": "nvidia-smi reports NVIDIA GPU status, memory use, driver information, temperature, and running processes."
+    },
+    {
+      "stage": "check",
+      "question": "What does VRAM limit during model training?",
+      "options": [
+        "Only the Python version you can run",
+        "The model size and batch size that fit on the GPU",
+        "The number of files git can track",
+        "The maximum internet bandwidth of a cloud instance"
+      ],
+      "correct": 1,
+      "explanation": "VRAM is memory on the GPU. Model weights, activations, gradients, and batches must fit there during training."
+    },
+    {
+      "stage": "check",
+      "question": "Why does a GPU benchmark call torch.cuda.synchronize() around timed work?",
+      "options": [
+        "To install the CUDA driver",
+        "To make asynchronous GPU work finish before reading the timer",
+        "To move all tensors back to CPU memory",
+        "To reduce the matrix size automatically"
+      ],
+      "correct": 1,
+      "explanation": "CUDA work is asynchronous from Python's point of view. synchronize() waits for queued GPU work to finish so timing is accurate."
     },
     {
       "stage": "post",
-      "question": "What command verifies that your NVIDIA GPU is detected and shows its current status?",
-      "options": ["gpu --status", "nvidia-smi", "torch.cuda.list_devices()", "lspci | grep gpu"],
+      "question": "Using the fp16 rule of thumb, about how many parameters fit in 24 GB of VRAM before extra training overhead?",
+      "options": [
+        "6 billion",
+        "12 billion",
+        "24 million",
+        "48 billion"
+      ],
       "correct": 1,
-      "explanation": "nvidia-smi (NVIDIA System Management Interface) displays GPU utilization, memory usage, temperature, and running processes. It is the standard tool for verifying GPU availability."
+      "explanation": "fp16 uses about 2 bytes per parameter, so 24 GB holds roughly 12 billion parameters before activations, gradients, and optimizer state."
     },
     {
       "stage": "post",
-      "question": "When benchmarking GPU vs CPU matrix multiplication, why must you call torch.cuda.synchronize() before measuring GPU time?",
-      "options": ["To transfer data from CPU to GPU memory", "To ensure all GPU operations have completed before stopping the timer", "To reset the GPU clock speed to its base frequency", "To free unused GPU memory"],
-      "correct": 1,
-      "explanation": "GPU operations are asynchronous -- Python returns immediately while the GPU is still computing. synchronize() blocks until all GPU operations finish, giving accurate timing."
-    },
-    {
-      "stage": "post",
-      "question": "Using the fp16 rule of thumb, approximately how many parameters can fit in 24 GB of VRAM?",
-      "options": ["24 billion parameters", "12 billion parameters", "6 billion parameters", "48 billion parameters"],
-      "correct": 1,
-      "explanation": "In fp16, each parameter uses 2 bytes. 24 GB / 2 bytes = 12 billion parameters. This is a rough estimate; actual usage includes activations, gradients, and optimizer states."
+      "question": "When is Google Colab a good first choice?",
+      "options": [
+        "When you need a quick GPU experiment and do not have a local NVIDIA GPU",
+        "When you need permanent storage for production training data",
+        "When you want to avoid using notebooks entirely",
+        "When your code must run without an internet connection"
+      ],
+      "correct": 0,
+      "explanation": "Colab is useful for quick experiments and learning when local GPU hardware is unavailable. Serious long-running jobs may need a paid cloud GPU instead."
     }
   ]
 }

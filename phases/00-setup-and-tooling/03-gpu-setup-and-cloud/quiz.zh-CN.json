@@ -1,64 +1,78 @@
 {
+  "lesson": "03-gpu-setup-and-cloud",
+  "title": "GPU 配置与云端",
   "questions": [
     {
       "stage": "pre",
-      "question": "为什么 GPU 在训练神经网络时比 CPU 更快？",
+      "question": "为什么 GPU 对训练神经网络有帮助？",
       "options": [
-        "GPU 的时钟频率比 CPU 更高",
-        "GPU 可以同时执行数千个并行矩阵运算",
-        "GPU 的 RAM 比 CPU 更多",
-        "GPU 使用了更高效的编程语言"
+        "它们的时钟频率一定比 CPU 更高",
+        "它们可以并行运行大量矩阵运算",
+        "它们会自动选择更好的模型架构",
+        "它们能更高效地存储源代码"
       ],
       "correct": 1,
-      "explanation": "GPU 拥有数千个为并行计算优化的核心，非常适合执行神经网络训练中占主导地位的矩阵乘法。"
+      "explanation": "神经网络训练主要由矩阵运算组成。GPU 有大量为并行计算设计的核心，可以同时运行这些运算。"
     },
     {
-      "stage": "pre",
-      "question": "VRAM 指的是什么？",
-      "options": [
-        "操作系统用于交换空间的虚拟 RAM",
-        "GPU 上的视频 RAM，独立于系统 RAM",
-        "所有设备上可用 RAM 的总量",
-        "一种 CPU 缓存内存"
-      ],
-      "correct": 1,
-      "explanation": "VRAM（Video RAM）是 GPU 上的专用内存。它独立于系统主内存，并会限制你在训练时可使用的模型大小和批量大小。"
-    },
-    {
-      "stage": "post",
-      "question": "哪个命令可以验证系统检测到了你的 NVIDIA GPU，并显示它当前的状态？",
+      "stage": "check",
+      "question": "在本地机器上检查 NVIDIA GPU 时，最常用的第一条命令是什么？",
       "options": [
         "gpu --status",
         "nvidia-smi",
         "torch.cuda.list_devices()",
-        "lspci | grep gpu"
+        "python --gpu"
       ],
       "correct": 1,
-      "explanation": "nvidia-smi（NVIDIA System Management Interface）会显示 GPU 利用率、显存使用量、温度和正在运行的进程。它是验证 GPU 可用性的标准工具。"
+      "explanation": "nvidia-smi 会报告 NVIDIA GPU 状态、显存使用、驱动信息、温度和正在运行的进程。"
+    },
+    {
+      "stage": "check",
+      "question": "训练模型时，VRAM 主要限制什么？",
+      "options": [
+        "只能运行哪个 Python 版本",
+        "能放进 GPU 的模型大小和批量大小",
+        "git 能追踪的文件数量",
+        "云实例的最大网络带宽"
+      ],
+      "correct": 1,
+      "explanation": "VRAM 是 GPU 上的显存。训练时，模型权重、激活值、梯度和批量数据都必须放进这块内存。"
+    },
+    {
+      "stage": "check",
+      "question": "为什么 GPU 基准测试会在计时代码前后调用 torch.cuda.synchronize()？",
+      "options": [
+        "为了安装 CUDA 驱动",
+        "为了让异步 GPU 工作完成后再读取计时器",
+        "为了把所有张量移回 CPU 内存",
+        "为了自动缩小矩阵尺寸"
+      ],
+      "correct": 1,
+      "explanation": "从 Python 的角度看，CUDA 工作是异步的。synchronize() 会等待队列中的 GPU 工作完成，因此计时才准确。"
     },
     {
       "stage": "post",
-      "question": "在对 GPU 与 CPU 的矩阵乘法做基准测试时，为什么必须在测量 GPU 时间前后调用 torch.cuda.synchronize()？",
+      "question": "按照 fp16 经验法则，在不计额外训练开销前，24 GB VRAM 大约能容纳多少参数？",
       "options": [
-        "为了把数据从 CPU 传输到 GPU 内存",
-        "为了确保所有 GPU 操作都已完成，然后再停止计时器",
-        "为了把 GPU 时钟速度重置到基础频率",
-        "为了释放未使用的 GPU 内存"
+        "60 亿",
+        "120 亿",
+        "2400 万",
+        "480 亿"
       ],
       "correct": 1,
-      "explanation": "GPU 操作是异步的：Python 会立即返回，而 GPU 仍在计算。synchronize() 会阻塞，直到所有 GPU 操作完成，从而得到准确的计时。"
+      "explanation": "fp16 每个参数大约占 2 字节，所以 24 GB 大约能容纳 120 亿参数；实际训练还要额外占用激活值、梯度和优化器状态。"
     },
     {
       "stage": "post",
-      "question": "按照 fp16 经验法则，24 GB 的 VRAM 大约可以容纳多少参数？",
+      "question": "什么时候 Google Colab 是一个好的首选？",
       "options": [
-        "240 亿参数",
-        "120 亿参数",
-        "60 亿参数",
-        "480 亿参数"
+        "你需要快速做 GPU 实验，但本地没有 NVIDIA GPU",
+        "你需要为生产训练数据提供永久存储",
+        "你想完全避免使用 notebook",
+        "你的代码必须在没有网络连接时运行"
       ],
-      "correct": 1,
-      "explanation": "在 fp16 中，每个参数占用 2 字节。24 GB / 2 字节 = 120 亿参数。这只是粗略估算；实际使用量还包括激活值、梯度和优化器状态。"
+      "correct": 0,
+      "explanation": "当本地没有 GPU 时，Colab 很适合快速实验和学习。严肃的长时间训练通常更适合付费云端 GPU。"
     }
   ]
 }
