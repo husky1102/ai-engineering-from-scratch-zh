@@ -1832,10 +1832,10 @@
             flatLessons.push({
               phaseIndex: i,
               lessonIndex: j,
-              phaseName: p.name,
+              phaseName: phaseDisplayName(p),
               phaseId: p.id,
               phaseSlug: pSlug,
-              lessonName: l.name,
+              lessonName: lessonDisplayName(l),
               lessonSlug: lSlug,
               status: l.status,
               type: l.type,
@@ -1883,6 +1883,34 @@
 
       function lessonRepoUrl(path, suffix) {
         return '../' + path + '/' + suffix;
+      }
+
+      function sourceHref(file) {
+        if (!file || !file.url) return '';
+        return file.url;
+      }
+
+      function copyText(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function (resolve, reject) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            var ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            ok ? resolve() : reject(new Error('copy-failed'));
+          } catch (err) {
+            document.body.removeChild(ta);
+            reject(err);
+          }
+        });
       }
 
       function updateLocalizedChrome() {
@@ -3601,7 +3629,11 @@
             if (file.size) html += '<div class="code-card-size">' + escapeHtml(formatSize(file.size)) + '</div>';
             if (fileCommand) html += '<div class="code-card-run">' + escapeHtml(fileCommand) + '</div>';
             html += '<div class="code-card-actions">';
-            html += '<a class="code-card-btn" href="' + escapeAttr(file.url || '') + '" target="_blank" rel="noopener">' + escapeHtml(t('viewSource')) + '</a>';
+            if (sourceHref(file)) {
+              html += '<a class="code-card-btn" href="' + escapeAttr(sourceHref(file)) + '" target="_blank" rel="noopener">' + escapeHtml(t('viewSource')) + '</a>';
+            } else {
+              html += '<span class="code-card-btn disabled" aria-disabled="true">' + escapeHtml(t('viewSource')) + '</span>';
+            }
             if (fileCommand) {
               html += '<button class="code-card-btn code-card-copy" data-command="' + escapeAttr(fileCommand) + '">' + escapeHtml(t('copyCommand')) + '</button>';
             }
@@ -3616,10 +3648,13 @@
           el.innerHTML = html;
           el.querySelectorAll('.code-card-copy').forEach(function (btn) {
             btn.addEventListener('click', function () {
-              var command = btn.getAttribute('data-command');
-              navigator.clipboard.writeText(command).then(function () {
+              var command = btn.getAttribute('data-command') || '';
+              copyText(command).then(function () {
                 btn.textContent = t('copied');
                 setTimeout(function () { btn.textContent = t('copyCommand'); }, 1500);
+              }).catch(function () {
+                btn.textContent = t('copyFailed');
+                setTimeout(function () { btn.textContent = t('copyCommand'); }, 2000);
               });
             });
           });

@@ -313,7 +313,7 @@
     el.id = PALETTE_ID;
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
-    el.setAttribute('aria-label', 'Search lessons and glossary');
+    el.setAttribute('aria-label', '搜索课程和术语');
 
     el.innerHTML =
       '<div class="cp-backdrop" id="cpBackdrop"></div>' +
@@ -326,10 +326,10 @@
             '<line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
           '</svg>' +
           '<input class="cp-input" id="cpInput" type="search"' +
-          ' placeholder="Search lessons and glossary…"' +
+          ' placeholder="搜索课程和术语…"' +
           ' autocomplete="off" autocorrect="off"' +
           ' autocapitalize="off" spellcheck="false"' +
-          ' aria-label="Search" aria-autocomplete="list"' +
+          ' aria-label="搜索" aria-autocomplete="list"' +
           ' aria-controls="cpResults">' +
           '<kbd class="cp-kbd-esc" id="cpKbdEsc">Esc</kbd>' +
         '</div>' +
@@ -338,15 +338,15 @@
         '<div class="cp-footer">' +
           '<span class="cp-footer-group">' +
             '<kbd>↑</kbd><kbd>↓</kbd>' +
-            '<span class="cp-footer-label">navigate</span>' +
+            '<span class="cp-footer-label">导航</span>' +
           '</span>' +
           '<span class="cp-footer-group">' +
             '<kbd>↵</kbd>' +
-            '<span class="cp-footer-label">open</span>' +
+            '<span class="cp-footer-label">打开</span>' +
           '</span>' +
           '<span class="cp-footer-group">' +
             '<kbd>Esc</kbd>' +
-            '<span class="cp-footer-label">close</span>' +
+            '<span class="cp-footer-label">关闭</span>' +
           '</span>' +
           '<span class="cp-footer-shortcut">' + shortcutLabel + '</span>' +
         '</div>' +
@@ -429,7 +429,7 @@
     if (!query) {
       list.innerHTML =
         '<li class="cp-empty" role="option" aria-disabled="true">' +
-        'Type to search, or filter with phase:02 runtime:local-kernel status:complete' +
+        '输入关键词，或使用 phase:02 runtime:local-kernel status:complete 筛选' +
         '</li>';
       _activeIdx = -1;
       return;
@@ -438,7 +438,7 @@
     if (results.length === 0) {
       list.innerHTML =
         '<li class="cp-empty" role="option" aria-disabled="true">' +
-        'No results for <em>' + escHtml(query) + '</em>' +
+        '没有找到 <em>' + escHtml(query) + '</em>' +
         '</li>';
       _activeIdx = -1;
       return;
@@ -456,20 +456,21 @@
         dest = r.lessonPath
           ? 'lesson.html?path=' + encodeURIComponent(r.lessonPath) + (r.langParam ? '&lang=' + encodeURIComponent(r.langParam) : '')
           : r.url;
-        chip = 'Phase ' + String(r.phaseId).padStart(2, '0');
+        chip = '第 ' + String(r.phaseId).padStart(2, '0') + ' 阶段';
       } else if (r.kind === 'artifact') {
         // Jump to the lesson that produced this artifact
         dest = r.lessonPath
           ? 'lesson.html?path=' + encodeURIComponent(r.lessonPath)
           : ('https://github.com/rohitg00/ai-engineering-from-scratch/tree/main/' + r.file);
         var ak = (r.artKind || 'artifact');
-        chip = ak.charAt(0).toUpperCase() + ak.slice(1);
+        var artifactLabels = { skill: '技能', prompt: '提示词', agent: '智能体', mission: '任务' };
+        chip = artifactLabels[ak] || '产物';
         chipClass += ' cp-item-chip--alt';
       } else {
         // Deep-link: pre-populate glossary search with the exact term name
         // so the user lands directly on the definition, not the full list.
         dest      = 'glossary.html?q=' + encodeURIComponent(r.name);
-        chip      = 'Glossary';
+        chip      = '术语';
         chipClass += ' cp-item-chip--alt';
       }
 
@@ -480,7 +481,7 @@
         if (r.lang && r.lang !== '—') metaParts.push(r.lang);
       } else if (r.kind === 'artifact') {
         if (r.phaseId !== undefined && r.phaseId !== null) {
-          metaParts.push('Phase ' + String(r.phaseId).padStart(2, '0'));
+          metaParts.push('第 ' + String(r.phaseId).padStart(2, '0') + ' 阶段');
         }
       }
       var meta = metaParts.join(' · '); // ·

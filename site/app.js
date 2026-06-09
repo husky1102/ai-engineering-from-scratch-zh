@@ -115,6 +115,7 @@
     var html = '';
     for (var i = 0; i < PHASES.length; i++) {
       var p = PHASES[i];
+      var phaseName = p.nameZh || p.name;
       var total = p.lessons.length;
       var done = 0;
       for (var j = 0; j < p.lessons.length; j++) {
@@ -131,7 +132,7 @@
       var num = String(p.id).padStart(2, '0');
       html += '<div class="toc-row" data-phase="' + i + '">';
       html += '<span class="toc-num">' + roman + '.</span>';
-      html += '<div><span class="toc-status ' + statusClass + '"></span><span class="toc-name">' + escapeHtml(p.nameZh || p.name) + '</span></div>';
+      html += '<div><span class="toc-status ' + statusClass + '"></span><span class="toc-name">' + escapeHtml(phaseName) + '</span></div>';
       html += '<span class="toc-meta">' + done + ' / ' + total + '</span>';
       html += '<span class="toc-meta">' + num + '</span>';
       html += '</div>';
@@ -232,10 +233,12 @@
     var p = PHASES[idx];
     if (!p) return;
     currentPhaseIdx = idx;
+    var phaseName = p.nameZh || p.name;
+    var phaseDesc = p.descZh || p.desc;
 
     document.getElementById('modalPhaseNum').textContent = '第 ' + String(p.id).padStart(2, '0') + ' 阶段';
-    document.getElementById('modalTitle').textContent = p.nameZh || p.name;
-    document.getElementById('modalDesc').textContent = p.descZh || p.desc;
+    document.getElementById('modalTitle').textContent = phaseName;
+    document.getElementById('modalDesc').textContent = phaseDesc;
 
     renderModalLessons(p);
 

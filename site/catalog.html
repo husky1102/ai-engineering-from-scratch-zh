@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson Catalog - AI Engineering from Scratch</title>
+  <title>课程目录 - 从零开始的 AI 工程</title>
   <link rel="icon" type="image/png" href="assets/mascot-gpt054.png">
   <link rel="apple-touch-icon" href="assets/mascot-gpt054.png">
-  <meta name="description" content="Full catalog of 503 AI engineering lessons. Search, filter, and sort every lesson across all 20 phases.">
+  <meta name="description" content="浏览 20 个阶段中的全部 AI 工程课程，支持搜索、筛选和排序。">
   <link rel="canonical" href="https://aiengineeringfromscratch.com/catalog.html">
-  <meta property="og:title" content="Catalog · AI Engineering from Scratch">
-  <meta property="og:description" content="Search and filter 503 lessons across 20 phases. Python, TypeScript, Rust, Julia.">
+  <meta property="og:title" content="课程目录 · 从零开始的 AI 工程">
+  <meta property="og:description" content="搜索和筛选 20 个阶段中的全部课程。Python、TypeScript、Rust、Julia。">
   <meta property="og:image" content="assets/mascot-gpt054.png">
   <meta property="og:url" content="https://aiengineeringfromscratch.com/catalog.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Catalog · AI Engineering from Scratch">
-  <meta name="twitter:description" content="Search and filter 503 lessons across 20 phases.">
+  <meta name="twitter:title" content="课程目录 · 从零开始的 AI 工程">
+  <meta name="twitter:description" content="搜索和筛选 20 个阶段中的全部课程。">
   <meta name="twitter:image" content="assets/mascot-gpt054.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -174,6 +174,10 @@
       background: var(--planned);
     }
 
+    .catalog-status-dot.in-progress {
+      background: var(--planned);
+    }
+
     .catalog-lang {
       font-family: var(--font-mono);
       font-size: 0.8rem;
@@ -219,7 +223,7 @@
 </head>
 <body>
 
-  <a href="#main" class="skip-link">Skip to content</a>
+  <a href="#main" class="skip-link">跳到正文</a>
 
   <header class="site-header">
     <div class="header-inner">
@@ -251,18 +255,19 @@
   <main class="catalog-page" id="main">
     <div class="container">
       <div class="catalog-header">
-        <h1>Lesson Catalog</h1>
-        <p>Every lesson across all 20 phases. Search, filter, sort.</p>
+        <h1>课程目录</h1>
+        <p>浏览 20 个阶段中的全部课程。可以搜索、筛选和排序。</p>
       </div>
       <div class="catalog-controls">
-        <input type="text" class="catalog-search" id="catalogSearch" placeholder="Search lessons...">
+        <input type="text" class="catalog-search" id="catalogSearch" placeholder="搜索课程、阶段、类型或语言...">
         <select class="catalog-filter" id="catalogPhase">
-          <option value="">All Phases</option>
+          <option value="">全部阶段</option>
         </select>
         <select class="catalog-filter" id="catalogStatus">
-          <option value="">All Status</option>
-          <option value="complete">Complete</option>
-          <option value="planned">Planned</option>
+          <option value="">全部状态</option>
+          <option value="complete">已完成</option>
+          <option value="in-progress">进行中</option>
+          <option value="planned">计划中</option>
         </select>
       </div>
       <div class="catalog-count" id="catalogCount"></div>
@@ -270,11 +275,11 @@
         <table class="catalog-table" id="catalogTable">
           <thead>
             <tr>
-              <th data-sort="phase">Phase <span class="sort-arrow"></span></th>
-              <th data-sort="name">Lesson <span class="sort-arrow"></span></th>
-              <th data-sort="type">Type <span class="sort-arrow"></span></th>
-              <th data-sort="lang">Language <span class="sort-arrow"></span></th>
-              <th data-sort="status">Status <span class="sort-arrow"></span></th>
+              <th data-sort="phase">阶段 <span class="sort-arrow"></span></th>
+              <th data-sort="name">课程 <span class="sort-arrow"></span></th>
+              <th data-sort="type">类型 <span class="sort-arrow"></span></th>
+              <th data-sort="lang">语言 <span class="sort-arrow"></span></th>
+              <th data-sort="status">状态 <span class="sort-arrow"></span></th>
             </tr>
           </thead>
           <tbody id="catalogBody"></tbody>
@@ -285,7 +290,7 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>AI Engineering from Scratch · open source · free forever.</p>
+      <p>从零开始的 AI 工程 · 开源 · 永久免费。</p>
       <div class="footer-links">
         <a href="index.html">首页</a>
         <a href="glossary.html">术语表</a>
@@ -342,18 +347,20 @@
           var p = PHASES[i];
           var opt = document.createElement('option');
           opt.value = String(p.id);
-          opt.textContent = String(p.id).padStart(2, '0') + ' - ' + p.name;
+          opt.textContent = String(p.id).padStart(2, '0') + ' - ' + (p.nameZh || p.name);
           phaseSelect.appendChild(opt);
 
           for (var j = 0; j < p.lessons.length; j++) {
             var l = p.lessons[j];
             allRows.push({
               phase: p.id,
-              phaseName: p.name,
-              name: l.name,
+              phaseName: p.nameZh || p.name,
+              name: l.nameZh || l.name,
               type: l.type,
+              typeLabel: typeLabel(l.type),
               lang: l.lang,
               status: l.status,
+              statusLabel: statusLabel(l.status),
               url: l.url || ''
             });
           }
@@ -370,6 +377,26 @@
           var div = document.createElement('div');
           div.textContent = str;
           return div.innerHTML;
+        }
+
+        function lessonPathFromUrl(url) {
+          var m = url ? url.match(/(phases\/[^/]+\/[^/]+)\/?$/) : null;
+          return m ? m[1] : '';
+        }
+
+        function localLessonHref(url) {
+          var path = lessonPathFromUrl(url);
+          return path ? 'lesson.html?path=' + encodeURIComponent(path) + '&lang=zh-CN' : '';
+        }
+
+        function typeLabel(type) {
+          var labels = { Build: '构建', Learn: '学习', Reference: '参考', Capstone: '综合' };
+          return labels[type] || type || '';
+        }
+
+        function statusLabel(status) {
+          var labels = { complete: '已完成', 'in-progress': '进行中', planned: '计划中' };
+          return labels[status] || status || '';
         }
 
         function render() {
@@ -412,10 +439,10 @@
             return 0;
           });
 
-          countEl.textContent = rows.length + ' of ' + allRows.length + ' lessons';
+          countEl.textContent = '显示 ' + rows.length + ' / ' + allRows.length + ' 节课程';
 
           if (rows.length === 0) {
-            bodyEl.innerHTML = '<tr><td colspan="5" class="catalog-empty">No lessons match your filters.</td></tr>';
+            bodyEl.innerHTML = '<tr><td colspan="5" class="catalog-empty">没有课程匹配当前筛选。</td></tr>';
             return;
           }
 
@@ -424,14 +451,15 @@
             var r = rows[i];
             html += '<tr>';
             html += '<td><span class="catalog-phase-label">' + String(r.phase).padStart(2, '0') + '</span></td>';
-            if (r.url) {
-              html += '<td><a href="' + r.url + '" target="_blank" rel="noopener">' + escapeHtml(r.name) + '</a></td>';
+            var href = localLessonHref(r.url);
+            if (href) {
+              html += '<td><a href="' + href + '">' + escapeHtml(r.name) + '</a></td>';
             } else {
               html += '<td>' + escapeHtml(r.name) + '</td>';
             }
-            html += '<td>' + escapeHtml(r.type) + '</td>';
+            html += '<td>' + escapeHtml(r.typeLabel) + '</td>';
             html += '<td><span class="catalog-lang">' + escapeHtml(r.lang) + '</span></td>';
-            html += '<td><span class="catalog-status-dot ' + r.status + '"></span>' + r.status + '</td>';
+            html += '<td><span class="catalog-status-dot ' + r.status + '"></span>' + escapeHtml(r.statusLabel) + '</td>';
             html += '</tr>';
           }
           bodyEl.innerHTML = html;

@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Glossary - AI Engineering from Scratch</title>
+  <title>术语表 - 从零开始的 AI 工程</title>
   <link rel="icon" type="image/png" href="assets/mascot-gpt054.png">
   <link rel="apple-touch-icon" href="assets/mascot-gpt054.png">
-  <meta name="description" content="AI glossary: what people say vs what things actually mean. Every term explained without hand-waving.">
+  <meta name="description" content="用直白语言解释课程中反复出现的 AI、机器学习和工程术语。">
   <link rel="canonical" href="https://aiengineeringfromscratch.com/glossary.html">
-  <meta property="og:title" content="Glossary · AI Engineering from Scratch">
-  <meta property="og:description" content="What people say vs what things actually mean. Every AI term, defined without hand-waving.">
+  <meta property="og:title" content="术语表 · 从零开始的 AI 工程">
+  <meta property="og:description" content="用直白语言解释课程中反复出现的 AI、机器学习和工程术语。">
   <meta property="og:image" content="assets/mascot-gpt054.png">
   <meta property="og:url" content="https://aiengineeringfromscratch.com/glossary.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Glossary · AI Engineering from Scratch">
-  <meta name="twitter:description" content="What people say vs what things actually mean.">
+  <meta name="twitter:title" content="术语表 · 从零开始的 AI 工程">
+  <meta name="twitter:description" content="AI、机器学习和工程术语速查。">
   <meta name="twitter:image" content="assets/mascot-gpt054.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -170,7 +170,7 @@
 </head>
 <body>
 
-  <a href="#main" class="skip-link">Skip to content</a>
+  <a href="#main" class="skip-link">跳到正文</a>
 
   <header class="site-header">
     <div class="header-inner">
@@ -202,11 +202,11 @@
   <main class="glossary-page" id="main">
     <div class="container">
       <div class="glossary-header">
-        <h1>AI Glossary</h1>
-        <p>What people <em>say</em> vs what things actually <em>mean</em></p>
+        <h1>术语表</h1>
+        <p>用直白语言解释课程中反复出现的 AI、机器学习和工程术语。</p>
       </div>
       <div class="glossary-search-wrap">
-        <input type="text" class="glossary-search" id="glossarySearch" placeholder="Search terms...">
+        <input type="text" class="glossary-search" id="glossarySearch" placeholder="搜索术语、说法或含义...">
       </div>
       <div class="glossary-count" id="glossaryCount"></div>
       <div class="glossary-list" id="glossaryList"></div>
@@ -215,7 +215,7 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>AI Engineering from Scratch · open source · free forever.</p>
+      <p>从零开始的 AI 工程 · 开源 · 永久免费。</p>
       <div class="footer-links">
         <a href="index.html">首页</a>
         <a href="catalog.html">课程</a>
@@ -286,10 +286,10 @@
             });
           }
 
-          countEl.textContent = terms.length + ' of ' + GLOSSARY.length + ' terms';
+          countEl.textContent = '显示 ' + terms.length + ' / ' + GLOSSARY.length + ' 个术语';
 
           if (terms.length === 0) {
-            listEl.innerHTML = '<div class="glossary-empty">No terms match your search.</div>';
+            listEl.innerHTML = '<div class="glossary-empty">没有匹配的术语。</div>';
             return;
           }
 
@@ -300,11 +300,11 @@
             html += '<div class="glossary-term">' + escapeHtml(t.term) + '</div>';
             html += '<div class="glossary-row">';
             html += '<div class="glossary-col">';
-            html += '<div class="glossary-col-label">What people say</div>';
+            html += '<div class="glossary-col-label">常见说法</div>';
             html += '<div class="glossary-col-says">"' + escapeHtml(t.says) + '"</div>';
             html += '</div>';
             html += '<div class="glossary-col">';
-            html += '<div class="glossary-col-label">What it actually means</div>';
+            html += '<div class="glossary-col-label">实际含义</div>';
             html += '<div class="glossary-col-means">' + escapeHtml(t.means) + '</div>';
             html += '</div>';
             html += '</div>';

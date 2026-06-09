@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roadmap - AI Engineering from Scratch</title>
+  <title>学习路线图 - 从零开始的 AI 工程</title>
   <link rel="icon" type="image/png" href="assets/mascot-gpt054.png">
   <link rel="apple-touch-icon" href="assets/mascot-gpt054.png">
-  <meta name="description" content="Interactive prerequisite map for 503 AI engineering lessons. See which phases depend on which, and plan your learning path.">
+  <meta name="description" content="交互式课程依赖图谱，查看每个阶段需要哪些基础，以及会解锁哪些后续内容。">
   <link rel="canonical" href="https://aiengineeringfromscratch.com/prereqs.html">
-  <meta property="og:title" content="Roadmap · AI Engineering from Scratch">
-  <meta property="og:description" content="Interactive prerequisite map. See what each phase depends on and what it unlocks downstream.">
+  <meta property="og:title" content="学习路线图 · 从零开始的 AI 工程">
+  <meta property="og:description" content="交互式课程依赖图谱，查看每个阶段的前置基础和后续路径。">
   <meta property="og:image" content="assets/mascot-gpt054.png">
   <meta property="og:url" content="https://aiengineeringfromscratch.com/prereqs.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Roadmap · AI Engineering from Scratch">
-  <meta name="twitter:description" content="Interactive prerequisite map across 20 phases.">
+  <meta name="twitter:title" content="学习路线图 · 从零开始的 AI 工程">
+  <meta name="twitter:description" content="覆盖 20 个阶段的交互式学习路线图。">
   <meta name="twitter:image" content="assets/mascot-gpt054.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -396,7 +396,7 @@
 </head>
 <body>
 
-  <a href="#main" class="skip-link">Skip to content</a>
+  <a href="#main" class="skip-link">跳到正文</a>
 
   <header class="site-header">
     <div class="header-inner">
@@ -428,20 +428,20 @@
   <main class="prereqs-page" id="main">
     <div class="container">
       <div class="prereqs-header">
-        <h1>Roadmap</h1>
-        <p>Click any phase to see its prerequisites and what it unlocks downstream.</p>
+        <h1>学习路线图</h1>
+        <p>点击任一阶段，查看它依赖哪些基础，以及会解锁哪些后续内容。</p>
       </div>
 
       <div class="prereqs-controls">
         <div class="prereqs-legend">
-          <div class="legend-item"><span class="legend-dot complete"></span> Complete</div>
-          <div class="legend-item"><span class="legend-dot in-progress"></span> In Progress</div>
-          <div class="legend-item"><span class="legend-dot planned"></span> Planned</div>
+          <div class="legend-item"><span class="legend-dot complete"></span><span>已完成</span></div>
+          <div class="legend-item"><span class="legend-dot in-progress"></span><span>进行中</span></div>
+          <div class="legend-item"><span class="legend-dot planned"></span><span>计划中</span></div>
         </div>
-        <button class="reset-btn" id="resetBtn">&#10005; Clear selection</button>
+        <button class="reset-btn" id="resetBtn">&#10005; 清除选择</button>
       </div>
 
-      <div class="graph-scroll-hint">&#8596; Scroll to explore the full graph</div>
+      <div class="graph-scroll-hint">&#8596; 横向滚动查看完整图谱</div>
 
       <div class="graph-wrap">
         <div class="graph-container" id="graphContainer">
@@ -455,7 +455,7 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>AI Engineering from Scratch · open source · free forever.</p>
+      <p>从零开始的 AI 工程 · 开源 · 永久免费。</p>
       <div class="footer-links">
         <a href="index.html">首页</a>
         <a href="catalog.html">课程</a>
@@ -687,6 +687,23 @@
       return div.innerHTML;
     }
 
+    function phaseName(phase) {
+      return (phase && (phase.nameZh || phase.name)) || '';
+    }
+
+    function phaseDesc(phase) {
+      return (phase && (phase.descZh || phase.desc)) || '';
+    }
+
+    function phaseLabel(id) {
+      return '第 ' + String(id).padStart(2, '0') + ' 阶段';
+    }
+
+    function statusText(status) {
+      var labels = { complete: '已完成', 'in-progress': '进行中', planned: '计划中' };
+      return labels[status] || status || '';
+    }
+
     /** Split a phase name into 1 or 2 lines for SVG text */
     function splitName(name) {
       if (name.length <= 20) return [name];
@@ -789,7 +806,7 @@
           transform: 'translate(' + (pos.x - NODE_W / 2) + ',' + (pos.y - NODE_H / 2) + ')',
           tabindex: '0',
           role: 'button',
-          'aria-label': 'Select Phase ' + id + ': ' + phase.name
+          'aria-label': '选择' + phaseLabel(id) + '：' + phaseName(phase)
         });
 
         /* Background */
@@ -803,7 +820,7 @@
         }));
 
         /* Label content */
-        var lines = splitName(phase.name);
+        var lines = splitName(phaseName(phase));
         var stats = lessonStats(phase);
 
         if (lines.length === 1) {
@@ -922,7 +939,7 @@
         var m2 = phase.lessons[0].url.match(/phases\/([^/]+)/);
         if (m2) return m2[1];
       }
-      return String(phase.id).padStart(2, '0') + '-' + phase.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      return String(phase.id).padStart(2, '0') + '-' + String(phase.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     }
 
     /* ===================================================
@@ -942,12 +959,12 @@
         prereqHtml = '<ul class="detail-prereq-list">';
         for (var i = 0; i < directPrereqs.length; i++) {
           var ppid = directPrereqs[i];
-          var pn   = PHASE_MAP[ppid] ? PHASE_MAP[ppid].name : 'Phase ' + ppid;
-          prereqHtml += '<li data-goto="' + ppid + '" tabindex="0" role="button" aria-label="Go to Phase ' + ppid + ': ' + escapeHtml(pn) + '"><span class="li-num">' + String(ppid).padStart(2, '0') + '</span> ' + escapeHtml(pn) + '</li>';
+          var pn   = PHASE_MAP[ppid] ? phaseName(PHASE_MAP[ppid]) : phaseLabel(ppid);
+          prereqHtml += '<li data-goto="' + ppid + '" tabindex="0" role="button" aria-label="跳转到' + phaseLabel(ppid) + '：' + escapeHtml(pn) + '"><span class="li-num">' + String(ppid).padStart(2, '0') + '</span> ' + escapeHtml(pn) + '</li>';
         }
         prereqHtml += '</ul>';
       } else {
-        prereqHtml = '<div class="detail-empty">None. This is a starting point.</div>';
+        prereqHtml = '<div class="detail-empty">无前置阶段，这是起点。</div>';
       }
 
       /* Unlocks list */
@@ -957,12 +974,12 @@
         unlockHtml = '<ul class="detail-unlock-list">';
         for (var i = 0; i < childIds.length; i++) {
           var cid = childIds[i];
-          var cn  = PHASE_MAP[cid] ? PHASE_MAP[cid].name : 'Phase ' + cid;
-          unlockHtml += '<li data-goto="' + cid + '" tabindex="0" role="button" aria-label="Go to Phase ' + cid + ': ' + escapeHtml(cn) + '"><span class="li-num">' + String(cid).padStart(2, '0') + '</span> ' + escapeHtml(cn) + '</li>';
+          var cn  = PHASE_MAP[cid] ? phaseName(PHASE_MAP[cid]) : phaseLabel(cid);
+          unlockHtml += '<li data-goto="' + cid + '" tabindex="0" role="button" aria-label="跳转到' + phaseLabel(cid) + '：' + escapeHtml(cn) + '"><span class="li-num">' + String(cid).padStart(2, '0') + '</span> ' + escapeHtml(cn) + '</li>';
         }
         unlockHtml += '</ul>';
       } else {
-        unlockHtml = '<div class="detail-empty">Final destination. End of the curriculum.</div>';
+        unlockHtml = '<div class="detail-empty">课程终点，后续阶段已完成。</div>';
       }
 
       /* Compute exact GitHub tree URL using standard slug logic */
@@ -976,7 +993,7 @@
         if (!lesson.url) continue;
         var pm = lesson.url.match(/(phases\/[^/]+\/[^/]+)\/?$/);
         if (pm) {
-          readLink = 'lesson.html?path=' + encodeURI(pm[1]);
+          readLink = 'lesson.html?path=' + encodeURIComponent(pm[1]) + '&lang=zh-CN';
           break;
         }
       }
@@ -986,23 +1003,23 @@
 
       panel.innerHTML =
         '<div class="detail-top">' +
-          '<span class="detail-phase-num">Phase ' + String(id).padStart(2, '0') + '</span>' +
-          '<span class="detail-status ' + phase.status + '">' + phase.status.replace('-', ' ') + '</span>' +
+          '<span class="detail-phase-num">' + phaseLabel(id) + '</span>' +
+          '<span class="detail-status ' + phase.status + '">' + statusText(phase.status) + '</span>' +
         '</div>' +
-        '<div class="detail-title">' + escapeHtml(phase.name) + '</div>' +
-        '<div class="detail-desc">' + escapeHtml(phase.desc) + '</div>' +
+        '<div class="detail-title">' + escapeHtml(phaseName(phase)) + '</div>' +
+        '<div class="detail-desc">' + escapeHtml(phaseDesc(phase)) + '</div>' +
         '<div class="detail-stats">' +
-          '<strong>' + stats.done + '</strong> of <strong>' + stats.total + '</strong> lessons complete' +
-          ' &nbsp;·&nbsp; <strong>' + ancestorCount + '</strong> prerequisite phases' +
-          ' &nbsp;·&nbsp; <strong>' + descendantCount + '</strong> phases unlocked' +
+          '<strong>' + stats.done + '</strong> / <strong>' + stats.total + '</strong> 节课程已完成' +
+          ' &nbsp;·&nbsp; <strong>' + ancestorCount + '</strong> 个前置阶段' +
+          ' &nbsp;·&nbsp; <strong>' + descendantCount + '</strong> 个后续阶段' +
         '</div>' +
         '<div class="detail-sections">' +
-          '<div><div class="detail-section-title"><span class="title-icon" style="color:var(--accent)">&#9664;</span> Prerequisites</div>' + prereqHtml + '</div>' +
-          '<div><div class="detail-section-title"><span class="title-icon" style="color:var(--complete)">&#9654;</span> Unlocks</div>' + unlockHtml + '</div>' +
+          '<div><div class="detail-section-title"><span class="title-icon" style="color:var(--accent)">&#9664;</span> 前置基础</div>' + prereqHtml + '</div>' +
+          '<div><div class="detail-section-title"><span class="title-icon" style="color:var(--complete)">&#9654;</span> 解锁后续</div>' + unlockHtml + '</div>' +
         '</div>' +
         '<div class="detail-actions">' +
-          (readLink ? '<a href="' + readLink + '" class="detail-link detail-link-read">Read</a>' : '') +
-          '<a href="' + phaseGithubUrl + '" target="_blank" rel="noopener" class="detail-link">View on GitHub</a>' +
+          (readLink ? '<a href="' + readLink + '" class="detail-link detail-link-read">开始阅读</a>' : '') +
+          '<a href="' + phaseGithubUrl + '" target="_blank" rel="noopener" class="detail-link">查看原仓库</a>' +
         '</div>';
 
       panel.classList.add('open');
