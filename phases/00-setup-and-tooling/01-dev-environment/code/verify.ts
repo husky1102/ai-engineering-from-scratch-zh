@@ -72,7 +72,7 @@ const PROBES: Probe[] = [
   },
 ];
 
-function run(): number {
+function run(strict = false): number {
   process.stdout.write("\n=== AI Engineering from Scratch — Environment Check ===\n\n");
 
   let requiredPassed = 0;
@@ -95,8 +95,9 @@ function run(): number {
     process.stdout.write("\nYou're ready. Start with Phase 1.\n\n");
     return 0;
   }
-  process.stdout.write("\nFix the failed required checks above, then re-run.\n\n");
-  return 1;
+  process.stdout.write("\nFix the failed required checks above, then re-run.\n");
+  process.stdout.write("Default mode exits 0 for teaching; rerun with --strict to fail a shell or CI gate.\n\n");
+  return strict ? 1 : 0;
 }
 
-process.exit(run());
+process.exit(run(process.argv.includes("--strict")));

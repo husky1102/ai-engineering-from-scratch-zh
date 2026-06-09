@@ -3,7 +3,7 @@
 > 你的工具会塑造你的思考。一次搭好，并且搭对。
 
 **类型：** Build
-**语言：** Python, Node.js, Rust
+**语言：** Python, TypeScript, Rust
 **前置要求：** 无
 **时间：** ~45 分钟
 
@@ -26,9 +26,9 @@
 
 ```mermaid
 graph TD
-    A["4. AI/ML Libraries\nPyTorch, JAX, transformers, etc."] --> B["3. Language Runtimes\nPython 3.11+, Node 20+, Rust, Julia"]
-    B --> C["2. Package Managers\nuv, pnpm, cargo, juliaup"]
-    C --> D["1. System Foundation\nOS, shell, git, editor, GPU drivers"]
+    A["4. AI/ML 库\nPyTorch、JAX、transformers 等"] --> B["3. 语言运行时\nPython 3.11+、Node 20+、Rust、Julia"]
+    B --> C["2. 包管理器\nuv、pnpm、cargo、juliaup"]
+    C --> D["1. 系统基础\nOS、shell、git、编辑器、GPU 驱动"]
 ```
 
 我们自底向上安装。每一层都依赖它下面的那一层。
@@ -63,7 +63,7 @@ uv python install 3.12
 uv venv
 source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 
-uv pip install numpy matplotlib jupyter
+uv pip install numpy
 ```
 
 验证：
@@ -137,8 +137,10 @@ if torch.cuda.is_available():
 运行验证脚本：
 
 ```bash
-python phases/00-setup-and-tooling/01-dev-environment/code/verify.py
+python phases/00-setup-and-tooling/01-dev-environment/code/main.py
 ```
+
+默认情况下，验证器会打印缺失工具的诊断并退出 0，因为这节课经常在环境尚未完成时运行。需要让 shell 脚本或 CI gate 因缺少必需工具而失败时，加上 `--strict`。
 
 ## 实际使用
 

@@ -1,19 +1,45 @@
 {
+  "lesson": "01-dev-environment",
+  "title": "Dev Environment",
   "questions": [
     {
       "stage": "pre",
       "question": "Why do AI projects need a separate virtual environment?",
       "options": [
         "Virtual environments make code run faster",
-        "They isolate dependencies so different projects don't conflict",
+        "They isolate dependencies so different projects do not conflict",
         "Python requires virtual environments to import packages",
         "Virtual environments provide GPU access"
       ],
       "correct": 1,
-      "explanation": "Virtual environments isolate package versions per project. Without them, upgrading PyTorch for one project can break another that depends on an older version."
+      "explanation": "Virtual environments isolate package versions per project. Without them, upgrading one project's ML stack can break another project."
     },
     {
-      "stage": "pre",
+      "stage": "check",
+      "question": "In the four-layer environment stack, which layer must be installed first?",
+      "options": [
+        "AI/ML libraries such as PyTorch",
+        "Package managers such as uv and pnpm",
+        "Language runtimes such as Python and Node.js",
+        "System foundation such as OS, shell, git, editor, and GPU drivers"
+      ],
+      "correct": 3,
+      "explanation": "Install bottom-up: system foundation first, then package managers, runtimes, and AI libraries."
+    },
+    {
+      "stage": "check",
+      "question": "What is the purpose of uv in a Python AI project?",
+      "options": [
+        "A GPU monitoring tool",
+        "A fast Python package installer and virtual-environment workflow",
+        "A neural network visualization library",
+        "A CUDA compiler for custom kernels"
+      ],
+      "correct": 1,
+      "explanation": "uv makes Python environment creation and package installation fast and reproducible."
+    },
+    {
+      "stage": "check",
       "question": "What does CUDA provide for AI workloads?",
       "options": [
         "A Python package manager for ML libraries",
@@ -22,35 +48,11 @@
         "A container runtime for model serving"
       ],
       "correct": 2,
-      "explanation": "CUDA is NVIDIA's parallel computing platform that lets you run matrix operations on thousands of GPU cores simultaneously. PyTorch and TensorFlow use it under the hood."
+      "explanation": "CUDA is NVIDIA's parallel computing platform. PyTorch and other libraries use it to run tensor operations on GPU cores."
     },
     {
       "stage": "post",
-      "question": "In the four-layer environment stack, which layer must be installed first?",
-      "options": [
-        "AI/ML Libraries (PyTorch, JAX)",
-        "Package Managers (pip, npm, cargo)",
-        "Language Runtimes (Python, Node.js)",
-        "System Foundation (OS, shell, GPU drivers)"
-      ],
-      "correct": 3,
-      "explanation": "You install bottom-up: system foundation first (OS, drivers), then package managers, then language runtimes, then AI libraries. Each layer depends on the one below."
-    },
-    {
-      "stage": "post",
-      "question": "What is the purpose of uv in a Python AI project?",
-      "options": [
-        "A GPU monitoring tool",
-        "An ultra-fast Python package installer and resolver",
-        "A neural network visualization library",
-        "A CUDA compiler for custom kernels"
-      ],
-      "correct": 1,
-      "explanation": "uv is a fast Python package installer written in Rust. It replaces pip with much faster dependency resolution and installation, often 10-100x faster."
-    },
-    {
-      "stage": "post",
-      "question": "How do you verify that PyTorch can access your GPU?",
+      "question": "How do you verify that PyTorch can access your NVIDIA GPU?",
       "options": [
         "import torch; print(torch.__version__)",
         "nvidia-smi --query",
@@ -58,7 +60,19 @@
         "python -c 'import gpu'"
       ],
       "correct": 2,
-      "explanation": "torch.cuda.is_available() returns True if PyTorch can access CUDA GPUs. On Apple Silicon, use torch.backends.mps.is_available() for Metal Performance Shaders."
+      "explanation": "torch.cuda.is_available() returns True when PyTorch can access CUDA GPUs. Apple Silicon uses the MPS backend instead."
+    },
+    {
+      "stage": "post",
+      "question": "Why does the verifier exit 0 by default even when required tools are missing?",
+      "options": [
+        "Missing tools are never important",
+        "The lesson treats missing tools as diagnostics; --strict is available when a shell or CI gate should fail",
+        "Node.js cannot return non-zero exit codes",
+        "GPU checks always force success"
+      ],
+      "correct": 1,
+      "explanation": "The setup lesson is often run before setup is complete, so default mode teaches what is missing. Strict mode turns the same checks into a gate."
     }
   ]
 }

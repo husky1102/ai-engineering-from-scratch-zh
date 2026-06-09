@@ -70,6 +70,8 @@ fn print_header() {
 }
 
 fn main() -> ExitCode {
+    let strict = std::env::args().any(|arg| arg == "--strict");
+
     print_header();
 
     let mut required_pass = 0u32;
@@ -132,6 +134,11 @@ fn main() -> ExitCode {
     } else {
         println!();
         println!("Fix the failed checks above, then run this again.");
-        ExitCode::from(1)
+        println!("Default mode exits 0 for teaching; rerun with --strict to fail a shell or CI gate.");
+        if strict {
+            ExitCode::from(1)
+        } else {
+            ExitCode::SUCCESS
+        }
     }
 }

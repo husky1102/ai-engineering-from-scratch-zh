@@ -3,7 +3,7 @@
 > Your tools shape your thinking. Set them up once, set them up right.
 
 **Type:** Build
-**Languages:** Python, Node.js, Rust
+**Languages:** Python, TypeScript, Rust
 **Prerequisites:** None
 **Time:** ~45 minutes
 
@@ -63,7 +63,7 @@ uv python install 3.12
 uv venv
 source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 
-uv pip install numpy matplotlib jupyter
+uv pip install numpy
 ```
 
 Verify:
@@ -137,8 +137,10 @@ No GPU? No problem. Most lessons work on CPU. For training-heavy lessons, use Go
 Run the verification script:
 
 ```bash
-python phases/00-setup-and-tooling/01-dev-environment/code/verify.py
+python phases/00-setup-and-tooling/01-dev-environment/code/main.py
 ```
+
+By default the verifier prints missing-tool diagnostics and exits 0, because this lesson is often run before the environment is complete. Add `--strict` when you want a shell script or CI gate to fail on missing required tools.
 
 ## Use It
 

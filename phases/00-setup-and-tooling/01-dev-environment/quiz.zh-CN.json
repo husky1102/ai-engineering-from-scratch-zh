@@ -1,4 +1,6 @@
 {
+  "lesson": "01-dev-environment",
+  "title": "开发环境",
   "questions": [
     {
       "stage": "pre",
@@ -10,10 +12,34 @@
         "虚拟环境会提供 GPU 访问能力"
       ],
       "correct": 1,
-      "explanation": "虚拟环境会按项目隔离包版本。没有它们时，为一个项目升级 PyTorch，可能会破坏另一个依赖旧版本的项目。"
+      "explanation": "虚拟环境会按项目隔离包版本。没有它们时，为一个项目升级 ML 技术栈，可能会破坏另一个项目。"
     },
     {
-      "stage": "pre",
+      "stage": "check",
+      "question": "在四层环境技术栈中，哪一层必须最先安装？",
+      "options": [
+        "PyTorch 等 AI/ML 库",
+        "uv 和 pnpm 等包管理器",
+        "Python 和 Node.js 等语言运行时",
+        "OS、shell、git、编辑器和 GPU 驱动等系统基础"
+      ],
+      "correct": 3,
+      "explanation": "需要自底向上安装：先是系统基础，然后是包管理器、运行时和 AI 库。"
+    },
+    {
+      "stage": "check",
+      "question": "在 Python AI 项目中，uv 的用途是什么？",
+      "options": [
+        "GPU 监控工具",
+        "快速的 Python 包安装器和虚拟环境工作流",
+        "神经网络可视化库",
+        "用于自定义内核的 CUDA 编译器"
+      ],
+      "correct": 1,
+      "explanation": "uv 可以快速、可复现地创建 Python 环境并安装包。"
+    },
+    {
+      "stage": "check",
       "question": "CUDA 为 AI 工作负载提供了什么？",
       "options": [
         "用于 ML 库的 Python 包管理器",
@@ -22,35 +48,11 @@
         "用于模型服务的容器运行时"
       ],
       "correct": 2,
-      "explanation": "CUDA 是 NVIDIA 的并行计算平台，可以让你在数千个 GPU 核心上同时运行矩阵运算。PyTorch 和 TensorFlow 会在底层使用它。"
+      "explanation": "CUDA 是 NVIDIA 的并行计算平台。PyTorch 等库会用它在 GPU 核心上运行张量运算。"
     },
     {
       "stage": "post",
-      "question": "在四层环境技术栈中，哪一层必须最先安装？",
-      "options": [
-        "AI/ML 库（PyTorch、JAX）",
-        "包管理器（pip、npm、cargo）",
-        "语言运行时（Python、Node.js）",
-        "系统基础（OS、shell、GPU 驱动）"
-      ],
-      "correct": 3,
-      "explanation": "你需要自底向上安装：先安装系统基础（OS、驱动），再安装包管理器，然后是语言运行时，最后是 AI 库。每一层都依赖它下面的那一层。"
-    },
-    {
-      "stage": "post",
-      "question": "在 Python AI 项目中，uv 的用途是什么？",
-      "options": [
-        "GPU 监控工具",
-        "速度极快的 Python 包安装器和解析器",
-        "神经网络可视化库",
-        "用于自定义内核的 CUDA 编译器"
-      ],
-      "correct": 1,
-      "explanation": "uv 是一个用 Rust 编写的快速 Python 包安装器。它可以替代 pip，以快得多的速度完成依赖解析和安装，通常快 10-100 倍。"
-    },
-    {
-      "stage": "post",
-      "question": "你如何验证 PyTorch 能够访问你的 GPU？",
+      "question": "你如何验证 PyTorch 能够访问 NVIDIA GPU？",
       "options": [
         "import torch; print(torch.__version__)",
         "nvidia-smi --query",
@@ -58,7 +60,19 @@
         "python -c 'import gpu'"
       ],
       "correct": 2,
-      "explanation": "torch.cuda.is_available() 会在 PyTorch 能够访问 CUDA GPUs 时返回 True。在 Apple Silicon 上，使用 torch.backends.mps.is_available() 检查 Metal Performance Shaders。"
+      "explanation": "torch.cuda.is_available() 会在 PyTorch 能够访问 CUDA GPU 时返回 True。Apple Silicon 使用 MPS 后端。"
+    },
+    {
+      "stage": "post",
+      "question": "为什么验证器默认即使缺少必需工具也退出 0？",
+      "options": [
+        "缺少工具永远不重要",
+        "这节课把缺少工具当作诊断；需要让 shell 或 CI gate 失败时可以使用 --strict",
+        "Node.js 不能返回非零退出码",
+        "GPU 检查总会强制成功"
+      ],
+      "correct": 1,
+      "explanation": "环境配置课通常会在配置完成前运行，所以默认模式用于说明缺什么。strict 模式会把同一组检查变成 gate。"
     }
   ]
 }
