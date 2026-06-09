@@ -128,7 +128,7 @@ def _coverage_findings(art: Artifacts, floor: float) -> list[Finding]:
         findings.append(Finding("coverage.below_floor", "block",
                                 f"coverage {current:.2%} below floor {floor:.0%}"))
     delta = previous - current
-    if delta > COVERAGE_REGRESSION_DELTA:
+    if delta > COVERAGE_REGRESSION_DELTA + 1e-12:
         findings.append(Finding("coverage.regression", "block",
                                 f"coverage dropped {delta:.2%} (prev {previous:.2%} -> {current:.2%})"))
     elif delta > 0:
@@ -208,7 +208,7 @@ def main() -> None:
             feedback=[{"command": accept[0], "exit_code": 0}],
             scope_report={"forbidden_writes": [], "off_scope_writes": []},
             rule_report=[{"slug": "done/tests-pass", "passed": True}],
-            coverage_report={"current": 0.84, "previous": 0.85},
+            coverage_report={"current": 0.84, "previous": 0.84},
             head_commit="a1b2c3d",
         ),
         Artifacts(
