@@ -15,18 +15,6 @@
       "explanation": "The gap between builder and reviewer is where reliability lives; acceptance only proves a weaker version."
     },
     {
-      "stage": "pre",
-      "question": "Which is NOT one of the five rubric dimensions?",
-      "options": [
-        "Problem fit",
-        "Scope discipline",
-        "Verification quality",
-        "Inference latency"
-      ],
-      "correct": 3,
-      "explanation": "The five are problem fit, scope discipline, assumptions, verification quality, handoff readiness."
-    },
-    {
       "stage": "check",
       "question": "What does role separation require?",
       "options": [

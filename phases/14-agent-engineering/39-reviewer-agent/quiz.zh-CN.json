@@ -1,50 +1,38 @@
 {
   "lesson": "39-reviewer-agent",
-  "title": "Reviewer Agent：将 Builder 与 Marker 分开",
+  "title": "审查代理：将构建者与评分者分开",
   "questions": [
     {
       "stage": "pre",
       "question": "为什么 builder 不能可靠地给自己的工作打分？",
       "options": [
         "它会用完 tokens",
-        "Acceptance 是必要但不充分的；problem-fit、scope discipline、documented assumptions 和 handoff readiness 需要一个带不同 inputs 的不同角色",
-        "它会丢失 authentication",
-        "模型拒绝 self-grading"
+        "Acceptance 是必要但不充分的；问题匹配、作用域纪律、假设记录和交接就绪度需要一个带不同 input 的不同角色",
+        "它会丢失认证",
+        "模型拒绝自评"
       ],
       "correct": 1,
       "explanation": "builder 与 reviewer 之间的间隙就是可靠性所在；acceptance 只能证明一个更弱版本。"
     },
     {
-      "stage": "pre",
-      "question": "下面哪一项不是五个 rubric dimensions 之一？",
-      "options": [
-        "Problem fit",
-        "Scope discipline",
-        "Verification quality",
-        "Inference latency"
-      ],
-      "correct": 3,
-      "explanation": "五个维度是 problem fit、scope discipline、assumptions、verification quality、handoff readiness。"
-    },
-    {
       "stage": "check",
-      "question": "role separation 需要什么？",
+      "question": "角色分离需要什么？",
       "options": [
         "不同的模型",
-        "不同的 system prompt 和不同 inputs；如果 posture 改变且 reviewer 对 diff 没有 write access，同一 model 也可以扮演两个角色",
+        "不同的 system prompt 和不同 input；如果姿态改变且 reviewer 对 diff 没有写入权限，同一 model 也可以扮演两个角色",
         "不同的物理硬件",
         "一个新账号"
       ],
       "correct": 1,
-      "explanation": "纪律在 posture 和 inputs 中，而不在 model identity 中。"
+      "explanation": "纪律在姿态和 input 中，而不在 model identity 中。"
     },
     {
       "stage": "check",
       "question": "Cloudflare 的 2026 review architecture 是什么样的？",
       "options": [
         "一个巨大的 reviewer",
-        "最多七个 specialist reviewers 在一个负责 deduplicate findings 的 Review Coordinator 下并行运行；top-tier model 只给 coordinator，cheaper tiers 给 specialists",
-        "两个 reviewers round-robin",
+        "最多七个 specialist reviewer 在负责去重 finding 的 Review Coordinator 下并行运行；top-tier model 只给 coordinator，cheaper tier 给 specialist",
+        "两个 reviewer 轮转",
         "单个顺序 LLM"
       ],
       "correct": 1,
@@ -54,37 +42,37 @@
       "stage": "check",
       "question": "下面哪一项不是本课列出的四种 LLM-judge biases 之一？",
       "options": [
-        "Position bias（A,B 与 B,A ordering inconsistency）",
-        "Verbosity bias（更长 outputs 得分更高）",
-        "Self-preference（相同 model family）",
-        "Vector locality"
+        "位置偏差（A,B 与 B,A 顺序不一致）",
+        "冗长偏差（更长 output 得分更高）",
+        "自偏好（相同 model family）",
+        "向量局部性"
       ],
       "correct": 3,
-      "explanation": "四种 bias 是 position、verbosity、self-preference、authority；vector locality 不在其中。"
+      "explanation": "四种 bias 是位置、冗长、自偏好、权威；向量局部性不在其中。"
     },
     {
       "stage": "post",
       "question": "什么是 calibration set？",
       "options": [
-        "一个新的 training corpus",
-        "10-20 个带已知 correct verdicts 的历史 task close-outs；每次 prompt change 都重跑；如果 reviewer agreement 低于 80%，先修 rubric 再交付",
+        "一个新的训练语料",
+        "10-20 个带已知正确 verdict 的历史 task close-out；每次 prompt change 都重跑；如果 reviewer agreement 低于 80%，先修 rubric 再交付",
         "一个 A/B test fixture",
-        "一个 vector index"
+        "一个向量索引"
       ],
       "correct": 1,
-      "explanation": "Calibration sets 让 reviewer 保持诚实；如果 agreement 漂移，应该修 rubric，而不是修 data。"
+      "explanation": "Calibration set 让 reviewer 保持诚实；如果一致率漂移，应该修 rubric，而不是修 data。"
     },
     {
       "stage": "post",
       "question": "reviewer 的 report 与 workbench 其余部分在哪里集成？",
       "options": [
         "它替代 verification",
-        "它会打包进 handoff packet（Lesson 40）；human review 从 report 开始，而不是从空白页开始",
+        "它会打包进 handoff packet（Lesson 40）；人工 review 从 report 开始，而不是从空白页开始",
         "它覆盖 gate",
-        "它只发给 manager"
+        "它只发给经理"
       ],
       "correct": 1,
-      "explanation": "review report 输入 handoff，让下一个会话和 human reviewer 从 written verdict 开始。"
+      "explanation": "review report 输入 handoff，让下一个会话和 human reviewer 从书面 verdict 开始。"
     }
   ]
 }
