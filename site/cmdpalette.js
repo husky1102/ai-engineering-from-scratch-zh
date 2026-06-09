@@ -429,7 +429,7 @@
     if (!query) {
       list.innerHTML =
         '<li class="cp-empty" role="option" aria-disabled="true">' +
-        'Type to search, or filter with phase:02 runtime:browser-pyodide status:complete' +
+        'Type to search, or filter with phase:02 runtime:local-kernel status:complete' +
         '</li>';
       _activeIdx = -1;
       return;

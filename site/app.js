@@ -24,9 +24,14 @@
 
   function updateThemeIcon() {
     var icon = document.getElementById('themeIcon');
+    var btn = document.getElementById('themeToggle');
     if (!icon) return;
     var theme = root.getAttribute('data-theme');
-    icon.textContent = theme === 'light' ? 'N' : 'D';
+    icon.textContent = theme === 'light' ? '☾' : '☼';
+    if (btn) {
+      btn.setAttribute('aria-label', theme === 'light' ? '切换到深色模式' : '切换到浅色模式');
+      btn.setAttribute('title', theme === 'light' ? '切换到深色模式' : '切换到浅色模式');
+    }
   }
 
   function initThemeToggle() {
@@ -126,7 +131,7 @@
       var num = String(p.id).padStart(2, '0');
       html += '<div class="toc-row" data-phase="' + i + '">';
       html += '<span class="toc-num">' + roman + '.</span>';
-      html += '<div><span class="toc-status ' + statusClass + '"></span><span class="toc-name">' + escapeHtml(p.name) + '</span></div>';
+      html += '<div><span class="toc-status ' + statusClass + '"></span><span class="toc-name">' + escapeHtml(p.nameZh || p.name) + '</span></div>';
       html += '<span class="toc-meta">' + done + ' / ' + total + '</span>';
       html += '<span class="toc-meta">' + num + '</span>';
       html += '</div>';
@@ -150,6 +155,25 @@
         newRows[r].classList.add('in-view', 'visible');
       }
     }
+  }
+
+  function lessonPathFromUrl(url) {
+    var pathMatch = url ? url.match(/(phases\/[^/]+\/[^/]+)\/?$/) : null;
+    return pathMatch ? pathMatch[1] : '';
+  }
+
+  function lessonUrl(lessonPath) {
+    return 'lesson.html?path=' + encodeURIComponent(lessonPath) + '&lang=zh-CN';
+  }
+
+  function lessonTypeLabel(type) {
+    var labels = {
+      Build: '构建',
+      Learn: '学习',
+      Reference: '参考',
+      Capstone: '综合'
+    };
+    return labels[type] || type || '';
   }
 
   function toRoman(num) {
@@ -195,7 +219,7 @@
     if (resetBtn) {
       resetBtn.addEventListener('click', function () {
         if (!window.AIFSProgress) return;
-        var ok = window.confirm('Clear all your local progress (quiz answers and completed lessons)? This cannot be undone.');
+        var ok = window.confirm('要清除本浏览器保存的课程进度和测验答案吗？此操作不可撤销。');
         if (!ok) return;
         window.AIFSProgress.reset();
       });
@@ -209,9 +233,9 @@
     if (!p) return;
     currentPhaseIdx = idx;
 
-    document.getElementById('modalPhaseNum').textContent = 'PHASE ' + String(p.id).padStart(2, '0');
-    document.getElementById('modalTitle').textContent = p.name;
-    document.getElementById('modalDesc').textContent = p.desc;
+    document.getElementById('modalPhaseNum').textContent = '第 ' + String(p.id).padStart(2, '0') + ' 阶段';
+    document.getElementById('modalTitle').textContent = p.nameZh || p.name;
+    document.getElementById('modalDesc').textContent = p.descZh || p.desc;
 
     renderModalLessons(p);
 
@@ -229,8 +253,8 @@
 
     for (var i = 0; i < p.lessons.length; i++) {
       var l = p.lessons[i];
-      var pathMatch = l.url ? l.url.match(/(phases\/[^/]+\/[^/]+)\/?$/) : null;
-      var lessonPath = pathMatch ? pathMatch[1] : '';
+      var lessonPath = lessonPathFromUrl(l.url);
+      var title = l.nameZh || l.name;
       var userComplete = hasProgress && lessonPath && window.AIFSProgress.isLessonComplete(lessonPath);
       if (userComplete) userDone++;
 
@@ -238,22 +262,22 @@
       if (userComplete) statusClass = 'complete';
 
       html += '<div class="modal-lesson' + (userComplete ? ' user-done' : '') + '">';
-      html += '<span class="modal-lesson-status ' + statusClass + '"' + (userComplete ? ' title="You completed this lesson"' : '') + '></span>';
-      if (l.url) {
-        html += '<a href="' + l.url + '" target="_blank" rel="noopener">' + escapeHtml(l.name) + '</a>';
+      html += '<span class="modal-lesson-status ' + statusClass + '"' + (userComplete ? ' title="你已完成这节课"' : '') + '></span>';
+      if (lessonPath) {
+        html += '<a href="' + lessonUrl(lessonPath) + '">' + escapeHtml(title) + '</a>';
       } else {
-        html += '<a>' + escapeHtml(l.name) + '</a>';
+        html += '<span>' + escapeHtml(title) + '</span>';
       }
-      html += '<span class="modal-lesson-type" data-type="' + escapeHtml(l.type) + '"' + (l.combines ? ' title="Combines: ' + escapeHtml(l.combines) + '"' : '') + '>' + escapeHtml(l.type) + '</span>';
+      html += '<span class="modal-lesson-type" data-type="' + escapeHtml(l.type) + '"' + (l.combines ? ' title="组合：' + escapeHtml(l.combines) + '"' : '') + '>' + escapeHtml(lessonTypeLabel(l.type)) + '</span>';
       html += '<span class="modal-lesson-lang">' + escapeHtml(l.lang) + '</span>';
 
       var actionHtml = '';
       if ((l.status === 'complete' || userComplete) && lessonPath) {
-        actionHtml = '<a href="lesson.html?path=' + lessonPath + '" class="modal-lesson-read">' + (userComplete ? 'Review' : 'Read') + '</a>';
+        actionHtml = '<a href="' + lessonUrl(lessonPath) + '" class="modal-lesson-read">' + (userComplete ? '复习' : '阅读') + '</a>';
       }
       var toggleHtml = '';
       if (hasProgress && lessonPath) {
-        toggleHtml = '<button type="button" class="modal-lesson-toggle' + (userComplete ? ' done' : '') + '" data-path="' + lessonPath + '" title="' + (userComplete ? 'Mark as not done' : 'Mark complete') + '" aria-label="' + (userComplete ? 'Mark as not done' : 'Mark complete') + '">' + (userComplete ? '✓' : '+') + '</button>';
+        toggleHtml = '<button type="button" class="modal-lesson-toggle' + (userComplete ? ' done' : '') + '" data-path="' + lessonPath + '" title="' + (userComplete ? '取消完成' : '标记完成') + '" aria-label="' + (userComplete ? '取消完成' : '标记完成') + '">' + (userComplete ? '✓' : '+') + '</button>';
       }
       html += (actionHtml || '<span class="modal-lesson-read-placeholder" aria-hidden="true"></span>') + toggleHtml;
       html += '</div>';
@@ -283,7 +307,7 @@
       var pct = Math.round((userDone / p.lessons.length) * 100);
       if (progEl) {
         progEl.style.display = '';
-        progEl.innerHTML = '<span class="modal-progress-count">' + userDone + ' / ' + p.lessons.length + '</span> <span class="modal-progress-label">completed</span> <span class="modal-progress-pct">' + pct + '%</span>';
+        progEl.innerHTML = '<span class="modal-progress-count">' + userDone + ' / ' + p.lessons.length + '</span> <span class="modal-progress-label">已完成</span> <span class="modal-progress-pct">' + pct + '%</span>';
       }
       if (barEl && barFill) {
         barEl.style.display = '';

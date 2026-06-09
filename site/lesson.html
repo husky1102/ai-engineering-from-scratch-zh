@@ -4,22 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lesson - AI Engineering from Scratch</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%233553ff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%233553ff'>AI</text></svg>">
+  <link rel="icon" type="image/png" href="assets/mascot-gpt054.png">
+  <link rel="apple-touch-icon" href="assets/mascot-gpt054.png">
   <meta name="description" content="A lesson from the AI Engineering from Scratch curriculum. 503 lessons across 20 phases, four languages, every algorithm built from raw math.">
   <link rel="canonical" href="https://aiengineeringfromscratch.com/lesson.html">
   <meta property="og:title" content="AI Engineering from Scratch · Lesson">
   <meta property="og:description" content="503 lessons. 20 phases. Write the backprop, the tokenizer, the attention mechanism, and the agent loop by hand.">
-  <meta property="og:image" content="https://aiengineeringfromscratch.com/og-image.png?v=3">
+  <meta property="og:image" content="assets/mascot-gpt054.png">
   <!-- og:url omitted intentionally: lesson.html is a static template that loads the lesson body client-side via ?path=. Static hosting cannot template the URL, so we let crawlers fall back to the request URL (which is the lesson-specific share link). -->
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AI Engineering from Scratch">
   <meta name="twitter:description" content="503 lessons. 20 phases. Build it from raw math, by hand.">
-  <meta name="twitter:image" content="https://aiengineeringfromscratch.com/og-image.png?v=3">
+  <meta name="twitter:image" content="assets/mascot-gpt054.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260525a">
+  <link rel="stylesheet" href="style.css?v=20260609mascot">
   <style>
     .scroll-progress {
       position: fixed;
@@ -1328,53 +1329,6 @@
       line-height: 1.45;
     }
 
-    .pyodide-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: -10px 0 18px;
-      flex-wrap: wrap;
-    }
-
-    .pyodide-toolbar button {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border: 1px solid var(--rule-soft);
-      color: var(--ink-soft);
-      background: transparent;
-      cursor: pointer;
-    }
-
-    .pyodide-toolbar button:hover:not(:disabled) {
-      border-color: var(--blueprint);
-      color: var(--blueprint);
-    }
-
-    .pyodide-toolbar button:disabled {
-      cursor: default;
-      opacity: 0.6;
-    }
-
-    .pyodide-status {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--ink-mute);
-    }
-
-    .pyodide-output {
-      margin-top: -6px;
-      border-color: var(--blueprint);
-      white-space: pre-wrap;
-    }
-
-    .pyodide-output-error,
-    .pyodide-output-stderr {
-      color: #b42318;
-    }
-
     .learning-timeline {
       display: flex;
       align-items: center;
@@ -1717,21 +1671,17 @@
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo">
-        <span class="logo-icon" aria-hidden="true"></span> AI / FROM SCRATCH
+        <span class="logo-icon" aria-hidden="true"></span> AI 工程
       </a>
       <nav class="header-nav">
-        <a href="index.html#contents">Contents</a>
-        <a href="catalog.html">Catalog</a>
-        <a href="prereqs.html">Roadmap</a>
-        <a href="glossary.html">Glossary</a>
-        <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener" class="header-github">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          <svg class="star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.896l-7.416 3.517 1.48-8.279L0 9.306l8.332-1.151z"/></svg>
-          <span class="star-count" data-loading="true" aria-label="GitHub stars">…</span>
-        </a>
+        <a href="index.html#contents">目录</a>
+        <a href="catalog.html">课程</a>
+        <a href="prereqs.html">路线图</a>
+        <a href="glossary.html">术语表</a>
+        <a href="about.html">关于</a>
       </nav>
       <button class="search-toggle" type="button" data-cmd-palette
-        aria-label="Search (⌘K)" title="Search (⌘K)">
+        aria-label="搜索 (⌘K)" title="搜索 (⌘K)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1743,8 +1693,8 @@
         <button type="button" data-lang-option="zh-CN" aria-pressed="true">中文</button>
         <button type="button" data-lang-option="en" aria-pressed="false">EN</button>
       </div>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
-        <span class="theme-icon" id="themeIcon">N</span>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换到深色模式" type="button">
+        <span class="theme-icon" id="themeIcon">☾</span>
       </button>
     </div>
   </header>
@@ -1776,14 +1726,12 @@
     <aside class="toc-sidebar" id="tocSidebar" aria-hidden="true"></aside>
   </div>
 
-  <script src="data.js?v=20260525a"></script>
-  <script src="i18n.js?v=20260609b"></script>
+  <script src="data.js?v=20260609r19"></script>
+  <script src="i18n.js?v=20260609r19"></script>
   <script src="progress.js?v=20260525a"></script>
-  <script src="header.js?v=20260525a" defer></script>
-  <script src="cmdpalette.js?v=20260525a" defer></script>
+  <script src="cmdpalette.js?v=20260609r19" defer></script>
   <script src="figures.js?v=20260607a"></script>
   <script src="lesson-figures.js?v=20260607a"></script>
-  <script src="runner-pyodide.js?v=20260609c"></script>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
     mermaid.initialize({
@@ -1820,12 +1768,17 @@
         var icon = document.getElementById('themeIcon');
         if (!icon) return;
         var theme = root.getAttribute('data-theme');
-        icon.textContent = theme === 'light' ? 'N' : 'D';
+        icon.textContent = theme === 'light' ? '☾' : '☼';
+        var btn = document.getElementById('themeToggle');
+        if (btn) {
+          btn.setAttribute('aria-label', theme === 'light' ? '切换到深色模式' : '切换到浅色模式');
+          btn.setAttribute('title', theme === 'light' ? '切换到深色模式' : '切换到浅色模式');
+        }
       }
 
-      var btn = document.getElementById('themeToggle');
-      if (btn) {
-        btn.addEventListener('click', function () {
+      var themeBtn = document.getElementById('themeToggle');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function () {
           var current = root.getAttribute('data-theme');
           var next = current === 'light' ? 'dark' : 'light';
           root.setAttribute('data-theme', next);
@@ -1982,6 +1935,18 @@
         return String(index + 1).padStart(2, '0') + '-' + lesson.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       }
 
+      function phaseDisplayName(phase) {
+        return (phase && (phase.nameZh || phase.name)) || '';
+      }
+
+      function lessonDisplayName(les) {
+        return (les && (les.nameZh || les.name)) || '';
+      }
+
+      function phaseLabel(id) {
+        return '第 ' + String(id).padStart(2, '0') + ' 阶段';
+      }
+
       function buildSidebar() {
         var sidebar = document.getElementById('lessonSidebar');
         if (!sidebar || typeof PHASES === 'undefined') return;
@@ -1997,20 +1962,20 @@
             var pp = PHASES[prevPhaseIdx];
             var ppSlug = extractPhaseSlug(pp, prevPhaseIdx);
             var ppFirstLesson = pp.lessons[0] ? extractLessonSlug(pp.lessons[0], 0) : '';
-            html += '<a href="' + lessonHref('phases/' + ppSlug + '/' + ppFirstLesson) + '">&larr; Phase ' + String(pp.id).padStart(2, '0') + ': ' + escapeHtml(pp.name) + '</a>';
+            html += '<a href="' + lessonHref('phases/' + ppSlug + '/' + ppFirstLesson) + '">&larr; ' + phaseLabel(pp.id) + '：' + escapeHtml(phaseDisplayName(pp)) + '</a>';
           }
           if (nextPhaseIdx >= 0) {
             var np = PHASES[nextPhaseIdx];
             var npSlug = extractPhaseSlug(np, nextPhaseIdx);
             var npFirstLesson = np.lessons[0] ? extractLessonSlug(np.lessons[0], 0) : '';
-            html += '<a href="' + lessonHref('phases/' + npSlug + '/' + npFirstLesson) + '">Phase ' + String(np.id).padStart(2, '0') + ': ' + escapeHtml(np.name) + ' &rarr;</a>';
+            html += '<a href="' + lessonHref('phases/' + npSlug + '/' + npFirstLesson) + '">' + phaseLabel(np.id) + '：' + escapeHtml(phaseDisplayName(np)) + ' &rarr;</a>';
           }
           html += '</div>';
         }
 
         if (currentPhaseIndex >= 0) {
           var phase = PHASES[currentPhaseIndex];
-          html += '<div class="sidebar-phase-header">Phase ' + String(phase.id).padStart(2, '0') + ' · ' + escapeHtml(phase.name) + '</div>';
+          html += '<div class="sidebar-phase-header">' + phaseLabel(phase.id) + ' · ' + escapeHtml(phaseDisplayName(phase)) + '</div>';
           for (var k = 0; k < phase.lessons.length; k++) {
             var les = phase.lessons[k];
             var lesSlug = extractLessonSlug(les, k);
@@ -2023,7 +1988,7 @@
               html += '<span class="sidebar-lesson-link disabled">';
             }
             html += '<span class="sidebar-lesson-dot ' + les.status + '"></span>';
-            html += escapeHtml(les.name);
+            html += escapeHtml(lessonDisplayName(les));
             html += lesReadable ? '</a>' : '</span>';
           }
         }
@@ -3387,32 +3352,46 @@
       }
 
       function runtimeLabel(runtime) {
-        if (runtime === 'browser-pyodide') return t('runtimeBrowser');
         if (runtime === 'local-kernel') return t('runtimeLocal');
         if (runtime === 'static-only') return t('runtimeStatic');
         return runtime || t('runtimeStatic');
       }
 
       function runtimeDefaultNote(runtime) {
-        if (runtime === 'browser-pyodide') return t('runtimeBrowserNote');
         if (runtime === 'local-kernel') return t('runtimeLocalNote');
         return t('runtimeStaticNote');
       }
 
       function runtimeNoteText(note) {
         var map = {
-          'light Python candidate': 'runtimeNoteLightPythonCandidate',
-          'Python uses packages outside the browser allowlist': 'runtimeNoteOutsideBrowserAllowlist',
           'uses API key or secret': 'runtimeNoteApiKey',
           'reads environment variables': 'runtimeNoteEnvVars',
           'uses subprocess': 'runtimeNoteSubprocess',
           'uses network or server APIs': 'runtimeNoteNetwork',
           'mentions GPU/CUDA': 'runtimeNoteGpuCuda',
-          'non-Python lesson; browser execution not enabled yet': 'runtimeNoteNonPython',
+          'non-Python lesson; browser execution not enabled yet': 'runtimeStaticNote',
           'no code files detected': 'runtimeNoteNoCodeFiles'
         };
         var key = map[String(note || '')];
         return key ? t(key) : String(note || '');
+      }
+
+      function normalizeRuntime(runtime) {
+        if (runtime === 'static-only') return 'static-only';
+        if (runtime === 'local-kernel') return 'local-kernel';
+        return 'local-kernel';
+      }
+
+      function normalizeRuntimeNotes(runtime, notes) {
+        var filtered = [];
+        for (var i = 0; i < notes.length; i++) {
+          var note = notes[i];
+          if (note === 'light Python candidate') continue;
+          if (note === 'Python uses packages outside the browser allowlist') continue;
+          if (note === 'non-Python lesson; browser execution not enabled yet') continue;
+          filtered.push(note);
+        }
+        return filtered.length ? filtered : [runtimeDefaultNote(runtime)];
       }
 
       function displayRuntimePackages(packages) {
@@ -3565,7 +3544,7 @@
           var assets = currentLessonAssets(assetManifest);
           var codeFiles = assets && Array.isArray(assets.code) ? assets.code : [];
           if (codePanelSubtitle) {
-            codePanelSubtitle.textContent = record ? runtimeLabel(record.runtime || 'static-only') : (codeFiles.length ? t('sourceFiles') : t('runtimeStatic'));
+            codePanelSubtitle.textContent = record ? runtimeLabel(normalizeRuntime(record.runtime || 'static-only')) : (codeFiles.length ? t('sourceFiles') : t('runtimeStatic'));
           }
           el.classList.remove('panel-loading');
           if (!record && !codeFiles.length) {
@@ -3575,16 +3554,13 @@
 
           var html = '<div class="code-cards">';
           if (record) {
-            var runtime = record.runtime || 'static-only';
+            var runtime = normalizeRuntime(record.runtime || 'static-only');
             var language = record.language || ((record.languages && record.languages[0]) || '');
             var icon = langIconFromLanguage(language);
             var entry = record.entry || '';
             var command = langCommandFromLanguage(language);
             var runCmd = entry && command && runtime !== 'static-only' ? (command + ' ' + entry) : '';
-            var notes = Array.isArray(record.notes) && record.notes.length ? record.notes : [runtimeDefaultNote(runtime)];
-            if (runtime === 'static-only' && notes.length === 1 && notes[0] === 'non-Python lesson; browser execution not enabled yet') {
-              notes = [runtimeDefaultNote(runtime)];
-            }
+            var notes = normalizeRuntimeNotes(runtime, Array.isArray(record.notes) && record.notes.length ? record.notes : [runtimeDefaultNote(runtime)]);
             var packages = displayRuntimePackages(record.packages);
 
             html += '<div class="code-card">';
