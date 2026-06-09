@@ -23,12 +23,42 @@ const CONTENT_IGNORED_FILES = new Set(['.DS_Store']);
 
 const GITHUB_BASE = 'https://github.com/rohitg00/ai-engineering-from-scratch/tree/main/';
 const SITE_ORIGIN = 'https://aiengineeringfromscratch.com';
+const PHASE_ZH = {
+  0: { name: '环境搭建与工具链', desc: '把本地开发、版本控制、运行环境和调试习惯先搭稳。' },
+  1: { name: '数学基础', desc: '用线性代数、微积分、概率和优化建立机器学习的底层语言。' },
+  2: { name: '机器学习基础', desc: '从经典监督学习、特征、评估和集成方法理解模型训练。' },
+  3: { name: '深度学习核心', desc: '从感知机、反向传播、激活函数、损失函数和优化器开始手写神经网络。' },
+  4: { name: '计算机视觉', desc: '理解卷积、检测、分割和视觉表征。' },
+  5: { name: '自然语言处理', desc: '从文本表示、序列模型到现代 NLP 管线。' },
+  6: { name: '语音与音频', desc: '处理音频特征、语音识别、合成和音频模型。' },
+  7: { name: 'Transformer 深入解析', desc: '从 attention 到完整 Transformer，拆开现代大模型的核心结构。' },
+  8: { name: '生成式 AI', desc: '学习 autoencoder、GAN、diffusion、flow matching 等生成模型。' },
+  9: { name: '强化学习', desc: '从 MDP、价值函数、策略梯度到智能体控制。' },
+  10: { name: '从零构建大语言模型', desc: '手写 tokenizer、数据管线、Transformer 和训练循环。' },
+  11: { name: '大语言模型工程', desc: '把 embedding、RAG、上下文工程、评估和生产应用连起来。' },
+  12: { name: '多模态 AI', desc: '连接图像、文本、音频和视频的表示与推理。' },
+  13: { name: '工具与协议', desc: '理解工具调用、MCP、协议、认证和集成边界。' },
+  14: { name: '智能体工程', desc: '构建规划、执行、评审、记忆、反馈和交接机制。' },
+  15: { name: '自主系统', desc: '把智能体放进长期运行、可观测和可恢复的系统中。' },
+  16: { name: '多智能体与群体智能', desc: '学习多智能体通信、协调、分工和群体行为。' },
+  17: { name: '基础设施与生产化', desc: '部署、监控、扩展、成本、安全和合规。' },
+  18: { name: '伦理、安全与对齐', desc: '理解模型风险、安全评估、对齐和治理框架。' },
+  19: { name: '综合项目', desc: '用端到端项目把前面的能力组合成可运行系统。' }
+};
 
 // GITHUB_BASE lesson url -> site path "phases/<phase>/<lesson>"
 function lessonPath(url) {
   if (!url) return null;
   const m = url.match(/(phases\/[^/]+\/[^/]+)\/?$/);
   return m ? m[1] : null;
+}
+
+function readLocalizedLessonTitle(lessonRel, locale) {
+  const docPath = path.join(REPO_ROOT, lessonRel, 'docs', `${locale}.md`);
+  if (!fs.existsSync(docPath)) return '';
+  const content = fs.readFileSync(docPath, 'utf8');
+  const match = content.match(/^#\s+(.+)$/m);
+  return match ? match[1].trim() : '';
 }
 
 function resetDir(dir) {
@@ -138,7 +168,16 @@ function parseReadme(content, roadmapStatuses) {
       }
       const roadmapKey = `Phase ${id}`;
       const phaseStatus = roadmapStatuses[roadmapKey]?.phaseStatus || 'planned';
-      currentPhase = { id, name: name.trim(), status: phaseStatus, desc, lessons: [] };
+      const phaseZh = PHASE_ZH[id] || {};
+      currentPhase = {
+        id,
+        name: name.trim(),
+        ...(phaseZh.name && { nameZh: phaseZh.name }),
+        status: phaseStatus,
+        desc,
+        ...(phaseZh.desc && { descZh: phaseZh.desc }),
+        lessons: []
+      };
       phases.push(currentPhase);
       inLessonTable = false;
       continue;
@@ -149,7 +188,17 @@ function parseReadme(content, roadmapStatuses) {
       const id = parseInt(idStr);
       const roadmapKey = `Phase ${id}`;
       const phaseStatus = roadmapStatuses[roadmapKey]?.phaseStatus || 'planned';
-      currentPhase = { id, name: name.trim(), status: phaseStatus, desc: desc?.trim() || '', lessons: [] };
+      const phaseZh = PHASE_ZH[id] || {};
+      const phaseDesc = desc?.trim() || '';
+      currentPhase = {
+        id,
+        name: name.trim(),
+        ...(phaseZh.name && { nameZh: phaseZh.name }),
+        status: phaseStatus,
+        desc: phaseDesc,
+        ...(phaseZh.desc && { descZh: phaseZh.desc }),
+        lessons: []
+      };
       phases.push(currentPhase);
       inLessonTable = false;
       continue;
@@ -238,8 +287,12 @@ function parseReadme(content, roadmapStatuses) {
         // (e.g., "P11 P13 P14"), not a Build/Learn enum. Keep `type` on the
         // Build/Learn axis so CSS selectors (data-type="Build"/"Learn") stay
         // valid, and emit the prereq string in a dedicated `combines` field.
+        const lessonRelPath = url ? lessonPath(url) : '';
+        const localizedTitle = lessonRelPath ? readLocalizedLessonTitle(lessonRelPath, 'zh-CN') : '';
+
         const lessonEntry = {
           name: lessonName.trim(),
+          ...(localizedTitle && { nameZh: localizedTitle }),
           status,
           type: isCapstoneTable ? 'Capstone' : type.trim(),
           lang: lang.trim() || '—',

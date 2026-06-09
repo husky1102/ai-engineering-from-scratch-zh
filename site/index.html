@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Engineering from Scratch</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%233553ff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%233553ff'>AI</text></svg>">
-  <meta name="description" content="AI Engineering from Scratch is a free, open-source curriculum that builds every core AI algorithm by hand — 503 lessons, 20 phases, four languages. The math, the model, the tokenizer, and the agent loop. Once, by hand.">
+  <title>AI 工程：从零开始</title>
+  <link rel="icon" type="image/png" href="assets/mascot-gpt054.png">
+  <link rel="apple-touch-icon" href="assets/mascot-gpt054.png">
+  <meta name="description" content="AI 工程：从零开始中文阅读站。503 节课、20 个阶段，从数学、模型、tokenizer、attention 到智能体循环，先手写原理，再理解框架。">
   <link rel="canonical" href="https://aiengineeringfromscratch.com/">
-  <meta property="og:title" content="AI Engineering from Scratch">
-  <meta property="og:description" content="503 lessons. 20 phases. Write the backprop, the tokenizer, the attention mechanism, and the agent loop by hand before any framework gets imported. Python, TypeScript, Rust, Julia.">
-  <meta property="og:image" content="https://aiengineeringfromscratch.com/og-image.png?v=3">
+  <meta property="og:title" content="AI 工程：从零开始">
+  <meta property="og:description" content="503 节课、20 个阶段。先手写反向传播、tokenizer、attention 和智能体循环，再理解框架。">
+  <meta property="og:image" content="assets/mascot-gpt054.png">
   <meta property="og:url" content="https://aiengineeringfromscratch.com">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI Engineering from Scratch">
-  <meta name="twitter:description" content="503 lessons. 20 phases. Write the backprop, the tokenizer, the attention mechanism, and the agent loop by hand.">
-  <meta name="twitter:image" content="https://aiengineeringfromscratch.com/og-image.png?v=3">
+  <meta name="twitter:title" content="AI 工程：从零开始">
+  <meta name="twitter:description" content="503 节课、20 个阶段。先手写原理，再理解框架。">
+  <meta name="twitter:image" content="assets/mascot-gpt054.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260525a">
+  <link rel="stylesheet" href="style.css?v=20260609mascot">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -27,18 +28,16 @@
       {
         "@type": "Organization",
         "@id": "https://aiengineeringfromscratch.com/#org",
-        "name": "AI Engineering from Scratch",
+        "name": "AI 工程：从零开始",
         "url": "https://aiengineeringfromscratch.com",
-        "logo": "https://aiengineeringfromscratch.com/og-image.png",
-        "sameAs": ["https://github.com/rohitg00/ai-engineering-from-scratch", "https://github.com/rohitg00"],
-        "founder": { "@type": "Person", "name": "Rohit Ghumare", "url": "https://github.com/rohitg00" }
+        "logo": "https://aiengineeringfromscratch.com/assets/mascot-gpt054.png"
       },
       {
         "@type": "WebSite",
         "@id": "https://aiengineeringfromscratch.com/#website",
         "url": "https://aiengineeringfromscratch.com",
-        "name": "AI Engineering from Scratch",
-        "description": "A free, open-source curriculum that builds every core AI algorithm by hand.",
+        "name": "AI 工程：从零开始",
+        "description": "面向中文读者的本地课程阅读站，源自 AI Engineering from Scratch。",
         "publisher": { "@id": "https://aiengineeringfromscratch.com/#org" },
         "potentialAction": {
           "@type": "SearchAction",
@@ -49,17 +48,17 @@
       {
         "@type": "Course",
         "@id": "https://aiengineeringfromscratch.com/#course",
-        "name": "AI Engineering from Scratch",
-        "description": "503 lessons across 20 phases. Write the backprop, the tokenizer, the attention mechanism, and the agent loop by hand before any framework gets imported.",
+        "name": "AI 工程：从零开始",
+        "description": "503 节课、20 个阶段。从数学、模型、tokenizer、attention 到智能体循环，先手写原理，再理解框架。",
         "provider": { "@id": "https://aiengineeringfromscratch.com/#org" },
         "url": "https://aiengineeringfromscratch.com",
         "isAccessibleForFree": true,
-        "inLanguage": "en",
-        "teaches": ["Neural networks", "Backpropagation", "Tokenization", "Attention mechanisms", "LLM training", "Inference optimization", "Agent loops", "Model context protocol"],
+        "inLanguage": "zh-CN",
+        "isBasedOn": "AI Engineering from Scratch original curriculum",
+        "teaches": ["神经网络", "反向传播", "Tokenization", "Attention 机制", "LLM 训练", "推理优化", "智能体循环", "模型上下文协议"],
         "hasCourseInstance": {
           "@type": "CourseInstance",
-          "courseMode": "online",
-          "instructor": { "@type": "Person", "name": "Rohit Ghumare" }
+          "courseMode": "online"
         }
       }
     ]
@@ -67,8 +66,16 @@
   </script>
   <style>
     .manual-masthead {
+      position: relative;
       padding: 96px 0 24px;
       border-bottom: 1px solid var(--rule-soft);
+      overflow: hidden;
+      min-height: 620px;
+    }
+
+    .manual-masthead > *:not(.manual-mascot) {
+      position: relative;
+      z-index: 1;
     }
 
     .manual-meta-row {
@@ -91,6 +98,7 @@
 
     .manual-title {
       display: block;
+      max-width: min(780px, calc(100% - min(34vw, 430px)));
       font-family: var(--font-display);
       font-size: clamp(3.2rem, 11vw, 8rem);
       line-height: 0.86;
@@ -100,7 +108,7 @@
     }
 
     .manual-tagline {
-      max-width: 720px;
+      max-width: min(720px, calc(100% - min(34vw, 430px)));
       margin: 28px 0 8px;
       font-family: var(--font-body);
       font-size: clamp(1.05rem, 1.7vw, 1.25rem);
@@ -109,10 +117,25 @@
     }
 
     .manual-attribution {
+      max-width: min(720px, calc(100% - min(34vw, 430px)));
       font-family: var(--font-body);
       font-size: 0.95rem;
       color: var(--ink-soft);
       font-style: italic;
+    }
+
+    .manual-mascot {
+      position: absolute;
+      right: clamp(12px, 4vw, 56px);
+      bottom: 0;
+      z-index: 0;
+      width: min(36vw, 430px);
+      height: auto;
+      max-height: min(72vh, 560px);
+      object-fit: contain;
+      object-position: right bottom;
+      pointer-events: none;
+      filter: drop-shadow(0 18px 34px rgba(36, 83, 255, 0.16));
     }
 
     .masthead-cta {
@@ -152,14 +175,6 @@
     .masthead-btn--primary:focus-visible {
       background: var(--blueprint);
       color: var(--bg);
-    }
-
-    .masthead-btn-count {
-      padding-left: 8px;
-      margin-left: 4px;
-      border-left: 1px solid currentColor;
-      opacity: 0.85;
-      font-variant-numeric: tabular-nums;
     }
 
     @media (max-width: 480px) {
@@ -490,15 +505,25 @@
     }
 
     @media (max-width: 900px) {
-      .manual-masthead { padding: 80px 0 16px; }
+      .manual-masthead { padding: 80px 0 16px; min-height: 0; }
       .preface { padding: 32px 0; }
       .stat-block { padding: 32px 0; }
       .toc { padding: 32px 0 40px; }
       .colophon { padding: 32px 0; }
 
       .manual-meta-row { margin-bottom: 20px; }
+      .manual-title,
+      .manual-tagline,
+      .manual-attribution { max-width: 100%; }
       .manual-tagline { margin: 20px 0 6px; font-size: 1rem; }
       .manual-attribution { font-size: 0.9rem; }
+      .manual-mascot {
+        position: static;
+        display: block;
+        width: min(72vw, 360px);
+        max-height: none;
+        margin: 24px auto 0;
+      }
 
       .preface-grid,
       .colophon-grid {
@@ -572,6 +597,11 @@
       .manual-tagline {
         font-size: 0.96rem;
         margin: 16px 0 4px;
+      }
+
+      .manual-mascot {
+        width: min(84vw, 320px);
+        margin-top: 18px;
       }
 
       .ascii-rule {
@@ -670,21 +700,17 @@
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo">
-        <span class="logo-icon" aria-hidden="true"></span> AI / FROM SCRATCH
+        <span class="logo-icon" aria-hidden="true"></span> AI 工程
       </a>
       <nav class="header-nav">
-        <a href="#contents">Contents</a>
-        <a href="catalog.html">Catalog</a>
-        <a href="prereqs.html">Roadmap</a>
-        <a href="glossary.html">Glossary</a>
-        <a href="about.html">About</a>
-        <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener" class="header-github">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          <span class="star-count" data-loading="true" aria-label="GitHub stars">…</span>
-        </a>
+        <a href="#contents">目录</a>
+        <a href="catalog.html">课程</a>
+        <a href="prereqs.html">路线图</a>
+        <a href="glossary.html">术语表</a>
+        <a href="about.html">关于</a>
       </nav>
       <button class="search-toggle" type="button" data-cmd-palette
-        aria-label="Search (⌘K)" title="Search (⌘K)">
+        aria-label="搜索 (⌘K)" title="搜索 (⌘K)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -692,8 +718,8 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
       </button>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
-        <span class="theme-icon" id="themeIcon">N</span>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换到深色模式" type="button">
+        <span class="theme-icon" id="themeIcon">☾</span>
       </button>
     </div>
   </header>
@@ -702,58 +728,54 @@
 
     <section class="manual-masthead container">
       <div class="manual-meta-row">
-        <span>FIG_000 &middot; curriculum v1.0 · 2026</span>
-        <span class="right">open source · MIT</span>
+        <span>FIG_000 &middot; 中文课程站 · 2026</span>
+        <span class="right">本地阅读 · MIT</span>
       </div>
-      <h1 class="manual-title">AI Engineering<br>from Scratch</h1>
-      <p class="manual-tagline reveal">503 lessons. 20 phases. Every algorithm built from raw math before a single framework gets imported.</p>
-      <p class="manual-attribution reveal" style="--stagger-delay: 80ms;">Maintained by Rohit Ghumare and contributors. Run on your own machine.</p>
+      <h1 class="manual-title">AI 工程：<br>从零开始</h1>
+      <p class="manual-tagline reveal">503 节课，20 个阶段。从数学、模型、tokenizer、attention 到智能体循环，先手写原理，再理解框架。</p>
+      <p class="manual-attribution reveal" style="--stagger-delay: 80ms;">中文 fork 的本地阅读入口，课程、目录和进度都在站内完成。</p>
       <div class="masthead-cta reveal" style="--stagger-delay: 140ms;">
-        <a class="masthead-btn masthead-btn--primary" href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener" aria-label="Star ai-engineering-from-scratch on GitHub">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.896l-7.416 3.517 1.48-8.279L0 9.306l8.332-1.151z"/></svg>
-          <span>Star on GitHub</span>
-          <span class="masthead-btn-count" data-gh-stars="rohitg00/ai-engineering-from-scratch" data-loading="true">…</span>
-        </a>
-        <a class="masthead-btn" href="https://github.com/rohitg00" target="_blank" rel="noopener" aria-label="Follow Rohit Ghumare on GitHub">
+        <a class="masthead-btn masthead-btn--primary" href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener" aria-label="查看原始英文仓库">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          <span>Follow @rohitg00</span>
+          <span>查看原仓库</span>
         </a>
       </div>
+      <img class="manual-mascot" src="assets/mascot-gpt054.png" width="1254" height="1254" alt="AI 工程中文站主视觉" decoding="async" fetchpriority="high">
       <div class="ascii-rule" style="margin-top:48px;"></div>
     </section>
 
     <section class="preface container">
       <div class="preface-grid">
-        <div class="preface-eyebrow reveal reveal--left">How this works</div>
+        <div class="preface-eyebrow reveal reveal--left">学习方式</div>
         <div class="preface-body reveal" style="--stagger-delay: 120ms;">
-          <p>Most AI material teaches in scattered pieces. A paper here, a fine-tuning post there, a flashy agent demo somewhere else. The pieces rarely line up. You ship a chatbot but can't explain its loss curve. You hook a function to an agent but can't say what attention does inside the model that's calling it.</p>
-          <p>This curriculum is the spine. 20 phases, 503 lessons, four languages: Python, TypeScript, Rust, Julia. Linear algebra at one end, autonomous swarms at the other. Every algorithm gets built from raw math first. Backprop. Tokenizer. Attention. Agent loop. By the time PyTorch shows up, you already know what it's doing under the hood.</p>
-          <p>Each lesson runs the same loop: read the problem, derive the math, write the code, run the test, keep the artifact. No five-minute videos, no copy-paste deploys, no hand-holding. Free, open source, and built to run on your own laptop.</p>
+          <p>很多 AI 材料是碎片化的：一篇论文、一篇微调教程、一个智能体演示，彼此之间很难连成能力路径。你可能能上线一个聊天机器人，却说不清 loss 曲线；能给智能体接工具，却不知道调用工具的模型内部 attention 正在做什么。</p>
+          <p>这套课程把路径串起来：20 个阶段、503 节课，覆盖 Python、TypeScript、Rust、Julia。从线性代数到自主系统，每个核心算法先从原始数学写一遍。反向传播、tokenizer、attention、智能体循环，框架出现时你已经知道它替你算了什么。</p>
+          <p>每节课都遵循同一个节奏：读问题、推公式、写代码、跑测试、留下可复用产物。这个站点负责把中文课程入口、目录、进度和课程页聚在本地浏览体验里。</p>
         </div>
       </div>
     </section>
 
 
     <section class="stat-block container">
-      <div class="stat-block-title reveal reveal--left">Current Progress</div>
+      <div class="stat-block-title reveal reveal--left">课程进度</div>
       <div class="stat-rows reveal" style="--stagger-delay: 100ms;" id="statRows">
         <div class="stat-row">
-          <span class="stat-row-label">Finished Lessons</span>
+          <span class="stat-row-label">已完成课程</span>
           <span class="stat-row-bar" data-bar="complete" style="--bar-pct:0%;" aria-hidden="true">bar</span>
           <span class="stat-row-value" data-stat="complete-frac">0 / 0</span>
         </div>
         <div class="stat-row">
-          <span class="stat-row-label">Phases</span>
+          <span class="stat-row-label">阶段</span>
           <span class="stat-row-bar" data-bar="phases" style="--bar-pct:0%;" aria-hidden="true">bar</span>
           <span class="stat-row-value" data-stat="phases-frac">0 / 0</span>
         </div>
         <div class="stat-row">
-          <span class="stat-row-label">Languages</span>
+          <span class="stat-row-label">语言</span>
           <span class="stat-row-bar" data-bar="languages" style="--bar-pct:100%;" aria-hidden="true">bar</span>
           <span class="stat-row-value">4</span>
         </div>
         <div class="stat-row">
-          <span class="stat-row-label">Glossary Terms</span>
+          <span class="stat-row-label">术语条目</span>
           <span class="stat-row-bar" data-bar="glossary" style="--bar-pct:100%;" aria-hidden="true">bar</span>
           <span class="stat-row-value" data-stat="glossary-count">···</span>
         </div>
@@ -761,13 +783,13 @@
     </section>
 
     <section class="toc container" id="contents">
-      <div class="toc-title reveal reveal--left">Curriculum · 20 phases · 503 lessons</div>
-      <div class="toc-subtitle reveal" style="--stagger-delay: 80ms;">Tap a phase to expand its lessons. Each one ships when its math, code, and test are all written.</div>
+      <div class="toc-title reveal reveal--left">课程目录 · 20 个阶段 · 503 节课</div>
+      <div class="toc-subtitle reveal" style="--stagger-delay: 80ms;">打开一个阶段查看课程。每节课都对应文档、代码、测试和可复用产物。</div>
       <div class="toc-list" id="phasesGrid"></div>
       <div class="legend">
-        <span class="legend-item"><span class="toc-status complete"></span> Complete</span>
-        <span class="legend-item"><span class="toc-status in-progress"></span> In progress</span>
-        <span class="legend-item"><span class="toc-status planned"></span> Planned</span>
+        <span class="legend-item"><span class="toc-status complete"></span> 已完成</span>
+        <span class="legend-item"><span class="toc-status in-progress"></span> 进行中</span>
+        <span class="legend-item"><span class="toc-status planned"></span> 计划中</span>
       </div>
     </section>
 
@@ -783,8 +805,8 @@
         </div>
         <div class="modal-lessons" id="modalLessons"></div>
         <div class="modal-footer">
-          <span class="modal-footer-note">Progress saved in browser only</span>
-          <button class="modal-reset" id="modalReset" type="button">Reset progress</button>
+          <span class="modal-footer-note">进度仅保存在本浏览器</span>
+          <button class="modal-reset" id="modalReset" type="button">重置进度</button>
         </div>
       </div>
     </div>
@@ -792,13 +814,9 @@
 
     <section class="colophon container">
       <div class="colophon-grid">
-        <div class="colophon-eyebrow reveal reveal--left">Colophon</div>
+        <div class="colophon-eyebrow reveal reveal--left">说明</div>
         <div class="reveal" style="--stagger-delay: 80ms;">
-          <p>The entire curriculum is on GitHub. Clone it, fork it, learn at your own pace. No paywall, no signup. Every lesson has runnable code in Python, TypeScript, Rust, or Julia, depending on what fits the concept best.</p>
-          <div class="colophon-cmd">
-            <code id="cloneCmd">git clone https://github.com/rohitg00/ai-engineering-from-scratch.git</code>
-            <button class="copy-btn" id="copyBtn" aria-label="Copy command" type="button">cp</button>
-          </div>
+          <p>这是面向中文学习者整理的本地阅读站。首页、目录、路线图、术语表和课程页优先跳转到站内页面；原始英文仓库只在首屏按钮中保留一个明确入口。</p>
         </div>
       </div>
     </section>
@@ -807,22 +825,19 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>© 2026 · open source · free forever</p>
+      <p>© 2026 · 中文课程阅读站 · open source</p>
       <div class="footer-links">
-        <a href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener">GitHub</a>
-        <a href="about.html">About</a>
-        <a href="catalog.html">Catalog</a>
-        <a href="glossary.html">Glossary</a>
-        <a href="https://github.com/rohitg00/ai-engineering-from-scratch/issues/new/choose" target="_blank" rel="noopener">Report</a>
+        <a href="about.html">关于</a>
+        <a href="catalog.html">课程</a>
+        <a href="glossary.html">术语表</a>
       </div>
     </div>
   </footer>
 
-  <script src="data.js?v=20260525a"></script>
+  <script src="data.js?v=20260609r19"></script>
   <script src="progress.js?v=20260525a"></script>
-  <script src="header.js?v=20260525a" defer></script>
-  <script src="cmdpalette.js?v=20260525a" defer></script>
-  <script src="app.js?v=20260525a"></script>
+  <script src="cmdpalette.js?v=20260609r19" defer></script>
+  <script src="app.js?v=20260609r19"></script>
   <script defer src="https://va.vercel-scripts.com/v1/script.js"></script>
 </body>
 </html>

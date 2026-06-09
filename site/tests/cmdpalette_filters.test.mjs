@@ -21,12 +21,12 @@ function loadPalette() {
 test('command palette parses search filter tokens', () => {
   const palette = loadPalette();
 
-  const parsed = palette._test.parseQuery('linear phase:02 runtime:browser-pyodide status:complete lang:zh-CN');
+  const parsed = palette._test.parseQuery('linear phase:02 runtime:local-kernel status:complete lang:zh-CN');
 
   assert.equal(parsed.text, 'linear');
   assert.deepEqual(Object.fromEntries(Object.entries(parsed.filters)), {
     phase: '02',
-    runtime: 'browser-pyodide',
+    runtime: 'local-kernel',
     status: 'complete',
     lang: 'zh-cn',
   });
