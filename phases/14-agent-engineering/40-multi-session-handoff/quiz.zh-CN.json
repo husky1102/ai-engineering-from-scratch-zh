@@ -15,18 +15,6 @@
       "explanation": "一个交接如果除了 next_action 什么都有，那它是状态报告；下一个具体步骤才会让下个会话高效。"
     },
     {
-      "stage": "pre",
-      "question": "为什么 handoff 应该生成，而不是手写？",
-      "options": [
-        "生成器更快",
-        "手写 handoff 在艰难日子里会被跳过；生成器读取 workbench 工件并产出交接包，所以 agent 只需要让 workbench 处在生成器可摘要的状态",
-        "生成器加密效果更好",
-        "Apache 2.0 要求这样做"
-      ],
-      "correct": 1,
-      "explanation": "自动化会弥合意图和一致性之间的差距。"
-    },
-    {
       "stage": "check",
       "question": "交接包以哪两种形式交付？",
       "options": [

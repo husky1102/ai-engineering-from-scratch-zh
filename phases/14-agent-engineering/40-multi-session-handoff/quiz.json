@@ -15,18 +15,6 @@
       "explanation": "A handoff with everything except next_action is a status report; the next concrete step is what makes the next session productive."
     },
     {
-      "stage": "pre",
-      "question": "Why are handoffs generated, not written?",
-      "options": [
-        "Generators are faster",
-        "Hand-written handoffs get skipped on a hard day; the generator reads workbench artifacts and emits the packet, so the agent just leaves the workbench in a state the generator can summarize",
-        "Generators encrypt better",
-        "Apache 2.0 requires it"
-      ],
-      "correct": 1,
-      "explanation": "Automation closes the gap between intention and consistency."
-    },
-    {
       "stage": "check",
       "question": "Which two forms does the packet ship in?",
       "options": [
