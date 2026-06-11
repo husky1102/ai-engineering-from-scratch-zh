@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 6 · 02 (Spectrograms), Phase 4 · 10 (Diffusion Models)
 **Time:** ~75 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Music Generation solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Music Generation
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Text → a 30-second to 4-minute music clip, with lyrics, vocals, and structure. Three sub-problems:
