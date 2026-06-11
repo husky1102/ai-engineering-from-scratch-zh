@@ -3,6 +3,10 @@
 > A matrix is a machine that reshapes space. Learn what it does to every point, and you understand the whole transformation.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python, Julia
 **Prerequisites:** Phase 1, Lessons 01-02 (Linear Algebra Intuition, Vectors & Matrices Operations)
 **Time:** ~75 minutes
