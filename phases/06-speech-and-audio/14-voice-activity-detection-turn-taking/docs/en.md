@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 6 · 11 (Real-Time Audio), Phase 6 · 12 (Voice Assistant)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Voice Activity Detection & Turn-Taking solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Voice Activity Detection & Turn-Taking
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Three distinct decisions a voice agent makes on every 20 ms chunk:
