@@ -3,6 +3,10 @@
 > One agent hits a wall. The smart move is not a bigger agent - it is more agents.
 
 **Type:** Learn
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** TypeScript
 **Prerequisites:** Phase 14 (Agent Engineering)
 **Time:** ~60 minutes
