@@ -3,7 +3,11 @@
 > Past performance does predict future results -- if you check for stationarity first.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 2, Lessons 01-09
 **Time:** ~90 minutes
 
