@@ -7,8 +7,11 @@
 **Prerequisites:** Phase 19 Track B foundations
 **Time:** ~90 min
 
-## Learning objectives
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
 
+## Learning Objectives
 - Define a JSONL task record schema that covers arithmetic, multiple-choice, code execution, classification, and free-text summarisation in one shape.
 - Pin a closed vocabulary of metric names so downstream lessons (71-73) can dispatch on a single field.
 - Specify few-shot examples and post-processing rules as part of the task, not the runner, so the same prompt produces the same target across models.
