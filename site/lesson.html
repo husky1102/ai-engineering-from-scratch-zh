@@ -358,6 +358,30 @@
       text-align: left;
     }
 
+    .lesson-article .revision-note {
+      border: 1px solid var(--blueprint);
+      border-left-width: 4px;
+      background: var(--blueprint-tint);
+      padding: 14px 18px;
+      margin: 22px 0;
+      font-family: var(--font-body);
+      color: var(--ink);
+      text-align: left;
+    }
+
+    .lesson-article .revision-note-title {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blueprint);
+    }
+
+    .lesson-article .revision-note.generated {
+      border-style: dashed;
+    }
+
     .lesson-article strong {
       color: var(--ink);
       font-weight: 600;
@@ -669,6 +693,17 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .quiz-provenance {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--blueprint);
+      border: 1px solid var(--rule-soft);
+      display: inline-block;
+      padding: 3px 8px;
+      margin: 0 0 14px;
     }
 
     .quiz-question {
@@ -2486,11 +2521,28 @@
         var blockquoteLines = [];
         var mermaidBlocks = 0;
         var inLabChallenge = false;
+        var inForkNote = false;
+        var forkNoteKind = '';
+        var forkNoteLines = [];
 
         function flushLabChallenge() {
           if (!inLabChallenge) return '';
           inLabChallenge = false;
           return '</div>';
+        }
+
+        function flushForkNote() {
+          if (!inForkNote) return '';
+          inForkNote = false;
+          var kind = forkNoteKind || 'updated';
+          var body = forkNoteLines.join('\n').trim();
+          forkNoteKind = '';
+          forkNoteLines = [];
+          var title = body.split(/\n+/)[0] || 'GPT 新增修订，仅供参考';
+          var h = '<aside class="revision-note ' + escapeAttr(kind) + '" data-origin="zh-fork">';
+          h += '<span class="revision-note-title">' + inlineFormat(title) + '</span>';
+          h += '</aside>';
+          return h;
         }
 
         function flushList() {
@@ -2579,6 +2631,27 @@
               codeLang = '';
             } else {
               codeLines.push(line);
+            }
+            continue;
+          }
+
+          var forkNoteStart = line.match(/^:::\s*fork-note(?:\s+([a-z-]+))?\s*$/);
+          if (forkNoteStart) {
+            out += flushList();
+            out += flushTable();
+            out += flushBlockquote();
+            out += flushLabChallenge();
+            inForkNote = true;
+            forkNoteKind = forkNoteStart[1] || 'updated';
+            forkNoteLines = [];
+            continue;
+          }
+
+          if (inForkNote) {
+            if (line.match(/^:::\s*$/)) {
+              out += flushForkNote();
+            } else {
+              forkNoteLines.push(line);
             }
             continue;
           }
@@ -2733,6 +2806,7 @@
         out += flushTable();
         out += flushBlockquote();
         out += flushLabChallenge();
+        out += flushForkNote();
 
         return out;
       }
@@ -3102,6 +3176,7 @@
       }
 
       function renderQuiz(data) {
+        var quizMeta = data && data._meta ? data._meta : null;
         var questions = data.questions || data;
         if (!questions || !questions.length) return;
 
@@ -3112,12 +3187,12 @@
         var buildH2 = findSectionNode(article, 'build');
         var keyTermsH2 = findSectionNode(article, 'keyTerms');
 
-        var preQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'pre'; }), 'pre', t('preLessonCheck'));
-        var checkQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'check'; }), 'check', t('midLessonCheck'));
-        var postQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'post'; }), 'post', t('postLessonQuiz'));
+        var preQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'pre'; }), 'pre', t('preLessonCheck'), quizMeta);
+        var checkQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'check'; }), 'check', t('midLessonCheck'), quizMeta);
+        var postQuizHtml = buildQuizHtml(questions.filter(function (q) { return q.stage === 'post'; }), 'post', t('postLessonQuiz'), quizMeta);
 
         if (!preQuizHtml && !checkQuizHtml && !postQuizHtml) {
-          var allHtml = buildQuizHtml(questions, 'all', t('quiz'));
+          var allHtml = buildQuizHtml(questions, 'all', t('quiz'), quizMeta);
           if (allHtml && keyTermsH2) {
             keyTermsH2.insertAdjacentHTML('beforebegin', allHtml);
           } else if (allHtml) {
@@ -3170,10 +3245,13 @@
         return legacy[key] ? article.querySelector(legacy[key]) : null;
       }
 
-      function buildQuizHtml(questions, id, title) {
+      function buildQuizHtml(questions, id, title, quizMeta) {
         if (!questions.length) return '';
         var html = '<div class="quiz-section" id="quiz-' + id + '">';
         html += '<div class="quiz-title">&#9989; ' + escapeHtml(title) + '</div>';
+        if (quizMeta && quizMeta.origin === 'zh-fork') {
+          html += '<div class="quiz-provenance">GPT 新增修订，仅供参考</div>';
+        }
         for (var qi = 0; qi < questions.length; qi++) {
           var q = questions[qi];
           var qid = id + '-q' + qi;
