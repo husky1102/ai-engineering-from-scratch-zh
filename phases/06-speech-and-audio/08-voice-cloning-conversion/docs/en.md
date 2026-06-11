@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 6 · 06 (Speaker Recognition), Phase 6 · 07 (TTS)
 **Time:** ~75 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Voice Cloning & Voice Conversion solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Voice Cloning & Voice Conversion
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 In 2026, a 5-second audio clip is enough to produce a high-quality clone of anyone's voice with a consumer GPU. ElevenLabs, F5-TTS, OpenVoice v2, VoiceBox all ship zero-shot or few-shot cloning. The technology is a blessing (accessibility TTS, dubbing, assistive voices) and a weapon (scam calls, political deepfakes, IP theft).
