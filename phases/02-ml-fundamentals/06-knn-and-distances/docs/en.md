@@ -3,7 +3,11 @@
 > Store everything. Predict by looking at your neighbors. The simplest algorithm that actually works.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 1 (Lesson 14 Norms and Distances)
 **Time:** ~90 minutes
 
