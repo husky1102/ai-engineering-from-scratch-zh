@@ -3,9 +3,23 @@
 > Batch pipelines process a file. Real-time pipelines process the next 20 milliseconds before the next 20 arrive. Every conversational AI, broadcast studio, and telephony bot lives and dies by this latency budget.
 
 **Type:** Build
-**Languages:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, Rust
 **Prerequisites:** Phase 6 · 02 (Spectrograms), Phase 6 · 04 (ASR), Phase 6 · 07 (TTS)
 **Time:** ~75 minutes
+
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Real-Time Audio Processing solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Real-Time Audio Processing
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
 
 ## The Problem
 
