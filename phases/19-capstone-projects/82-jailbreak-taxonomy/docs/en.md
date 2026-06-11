@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 18 safety lessons, Phase 19 Track A lessons 25-29
 **Time:** ~90 min
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Capstone 82 solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Capstone 82
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## Problem
 
 A model deployed without an attack model is a model defended against nothing in particular. Operators read a Twitter thread, recognize the trick, write a regex, ship it, and move on. The next prompt is a paraphrase. The regex misses. A week later someone shows the same trick wrapped in base64 and the operator writes a second regex. By month three, the system has 40 patched rules, no shared vocabulary, no way to talk about what an attack actually is, and a backlog growing faster than the patches.
