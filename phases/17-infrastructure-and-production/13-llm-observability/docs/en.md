@@ -3,7 +3,11 @@
 > The 2026 observability market splits into two categories. Development platforms (LangSmith, Langfuse, Comet Opik) bundle monitoring with evals, prompt management, session replays. Gateway/instrumentation tools (Helicone, SigNoz, OpenLLMetry, Phoenix) focus on telemetry. Langfuse is MIT-licensed core with strong OSS balance (50K events/month free cloud). Phoenix is OpenTelemetry-native under Elastic License 2.0 — excellent for drift/RAG visualization, not a persistent production backend. Arize AX uses zero-copy Iceberg/Parquet integration claiming 100x cheaper than monolithic observability. LangSmith leads for LangChain/LangGraph, $39/user/mo, self-host in Enterprise only. Helicone is proxy-based with 15-30 min setup, 100K req/mo free, but less depth on agent traces. Common production pattern: Gateway (Helicone/Portkey) + eval platform (Phoenix/TruLens) glued by OpenTelemetry.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy trace-sampling simulator)
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 17 · 08 (Inference Metrics), Phase 14 (Agent Engineering)
 **Time:** ~60 minutes
 
