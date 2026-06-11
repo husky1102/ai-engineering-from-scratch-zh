@@ -3,10 +3,24 @@
 > Every serious engineering org in 2026 runs an internal code search that understands meaning, not just strings. Sourcegraph Amp, Cursor's codebase answers, Augment's enterprise graph, Aider's repomap, Pinterest's internal MCP — same shape. Ingest many repos, parse with tree-sitter, embed function- and class-level chunks, hybrid-search, re-rank, answer with citations. This capstone asks you to build one that handles 2M lines of code across 10 repos and survives incremental re-indexing on every git push.
 
 **Type:** Capstone
-**Languages:** Python (ingestion), TypeScript (API + UI)
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 5 (NLP foundations), Phase 7 (transformers), Phase 11 (LLM engineering), Phase 13 (tools), Phase 17 (infrastructure)
 **Phases exercised:** P5 · P7 · P11 · P13 · P17
 **Time:** 30 hours
+
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Capstone 02 solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Capstone 02
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
 
 ## Problem
 
