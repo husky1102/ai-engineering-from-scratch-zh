@@ -3,7 +3,11 @@
 > Without nonlinearity, your 100-layer network is a fancy matrix multiply. Activations are the gates that let neural networks think in curves.
 
 **Type:** Build
-**Languages:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Julia, Python
 **Prerequisites:** Lesson 03.03 (Backpropagation)
 **Time:** ~75 minutes
 
