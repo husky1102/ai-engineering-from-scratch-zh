@@ -3,7 +3,11 @@
 > GPT-2 Small has 124 million parameters. That's 12 transformer layers, 12 attention heads, and 768-dimensional embeddings. You can train it from scratch on a single GPU in a few hours. Most people never do this. They use pre-trained checkpoints. But if you don't train one yourself, you don't actually understand what's happening inside the model you're building products on.
 
 **Type:** Build
-**Languages:** Python (with numpy)
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, Rust
 **Prerequisites:** Phase 10, Lessons 01-03 (Tokenizers, Building a Tokenizer, Data Pipelines)
 **Time:** ~120 minutes
 
