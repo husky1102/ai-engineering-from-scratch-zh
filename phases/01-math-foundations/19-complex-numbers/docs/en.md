@@ -3,7 +3,11 @@
 > The square root of -1 is not imaginary. It is the key to rotations, frequencies, and half of signal processing.
 
 **Type:** Learn
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 1, Lessons 01-04 (linear algebra, calculus)
 **Time:** ~60 minutes
 
