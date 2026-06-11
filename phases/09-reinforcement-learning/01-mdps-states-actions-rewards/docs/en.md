@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 1 · 06 (Probability & Distributions), Phase 2 · 01 (ML Taxonomy)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that MDPs, States, Actions & Rewards solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of MDPs, States, Actions & Rewards
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 You are writing a chess bot. Or an inventory planner. Or a trading agent. Or the PPO loop that trains a reasoning model. Four different domains, one surprising fact: all four collapse to the same mathematical object.
