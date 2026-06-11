@@ -3,6 +3,10 @@
 > Every AI model is just matrix math wearing a fancy hat.
 
 **Type:** Learn
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python, Julia
 **Prerequisites:** Phase 0
 **Time:** ~60 minutes
