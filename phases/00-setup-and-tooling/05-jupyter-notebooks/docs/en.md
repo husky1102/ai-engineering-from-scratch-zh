@@ -3,6 +3,10 @@
 > Notebooks are the lab bench of AI engineering. You prototype here, then move what works into production.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python
 **Prerequisites:** Phase 0, Lesson 01
 **Time:** ~30 minutes
