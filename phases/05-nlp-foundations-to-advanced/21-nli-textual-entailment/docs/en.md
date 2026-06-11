@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 5 · 05 (Sentiment Analysis), Phase 5 · 13 (Question Answering)
 **Time:** ~60 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Natural Language Inference solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Natural Language Inference
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 You built a summarizer. It produced a summary. How do you know the summary does not contain a hallucination?
