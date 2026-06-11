@@ -3,6 +3,10 @@
 > Full fine-tuning a 7B model requires 56GB of VRAM. You don't have that. Neither do most companies. LoRA lets you fine-tune the same model in 6GB by training less than 1% of the parameters. This isn't a compromise -- it matches full fine-tuning quality on most tasks. The entire open-source fine-tuning ecosystem runs on this one trick.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python
 **Prerequisites:** Phase 10, Lesson 06 (Instruction Tuning / SFT)
 **Time:** ~75 minutes
