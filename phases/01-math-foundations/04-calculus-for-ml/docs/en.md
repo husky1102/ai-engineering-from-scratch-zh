@@ -3,7 +3,11 @@
 > Derivatives tell you which way is downhill. That is all a neural network needs to learn.
 
 **Type:** Learn
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Julia
 **Prerequisites:** Phase 1, Lessons 01-03
 **Time:** ~60 minutes
 
