@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 7 · 05 (Full Transformer), Phase 7 · 08 (Encoder-Decoder), Phase 7 · 09 (ViT)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Audio Transformers solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Audio Transformers
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Before Whisper (OpenAI, Radford et al. 2022), state-of-the-art automatic speech recognition (ASR) meant wav2vec 2.0 and HuBERT — self-supervised feature extractors plus a fine-tuned head. High quality, expensive data pipelines, domain-brittle. Multilingual speech recognition needed separate models per language family.
