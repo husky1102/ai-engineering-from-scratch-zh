@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 7 · 05 (Full Transformer), Phase 7 · 07 (GPT)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Scaling Laws solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Scaling Laws
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 When you have C FLOPs of training compute and want the best model, you face two knobs:
