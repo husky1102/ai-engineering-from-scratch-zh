@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 15 · 03 (evolutionary coding), Phase 14 · 01 (the agent loop)
 **Time:** ~60 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Darwin Godel Machine solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Darwin Godel Machine
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Can an agent edit its own code and get better at its job? Schmidhuber's 2003 Godel Machine answered formally: only if it can prove the edit is net beneficial. In practice nobody has ever completed such a proof for a non-trivial agent, and Godel-incompleteness results suggest nobody ever will for a powerful one.
