@@ -3,6 +3,10 @@
 > You built the engine from pistons and crankshafts. Now learn the one everyone actually drives.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python
 **Prerequisites:** Lesson 03.10 (Build Your Own Mini Framework)
 **Time:** ~75 minutes
