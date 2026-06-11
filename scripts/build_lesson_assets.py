@@ -17,24 +17,12 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Iterable
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _lib import CODE_SUFFIXES, iter_lesson_dirs, rel_path  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-PHASES_DIR = ROOT / "phases"
 DEFAULT_OUT = ROOT / "site" / "lesson-assets.json"
-
-CODE_SUFFIXES = {
-    ".py": "python",
-    ".ts": "typescript",
-    ".js": "javascript",
-    ".mjs": "javascript",
-    ".rs": "rust",
-    ".jl": "julia",
-    ".sh": "shell",
-    ".yml": "yaml",
-    ".yaml": "yaml",
-    ".json": "json",
-}
 
 COMMAND_BY_SUFFIX = {
     ".py": "python",
@@ -48,20 +36,11 @@ COMMAND_BY_SUFFIX = {
 
 
 def rel(path: Path) -> str:
-    return path.relative_to(ROOT).as_posix()
+    return rel_path(path, ROOT)
 
 
 def local_url(path: Path) -> str:
     return "content/" + rel(path)
-
-
-def iter_lesson_dirs() -> Iterable[Path]:
-    for phase in sorted(PHASES_DIR.iterdir()):
-        if not phase.is_dir() or not phase.name[:2].isdigit():
-            continue
-        for lesson in sorted(phase.iterdir()):
-            if lesson.is_dir() and lesson.name[:2].isdigit():
-                yield lesson
 
 
 def language_for(path: Path) -> str:

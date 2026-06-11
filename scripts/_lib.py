@@ -1,12 +1,88 @@
 """Shared helpers for scripts/ tools.
 
-Currently provides:
-- parse_frontmatter: minimal YAML-subset parser for `--- ... ---` blocks in markdown.
-
 No external dependencies. Python 3.10+ (PEP 604 unions in type hints).
 """
 
 from __future__ import annotations
+
+import re
+from pathlib import Path
+from typing import Iterable
+
+
+ROOT = Path(__file__).resolve().parent.parent
+PHASES_DIR = ROOT / "phases"
+
+PHASE_DIR_RE = re.compile(r"^([0-9]{2})-([a-z0-9][a-z0-9-]*)$")
+LESSON_DIR_RE = re.compile(r"^([0-9]{2})-([a-z0-9][a-z0-9-]*)$")
+
+CODE_SUFFIXES = {
+    ".py": "python",
+    ".ts": "typescript",
+    ".tsx": "typescript",
+    ".js": "javascript",
+    ".mjs": "javascript",
+    ".rs": "rust",
+    ".jl": "julia",
+    ".sh": "shell",
+    ".yml": "yaml",
+    ".yaml": "yaml",
+    ".json": "json",
+    ".go": "go",
+    ".swift": "swift",
+    ".ipynb": "jupyter",
+}
+
+MAIN_LANGUAGE_BY_SUFFIX = {
+    ".py": "Python",
+    ".ts": "TypeScript",
+    ".rs": "Rust",
+    ".jl": "Julia",
+}
+
+
+def rel_path(path: Path, root: Path = ROOT) -> str:
+    """Return a POSIX path relative to the repository root."""
+    return path.relative_to(root).as_posix()
+
+
+def iter_phase_dirs(phases_dir: Path = PHASES_DIR) -> Iterable[Path]:
+    """Yield valid phase directories in stable order."""
+    if not phases_dir.is_dir():
+        return
+    for path in sorted(phases_dir.iterdir()):
+        if path.is_dir() and PHASE_DIR_RE.match(path.name):
+            yield path
+
+
+def iter_lesson_dirs(
+    phase_filter: int | None = None,
+    phases_dir: Path = PHASES_DIR,
+) -> Iterable[Path]:
+    """Yield valid lesson directories in stable order, optionally for one phase."""
+    for phase in iter_phase_dirs(phases_dir):
+        if phase_filter is not None:
+            try:
+                phase_num = int(phase.name.split("-", 1)[0])
+            except ValueError:
+                continue
+            if phase_num != phase_filter:
+                continue
+        for lesson in sorted(phase.iterdir()):
+            if lesson.is_dir() and LESSON_DIR_RE.match(lesson.name):
+                yield lesson
+
+
+def main_languages(lesson: Path) -> set[str]:
+    """Return AGENTS.md language names represented by code/main.* files."""
+    code_dir = lesson / "code"
+    if not code_dir.is_dir():
+        return set()
+    return {
+        MAIN_LANGUAGE_BY_SUFFIX[path.suffix]
+        for path in code_dir.glob("main.*")
+        if path.suffix in MAIN_LANGUAGE_BY_SUFFIX
+    }
 
 
 def parse_frontmatter(text: str) -> dict[str, object] | None:

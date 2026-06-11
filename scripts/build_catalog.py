@@ -53,19 +53,15 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Iterable
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _lib import parse_frontmatter as _parse_frontmatter  # noqa: E402
+from _lib import CODE_SUFFIXES, iter_phase_dirs, parse_frontmatter as _parse_frontmatter, rel_path  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-PHASES_DIR = ROOT / "phases"
 
-PHASE_DIR_RE = re.compile(r"^([0-9]{2})-([a-z0-9][a-z0-9-]*)$")
 LESSON_DIR_RE = re.compile(r"^([0-9]{2})-([a-z0-9][a-z0-9-]*)$")
 H1_RE = re.compile(r"^#\s+(.+?)\s*$", re.MULTILINE)
 ARTIFACT_TYPES = ("skill", "prompt", "agent")
-CODE_SUFFIXES = {".py", ".ts", ".tsx", ".js", ".mjs", ".rs", ".jl", ".go", ".swift", ".ipynb"}
 
 
 def slug_to_title(slug: str) -> str:
@@ -146,7 +142,7 @@ def parse_artifact(path: Path) -> dict[str, object] | None:
     return {
         "type": artifact_type,
         "name": name,
-        "path": path.relative_to(ROOT).as_posix(),
+        "path": rel_path(path, ROOT),
         "version": str(meta.get("version", "")).strip(),
         "description": str(meta.get("description", "")).strip(),
         "tags": list(tags),
@@ -187,7 +183,7 @@ def build_lesson_entry(lesson_dir: Path) -> dict[str, object] | None:
         "num": num,
         "slug": lesson_dir.name,
         "title": title,
-        "path": lesson_dir.relative_to(ROOT).as_posix(),
+        "path": rel_path(lesson_dir, ROOT),
         "has_docs": has_docs,
         "has_code": code_dir.is_dir(),
         "has_quiz": quiz_path.is_file(),
@@ -197,19 +193,9 @@ def build_lesson_entry(lesson_dir: Path) -> dict[str, object] | None:
     }
 
 
-def iter_phase_dirs() -> Iterable[Path]:
-    if not PHASES_DIR.is_dir():
-        return
-    for path in sorted(PHASES_DIR.iterdir()):
-        if path.is_dir() and PHASE_DIR_RE.match(path.name):
-            yield path
-
-
 def build_phase_entry(phase_dir: Path) -> dict[str, object]:
-    match = PHASE_DIR_RE.match(phase_dir.name)
-    assert match is not None
-    num = int(match.group(1))
-    slug = match.group(2)
+    num_text, slug = phase_dir.name.split("-", 1)
+    num = int(num_text)
     lessons: list[dict[str, object]] = []
     for lesson_dir in sorted(phase_dir.iterdir()):
         if lesson_dir.is_dir():

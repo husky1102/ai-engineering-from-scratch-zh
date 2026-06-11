@@ -5,25 +5,26 @@ Usage:
     python scripts/audit_lessons.py [--phase N] [--json] [--strict]
 
 Exit codes:
-    0 — clean
-    1 — issues found
+    0 — no blocking issues
+    1 — blocking issues found, or advisory warnings found with --strict
 """
 
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _lib import iter_lesson_dirs, main_languages, rel_path  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-PHASES_DIR = ROOT / "phases"
 
 LESSON_DIR_RE = re.compile(r"^[0-9]{2}-[a-z0-9][a-z0-9-]*[a-z0-9]$")
-PHASE_DIR_RE = re.compile(r"^[0-9]{2}-[a-z0-9][a-z0-9-]*[a-z0-9]$")
 MD_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)\s#]+)(?:#[^)]*)?\)")
 H1_RE = re.compile(r"^#\s+\S", re.MULTILINE)
 
@@ -33,6 +34,19 @@ CODE_IGNORED_NAMES = {"README.md", "AGENTS.md", ".gitkeep", ".DS_Store"}
 MIN_DOC_BYTES = 200
 MAX_OPTIONS = 6
 MIN_OPTIONS = 2
+DEFAULT_REPORT_LIMIT = 25
+REQUIRED_QUIZ_STAGE_COUNTS = {"pre": 1, "check": 3, "post": 2}
+REQUIRED_QUIZ_QUESTION_COUNT = 6
+MIN_TEST_CASES = 5
+LANGUAGE_ALIASES = {
+    "python": "Python",
+    "typescript": "TypeScript",
+    "rust": "Rust",
+    "julia": "Julia",
+}
+LANGUAGE_LINE_RE = re.compile(r"^\*\*Languages:\*\*\s*(.+)$", re.MULTILINE)
+LEARNING_OBJECTIVES_RE = re.compile(r"^##\s+Learning Objectives\s*$", re.MULTILINE)
+JS_TEST_RE = re.compile(r"\b(?:test|it)\s*\(")
 
 
 @dataclass
@@ -55,31 +69,17 @@ class Issue:
 class Audit:
     lessons_checked: int = 0
     issues: list[Issue] = field(default_factory=list)
+    warnings: list[Issue] = field(default_factory=list)
 
     def add(self, rule: str, lesson: Path, file: Path | None, message: str) -> None:
-        rel_lesson = lesson.relative_to(ROOT).as_posix()
-        rel_file = file.relative_to(ROOT).as_posix() if file else rel_lesson
+        rel_lesson = rel_path(lesson, ROOT)
+        rel_file = rel_path(file, ROOT) if file else rel_lesson
         self.issues.append(Issue(rule, rel_lesson, rel_file, message))
 
-
-def iter_lesson_dirs(phase_filter: int | None) -> Iterable[Path]:
-    if not PHASES_DIR.is_dir():
-        return
-    for phase in sorted(PHASES_DIR.iterdir()):
-        if not phase.is_dir():
-            continue
-        if not PHASE_DIR_RE.match(phase.name):
-            continue
-        if phase_filter is not None:
-            try:
-                phase_num = int(phase.name.split("-", 1)[0])
-            except ValueError:
-                continue
-            if phase_num != phase_filter:
-                continue
-        for lesson in sorted(phase.iterdir()):
-            if lesson.is_dir():
-                yield lesson
+    def warn(self, rule: str, lesson: Path, file: Path | None, message: str) -> None:
+        rel_lesson = rel_path(lesson, ROOT)
+        rel_file = rel_path(file, ROOT) if file else rel_lesson
+        self.warnings.append(Issue(rule, rel_lesson, rel_file, message))
 
 
 def check_lesson_dir_pattern(audit: Audit, lesson: Path) -> bool:
@@ -114,6 +114,37 @@ def check_docs_en_md(audit: Audit, lesson: Path) -> str | None:
     if not H1_RE.search(text):
         audit.add("L004", lesson, doc, "docs/en.md missing top-level H1")
     return text
+
+
+def declared_languages(text: str) -> set[str] | None:
+    match = LANGUAGE_LINE_RE.search(text)
+    if not match:
+        return None
+    value = match.group(1)
+    found = set()
+    for raw, canonical in LANGUAGE_ALIASES.items():
+        if re.search(rf"\b{re.escape(raw)}\b", value, re.IGNORECASE):
+            found.add(canonical)
+    return found
+
+
+def check_frontmatter_contract(audit: Audit, lesson: Path, text: str) -> None:
+    doc = lesson / "docs" / "en.md"
+    languages = declared_languages(text)
+    if languages is None:
+        audit.warn("A001", lesson, doc, "docs/en.md missing **Languages:** field")
+    else:
+        expected = main_languages(lesson)
+        if languages != expected:
+            audit.warn(
+                "A002",
+                lesson,
+                doc,
+                "**Languages:** must match code/main.* languages "
+                f"(declared {sorted(languages)}, expected {sorted(expected)})",
+            )
+    if not LEARNING_OBJECTIVES_RE.search(text):
+        audit.warn("A003", lesson, doc, "docs/en.md missing ## Learning Objectives")
 
 
 def check_code_main(audit: Audit, lesson: Path) -> None:
@@ -193,6 +224,117 @@ def check_quiz(audit: Audit, lesson: Path) -> None:
             )
 
 
+def load_quiz(audit: Audit, lesson: Path) -> object | None:
+    quiz = lesson / "quiz.json"
+    if not quiz.is_file():
+        audit.warn("A004", lesson, quiz, "missing quiz.json")
+        return None
+    try:
+        return json.loads(quiz.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return None
+
+
+def check_quiz_contract(audit: Audit, lesson: Path) -> None:
+    quiz = lesson / "quiz.json"
+    data = load_quiz(audit, lesson)
+    if data is None:
+        return
+    if isinstance(data, list):
+        questions = data
+        audit.warn(
+            "A005",
+            lesson,
+            quiz,
+            "quiz.json should be an object with lesson, title, and questions[]",
+        )
+    elif isinstance(data, dict):
+        questions = data.get("questions")
+        missing = [key for key in ("lesson", "title", "questions") if key not in data]
+        if missing:
+            audit.warn(
+                "A005",
+                lesson,
+                quiz,
+                f"quiz.json missing top-level key(s) {missing}",
+            )
+    else:
+        return
+    if not isinstance(questions, list):
+        return
+    if len(questions) != REQUIRED_QUIZ_QUESTION_COUNT:
+        audit.warn(
+            "A006",
+            lesson,
+            quiz,
+            f"quiz.json should contain exactly {REQUIRED_QUIZ_QUESTION_COUNT} questions "
+            f"(got {len(questions)})",
+        )
+    stage_counts: dict[str, int] = {}
+    for question in questions:
+        if isinstance(question, dict):
+            stage = question.get("stage")
+            if isinstance(stage, str):
+                stage_counts[stage] = stage_counts.get(stage, 0) + 1
+    if stage_counts != REQUIRED_QUIZ_STAGE_COUNTS:
+        audit.warn(
+            "A007",
+            lesson,
+            quiz,
+            "quiz stage distribution should be 1 pre, 3 check, 2 post "
+            f"(got {stage_counts})",
+        )
+
+
+def count_python_tests(path: Path) -> int:
+    try:
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+    except (SyntaxError, UnicodeDecodeError):
+        return 0
+    return sum(
+        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name.startswith("test")
+        for node in ast.walk(tree)
+    )
+
+
+def count_test_cases(path: Path) -> int:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return 0
+    if path.suffix == ".py":
+        return count_python_tests(path)
+    if path.suffix in {".js", ".mjs", ".cjs", ".ts", ".tsx"}:
+        return len(JS_TEST_RE.findall(text))
+    if path.suffix == ".rs":
+        return text.count("#[test]")
+    if path.suffix == ".jl":
+        return text.count("@test")
+    return 0
+
+
+def check_tests_contract(audit: Audit, lesson: Path) -> None:
+    if not main_languages(lesson):
+        return
+    tests_dir = lesson / "code" / "tests"
+    if not tests_dir.is_dir():
+        audit.warn(
+            "A008",
+            lesson,
+            tests_dir,
+            f"code/tests/ missing for lesson with code/main.*; expected {MIN_TEST_CASES}+ tests",
+        )
+        return
+    test_count = sum(count_test_cases(path) for path in tests_dir.rglob("*") if path.is_file())
+    if test_count < MIN_TEST_CASES:
+        audit.warn(
+            "A008",
+            lesson,
+            tests_dir,
+            f"code/tests/ should contain {MIN_TEST_CASES}+ unit tests (found {test_count})",
+        )
+
+
 def check_internal_links(audit: Audit, lesson: Path, text: str) -> None:
     doc = lesson / "docs" / "en.md"
     seen: set[str] = set()
@@ -219,25 +361,45 @@ def audit_lesson(audit: Audit, lesson: Path) -> None:
     check_code_main(audit, lesson)
     check_quiz(audit, lesson)
     if text is not None:
+        check_frontmatter_contract(audit, lesson, text)
         check_internal_links(audit, lesson, text)
+    check_quiz_contract(audit, lesson)
+    check_tests_contract(audit, lesson)
 
 
-def render_report(audit: Audit) -> str:
+def render_report(audit: Audit, limit: int = DEFAULT_REPORT_LIMIT) -> str:
     by_rule: dict[str, int] = {}
     for issue in audit.issues:
         by_rule[issue.rule] = by_rule.get(issue.rule, 0) + 1
+    by_warning_rule: dict[str, int] = {}
+    for warning in audit.warnings:
+        by_warning_rule[warning.rule] = by_warning_rule.get(warning.rule, 0) + 1
     lines = [
         f"audit_lessons.py — {audit.lessons_checked} lesson(s) checked, "
-        f"{len(audit.issues)} issue(s)",
+        f"{len(audit.issues)} issue(s), {len(audit.warnings)} advisory warning(s)",
     ]
     if audit.issues:
         lines.append("")
-        for issue in audit.issues:
+        lines.append("Blocking issues:")
+        for issue in audit.issues[:limit]:
             lines.append(f"  [{issue.rule}] {issue.file}: {issue.message}")
+        if len(audit.issues) > limit:
+            lines.append(f"  ... {len(audit.issues) - limit} more blocking issue(s); use --json for full detail")
         lines.append("")
-        lines.append("Summary by rule:")
+        lines.append("Blocking summary by rule:")
         for rule in sorted(by_rule):
             lines.append(f"  {rule}: {by_rule[rule]}")
+    if audit.warnings:
+        lines.append("")
+        lines.append("Advisory warnings:")
+        for warning in audit.warnings[:limit]:
+            lines.append(f"  [{warning.rule}] {warning.file}: {warning.message}")
+        if len(audit.warnings) > limit:
+            lines.append(f"  ... {len(audit.warnings) - limit} more advisory warning(s); use --json for full detail")
+        lines.append("")
+        lines.append("Advisory summary by rule:")
+        for rule in sorted(by_warning_rule):
+            lines.append(f"  {rule}: {by_warning_rule[rule]}")
     return "\n".join(lines)
 
 
@@ -248,7 +410,7 @@ def main(argv: list[str]) -> int:
     parser.add_argument(
         "--strict",
         action="store_true",
-        help="treat warnings as errors (currently equivalent to default; reserved)",
+        help="treat advisory contract warnings as errors",
     )
     args = parser.parse_args(argv)
 
@@ -261,6 +423,8 @@ def main(argv: list[str]) -> int:
             {
                 "lessons_checked": audit.lessons_checked,
                 "issues": [issue.to_dict() for issue in audit.issues],
+                "warnings": [warning.to_dict() for warning in audit.warnings],
+                "strict": args.strict,
             },
             sys.stdout,
             indent=2,
@@ -269,7 +433,7 @@ def main(argv: list[str]) -> int:
     else:
         sys.stdout.write(render_report(audit) + "\n")
 
-    return 1 if audit.issues else 0
+    return 1 if audit.issues or (args.strict and audit.warnings) else 0
 
 
 if __name__ == "__main__":

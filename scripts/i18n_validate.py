@@ -19,10 +19,11 @@ import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _lib import iter_lesson_dirs, rel_path  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-PHASES_DIR = ROOT / "phases"
 FENCE_RE = re.compile(r"^```([^\s`]*)\s*$")
 
 
@@ -49,18 +50,7 @@ class Report:
 
 
 def rel(path: Path) -> str:
-    return path.relative_to(ROOT).as_posix()
-
-
-def iter_lesson_dirs() -> Iterable[Path]:
-    if not PHASES_DIR.is_dir():
-        return
-    for phase in sorted(PHASES_DIR.iterdir()):
-        if not phase.is_dir() or not phase.name[:2].isdigit():
-            continue
-        for lesson in sorted(phase.iterdir()):
-            if lesson.is_dir() and lesson.name[:2].isdigit():
-                yield lesson
+    return rel_path(path, ROOT)
 
 
 def resolve_lesson(path: str) -> Path:

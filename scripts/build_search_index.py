@@ -15,10 +15,11 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Iterable
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _lib import iter_lesson_dirs, rel_path  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-PHASES_DIR = ROOT / "phases"
 DEFAULT_OUT = ROOT / "site" / "search-index.zh-CN.json"
 RUNTIME_MANIFEST = ROOT / "site" / "runtime-manifest.json"
 
@@ -26,19 +27,6 @@ HEADING_RE = re.compile(r"^(#{1,3})\s+(.+?)\s*$")
 QUOTE_RE = re.compile(r"^>\s*(.+?)\s*$")
 META_RE = re.compile(r"^\*\*[^*]+\*\*:\s*")
 FENCE_RE = re.compile(r"^```")
-
-
-def rel(path: Path) -> str:
-    return path.relative_to(ROOT).as_posix()
-
-
-def iter_lesson_dirs() -> Iterable[Path]:
-    for phase in sorted(PHASES_DIR.iterdir()):
-        if not phase.is_dir() or not phase.name[:2].isdigit():
-            continue
-        for lesson in sorted(phase.iterdir()):
-            if lesson.is_dir() and lesson.name[:2].isdigit():
-                yield lesson
 
 
 def choose_doc(lesson: Path) -> tuple[Path, str] | tuple[None, None]:
@@ -124,7 +112,7 @@ def build_index() -> dict[str, object]:
         doc, lang = choose_doc(lesson)
         if doc is None or lang is None:
             continue
-        lesson_path = rel(lesson)
+        lesson_path = rel_path(lesson, ROOT)
         fields = extract_doc_fields(doc)
         phase = lesson.parent
         phase_num = int(phase.name.split("-", 1)[0])

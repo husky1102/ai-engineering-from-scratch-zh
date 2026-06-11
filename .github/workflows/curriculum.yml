@@ -12,6 +12,7 @@ on:
       - "ROADMAP.md"
       - "glossary/**"
       - "site/build.js"
+      - "scripts/link_check.py"
       - ".github/workflows/curriculum.yml"
   pull_request:
     branches: [main]
@@ -24,6 +25,7 @@ on:
       - "ROADMAP.md"
       - "glossary/**"
       - "site/build.js"
+      - "scripts/link_check.py"
       - ".github/workflows/curriculum.yml"
 
 permissions:
@@ -46,6 +48,9 @@ jobs:
   readme-counts-sync:
     name: README counts auto-fix (main only)
     runs-on: ubuntu-latest
+    concurrency:
+      group: readme-counts-sync-main
+      cancel-in-progress: false
     permissions:
       contents: write
     if: github.event_name == 'push'
@@ -100,6 +105,9 @@ jobs:
   site-rebuild:
     name: site/data.js auto-rebuild (main only)
     runs-on: ubuntu-latest
+    concurrency:
+      group: site-rebuild-main
+      cancel-in-progress: false
     permissions:
       contents: write
     needs: readme-counts-sync
@@ -109,6 +117,9 @@ jobs:
         with:
           ref: ${{ github.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4
+        with:
+          node-version: "20"
       - name: rebuild site/data.js
         run: node site/build.js
       - name: commit + push if site/data.js changed
@@ -163,4 +174,21 @@ jobs:
         run: |
           if ! python3 scripts/check_readme_counts.py; then
             echo "::warning::README.md counts drift detected. Main will self-heal on merge."
+          fi
+
+  link-check-advisory:
+    name: external link check advisory
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
+        with:
+          python-version: "3.12"
+      - name: check external links
+        run: |
+          if ! python3 scripts/link_check.py --strict --cache 0 --timeout 10 --concurrency 16; then
+            echo "::warning::External link check found failures. Review link_check.py output; this job is advisory."
           fi
