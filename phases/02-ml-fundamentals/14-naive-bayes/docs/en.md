@@ -3,7 +3,11 @@
 > The "naive" assumption is wrong, and it works anyway. That's the beauty of it.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 2, Lessons 01-07 (classification, Bayes' theorem)
 **Time:** ~75 minutes
 
