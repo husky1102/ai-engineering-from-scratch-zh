@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 15 · 01 (Long-horizon agents), Phase 15 · 19 (RSP)
 **Time:** ~60 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that METR Time Horizons and External Capability Evaluation solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of METR Time Horizons and External Capability Evaluation
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Scaling policies (Lessons 19, 20) are only as useful as the measurements they reference. "AI R&D-4 threshold" and "Long-range Autonomy" are defined in policy prose; they become actionable only when specific evaluations produce specific numbers.
