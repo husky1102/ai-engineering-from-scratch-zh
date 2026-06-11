@@ -3,7 +3,11 @@
 > Find the widest street between two classes. That is the entire idea.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Julia
 **Prerequisites:** Phase 1 (Lessons 08 Optimization, 14 Norms and Distances, 18 Convex Optimization)
 **Time:** ~90 minutes
 
