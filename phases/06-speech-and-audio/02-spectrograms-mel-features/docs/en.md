@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 6 · 01 (Audio Fundamentals)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Spectrograms, Mel Scale & Audio Features solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Spectrograms, Mel Scale & Audio Features
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Take a 10-second 16 kHz clip. That is 160,000 floats, all in `[-1, 1]`, almost perfectly uncorrelated with the label "dog barking" or "the word cat". The raw waveform has the information but in a form the model cannot easily extract. Two identical phonemes spoken 100 ms apart have completely different raw samples.
