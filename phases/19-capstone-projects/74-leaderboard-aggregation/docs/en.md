@@ -7,8 +7,11 @@
 **Prerequisites:** Phase 19 Track B foundations, lessons 70, 71, 73
 **Time:** ~90 min
 
-## Learning objectives
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
 
+## Learning Objectives
 - Aggregate per-task scores across multiple models and multiple tasks into a tidy per-model row.
 - Normalise heterogeneous scores so that pass rates and BLEU values do not over-influence the aggregate.
 - Rank models by mean and by win-rate, and explain when each is the right summary.
