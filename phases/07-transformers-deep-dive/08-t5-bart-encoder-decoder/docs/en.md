@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 7 · 05 (Full Transformer), Phase 7 · 06 (BERT), Phase 7 · 07 (GPT)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that T5, BART solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of T5, BART
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Decoder-only GPT and encoder-only BERT each strip down the 2017 architecture for a different goal. But many tasks are naturally input-output:
