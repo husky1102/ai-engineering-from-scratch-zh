@@ -3,6 +3,10 @@
 > SVD is the Swiss Army knife of linear algebra. Every matrix has one. Every data scientist needs one.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python, Julia
 **Prerequisites:** Phase 1, Lessons 01 (Linear Algebra Intuition), 02 (Vectors & Matrices Operations), 03 (Matrix Transformations)
 **Time:** ~120 minutes
