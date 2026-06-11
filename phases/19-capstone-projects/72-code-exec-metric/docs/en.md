@@ -7,8 +7,11 @@
 **Prerequisites:** Phase 19 Track B foundations, lessons 70 and 71
 **Time:** ~90 min
 
-## Learning objectives
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
 
+## Learning Objectives
 - Extract a code block from a free-form generation in a way that matches the post-process rule from lesson 70.
 - Execute candidate code in an isolated subprocess with a wall-clock timeout, output cap, and an import denylist.
 - Score a task as the fraction of supplied assertion strings that pass against the candidate.
