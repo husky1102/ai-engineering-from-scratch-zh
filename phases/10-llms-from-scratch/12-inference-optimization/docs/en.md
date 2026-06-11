@@ -3,7 +3,11 @@
 > Two phases define LLM inference. Prefill processes your prompt in parallel -- compute-bound. Decode generates tokens one at a time -- memory-bound. Every optimization targets one or both.
 
 **Type:** Build
-**Languages:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, Rust
 **Prerequisites:** Phase 10, Lessons 01-08 (Transformer architecture, attention)
 **Time:** ~120 minutes
 
