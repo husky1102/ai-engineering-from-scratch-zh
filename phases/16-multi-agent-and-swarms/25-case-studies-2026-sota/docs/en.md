@@ -3,9 +3,23 @@
 > Three production-grade references to study end-to-end, each illustrating a different slice of multi-agent engineering. **Anthropic's Research system** (orchestrator-worker, 15x tokens, +90.2% over single-agent Opus 4, rainbow deployments) is the canonical supervisor case. **MetaGPT / ChatDev** (SOP-encoded role specialization for software engineering; ChatDev's "communicative dehallucination"; MacNet extension to >1000 agents via DAGs, arXiv:2406.07155) is the canonical role-decomposition case. **OpenClaw / Moltbook** (originally Clawdbot by Peter Steinberger, November 2025; renamed twice; 247k GitHub stars by March 2026; local ReAct-loop agents; Moltbook as an agent-only social network with ~2.3M agent accounts within days of launch, acquired by Meta 2026-03-10) illustrates what happens at population scale: emergent economic activity, prompt-injection risks, state-level regulation (China restricted OpenClaw on government computers, March 2026). **Framework landscape April 2026:** LangGraph and CrewAI lead production; AG2 is the community AutoGen continuation; Microsoft AutoGen is in maintenance mode (merged into Microsoft Agent Framework, RC Feb 2026); OpenAI Agents SDK is the production Swarm successor; Google ADK (April 2025) is the A2A-native entrant. Every major framework now ships MCP support; most ship A2A. This lesson reads each case end-to-end and distills the common patterns so you can pick the right reference for your next production system.
 
 **Type:** Learn (capstone)
-**Languages:** —
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** all of Phase 16 (Lessons 01-24)
 **Time:** ~90 minutes
+
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Case Studies and the 2026 State of the Art solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Case Studies and the 2026 State of the Art
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
 
 ## Problem
 
