@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 5 · 01 (Text Processing), Phase 2 · 02 (Linear Regression from Scratch)
 **Time:** ~75 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Bag of Words, TF-IDF, and Text Representation solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Bag of Words, TF-IDF, and Text Representation
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 The model needs numbers. You have strings.
