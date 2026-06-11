@@ -3,9 +3,23 @@
 > One attention head learns one relation at a time. Eight heads learn eight. Heads are free. Take more of them.
 
 **Type:** Build
-**Languages:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, Rust
 **Prerequisites:** Phase 7 · 02 (Self-Attention from Scratch)
 **Time:** ~75 minutes
+
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Multi-Head Attention solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Multi-Head Attention
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
 
 ## The Problem
 
