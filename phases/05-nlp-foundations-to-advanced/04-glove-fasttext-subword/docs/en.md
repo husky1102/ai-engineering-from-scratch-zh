@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 5 · 03 (Word2Vec from Scratch)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that GloVe, FastText, and Subword Embeddings solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of GloVe, FastText, and Subword Embeddings
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Word2Vec left two open questions.
