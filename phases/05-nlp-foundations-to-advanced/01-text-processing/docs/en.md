@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 2 · 14 (Naive Bayes)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Text Processing solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Text Processing
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 A model cannot read "The cats were running." It reads integers.
