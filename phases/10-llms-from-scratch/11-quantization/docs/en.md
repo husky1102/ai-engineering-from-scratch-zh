@@ -3,7 +3,11 @@
 > A 70B model in FP16 needs 140GB. Two A100s just for weights. Quantize to FP8: one 80GB GPU. INT4: a MacBook.
 
 **Type:** Build
-**Languages:** Python (with numpy)
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, Rust
 **Prerequisites:** Phase 10, Lessons 01-10 (LLMs from Scratch)
 **Time:** ~120 minutes
 
