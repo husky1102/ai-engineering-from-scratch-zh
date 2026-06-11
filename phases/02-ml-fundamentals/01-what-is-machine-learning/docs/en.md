@@ -3,6 +3,10 @@
 > Machine learning is teaching computers to find patterns in data instead of writing rules by hand.
 
 **Type:** Learn
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python
 **Prerequisites:** Phase 1 (Math Foundations)
 **Time:** ~45 minutes
