@@ -3,6 +3,10 @@
 > Every neural network is just matrix multiplication with extra steps.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python, Julia
 **Prerequisites:** Phase 1, Lesson 01 (Linear Algebra Intuition)
 **Time:** ~60 minutes
