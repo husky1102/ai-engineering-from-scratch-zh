@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 5 · 02 (BoW + TF-IDF), Phase 5 · 04 (GloVe, FastText, Subword)
 **Time:** ~75 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Information Retrieval and Search solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Information Retrieval and Search
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 The user types "what happens if someone lies to get money" and expects to find the statute that actually covers that: "Section 420 IPC." A keyword search misses it entirely (no shared vocabulary). A semantic search misses it if the embeddings were not trained on legal text. Real search has to handle both.
