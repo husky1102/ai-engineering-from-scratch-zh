@@ -3,7 +3,11 @@
 > The worst AI bugs don't crash. They train silently on garbage and report a beautiful loss curve.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Lesson 1 (Dev Environment), basic PyTorch familiarity
 **Time:** ~60 minutes
 
