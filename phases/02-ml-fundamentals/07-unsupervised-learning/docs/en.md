@@ -3,6 +3,10 @@
 > No labels, no teacher. The algorithm finds structure on its own.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python
 **Prerequisites:** Phase 1 (Norms & Distances, Probability & Distributions), Phase 2 Lessons 1-6
 **Time:** ~90 minutes
