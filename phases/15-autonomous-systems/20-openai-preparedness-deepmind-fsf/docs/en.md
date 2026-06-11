@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 15 · 19 (Anthropic RSP)
 **Time:** ~45 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that OpenAI Preparedness Framework and DeepMind Frontier Safety Framework solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of OpenAI Preparedness Framework and DeepMind Frontier Safety Framework
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Lesson 19 read Anthropic's scaling policy closely. This lesson completes the picture by reading OpenAI's and DeepMind's. The three documents are cousin artifacts addressing the same question — when should a frontier lab pause or gate a model — and they converge on a small set of categories and diverge in specific places that matter.
