@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 7 · 01 through 13. Don't skip.
 **Time:** ~120 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Build a Transformer from Scratch solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Build a Transformer from Scratch
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 You've read every paper. You've implemented attention, multi-head splits, positional encodings, encoder and decoder blocks, BERT and GPT losses, MoE, KV cache. Now make them work together on a real task.
