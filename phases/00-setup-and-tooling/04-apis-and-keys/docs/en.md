@@ -3,6 +3,10 @@
 > Every AI API works the same way: send a request, get a response. The details change, the pattern doesn't.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python, TypeScript
 **Prerequisites:** Phase 0, Lesson 01
 **Time:** ~30 minutes
