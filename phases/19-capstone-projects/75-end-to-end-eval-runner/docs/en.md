@@ -7,8 +7,11 @@
 **Prerequisites:** Phase 19 Track B foundations, lessons 70 through 74
 **Time:** ~90 min
 
-## Learning objectives
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
 
+## Learning Objectives
 - Define a `ModelAdapter` interface that any model (mock, local, API) can satisfy with a small method surface.
 - Run the eval over a fixture JSONL file with parallel task execution across a worker pool.
 - Compose the metric layer (exact_match, F1, BLEU-4, ROUGE-L, code_exec) with the calibration layer in one pass.
