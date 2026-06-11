@@ -3,7 +3,11 @@
 > Floating point is a leaky abstraction. It will bite you during training, and you will not see it coming.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 1, Lessons 01-04
 **Time:** ~120 minutes
 
