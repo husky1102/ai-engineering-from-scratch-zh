@@ -3,7 +3,11 @@
 > A model is only as good as the way you measure it.
 
 **Type:** Build
-**Languages:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Julia
 **Prerequisites:** Phase 1 (Probability & Distributions, Statistics for ML), Phase 2 Lessons 1-8
 **Time:** ~90 minutes
 
