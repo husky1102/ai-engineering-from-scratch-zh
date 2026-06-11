@@ -3,7 +3,11 @@
 > When 99% of your data is "normal," accuracy is a lie.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 2, Lessons 01-09 (especially evaluation metrics)
 **Time:** ~90 minutes
 
