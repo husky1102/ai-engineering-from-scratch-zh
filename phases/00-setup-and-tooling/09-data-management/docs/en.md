@@ -3,7 +3,11 @@
 > Data is the fuel. How you manage it determines how fast you go.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python
 **Prerequisites:** Phase 0, Lesson 01
 **Time:** ~45 minutes
 
