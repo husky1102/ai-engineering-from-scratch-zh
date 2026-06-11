@@ -3,7 +3,11 @@
 > Training a neural network is nothing more than finding the bottom of a valley.
 
 **Type:** Build
-**Language:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Julia
 **Prerequisites:** Phase 1, Lessons 04-05 (Derivatives, Gradients)
 **Time:** ~75 minutes
 
