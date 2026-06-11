@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 5 · 13 (Question Answering), Phase 5 · 14 (Information Retrieval)
 **Time:** ~75 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that LLM Evaluation solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of LLM Evaluation
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Your RAG system answers: "June 29th, 2007."
