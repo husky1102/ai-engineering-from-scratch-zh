@@ -112,6 +112,20 @@ Exactly 6 questions: 1 pre + 3 check + 2 post. `correct` is zero-indexed. The si
 
 ---
 
+## Rendered lesson validation
+
+When checking local lesson pages, site rendering, visible markers, quiz UI, screenshots, or any other browser-visible behavior, use Codex's Browser / in-app Browser skill first.
+
+Expected workflow:
+1. Start the local site or static server needed for the page.
+2. Open the local URL with the Codex in-app Browser.
+3. Inspect the rendered DOM or screenshot through the Browser skill.
+4. Fall back to raw HTTP checks, standalone Playwright, or file inspection only when the Browser skill is unavailable or blocked, and note the reason.
+
+This applies especially to fork-visible markers such as `GPT 新增修订，仅供参考`.
+
+---
+
 ## Per-PR validation
 
 Run locally before pushing:
