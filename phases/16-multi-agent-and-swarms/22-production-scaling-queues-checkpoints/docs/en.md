@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 16 · 09 (Parallel Swarm Networks), Phase 16 · 13 (Shared Memory)
 **Time:** ~75 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Production Scaling solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Production Scaling
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## Problem
 
 A prototype multi-agent system works on one laptop with three agents in an in-memory event loop. You move to production:
