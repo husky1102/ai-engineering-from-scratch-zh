@@ -3,6 +3,10 @@
 > PyTorch mutates tensors. TensorFlow builds graphs. JAX compiles pure functions. That last one changes how you think about deep learning.
 
 **Type:** Build
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
 **Languages:** Python
 **Prerequisites:** Phase 03 Lessons 01-10, basic NumPy
 **Time:** ~90 minutes
