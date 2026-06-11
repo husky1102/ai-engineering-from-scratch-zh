@@ -3,7 +3,11 @@
 > LangGraph is the 2026 reference for low-level stateful orchestration. Agent is a state machine; nodes are functions; edges are transitions; state is immutable and checkpointed after every step. Resume from any failure exactly where it left off.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib)
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 14 · 01 (Agent Loop), Phase 14 · 12 (Workflow Patterns)
 **Time:** ~75 minutes
 
