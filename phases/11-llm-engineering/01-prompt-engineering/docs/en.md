@@ -3,7 +3,11 @@
 > Most people write prompts like they are texting a friend. Then they wonder why a 200-billion parameter model gives mediocre answers. Prompt engineering is not about tricks. It is about understanding that every token you send is an instruction, and the model follows instructions literally. Write better instructions, get better outputs. It is that simple and that hard.
 
 **Type:** Build
-**Languages:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** TypeScript
 **Prerequisites:** Phase 10, Lessons 01-05 (LLMs from Scratch)
 **Time:** ~90 minutes
 **Related:** Phase 11 · 05 (Context Engineering) for what else goes in the window; Phase 5 · 20 (Structured Outputs) for token-level format control.
