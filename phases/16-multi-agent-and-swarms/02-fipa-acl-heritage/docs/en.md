@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 16 · 01 (Why Multi-Agent)
 **Time:** ~60 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Heritage of FIPA-ACL and Speech Acts solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Heritage of FIPA-ACL and Speech Acts
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## Problem
 
 The 2026 agent-protocol landscape is busy: MCP for tools, A2A for agents, ACP for enterprise audit, ANP for decentralized trust, NLIP for natural-language content, plus CA-MCP and two dozen research proposals. Each spec announces itself as foundational.
