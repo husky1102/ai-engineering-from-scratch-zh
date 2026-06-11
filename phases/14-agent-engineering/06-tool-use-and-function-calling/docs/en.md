@@ -3,7 +3,11 @@
 > Toolformer (Schick et al., 2023) started self-supervised tool annotation. Berkeley Function Calling Leaderboard V4 (Patil et al., 2025) sets the 2026 bar: 40% agentic, 30% multi-turn, 10% live, 10% non-live, 10% hallucination. Single-turn is solved. Memory, dynamic decision-making, and long-horizon tool chains are not.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 14 · 01 (Agent Loop), Phase 13 · 01 (Function Calling Deep Dive)
 **Time:** ~60 minutes
 
