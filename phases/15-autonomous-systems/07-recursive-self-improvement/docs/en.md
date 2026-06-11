@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 15 · 04 (DGM), Phase 15 · 06 (AAR)
 **Time:** ~60 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Recursive Self-Improvement solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Recursive Self-Improvement
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 A system that improves itself generates a curve. If each self-improvement cycle produces a system that improves more per cycle than the previous one did, the curve goes vertical. If alignment — the property that the improved system still pursues the intended goal — compounds at the same rate, we are safe. If alignment compounds slower, we are not.
