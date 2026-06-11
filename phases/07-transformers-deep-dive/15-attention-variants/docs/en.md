@@ -7,6 +7,16 @@
 **Prerequisites:** Phase 7 · 02 (Self-Attention), Phase 7 · 03 (Multi-Head), Phase 7 · 12 (KV Cache / Flash Attention)
 **Time:** ~60 minutes
 
+::: fork-note generated
+GPT 新增修订，仅供参考
+:::
+
+## Learning Objectives
+- Explain the core problem that Attention Variants solves in an AI engineering workflow
+- Build a small, inspectable implementation that exposes the main moving parts of Attention Variants
+- Compare the from-scratch implementation with the production-style library or system pattern
+- Validate the lesson artifact with a focused test, metric, or reproducible run
+
 ## The Problem
 
 Full attention costs `O(N²)` memory and `O(N²)` compute in sequence length. For a 128K-context Llama 3 70B that is 16 billion attention entries per layer, times 80 layers. Flash Attention (Lesson 12) hides the `O(N²)` activation memory but does not change the arithmetic cost — every token still attends to every other token.
