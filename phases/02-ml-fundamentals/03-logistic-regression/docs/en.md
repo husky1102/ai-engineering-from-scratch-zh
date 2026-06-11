@@ -3,7 +3,11 @@
 > Logistic regression bends a straight line into an S-curve to answer yes-or-no questions with probabilities.
 
 **Type:** Build
-**Languages:** Python
+::: fork-note updated
+GPT 新增修订，仅供参考
+:::
+
+**Languages:** Julia
 **Prerequisites:** Phase 2 Lesson 1-2 (What Is ML, Linear Regression)
 **Time:** ~90 minutes
 
