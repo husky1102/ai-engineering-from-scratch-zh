@@ -1,5 +1,5 @@
-# Phase 12: Multimodal AI
+# 阶段 12：多模态 AI
 
-> Models that see, hear, read, and reason across modalities.
+> 能看、能听、能读、并跨模态推理的模型。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

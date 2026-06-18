@@ -1,5 +1,5 @@
-# Phase 10: LLMs from Scratch
+# 阶段 10：从零构建大语言模型
 
-> Build, train, and understand large language models.
+> 构建、训练并真正理解大语言模型。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

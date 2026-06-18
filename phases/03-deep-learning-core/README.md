@@ -1,5 +1,5 @@
-# Phase 3: Deep Learning Core
+# 阶段 3：深度学习核心
 
-> Neural networks from first principles. No frameworks until you build one yourself.
+> 从第一性原理理解神经网络。在你亲手造出一个之前，不碰任何框架。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

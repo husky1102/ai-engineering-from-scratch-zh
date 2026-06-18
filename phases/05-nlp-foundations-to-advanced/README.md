@@ -1,5 +1,5 @@
-# Phase 5: NLP — Foundations to Advanced
+# 阶段 5：NLP——从基础到进阶
 
-> Language is the interface to intelligence. Master every layer.
+> 语言是通往智能的接口。掌握它的每一层。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

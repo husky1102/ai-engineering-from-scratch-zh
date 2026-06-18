@@ -1,5 +1,5 @@
-# Phase 16: Multi-Agent & Swarms
+# 阶段 16：多智能体与群体
 
-> Coordination, emergence, and collective intelligence.
+> 协调、涌现与群体智能。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

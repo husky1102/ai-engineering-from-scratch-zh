@@ -1,5 +1,5 @@
-# Phase 15: Autonomous Systems
+# 阶段 15：自主系统
 
-> Agents that run without human intervention — safely.
+> 无需人工干预即可运行的智能体——而且要安全。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

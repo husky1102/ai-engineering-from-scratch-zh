@@ -1,5 +1,5 @@
-# Phase 19: Capstone Projects
+# 阶段 19：综合项目
 
-> Prove everything you learned. Build portfolio-grade systems.
+> 检验你学到的一切。构建可放进作品集的系统。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

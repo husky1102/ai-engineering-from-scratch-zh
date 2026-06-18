@@ -1,5 +1,5 @@
-# Phase 11: LLM Engineering
+# 阶段 11：大语言模型工程
 
-> Put LLMs to work in production applications.
+> 让大语言模型在生产应用中真正干活。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。

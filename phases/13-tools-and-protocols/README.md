@@ -1,5 +1,5 @@
-# Phase 13: Tools & Protocols
+# 阶段 13：工具与协议
 
-> The interfaces between AI and the real world.
+> AI 与真实世界之间的接口。
 
-See [ROADMAP.md](../../ROADMAP.md) for the full lesson plan.
+完整课程计划见 [ROADMAP.md](../../ROADMAP.md)。
