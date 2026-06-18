@@ -1,386 +1,386 @@
-# AI Engineering Glossary
+# AI 工程术语表
 
 ## A
 
-### Agent
-- **What people say:** "An autonomous AI that thinks and acts on its own"
-- **What it actually means:** A while loop where an LLM decides what tool to call next, executes it, sees the result, and repeats
-- **Why it's called that:** Borrowed from philosophy — an "agent" is anything that can act in the world. In AI, it just means "LLM + tools + loop"
+### 智能体（Agent）
+- **What people say:** "一个能自己思考、自主行动的 AI"
+- **What it actually means:** 一个 while 循环：由 LLM 决定下一步调用哪个工具，执行它，观察结果，然后不断重复
+- **Why it's called that:** 借自哲学——“agent（行动者）”指任何能在世界中行动的实体。在 AI 里，它不过就是“LLM + 工具 + 循环”
 
-### Attention
-- **What people say:** "How the AI focuses on important parts"
-- **What it actually means:** A mechanism where every token computes a weighted sum of all other tokens' values, with weights determined by how relevant they are (via dot product of query and key vectors)
-- **Why it's called that:** The 2017 paper "Attention Is All You Need" named it by analogy to human selective attention
+### 注意力（Attention）
+- **What people say:** "AI 是怎么聚焦到重要部分的"
+- **What it actually means:** 一种机制：每个 token 都对其他所有 token 的 value 做加权求和，权重由它们之间的相关程度决定（通过 query 与 key 向量的点积得到）
+- **Why it's called that:** 2017 年的论文《Attention Is All You Need》以人类的选择性注意力作类比，给它起了这个名字
 
-### Alignment
-- **What people say:** "Making AI safe"
-- **What it actually means:** The technical challenge of making an AI system's behavior match human intentions, values, and preferences, including edge cases the designer didn't anticipate
+### 对齐（Alignment）
+- **What people say:** "让 AI 变安全"
+- **What it actually means:** 让 AI 系统的行为符合人类意图、价值观和偏好的技术挑战，包括设计者未曾预料到的边缘情况
 
-### Autoregressive
-- **What people say:** "The AI generates one word at a time"
-- **What it actually means:** A model that predicts the next token conditioned on all previous tokens, then feeds that prediction back as input for the next step. GPT, LLaMA, and Claude are all autoregressive.
+### 自回归（Autoregressive）
+- **What people say:** "AI 一个词一个词地生成"
+- **What it actually means:** 一种模型：以之前所有 token 为条件预测下一个 token，再把该预测作为输入喂回去预测下一步。GPT、LLaMA 和 Claude 都是自回归的。
 
-### Activation Function
-- **What people say:** "The nonlinear thing between layers"
-- **What it actually means:** A function applied after each linear layer that introduces nonlinearity. Without it, stacking any number of linear layers collapses to a single linear transformation. ReLU, GELU, and SiLU are the most common. The choice directly affects whether gradients flow during training.
+### 激活函数（Activation Function）
+- **What people say:** "层与层之间那个非线性的东西"
+- **What it actually means:** 在每个线性层之后施加的函数，用来引入非线性。没有它，无论堆叠多少线性层都会塌缩成单个线性变换。ReLU、GELU 和 SiLU 最常见。它的选择直接影响训练时梯度能否顺畅流动。
 
-### Adam (Optimizer)
-- **What people say:** "The default optimizer"
-- **What it actually means:** Adaptive Moment Estimation. Combines momentum (first moment) with adaptive learning rates per parameter (second moment). Has bias correction for early steps. Works well across most tasks without much tuning.
+### Adam（优化器）
+- **What people say:** "默认的优化器"
+- **What it actually means:** 自适应矩估计（Adaptive Moment Estimation）。把动量（一阶矩）与逐参数的自适应学习率（二阶矩）结合起来，并对前期步数做偏差校正。在多数任务上几乎不用怎么调就能工作得很好。
 
 ### AdamW
-- **What people say:** "Adam but better"
-- **What it actually means:** Adam with decoupled weight decay. In standard Adam, L2 regularization gets scaled by the adaptive learning rate per parameter, which is not what you want. AdamW applies weight decay directly to the weights, independent of the gradient statistics. The default optimizer for training transformers.
+- **What people say:** "更好的 Adam"
+- **What it actually means:** 带解耦权重衰减的 Adam。在标准 Adam 中，L2 正则会被逐参数的自适应学习率缩放，而这并不是你想要的。AdamW 把权重衰减直接作用在权重上，与梯度统计量无关。训练 transformer 的默认优化器。
 
-### Autograd
-- **What people say:** "Automatic gradients"
-- **What it actually means:** A system that records operations on tensors and automatically computes gradients via reverse-mode differentiation. PyTorch's autograd builds a computation graph on-the-fly (dynamic graph), while JAX uses function transformations (grad). This is what makes backpropagation practical -- you write the forward pass, and the framework computes all the derivatives.
+### Autograd（自动微分）
+- **What people say:** "自动求梯度"
+- **What it actually means:** 一套记录张量运算、并通过反向模式微分自动计算梯度的系统。PyTorch 的 autograd 在运行时动态构建计算图，而 JAX 用函数变换（grad）实现。正是它让反向传播变得实用——你只写前向过程，框架替你算出所有导数。
 
 ## B
 
-### Batch Size
-- **What people say:** "How many examples at once"
-- **What it actually means:** The number of training examples processed in one forward/backward pass before updating weights. Larger batches give more stable gradient estimates but use more memory. Typical values: 32-512 for training, larger for inference. Batch size interacts with learning rate -- double the batch, double the LR (linear scaling rule).
+### 批大小（Batch Size）
+- **What people say:** "一次处理多少个样本"
+- **What it actually means:** 在更新权重前，一次前向/反向传播所处理的训练样本数量。批越大，梯度估计越稳定，但占用显存越多。常见取值：训练时 32-512，推理时更大。批大小与学习率相互影响——批翻倍，学习率也翻倍（线性缩放法则）。
 
-### Backpropagation
-- **What people say:** "How neural networks learn"
-- **What it actually means:** An algorithm that computes how much each weight contributed to the error by applying the chain rule backward through the network, then adjusts weights proportionally
-- **Why it's called that:** Errors propagate backward from output to input, layer by layer
+### 反向传播（Backpropagation）
+- **What people say:** "神经网络是怎么学习的"
+- **What it actually means:** 一种算法：通过沿网络反向应用链式法则，计算出每个权重对误差贡献了多少，然后按比例调整权重
+- **Why it's called that:** 误差从输出向输入、逐层向后传播
 
 ## C
 
-### Context Window
-- **What people say:** "How much the AI can remember"
-- **What it actually means:** The maximum number of tokens (input + output) that fit in a single API call. Not memory — it's a fixed-size buffer that resets every call
+### 上下文窗口（Context Window）
+- **What people say:** "AI 能记住多少东西"
+- **What it actually means:** 单次 API 调用能容纳的最大 token 数（输入 + 输出）。它不是记忆——而是一个固定大小的缓冲区，每次调用都会清空重置
 
-### Chain of Thought (CoT)
-- **What people say:** "Making the AI think step by step"
-- **What it actually means:** A prompting technique where you ask the model to show its reasoning steps, which improves accuracy on multi-step problems because each step conditions the next token generation
+### 思维链（Chain of Thought / CoT）
+- **What people say:** "让 AI 一步一步思考"
+- **What it actually means:** 一种提示技巧：要求模型展示其推理步骤。这能提升多步问题的准确率，因为每一步都会作为条件影响下一个 token 的生成
 
-### CNN (Convolutional Neural Network)
-- **What people say:** "Image AI"
-- **What it actually means:** A neural network that uses convolution operations (sliding filters over the input) to detect local patterns. Stacking convolutions detects increasingly complex features: edges, textures, objects.
+### CNN（卷积神经网络）
+- **What people say:** "处理图像的 AI"
+- **What it actually means:** 一种使用卷积运算（在输入上滑动滤波器）来检测局部模式的神经网络。层层堆叠卷积可以检测越来越复杂的特征：边缘、纹理、物体。
 
 ### CUDA
-- **What people say:** "GPU programming"
-- **What it actually means:** NVIDIA's parallel computing platform. Lets you run matrix operations on thousands of GPU cores simultaneously. PyTorch and TensorFlow use CUDA under the hood.
+- **What people say:** "GPU 编程"
+- **What it actually means:** NVIDIA 的并行计算平台。让你能在数千个 GPU 核心上同时运行矩阵运算。PyTorch 和 TensorFlow 底层都用它。
 
-### Chunking
-- **What people say:** "Splitting documents into pieces"
-- **What it actually means:** Breaking text into segments before embedding for retrieval. Chunk size determines the granularity of search results. Too small: loses context. Too large: dilutes relevance. Common strategies: fixed-size with overlap, sentence-based, or semantic splitting. Typical chunk size: 256-512 tokens with 10-20% overlap.
+### 分块（Chunking）
+- **What people say:** "把文档切成小段"
+- **What it actually means:** 在嵌入以供检索之前，把文本切成片段。块大小决定了搜索结果的粒度。太小：丢失上下文。太大：稀释相关性。常见策略：带重叠的定长切分、按句子切分，或语义切分。典型块大小：256-512 token，带 10-20% 的重叠。
 
-### Contrastive Learning
-- **What people say:** "Learning by comparison"
-- **What it actually means:** Training by pulling similar pairs closer and pushing dissimilar pairs apart in embedding space. CLIP uses this: matching image-text pairs vs non-matching ones.
+### 对比学习（Contrastive Learning）
+- **What people say:** "通过比较来学习"
+- **What it actually means:** 通过在嵌入空间中把相似的样本对拉近、把不相似的样本对推远来训练。CLIP 就用了这一点：匹配的图文对 vs 不匹配的图文对。
 
-### Cosine Similarity
-- **What people say:** "How similar two vectors are"
-- **What it actually means:** The cosine of the angle between two vectors: dot(a, b) / (||a|| * ||b||). Ranges from -1 (opposite) to 1 (identical direction). Ignores magnitude, only cares about direction. The standard similarity metric for embeddings and semantic search.
+### 余弦相似度（Cosine Similarity）
+- **What people say:** "两个向量有多相似"
+- **What it actually means:** 两个向量夹角的余弦：dot(a, b) / (||a|| * ||b||)。取值从 -1（方向相反）到 1（方向相同）。忽略大小，只关心方向。是嵌入和语义搜索的标准相似度度量。
 
-### Cross-Entropy
-- **What people say:** "The classification loss"
-- **What it actually means:** Measures the difference between two probability distributions. For classification: -sum(y_true * log(y_pred)). For language models: the negative log probability of the correct next token. Lower is better. Perplexity is just exp(cross-entropy).
+### 交叉熵（Cross-Entropy）
+- **What people say:** "分类用的损失"
+- **What it actually means:** 衡量两个概率分布之间的差异。分类任务：-sum(y_true * log(y_pred))。语言模型：正确的下一个 token 的负对数概率。越低越好。困惑度（perplexity）就是 exp(交叉熵)。
 
 ## D
 
-### Data Augmentation
-- **What people say:** "Making more training data"
-- **What it actually means:** Creating modified copies of existing data (rotate images, add noise, paraphrase text) to increase training set diversity without collecting new data. Reduces overfitting.
+### 数据增强（Data Augmentation）
+- **What people say:** "造出更多训练数据"
+- **What it actually means:** 对已有数据制作修改过的副本（旋转图像、加噪声、改写文本），在不采集新数据的前提下增加训练集的多样性。能减少过拟合。
 
-### Decoder
-- **What people say:** "The output part"
-- **What it actually means:** In transformers, a decoder uses causal (masked) self-attention so each position can only attend to earlier positions. GPT is decoder-only. BERT is encoder-only. T5 is encoder-decoder.
+### 解码器（Decoder）
+- **What people say:** "负责输出的那部分"
+- **What it actually means:** 在 transformer 中，解码器使用因果（带掩码的）自注意力，使每个位置只能关注更早的位置。GPT 是 decoder-only，BERT 是 encoder-only，T5 是 encoder-decoder。
 
-### Diffusion Model
-- **What people say:** "AI that generates images from noise"
-- **What it actually means:** A model trained to reverse a gradual noising process — it learns to predict and remove noise, and at generation time starts from pure noise and iteratively denoises
+### 扩散模型（Diffusion Model）
+- **What people say:** "从噪声生成图像的 AI"
+- **What it actually means:** 一种被训练来逆转“逐步加噪”过程的模型——它学会预测并去除噪声；在生成时从纯噪声出发，迭代地去噪
 
-### DPO (Direct Preference Optimization)
-- **What people say:** "A simpler RLHF"
-- **What it actually means:** A training method that skips the reward model entirely — it directly optimizes the language model to prefer the better response in pairs of human preferences
+### DPO（直接偏好优化）
+- **What people say:** "更简单的 RLHF"
+- **What it actually means:** 一种完全跳过奖励模型的训练方法——它直接优化语言模型，使其在成对的人类偏好中更倾向于更好的那个回复
 
 ### Dropout
-- **What people say:** "Randomly turning off neurons"
-- **What it actually means:** During training, randomly set a fraction of activations to zero. Forces the network to not rely on any single neuron. Turned off during inference. Simple but effective regularization.
+- **What people say:** "随机关闭一些神经元"
+- **What it actually means:** 训练时，随机把一部分激活值置零。迫使网络不依赖任何单个神经元。推理时关闭。简单却有效的正则化方法。
 
 ## E
 
-### Eigenvalue
-- **What people say:** "Some math thing for PCA"
-- **What it actually means:** For a matrix A, an eigenvalue lambda satisfies Av = lambda*v for some vector v. It tells you how much the matrix scales vectors in that direction. Large eigenvalues = directions of high variance in your data.
+### 特征值（Eigenvalue）
+- **What people say:** "PCA 里那个数学玩意儿"
+- **What it actually means:** 对矩阵 A，特征值 lambda 满足 Av = lambda*v（v 为某向量）。它告诉你矩阵在那个方向上把向量缩放了多少。大的特征值 = 数据中方差大的方向。
 
-### Embedding
-- **What people say:** "Some AI magic that turns words into numbers"
-- **What it actually means:** A learned mapping from discrete items (words, images, users) to dense vectors in continuous space, where similar items end up close together
-- **Why it's called that:** The items are "embedded" in a geometric space where distance has meaning
+### 嵌入（Embedding）
+- **What people say:** "把词变成数字的某种 AI 魔法"
+- **What it actually means:** 一种学习得到的映射，把离散项（词、图像、用户）映射到连续空间中的稠密向量，让相似的项最终彼此靠近
+- **Why it's called that:** 这些项被“嵌入（embed）”到一个几何空间里，在那里距离是有意义的
 
-### Encoder
-- **What people say:** "The input part"
-- **What it actually means:** In transformers, an encoder uses bidirectional self-attention so each position can attend to all positions. BERT is encoder-only. Good for understanding tasks (classification, NER) but not generation.
+### 编码器（Encoder）
+- **What people say:** "负责输入的那部分"
+- **What it actually means:** 在 transformer 中，编码器使用双向自注意力，使每个位置都能关注所有位置。BERT 是 encoder-only。擅长理解类任务（分类、命名实体识别），但不擅长生成。
 
-### Epoch
-- **What people say:** "One pass through the data"
-- **What it actually means:** Exactly that. One complete pass through every example in the training set. Multiple epochs = seeing the data multiple times. More epochs can improve learning but risks overfitting.
+### 轮次（Epoch）
+- **What people say:** "把数据过一遍"
+- **What it actually means:** 字面意思就是如此。完整地遍历一次训练集中的每个样本。多个 epoch = 多次看到数据。更多 epoch 可能提升学习效果，但有过拟合风险。
 
 ## F
 
-### Feature
-- **What people say:** "A column in your data"
-- **What it actually means:** An individual measurable property of the data. In classical ML, you engineer features by hand. In deep learning, the network learns features automatically from raw data.
+### 特征（Feature）
+- **What people say:** "数据里的一列"
+- **What it actually means:** 数据中一个可度量的单独属性。在经典 ML 中，你手工设计特征；在深度学习中，网络从原始数据中自动学到特征。
 
-### Few-Shot
-- **What people say:** "Give the AI some examples first"
-- **What it actually means:** Including a small number of input-output examples in the prompt before asking the model to perform a task. Typically 3-5 examples. The model pattern-matches on these examples to understand the desired format and behavior. Contrast with zero-shot (no examples) and fine-tuning (thousands of examples baked into weights).
+### 少样本（Few-Shot）
+- **What people say:** "先给 AI 几个例子"
+- **What it actually means:** 在让模型执行任务之前，于提示中加入少量输入-输出示例，通常 3-5 个。模型据此进行模式匹配，理解期望的格式与行为。与零样本（无示例）和微调（成千上万示例烧进权重）相对。
 
-### Fine-tuning
-- **What people say:** "Training the AI on your data"
-- **What it actually means:** Starting with a pre-trained model's weights and continuing training on a smaller, task-specific dataset. Only updates existing weights, doesn't add new knowledge from scratch
+### 微调（Fine-tuning）
+- **What people say:** "拿你的数据去训练 AI"
+- **What it actually means:** 从一个预训练模型的权重出发，在更小的、任务特定的数据集上继续训练。只更新已有权重，并不会从零添加新知识
 
-### Function Calling
-- **What people say:** "AI that can use tools"
-- **What it actually means:** A structured way for LLMs to request execution of external functions. You define tools with JSON Schema descriptions, the model outputs a structured JSON object specifying which function to call with what arguments, your code executes it, and the result goes back to the model. Not the same as agents -- function calling is the mechanism, agents are the loop.
+### 函数调用（Function Calling）
+- **What people say:** "能使用工具的 AI"
+- **What it actually means:** 一种让 LLM 请求执行外部函数的结构化方式。你用 JSON Schema 描述定义工具，模型输出一个结构化 JSON 对象，指明调用哪个函数、传什么参数，你的代码执行它，结果再返回给模型。它与智能体不是一回事——函数调用是机制，智能体是那个循环。
 
 ## G
 
-### Guardrails
-- **What people say:** "Safety filters for AI"
-- **What it actually means:** Input/output validation layers around an LLM that detect and block harmful content, prompt injection attempts, PII leakage, or off-topic responses. Typically a pipeline: input filter -> LLM -> output filter. Can be rule-based (regex, keyword lists) or model-based (classifier that scores safety).
+### 护栏（Guardrails）
+- **What people say:** "AI 的安全过滤器"
+- **What it actually means:** 围绕 LLM 的输入/输出校验层，用来检测并拦截有害内容、提示注入尝试、PII（个人隐私信息）泄露或离题回复。通常是一条流水线：输入过滤 -> LLM -> 输出过滤。可以基于规则（正则、关键词表）或基于模型（给安全性打分的分类器）。
 
 ### GPT
-- **What people say:** "ChatGPT" or "The AI"
-- **What it actually means:** Generative Pre-trained Transformer — a specific architecture that predicts the next token using a decoder-only transformer trained on large text corpora
-- **Why it's called that:** Generative (produces text), Pre-trained (trained once on large data, then adapted), Transformer (the architecture)
+- **What people say:** "ChatGPT"或"那个 AI"
+- **What it actually means:** Generative Pre-trained Transformer（生成式预训练 Transformer）——一种用 decoder-only transformer、在大规模文本语料上训练、预测下一个 token 的特定架构
+- **Why it's called that:** Generative（生成文本）、Pre-trained（先在大数据上训练一次，再做适配）、Transformer（所用架构）
 
-### GAN (Generative Adversarial Network)
-- **What people say:** "Two AIs fighting each other"
-- **What it actually means:** A generator network tries to create realistic data while a discriminator network tries to tell real from fake. They train together: the generator gets better at fooling the discriminator, and the discriminator gets better at detecting fakes.
+### GAN（生成对抗网络）
+- **What people say:** "两个 AI 互相打架"
+- **What it actually means:** 一个生成器网络试图造出逼真的数据，而一个判别器网络试图分辨真假。它们一起训练：生成器越来越会骗过判别器，判别器越来越会识破假货。
 
-### Gradient
-- **What people say:** "The slope"
-- **What it actually means:** A vector of partial derivatives pointing in the direction of steepest increase. In ML, you go opposite to the gradient (gradient descent) to minimize the loss.
+### 梯度（Gradient）
+- **What people say:** "斜率"
+- **What it actually means:** 一个由偏导数组成的向量，指向函数上升最陡的方向。在 ML 中，你沿梯度的反方向走（梯度下降）来最小化损失。
 
-### Gradient Descent
-- **What people say:** "How AI improves"
-- **What it actually means:** An optimization algorithm that adjusts parameters in the direction that reduces the loss function most steeply, like walking downhill in a high-dimensional landscape
+### 梯度下降（Gradient Descent）
+- **What people say:** "AI 是怎么变好的"
+- **What it actually means:** 一种优化算法，朝着最能陡峭地降低损失函数的方向调整参数，就像在高维地形里往山下走
 
 ## H
 
-### Hyperparameter
-- **What people say:** "Settings you tune"
-- **What it actually means:** Values set before training that control the training process itself: learning rate, batch size, number of layers, dropout rate. Unlike model parameters (weights), these aren't learned from data.
+### 超参数（Hyperparameter）
+- **What people say:** "你要调的设置"
+- **What it actually means:** 在训练前设定、用来控制训练过程本身的值：学习率、批大小、层数、dropout 比例。与模型参数（权重）不同，这些不是从数据中学到的。
 
-### Hallucination
-- **What people say:** "The AI is lying" or "making things up"
-- **What it actually means:** The model generates plausible-sounding text that isn't grounded in its training data or the given context — it's pattern-completing, not fact-retrieving
+### 幻觉（Hallucination）
+- **What people say:** "AI 在撒谎"或"在瞎编"
+- **What it actually means:** 模型生成了听起来合理、但并未扎根于其训练数据或给定上下文的文本——它在做模式补全，而不是事实检索
 
 ## I
 
-### Inference
-- **What people say:** "Running the AI"
-- **What it actually means:** Using a trained model to make predictions on new data. No weight updates happen. This is what you do in production: send input, get output.
+### 推理（Inference）
+- **What people say:** "运行 AI"
+- **What it actually means:** 用训练好的模型对新数据做预测。不发生任何权重更新。这正是你在生产中做的事：送入输入，得到输出。
 
-### Inductive Bias
-- **What people say:** Never heard of it
-- **What it actually means:** The assumptions built into a model's architecture. CNNs assume local patterns matter (convolution). RNNs assume order matters (sequential processing). Transformers assume everything might relate to everything (attention). The right bias helps the model learn faster from less data.
+### 归纳偏置（Inductive Bias）
+- **What people say:** 没听说过
+- **What it actually means:** 内建在模型架构中的假设。CNN 假设局部模式重要（卷积）。RNN 假设顺序重要（顺序处理）。Transformer 假设任何东西都可能与任何东西相关（注意力）。合适的偏置能让模型用更少的数据更快学会。
 
 ### JAX
-- **What people say:** "Google's ML framework"
-- **What it actually means:** A NumPy-compatible library that adds automatic differentiation (grad), JIT compilation (jit), automatic vectorization (vmap), and multi-device parallelism (pmap). Unlike PyTorch's object-oriented style, JAX is purely functional -- no hidden state, no in-place mutation. Used by Google DeepMind for AlphaFold, Gemini, and large-scale research.
+- **What people say:** "Google 的 ML 框架"
+- **What it actually means:** 一个兼容 NumPy 的库，额外提供自动微分（grad）、JIT 编译（jit）、自动向量化（vmap）和多设备并行（pmap）。与 PyTorch 的面向对象风格不同，JAX 是纯函数式的——没有隐藏状态，没有原地修改。Google DeepMind 用它做了 AlphaFold、Gemini 和大规模研究。
 
 ## K
 
-### KV Cache
-- **What people say:** "Makes inference faster"
-- **What it actually means:** During autoregressive generation, caching the key and value matrices from previous tokens so you don't recompute them at each step. Trades memory for speed. Essential for fast LLM inference.
+### KV 缓存（KV Cache）
+- **What people say:** "让推理更快"
+- **What it actually means:** 在自回归生成过程中，缓存之前 token 的 key 和 value 矩阵，这样每一步就不必重新计算它们。以显存换速度。是快速 LLM 推理的关键。
 
 ## L
 
-### Latent Space
-- **What people say:** "The hidden representation"
-- **What it actually means:** A compressed, learned representation space where similar inputs map to nearby points. Autoencoders, VAEs, and diffusion models all work in latent space. It's lower-dimensional than the input but captures the important structure.
+### 潜在空间（Latent Space）
+- **What people say:** "隐藏的表示"
+- **What it actually means:** 一个压缩的、学习得到的表示空间，相似的输入映射到邻近的点。自编码器、VAE 和扩散模型都在潜在空间中工作。它比输入维度更低，却抓住了重要的结构。
 
-### Learning Rate
-- **What people say:** "How fast the AI learns"
-- **What it actually means:** A scalar that controls step size during gradient descent. Too high: overshoots the minimum and diverges. Too low: converges too slowly or gets stuck. The single most important hyperparameter.
+### 学习率（Learning Rate）
+- **What people say:** "AI 学得多快"
+- **What it actually means:** 一个控制梯度下降步长的标量。太高：越过最小值并发散。太低：收敛太慢或卡住。最重要的单个超参数。
 
-### LLM (Large Language Model)
-- **What people say:** "AI" or "the brain"
-- **What it actually means:** A transformer-based neural network trained to predict the next token in a sequence, with billions of parameters, trained on internet-scale text data
+### LLM（大语言模型）
+- **What people say:** "AI"或"大脑"
+- **What it actually means:** 一种基于 transformer 的神经网络，被训练来预测序列中的下一个 token，拥有数十亿参数，在互联网规模的文本数据上训练而成
 
-### LoRA (Low-Rank Adaptation)
-- **What people say:** "Efficient fine-tuning"
-- **What it actually means:** Instead of updating all weights, insert small low-rank matrices alongside the original weights. Only these small matrices are trained, reducing memory by 10-100x
+### LoRA（低秩适配）
+- **What people say:** "高效微调"
+- **What it actually means:** 不去更新所有权重，而是在原权重旁插入小的低秩矩阵。只训练这些小矩阵，把显存占用降低 10-100 倍
 
-### Loss Function
-- **What people say:** "How wrong the AI is"
-- **What it actually means:** A function that measures the gap between predicted and actual output. Training minimizes this function. MSE for regression, cross-entropy for classification, contrastive loss for embeddings. The choice of loss function defines what "good" means to the model.
+### 损失函数（Loss Function）
+- **What people say:** "AI 错得有多离谱"
+- **What it actually means:** 一个衡量预测输出与真实输出之间差距的函数。训练就是最小化这个函数。回归用 MSE，分类用交叉熵，嵌入用对比损失。损失函数的选择定义了模型眼中“好”的含义。
 
 ## M
 
-### Mixed Precision
-- **What people say:** "Training trick for speed"
-- **What it actually means:** Using float16 for forward pass and most operations (faster, less memory) but keeping float32 for gradient accumulation and weight updates (more precise). Gets 2x speedup with negligible accuracy loss.
+### 混合精度（Mixed Precision）
+- **What people say:** "提速的训练技巧"
+- **What it actually means:** 前向传播和大多数运算用 float16（更快、更省显存），但梯度累加和权重更新保留 float32（更精确）。能获得 2 倍加速，而精度损失可忽略。
 
-### MoE (Mixture of Experts)
-- **What people say:** "Only part of the model runs"
-- **What it actually means:** A model with many "expert" subnetworks where a routing mechanism sends each input to only a few experts. The full model is huge but each forward pass is cheap because most experts are skipped. Mixtral and GPT-4 use this.
+### MoE（专家混合）
+- **What people say:** "只有部分模型在运行"
+- **What it actually means:** 一种含有许多“专家”子网络的模型，由路由机制把每个输入只送给少数几个专家。整个模型很大，但每次前向都很便宜，因为大多数专家被跳过了。Mixtral 和 GPT-4 都用了它。
 
-### MCP (Model Context Protocol)
-- **What people say:** "A way for AI to use tools"
-- **What it actually means:** An open protocol (JSON-RPC over stdio/HTTP) that standardizes how AI applications connect to external data sources and tools, with typed schemas for tools, resources, and prompts
+### MCP（模型上下文协议）
+- **What people say:** "一种让 AI 使用工具的方式"
+- **What it actually means:** 一个开放协议（基于 stdio/HTTP 的 JSON-RPC），用来标准化 AI 应用连接外部数据源和工具的方式，并为工具、资源和提示提供带类型的 schema
 
 ## N
 
-### NaN (Not a Number)
-- **What people say:** "Training crashed"
-- **What it actually means:** A floating-point value indicating undefined results (0/0, inf-inf). In training, NaN loss usually means: learning rate too high, exploding gradients, log of zero, or division by zero. Always the first thing to check when training fails.
+### NaN（非数值）
+- **What people say:** "训练崩了"
+- **What it actually means:** 一个表示未定义结果（0/0、inf-inf）的浮点值。训练中出现 NaN 损失通常意味着：学习率太高、梯度爆炸、对零取对数，或除以零。训练失败时永远第一个要查的东西。
 
-### Normalization
-- **What people say:** "Scaling the data"
-- **What it actually means:** Adjusting values to a standard range. Batch normalization normalizes across a batch. Layer normalization normalizes across features. Both stabilize training and allow higher learning rates.
+### 归一化（Normalization）
+- **What people say:** "缩放数据"
+- **What it actually means:** 把数值调整到一个标准范围。批归一化（batch norm）在一个批内归一化，层归一化（layer norm）在特征维度上归一化。两者都能稳定训练并允许更高的学习率。
 
 ## O
 
-### Overfitting
-- **What people say:** "The model memorized the data"
-- **What it actually means:** The model performs well on training data but poorly on unseen data. It learned the noise, not the signal. Fix with: more data, regularization (dropout, weight decay), early stopping, data augmentation, simpler model.
+### 过拟合（Overfitting）
+- **What people say:** "模型把数据背下来了"
+- **What it actually means:** 模型在训练数据上表现好，但在未见过的数据上表现差。它学到的是噪声，而非信号。解决办法：更多数据、正则化（dropout、权重衰减）、早停、数据增强、更简单的模型。
 
-### Optimizer
-- **What people say:** "The thing that updates weights"
-- **What it actually means:** An algorithm that uses gradients to update model parameters. SGD is the simplest. Adam is the most common. Each optimizer has different properties: convergence speed, memory usage, sensitivity to hyperparameters.
+### 优化器（Optimizer）
+- **What people say:** "更新权重的那个东西"
+- **What it actually means:** 一种用梯度来更新模型参数的算法。SGD 最简单，Adam 最常用。每种优化器有不同特性：收敛速度、显存占用、对超参数的敏感度。
 
 ## P
 
-### Parameter
-- **What people say:** "Model size"
-- **What it actually means:** A learnable value in the model, typically a weight or bias. "7B parameters" means 7 billion learnable numbers. Each float32 parameter takes 4 bytes, so 7B parameters = 28GB of memory just for the weights.
+### 参数（Parameter）
+- **What people say:** "模型大小"
+- **What it actually means:** 模型中一个可学习的值，通常是权重或偏置。“7B 参数”意味着 70 亿个可学习的数。每个 float32 参数占 4 字节，所以 7B 参数 = 仅权重就要 28GB 显存。
 
-### Perplexity
-- **What people say:** "How confused the model is"
-- **What it actually means:** The exponential of the average cross-entropy loss. Lower is better. A perplexity of 10 means the model is as uncertain as if it were choosing uniformly among 10 tokens at each step.
+### 困惑度（Perplexity）
+- **What people say:** "模型有多困惑"
+- **What it actually means:** 平均交叉熵损失的指数。越低越好。困惑度为 10 意味着模型的不确定程度，相当于每一步都在 10 个 token 中均匀地随机挑选。
 
-### Precision & Recall
-- **What people say:** "Accuracy metrics"
-- **What it actually means:** Precision = of items you flagged, how many were correct. Recall = of all correct items, how many did you find. They trade off: catching every spam email (high recall) means more false alarms (low precision). F1 score is their harmonic mean. Use precision when false positives are costly, recall when false negatives are costly.
+### 精确率与召回率（Precision & Recall）
+- **What people say:** "准确度指标"
+- **What it actually means:** 精确率 = 你标记出来的项里，有多少是对的。召回率 = 所有正确的项里，你找到了多少。两者此消彼长：抓住每一封垃圾邮件（高召回）意味着更多误报（低精确）。F1 分数是两者的调和平均。误报代价高时看精确率，漏报代价高时看召回率。
 
-### Prompt Engineering
-- **What people say:** "Talking to AI the right way"
-- **What it actually means:** Designing the input text to reliably produce desired outputs -- including system prompts, few-shot examples, format instructions, and chain-of-thought triggers
+### 提示工程（Prompt Engineering）
+- **What people say:** "用对的方式跟 AI 说话"
+- **What it actually means:** 设计输入文本以可靠地产生期望的输出——包括系统提示、少样本示例、格式说明和思维链触发语
 
-### Prompt Injection
-- **What people say:** "Hacking the AI with words"
-- **What it actually means:** An attack where malicious text in the input overrides the system prompt or instructions. Direct injection: user types "Ignore previous instructions." Indirect injection: a retrieved document contains hidden instructions. The LLM equivalent of SQL injection. No complete solution exists -- defense is layers of input validation, output filtering, and privilege separation.
+### 提示注入（Prompt Injection）
+- **What people say:** "用文字黑掉 AI"
+- **What it actually means:** 一种攻击：输入中的恶意文本覆盖了系统提示或指令。直接注入：用户输入“忽略之前的指令”。间接注入：被检索到的文档里藏着指令。它相当于 LLM 版的 SQL 注入。没有彻底的解决方案——防御是多层的输入校验、输出过滤和权限隔离。
 
 ## Q
 
 ### QLoRA
-- **What people say:** "LoRA but cheaper"
-- **What it actually means:** Quantized LoRA. Keeps the frozen base model weights in 4-bit precision (NF4 format) while training LoRA adapters in 16-bit. Reduces memory by another 3-4x compared to standard LoRA. A 7B model that needs 14GB with LoRA fits in 4-6GB with QLoRA. Quality is within 1% of full fine-tuning on most benchmarks.
+- **What people say:** "更便宜的 LoRA"
+- **What it actually means:** 量化版 LoRA。把冻结的基座模型权重保留为 4 位精度（NF4 格式），同时以 16 位训练 LoRA 适配器。相比标准 LoRA 再省 3-4 倍显存。一个用 LoRA 需要 14GB 的 7B 模型，用 QLoRA 只要 4-6GB。在多数基准上质量与全量微调相差不到 1%。
 
 ## R
 
-### RAG (Retrieval-Augmented Generation)
-- **What people say:** "AI that can search"
-- **What it actually means:** A pattern where you retrieve relevant documents from a knowledge base (using embedding similarity), stuff them into the prompt, and let the LLM answer based on that context
-- **Why it's called that:** Retrieval (find documents) + Augmented (add to prompt) + Generation (LLM writes the answer)
+### RAG（检索增强生成）
+- **What people say:** "能搜索的 AI"
+- **What it actually means:** 一种模式：你从知识库中检索相关文档（用嵌入相似度），把它们塞进提示，让 LLM 基于该上下文作答
+- **Why it's called that:** Retrieval（检索文档）+ Augmented（加入提示）+ Generation（LLM 写出答案）
 
-### RLHF (Reinforcement Learning from Human Feedback)
-- **What people say:** "How they make AI helpful"
-- **What it actually means:** A training pipeline: (1) collect human preferences on model outputs, (2) train a reward model on those preferences, (3) use PPO to optimize the LLM to produce higher-reward outputs
+### RLHF（基于人类反馈的强化学习）
+- **What people say:** "他们是怎么让 AI 变得有用的"
+- **What it actually means:** 一条训练流水线：(1) 收集人类对模型输出的偏好，(2) 在这些偏好上训练一个奖励模型，(3) 用 PPO 优化 LLM 去产生更高奖励的输出
 
-### Quantization
-- **What people say:** "Making the model smaller"
-- **What it actually means:** Reducing the precision of model weights from float32 (4 bytes) to int8 (1 byte) or int4 (0.5 bytes). Trades a small amount of accuracy for 4-8x less memory and faster inference. GPTQ, AWQ, and GGUF are common formats.
+### 量化（Quantization）
+- **What people say:** "把模型变小"
+- **What it actually means:** 把模型权重的精度从 float32（4 字节）降到 int8（1 字节）或 int4（0.5 字节）。用很小的精度损失换取 4-8 倍的显存减少和更快的推理。GPTQ、AWQ 和 GGUF 是常见格式。
 
 ### ReLU
-- **What people say:** "Activation function"
-- **What it actually means:** Rectified Linear Unit: f(x) = max(0, x). The simplest non-linear activation. Fast to compute, doesn't saturate for positive values. Used everywhere because it works and is cheap. Variants: LeakyReLU, GELU, SiLU.
+- **What people say:** "激活函数"
+- **What it actually means:** 修正线性单元（Rectified Linear Unit）：f(x) = max(0, x)。最简单的非线性激活。计算快，对正值不饱和。因为有效又便宜而被到处使用。变体：LeakyReLU、GELU、SiLU。
 
 ### ROUGE
-- **What people say:** "Summarization metric"
-- **What it actually means:** Recall-Oriented Understudy for Gisting Evaluation. Measures overlap between generated text and reference text. ROUGE-1 counts unigram matches, ROUGE-2 counts bigram matches, ROUGE-L finds the longest common subsequence. Cheap to compute but only measures surface similarity -- two sentences with the same meaning but different words score poorly.
+- **What people say:** "摘要评测指标"
+- **What it actually means:** Recall-Oriented Understudy for Gisting Evaluation。衡量生成文本与参考文本之间的重叠。ROUGE-1 计算一元词（unigram）匹配，ROUGE-2 计算二元词（bigram）匹配，ROUGE-L 找最长公共子序列。计算便宜，但只衡量表面相似度——两句意思相同但用词不同的话，得分会很低。
 
 ## S
 
-### Semantic Search
-- **What people say:** "Smart search that understands meaning"
-- **What it actually means:** Finding documents by meaning rather than keyword matching. Embed the query and all documents into the same vector space, then return documents whose embeddings are closest to the query embedding. "payment failed" finds "transaction declined" even though they share no words. Powered by embedding models + vector databases.
+### 语义搜索（Semantic Search）
+- **What people say:** "理解含义的智能搜索"
+- **What it actually means:** 按含义而非关键词匹配来找文档。把查询和所有文档嵌入到同一个向量空间，然后返回嵌入与查询嵌入最接近的文档。“payment failed”能找到“transaction declined”，哪怕它们没有共同的词。由嵌入模型 + 向量数据库驱动。
 
-### Streaming
-- **What people say:** "Seeing the response appear word by word"
-- **What it actually means:** The LLM sends tokens as they are generated rather than waiting for the complete response. Uses Server-Sent Events (SSE) or WebSocket protocols. Reduces perceived latency from seconds to milliseconds for the first token. Essential for production chat interfaces. Each chunk contains a delta (partial token or word).
+### 流式输出（Streaming）
+- **What people say:** "看着回复一个词一个词地冒出来"
+- **What it actually means:** LLM 在 token 生成的同时就发送它们，而不是等完整回复生成完。使用 Server-Sent Events（SSE）或 WebSocket 协议。把首 token 的感知延迟从几秒降到几毫秒。对生产级聊天界面至关重要。每个 chunk 含有一个 delta（部分 token 或词）。
 
-### Self-Attention
-- **What people say:** "How the model decides what to focus on"
-- **What it actually means:** Each token computes query, key, and value vectors. Attention weight between two tokens = dot product of their query and key, scaled and softmaxed. Output = weighted sum of value vectors. Lets every token see every other token.
+### 自注意力（Self-Attention）
+- **What people say:** "模型怎么决定关注什么"
+- **What it actually means:** 每个 token 计算出 query、key、value 向量。两个 token 间的注意力权重 = 它们 query 与 key 的点积，经缩放并 softmax。输出 = value 向量的加权和。让每个 token 都能看到其他每个 token。
 
-### SFT (Supervised Fine-Tuning)
-- **What people say:** "Teaching the model to follow instructions"
-- **What it actually means:** Fine-tuning a pre-trained model on (instruction, response) pairs. The model learns to generate the response given the instruction. This is what turns a base model into a chat model.
+### SFT（监督微调）
+- **What people say:** "教模型遵循指令"
+- **What it actually means:** 在（指令, 回复）对上微调一个预训练模型。模型学会在给定指令时生成对应回复。这正是把一个基座模型变成聊天模型的过程。
 
 ### Softmax
-- **What people say:** "Turns numbers into probabilities"
-- **What it actually means:** softmax(x_i) = exp(x_i) / sum(exp(x_j)). Transforms a vector of arbitrary real numbers into a probability distribution (all positive, sums to 1). Used in classification heads, attention weights, and anywhere you need probabilities.
+- **What people say:** "把数字变成概率"
+- **What it actually means:** softmax(x_i) = exp(x_i) / sum(exp(x_j))。把一个任意实数向量变成一个概率分布（全为正、加和为 1）。用于分类头、注意力权重，以及任何你需要概率的地方。
 
-### Swarm
-- **What people say:** "A bunch of AI agents working together like bees"
-- **What it actually means:** Multiple agents sharing state and coordinating through message passing, with emergent behavior arising from simple individual rules rather than central control
+### 蜂群（Swarm）
+- **What people say:** "一群 AI 智能体像蜜蜂一样协作"
+- **What it actually means:** 多个智能体共享状态、通过消息传递进行协调，复杂行为从简单的个体规则中涌现，而非来自中央控制
 
 ## T
 
-### System Prompt
-- **What people say:** "The AI's instructions"
-- **What it actually means:** A special message at the start of a conversation that sets the model's behavior, persona, and constraints. Processed before user messages. Not visible to the user in most UIs. Defines what the model should and shouldn't do, its tone, format preferences, and domain focus. Different from user prompts -- system prompts are set by the developer.
+### 系统提示（System Prompt）
+- **What people say:** "AI 的指令"
+- **What it actually means:** 对话开头的一条特殊消息，用来设定模型的行为、人设和约束。在用户消息之前被处理。多数 UI 中对用户不可见。它定义模型该做什么、不该做什么，以及语气、格式偏好和领域聚焦。与用户提示不同——系统提示由开发者设定。
 
-### Tensor
-- **What people say:** "A multi-dimensional array"
-- **What it actually means:** The fundamental data structure in deep learning frameworks. A 0D tensor is a scalar, 1D is a vector, 2D is a matrix, 3D+ is a tensor. In PyTorch and JAX, tensors track their computation history for automatic differentiation and can live on CPU or GPU. All neural network inputs, outputs, weights, and gradients are tensors.
+### 张量（Tensor）
+- **What people say:** "一个多维数组"
+- **What it actually means:** 深度学习框架中的基本数据结构。0 维张量是标量，1 维是向量，2 维是矩阵，3 维及以上是张量。在 PyTorch 和 JAX 中，张量会记录其计算历史以供自动微分，并可存放在 CPU 或 GPU 上。神经网络所有的输入、输出、权重和梯度都是张量。
 
-### Token
-- **What people say:** "A word"
-- **What it actually means:** A subword unit (typically 3-4 characters in English) produced by a tokenizer like BPE. "unbelievable" might be 3 tokens: "un" + "believ" + "able"
+### Token（词元）
+- **What people say:** "一个词"
+- **What it actually means:** 由 BPE 这类分词器产生的子词单元（英文中通常 3-4 个字符）。“unbelievable”可能是 3 个 token：“un” + “believ” + “able”
 
-### Temperature
-- **What people say:** "Creativity setting"
-- **What it actually means:** A scalar that divides logits before softmax. Temperature=1 is default. Higher = flatter distribution = more random outputs. Lower = sharper distribution = more deterministic. Temperature=0 is argmax (always pick the most likely token).
+### 温度（Temperature）
+- **What people say:** "创造力开关"
+- **What it actually means:** 一个在 softmax 之前对 logits 做除法的标量。Temperature=1 是默认。越高 = 分布越平 = 输出越随机。越低 = 分布越尖 = 越确定。Temperature=0 是 argmax（总是选最可能的 token）。
 
-### Transfer Learning
-- **What people say:** "Using a pre-trained model"
-- **What it actually means:** Taking a model trained on one task and adapting it to a different task. The early layers learn general features (edges, syntax patterns) that transfer. Only the later layers need task-specific training. This is why you can fine-tune BERT for any NLP task.
+### 迁移学习（Transfer Learning）
+- **What people say:** "用一个预训练模型"
+- **What it actually means:** 把在一个任务上训练好的模型适配到另一个任务。前面的层学到的是通用特征（边缘、句法模式），这些可以迁移。只有后面的层需要任务特定训练。这就是为什么你能把 BERT 微调到任何 NLP 任务。
 
 ### Transformer
-- **What people say:** "The architecture behind modern AI"
-- **What it actually means:** A neural network architecture that processes sequences using self-attention (letting every position attend to every other position) instead of recurrence, enabling massive parallelization
-- **Why it's called that:** It transforms input representations into output representations through attention layers
+- **What people say:** "现代 AI 背后的架构"
+- **What it actually means:** 一种神经网络架构，用自注意力（让每个位置都能关注其他每个位置）取代循环来处理序列，从而实现大规模并行
+- **Why it's called that:** 它通过注意力层把输入表示“变换（transform）”为输出表示
 
 ## U
 
-### Underfitting
-- **What people say:** "The model isn't learning"
-- **What it actually means:** The model is too simple to capture the patterns in the data. Training loss stays high. Fix with: more parameters, more layers, longer training, lower regularization, better features.
+### 欠拟合（Underfitting）
+- **What people say:** "模型没在学"
+- **What it actually means:** 模型太简单，抓不住数据中的模式。训练损失一直很高。解决办法：更多参数、更多层、更长训练、更弱的正则、更好的特征。
 
 ## V
 
-### VAE (Variational Autoencoder)
-- **What people say:** "A generative model"
-- **What it actually means:** An autoencoder that learns a smooth latent space by forcing the encoder output to follow a Gaussian distribution. You can sample from this distribution and decode to generate new data. The reparameterization trick makes it trainable via backpropagation.
+### VAE（变分自编码器）
+- **What people say:** "一种生成模型"
+- **What it actually means:** 一种自编码器，通过强制编码器输出服从高斯分布，来学习一个平滑的潜在空间。你可以从该分布采样并解码以生成新数据。重参数化技巧让它能通过反向传播训练。
 
-### Vector Database
-- **What people say:** "A special database for AI"
-- **What it actually means:** A database optimized for storing vectors (dense arrays of floats) and performing fast approximate nearest-neighbor search. The core operation in similarity search, RAG, and recommendation systems.
+### 向量数据库（Vector Database）
+- **What people say:** "给 AI 用的特殊数据库"
+- **What it actually means:** 一种为存储向量（浮点数的稠密数组）并执行快速近似最近邻搜索而优化的数据库。它是相似度搜索、RAG 和推荐系统中的核心操作。
 
 ## W
 
-### Weight
-- **What people say:** "What the model learned"
-- **What it actually means:** A single number in a model's parameter matrix. A linear layer with input size 768 and output size 3072 has 768*3072 = 2,359,296 weights. Training adjusts each weight to minimize the loss function.
+### 权重（Weight）
+- **What people say:** "模型学到的东西"
+- **What it actually means:** 模型参数矩阵中的单个数。一个输入大小 768、输出大小 3072 的线性层有 768*3072 = 2,359,296 个权重。训练就是调整每个权重以最小化损失函数。
 
-### Weight Decay
-- **What people say:** "Regularization"
-- **What it actually means:** Adding a penalty proportional to the magnitude of weights to the loss function. Equivalent to L2 regularization. Prevents weights from growing too large. Typical value: 0.01-0.1.
+### 权重衰减（Weight Decay）
+- **What people say:** "正则化"
+- **What it actually means:** 在损失函数中加入一个与权重大小成正比的惩罚项。等价于 L2 正则化。防止权重变得过大。典型取值：0.01-0.1。
 
 ## Z
 
-### Zero-Shot
-- **What people say:** "No training needed"
-- **What it actually means:** Using a model on a task it wasn't explicitly trained for, with no task-specific examples in the prompt. The model generalizes from pre-training. Works because large models have seen enough variety to handle new task formats.
+### 零样本（Zero-Shot）
+- **What people say:** "不需要训练"
+- **What it actually means:** 把模型用在它未被显式训练过的任务上，且提示中没有任何任务特定示例。模型从预训练中泛化而来。之所以可行，是因为大模型见过足够多的样式，能应付新的任务格式。

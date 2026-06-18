@@ -1,11 +1,11 @@
-# Glossary
+# 术语表
 
-Two resources to cut through the noise:
+两份帮你拨开噪声的资料：
 
-- **[terms.md](terms.md)** - 60+ AI terms explained. What people say vs what it actually means.
-- **[myths.md](myths.md)** - 20 common AI misconceptions busted with what's actually going on.
+- **[terms.md](terms.md)** —— 60+ 个 AI 术语解析。别人怎么说 vs 它实际是什么意思。
+- **[myths.md](myths.md)** —— 破除 20 个常见的 AI 误解，讲清楚实际在发生什么。
 
-Each term entry follows the pattern:
-- **What people say** - the common (often wrong) understanding
-- **What it actually means** - the real definition
-- **Why it's called that** - origin of the name (when interesting)
+每个术语条目遵循如下结构：
+- **What people say** —— 常见的（往往是错的）理解
+- **What it actually means** —— 真正的定义
+- **Why it's called that** —— 名称的由来（有意思时才写）

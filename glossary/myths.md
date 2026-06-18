@@ -1,167 +1,167 @@
-# AI Myths Busted
+# AI 迷思破除
 
-Common misconceptions about AI, ML, and deep learning. Each one explained with what's actually going on.
-
----
-
-## "AI understands language"
-
-**Reality:** LLMs predict the next token based on statistical patterns in training data. They have no understanding, no beliefs, no world model (that we can prove). They're very good at pattern matching across billions of examples. The output looks like understanding because the patterns are rich enough to cover most situations.
-
-**Why it matters:** If you treat an LLM as a reasoning engine, you'll be surprised when it confidently says wrong things. If you treat it as a pattern matcher, you'll design better systems around it.
+关于 AI、ML 和深度学习的常见误解。每一条都用“实际在发生什么”来解释。
 
 ---
 
-## "More parameters = smarter model"
+## “AI 理解语言”
 
-**Reality:** A 7B parameter model trained on high-quality data with good techniques can outperform a 70B model trained on garbage. Chinchilla showed that most models were over-parameterized and under-trained. The quality and quantity of training data matters as much as model size. Phi-2 (2.7B) beat models 10x its size on many benchmarks.
+**Reality:** LLM 基于训练数据中的统计模式预测下一个 token。它们没有理解、没有信念、也没有（我们能证明的）世界模型。它们非常擅长在数十亿样本上做模式匹配。输出看起来像理解，是因为这些模式足够丰富，覆盖了大多数情况。
 
-**Why it matters:** Don't default to the biggest model. Match model size to your task and budget.
-
----
-
-## "Neural networks are black boxes"
-
-**Reality:** We have tools to understand what neural networks learn. Attention visualization shows what tokens the model focuses on. Probing classifiers reveal what information is stored in hidden representations. Mechanistic interpretability is finding actual circuits (induction heads, feature detectors). It's not complete transparency, but it's not a black box either.
-
-**Why it matters:** You can debug neural networks. Gradient analysis, activation visualization, and attention maps are real tools covered in this course.
+**Why it matters:** 如果你把 LLM 当作推理引擎，那么当它自信地说出错误内容时你会很意外。如果你把它当作模式匹配器，你就会围绕它设计出更好的系统。
 
 ---
 
-## "AI will replace programmers"
+## “参数越多 = 模型越聪明”
 
-**Reality:** AI changed programming, it didn't replace it. AI writes boilerplate. Humans design systems, make architectural decisions, review correctness, and handle the cases AI gets wrong. The role shifted from "write every line" to "review, direct, and architect." The best engineers use AI as a tool, not fear it as a replacement.
+**Reality:** 一个用高质量数据、好技术训练出来的 7B 参数模型，可以胜过一个用垃圾数据训练的 70B 模型。Chinchilla 表明大多数模型都参数过多而训练不足。训练数据的质与量，和模型大小同样重要。Phi-2（2.7B）在许多基准上击败了体量是它 10 倍的模型。
 
-**Why it matters:** You're learning AI engineering, which is programming + AI. Both skills together are more valuable than either alone.
-
----
-
-## "You need a PhD in math to do AI"
-
-**Reality:** You need high school math plus the specific topics in Phase 1 of this course. Linear algebra, calculus, probability, and optimization. You don't need proofs. You need intuition for what operations do and why they matter. If you can multiply matrices and take derivatives, you can build neural networks.
-
-**Why it matters:** Phase 1 exists to give you exactly the math you need, nothing more.
+**Why it matters:** 不要默认选最大的模型。让模型大小匹配你的任务和预算。
 
 ---
 
-## "GPT stands for General Purpose Technology"
+## “神经网络是黑箱”
 
-**Reality:** GPT stands for Generative Pre-trained Transformer. Generative = it produces text. Pre-trained = trained once on a large corpus before being adapted. Transformer = the architecture from the 2017 "Attention Is All You Need" paper.
+**Reality:** 我们有工具来理解神经网络学到了什么。注意力可视化显示模型聚焦在哪些 token 上。探针分类器（probing classifier）揭示隐藏表示里存了哪些信息。机制可解释性（mechanistic interpretability）正在找到真实的“电路”（归纳头、特征检测器）。这不是完全透明，但也绝非黑箱。
 
----
-
-## "Temperature makes the AI more creative"
-
-**Reality:** Temperature scales the logits before softmax. Higher temperature = flatter probability distribution = more random token selection. Lower temperature = sharper distribution = more deterministic. It's not creativity, it's randomness. A high-temperature model doesn't think harder, it just considers less likely tokens.
-
-**Why it matters:** When your output is too repetitive, raise temperature. When it's too chaotic, lower it. It's a randomness knob, nothing more.
+**Why it matters:** 你可以调试神经网络。梯度分析、激活可视化和注意力图都是本课程涵盖的真实工具。
 
 ---
 
-## "Fine-tuning teaches the model new knowledge"
+## “AI 会取代程序员”
 
-**Reality:** Fine-tuning adjusts how the model uses existing knowledge, not what it knows. If information wasn't in the pre-training data, fine-tuning won't reliably add it. Fine-tuning is better for changing behavior (style, format, tone, task-specific patterns) than for adding facts. For new knowledge, use RAG.
+**Reality:** AI 改变了编程，但没有取代它。AI 写样板代码；人类设计系统、做架构决策、审查正确性，并处理 AI 搞错的情况。角色从“写每一行”转变为“审查、指挥与架构”。最优秀的工程师把 AI 当工具用，而不是怕它来抢饭碗。
 
-**Why it matters:** If you need the model to know about your company's internal docs, use RAG. If you need it to respond in a specific format, fine-tune.
-
----
-
-## "Bigger context window = better"
-
-**Reality:** Models degrade on long contexts. The "lost in the middle" problem means models pay more attention to the beginning and end of long prompts and less to the middle. A 200K context window doesn't mean the model uses all 200K tokens equally well. Also, longer contexts cost more and are slower.
-
-**Why it matters:** Don't dump everything into the context. Be selective. RAG with targeted retrieval beats stuffing the full document in.
+**Why it matters:** 你正在学的是 AI 工程，也就是编程 + AI。两种技能合在一起，比任何单独一种都更有价值。
 
 ---
 
-## "AI agents are autonomous"
+## “做 AI 需要数学博士学位”
 
-**Reality:** Current AI agents run in a loop: think, act, observe, repeat. They follow the pattern the harness defines. They don't have goals, plans, or self-awareness. They're reactive systems that use LLMs to decide what tool to call next. The "autonomy" comes from the loop, not from the AI.
+**Reality:** 你需要的是高中数学，加上本课程第 1 阶段里的特定主题：线性代数、微积分、概率和优化。你不需要证明，你需要的是对各种运算在做什么、为什么重要的直觉。如果你会做矩阵乘法、会求导，你就能构建神经网络。
 
-**Why it matters:** When building agents, you're building the loop, the tools, and the guardrails. The LLM is just the decision-making component inside your system.
-
----
-
-## "Transformers understand order because of positional encoding"
-
-**Reality:** Transformers have no inherent sense of order. Self-attention treats input as a set, not a sequence. Positional encoding is a hack to inject order information by adding position-dependent vectors to the input. Different methods (sinusoidal, learned, RoPE, ALiBi) handle this differently. None of them truly give the model sequential understanding the way RNNs had it.
-
-**Why it matters:** This is why positional encoding research is still active. It's a solved-enough problem for most uses, but it's fundamentally a workaround.
+**Why it matters:** 第 1 阶段的存在，就是为了恰好给你所需的数学，不多也不少。
 
 ---
 
-## "Pre-training is just reading the internet"
+## “GPT 代表通用技术（General Purpose Technology）”
 
-**Reality:** Pre-training is next-token prediction on a massive corpus. The model learns to predict what comes next given what came before. Through this simple objective, it learns grammar, facts, reasoning patterns, code structure, and more. But it also learns internet nonsense, biases, and incorrect information. The data curation, filtering, and deduplication matter enormously.
-
-**Why it matters:** Garbage in, garbage out. The quality of pre-training data is one of the biggest differentiators between models.
+**Reality:** GPT 代表 Generative Pre-trained Transformer（生成式预训练 Transformer）。Generative = 它生成文本。Pre-trained = 在被适配之前先在大语料上训练一次。Transformer = 来自 2017 年《Attention Is All You Need》论文的架构。
 
 ---
 
-## "RLHF aligns AI with human values"
+## “温度让 AI 更有创造力”
 
-**Reality:** RLHF aligns AI with the preferences of the specific humans who provided feedback. Those humans disagree with each other, have biases, and can't cover every situation. RLHF makes the model helpful and harmless in the ways the raters defined, not aligned with some universal human value system.
+**Reality:** 温度在 softmax 之前缩放 logits。温度越高 = 概率分布越平 = token 选择越随机；温度越低 = 分布越尖 = 越确定。它不是创造力，而是随机性。高温度的模型并没有想得更努力，它只是去考虑那些可能性更低的 token。
 
-**Why it matters:** RLHF is a training technique, not a solution to alignment. It's one tool in a larger toolkit.
-
----
-
-## "Embeddings capture meaning"
-
-**Reality:** Embeddings capture statistical co-occurrence patterns. Words that appear in similar contexts get similar vectors. This correlates with meaning well enough to be useful, but it's not semantic understanding. "King - Man + Woman = Queen" works because of distributional patterns, not because the model understands monarchy or gender.
-
-**Why it matters:** Embeddings are powerful for similarity search, clustering, and retrieval. But don't over-interpret what "similar" means.
+**Why it matters:** 当输出太重复时，调高温度；太混乱时，调低。它只是个随机性旋钮，仅此而已。
 
 ---
 
-## "Zero-shot means no training"
+## “微调会教给模型新知识”
 
-**Reality:** Zero-shot means no task-specific examples at inference time. The model was still trained on billions of tokens. It just hasn't seen examples of this specific task format. It generalizes from pre-training patterns. Few-shot means giving a few examples in the prompt. Neither means the model learned without training.
+**Reality:** 微调调整的是模型如何使用已有知识，而不是它知道什么。如果某信息不在预训练数据里，微调无法可靠地把它加进去。微调更适合改变行为（风格、格式、语气、任务特定模式），而不适合添加事实。要加新知识，用 RAG。
 
----
-
-## "AI models learn like humans"
-
-**Reality:** Humans learn from few examples, generalize across domains, and update beliefs continuously. Neural networks need millions of examples, generalize within their training distribution, and have fixed weights after training. The learning analogy is loose at best. Backpropagation is nothing like how biological neurons learn.
-
-**Why it matters:** Don't anthropomorphize models. It leads to wrong expectations about what they can and can't do.
+**Why it matters:** 如果你需要模型了解公司内部文档，用 RAG；如果你需要它以特定格式回应，就微调。
 
 ---
 
-## "Scaling laws mean bigger is always better"
+## “上下文窗口越大 = 越好”
 
-**Reality:** Scaling laws describe predictable relationships between compute, data, and model size. They show diminishing returns: doubling parameters doesn't double performance. They also assume you scale data proportionally. Many practical improvements come from better architectures, training techniques, and data quality, not just scale.
+**Reality:** 模型在长上下文上会退化。“迷失在中间（lost in the middle）”问题意味着模型更关注长提示的开头和结尾，而较少关注中间。200K 的上下文窗口并不意味着模型能同样好地用上全部 200K token。而且，更长的上下文更贵也更慢。
 
-**Why it matters:** A 7B model with good engineering can solve your problem. Don't reach for 70B by default.
-
----
-
-## "Open source AI is the same as open weights"
-
-**Reality:** Most "open source" models are open weights. You get the model files but not the training data, training code, or data pipeline. True open source (like OLMo) releases everything: data, code, intermediate checkpoints, evaluation. Open weights is useful but not the same commitment as open source.
-
-**Why it matters:** Know what you're getting. Open weights let you run and fine-tune. True open source lets you reproduce and understand.
+**Why it matters:** 不要把所有东西都塞进上下文，要有选择。用有针对性检索的 RAG，胜过把整篇文档硬塞进去。
 
 ---
 
-## "Prompt engineering is not real engineering"
+## “AI 智能体是自主的”
 
-**Reality:** Prompt engineering is system design. You're designing the interface between human intent and model behavior. Good prompt engineering requires understanding tokenization, attention patterns, context window limits, and output parsing. It's closer to API design than to "talking nicely to the AI."
+**Reality:** 当前的 AI 智能体在一个循环里运行：思考、行动、观察、重复。它们遵循 harness（执行框架）定义的模式。它们没有目标、计划或自我意识。它们是用 LLM 来决定下一步调用哪个工具的反应式系统。“自主性”来自循环，而非来自 AI。
 
-**Why it matters:** This course teaches prompt engineering as a real engineering discipline in Phase 11.
-
----
-
-## "CNNs are outdated, everything is transformers now"
-
-**Reality:** Vision Transformers (ViT) beat CNNs on many benchmarks, but CNNs are still used extensively. They're faster for inference, work well on mobile/edge, need less data, and have useful inductive biases (translation invariance, local patterns). Many production vision systems still use CNNs. The best architectures often combine both.
-
-**Why it matters:** Learn both (Phases 4 and 7). Use what works for your constraints.
+**Why it matters:** 构建智能体时，你构建的是循环、工具和护栏。LLM 只是你系统里负责决策的那个组件。
 
 ---
 
-## "You need massive compute to train useful models"
+## “Transformer 靠位置编码理解顺序”
 
-**Reality:** You need massive compute to pre-train foundation models. But fine-tuning, LoRA, and transfer learning let you adapt models on a single GPU. Many useful AI applications don't require training at all, just good prompting and RAG. The "compute barrier" is for building foundation models, not for using them.
+**Reality:** Transformer 本身没有任何顺序感。自注意力把输入当作集合，而非序列。位置编码是一种“补丁”，通过给输入加上与位置相关的向量来注入顺序信息。不同方法（正弦、可学习、RoPE、ALiBi）处理方式各异，但没有一个能像 RNN 那样真正赋予模型序列性的理解。
 
-**Why it matters:** You can build real AI applications with a laptop. This course proves it.
+**Why it matters:** 这就是为什么位置编码研究至今仍很活跃。对多数用途而言它“够用了”，但本质上仍是一种变通。
+
+---
+
+## “预训练只是读一遍互联网”
+
+**Reality:** 预训练是在海量语料上做下一个 token 预测。模型学会在给定前文时预测接下来是什么。通过这个简单目标，它学到了语法、事实、推理模式、代码结构等等。但它也学到了互联网上的胡言乱语、偏见和错误信息。数据的清洗、过滤和去重至关重要。
+
+**Why it matters:** 垃圾进，垃圾出。预训练数据的质量，是模型之间最大的区分因素之一。
+
+---
+
+## “RLHF 让 AI 与人类价值观对齐”
+
+**Reality:** RLHF 让 AI 与提供反馈的那批特定人类的偏好对齐。这些人彼此意见不一、各有偏见，也无法覆盖每一种情况。RLHF 让模型在评测员所定义的那些方面变得有用且无害，而不是与某种普世的人类价值体系对齐。
+
+**Why it matters:** RLHF 是一种训练技术，而非对齐问题的解决方案。它只是更大工具箱里的一件工具。
+
+---
+
+## “嵌入捕捉含义”
+
+**Reality:** 嵌入捕捉的是统计上的共现模式。出现在相似上下文中的词会得到相似的向量。这与含义的相关性足够高，因而很有用，但它不是语义理解。“King - Man + Woman = Queen”之所以成立，是因为分布模式，而非模型理解了君主制或性别。
+
+**Why it matters:** 嵌入在相似度搜索、聚类和检索上很强大。但不要过度解读“相似”意味着什么。
+
+---
+
+## “零样本意味着没有训练”
+
+**Reality:** 零样本指的是推理时没有任务特定示例。模型仍然在数十亿 token 上训练过，只是没见过这一特定任务格式的示例。它从预训练模式中泛化。少样本指的是在提示里给几个示例。两者都不意味着模型在没有训练的情况下学会了。
+
+---
+
+## “AI 模型像人一样学习”
+
+**Reality:** 人类从少量示例中学习、跨领域泛化、并持续更新信念。神经网络需要数百万示例、只在其训练分布内泛化，且训练后权重固定。这个学习类比充其量是松散的。反向传播与生物神经元的学习方式毫无相似之处。
+
+**Why it matters:** 不要把模型拟人化，那会导致你对它们能做什么、不能做什么产生错误预期。
+
+---
+
+## “缩放定律意味着越大总是越好”
+
+**Reality:** 缩放定律描述的是算力、数据和模型大小之间可预测的关系。它们呈现收益递减：参数翻倍并不会让性能翻倍。它们还假设你按比例扩展数据。许多实际的提升来自更好的架构、训练技巧和数据质量，而不仅仅是规模。
+
+**Why it matters:** 一个工程做得好的 7B 模型就能解决你的问题。别默认伸手去拿 70B。
+
+---
+
+## “开源 AI 等同于开放权重”
+
+**Reality:** 大多数“开源”模型其实是开放权重。你拿到模型文件，却拿不到训练数据、训练代码或数据流水线。真正的开源（如 OLMo）会发布一切：数据、代码、中间检查点、评测。开放权重很有用，但与开源不是同一种承诺。
+
+**Why it matters:** 搞清楚你拿到的是什么。开放权重让你能运行和微调；真正的开源让你能复现和理解。
+
+---
+
+## “提示工程不是真正的工程”
+
+**Reality:** 提示工程是系统设计。你在设计人类意图与模型行为之间的接口。好的提示工程需要理解分词、注意力模式、上下文窗口限制和输出解析。它更接近 API 设计，而非“好好跟 AI 说话”。
+
+**Why it matters:** 本课程在第 11 阶段把提示工程当作一门真正的工程学科来教。
+
+---
+
+## “CNN 过时了，现在全是 transformer”
+
+**Reality:** Vision Transformer（ViT）在许多基准上击败 CNN，但 CNN 仍被广泛使用。它们推理更快、在移动端/边缘端表现好、需要的数据更少，并具备有用的归纳偏置（平移不变性、局部模式）。许多生产级视觉系统仍在用 CNN。最好的架构往往两者结合。
+
+**Why it matters:** 两个都学（第 4 和第 7 阶段）。用最适合你约束条件的那个。
+
+---
+
+## “训练有用的模型需要海量算力”
+
+**Reality:** 预训练基础模型需要海量算力。但微调、LoRA 和迁移学习让你能在单块 GPU 上适配模型。许多有用的 AI 应用根本不需要训练，只需好的提示和 RAG。“算力门槛”是针对构建基础模型的，而非使用它们。
+
+**Why it matters:** 你用一台笔记本就能构建真正的 AI 应用。本课程证明了这一点。
