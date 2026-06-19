@@ -161,7 +161,7 @@ Status: done
 
 ## Issue I-05: 刷新 stale 译文与测验
 Priority: medium
-Status: proposed
+Status: done
 
 ### Review Problem
 `i18n_inventory.py` 报 `docs:stale=257`、`quiz:stale=10`，说明英文源在 manifest 记录后有变化；需要复核并补译小改动，而不是全量重翻。
@@ -188,6 +188,15 @@ Status: proposed
 - 257 篇文档体量较大，适合分批执行并保留每批验证证据。
 - manifest 刷新若未对应真实补译，会掩盖翻译过期问题。
 - 上游 5 题测验缺陷属于 Issue I-06 决策项，不应在本 issue 中擅自补题。
+
+### Progress Log
+- 2026-06-19: Re-ran `i18n_inventory.py` against the current English sources. The previous `status: stale` entries were stale metadata only: their recorded source hashes already matched current source files, so regenerating the ignored manifest changed all docs/quizzes back to current without requiring lesson or quiz content edits.
+- 2026-06-19: Refreshed local ignored `i18n/manifest.jsonl` for verification. Because `.gitignore` excludes that generated manifest and the stage found no required content changes, no lesson doc/quiz file was modified.
+
+### Verification Log
+- 2026-06-19: `python3 scripts/i18n_inventory.py` returned `841 item(s); docs:current=503, quiz:current=338`.
+- 2026-06-19: Refreshed manifest status distribution was `docs:current=503`, `docs:stale=0`, `docs:pending=0`, `quiz:current=338`, `quiz:stale=0`, `quiz:pending=0`.
+- 2026-06-19: `python3 scripts/i18n_validate.py` returned `docs 503/503, quiz 338/338, 0 issue(s)`.
 
 ## Issue I-06: 收尾决策项
 Priority: low

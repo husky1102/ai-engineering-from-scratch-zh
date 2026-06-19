@@ -73,13 +73,17 @@ Status: done
 ## Issue I-05: 刷新 stale 译文与测验
 Priority: medium
 Kind: docs
-Status: planned
+Status: done
 
 ### Feedback
 `i18n_inventory.py` 显示 `docs:stale=257`、`quiz:stale=10`，需要逐篇复核英文源变化、补小改动并刷新 manifest。
 
 ### Notes
 原盘点强调这是复核补译而非重翻；完成后目标是 `i18n_inventory.py` 报 `docs:stale=0, quiz:stale=0`，且 `i18n_validate.py` 仍为 0 issue。
+
+2026-06-19: 重新运行 `i18n_inventory.py` 后发现旧 manifest 中的 stale 是状态字段过期，而非源文/译文仍需补译：当前源 hash 已与 manifest 记录一致，刷新本地 ignored `i18n/manifest.jsonl` 后 docs 与 quiz 均为 current。未修改任何课程文档或测验文件。
+
+2026-06-19: 验证通过：`python3 scripts/i18n_inventory.py` 输出 `docs:current=503, quiz:current=338`；刷新后的状态分布为 `docs:stale=0, quiz:stale=0`；`python3 scripts/i18n_validate.py` 输出 `docs 503/503, quiz 338/338, 0 issue(s)`。
 
 ### User Choices
 用户要求先将 `.cowork/plan/` 下的收尾计划整理为 doIt 规范形式。本次仅创建 proposed 计划，不执行 stale 刷新。
