@@ -91,7 +91,7 @@ Status: done
 ## Issue I-06: 收尾决策项
 Priority: low
 Kind: investigation
-Status: planned
+Status: done
 
 ### Feedback
 还存在若干需要用户拍板的低优先事项：上游 5 题测验缺陷如何处理、贡献者向元文档是否汉化、fork 与上游同步策略、`.cowork/` 是否纳入 git 或 gitignore。
@@ -99,5 +99,11 @@ Status: planned
 ### Notes
 这些决策会影响后续变更范围和维护策略，不能在没有明确用户选择时直接执行。
 
+2026-06-19: 已收集决策事实。测验契约漂移为 207 套非 6 题测验（118 套 5 题、60 套 7 题、29 套 8 题），中英文题数一致；公开英文元文档集中在根目录与 `.github/`，`.claude/skills` 属于内部 skill 文档；`origin` 是中文 fork，`upstream` 是原仓库；`.cowork` 当前跟踪 plan/review，但 `current.md` 是未跟踪本地状态。
+
+2026-06-20: 用户回复 `1`，接受全部推荐选项：测验契约单独 follow-up，不在当前收尾中补/裁题；优先汉化公开贡献者文档与 GitHub 模板；先写手动 upstream sync checklist；`.cowork` 跟踪 durable plan/review，忽略 local runtime state。
+
+2026-06-20: 已创建后续 review `.cowork/review/R-20260620-01-post-i18n-followups.md`，拆出四个带明确 `User Choices` 的 triaged issue。
+
 ### User Choices
-用户要求先将 `.cowork/plan/` 下的收尾计划整理为 doIt 规范形式。本次仅创建 proposed 计划，不替用户决定这些事项。
+2026-06-20: 用户回复 `1`，确认接受全部推荐选项：1A、2A、3A、4A。

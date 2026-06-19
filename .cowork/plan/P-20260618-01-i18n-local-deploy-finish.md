@@ -200,7 +200,7 @@ Status: done
 
 ## Issue I-06: 收尾决策项
 Priority: low
-Status: proposed
+Status: done
 
 ### Review Problem
 还有若干低优先但会影响范围的事项需要用户拍板：上游 5 题测验缺陷、贡献者向元文档汉化、fork 与上游同步策略、`.cowork/` 是否纳入 git 或 gitignore。
@@ -227,3 +227,23 @@ Status: proposed
 - 这些事项会改变维护策略，擅自执行会扩大当前收尾范围。
 - `.cowork/` 是否纳入版本管理与本次计划文件本身相关，执行前需要避免把队列文件意外当作产品文件。
 - 测验补题会同时影响中英文内容和 i18n 校验，需单独规划。
+
+### Findings Log
+- 2026-06-19: Quiz contract drift is broader than the original "5-question" wording: 338 quiz sets include 131 with 6 questions and 207 non-6 sets (118 with 5, 60 with 7, 29 with 8). English and zh-CN quiz counts match, so i18n validation passes while the AGENTS quiz contract remains a separate concern.
+- 2026-06-19: English public/meta docs remain in root and `.github/`: `CHANGELOG.md`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `FORKING.md`, `LESSON_TEMPLATE.md`, `SPONSORS.md`, `.github/ISSUE_TEMPLATE/*.md`, and `.github/PULL_REQUEST_TEMPLATE.md`. `.claude/skills/*.md` are also English but are internal agent skill docs.
+- 2026-06-19: Git remotes are `origin` for the Chinese fork and `upstream` for the original repo; local `main` was ahead of `origin/main` by 9 and not behind.
+- 2026-06-19: `.cowork/plan` and `.cowork/review` files are tracked, while `.cowork/current.md` is untracked local runtime state. `.gitignore` ignores `cowork/` but not `.cowork/`.
+
+### User Choices
+- 2026-06-20: User replied `1`, accepting all recommended I-06 options.
+- Quiz contract: keep upstream-compatible quiz content during the current closeout and open a separate follow-up for the 207 non-6-question quizzes.
+- Public meta-doc localization: translate public contributor-facing docs and GitHub templates first; leave internal `.claude/skills` metadata out of that first scope.
+- Fork sync: document a manual upstream sync checklist before considering automation.
+- `.cowork/` strategy: track durable plan/review records, but ignore local runtime state such as `current.md` and future session/history scratch.
+
+### Follow-up Log
+- 2026-06-20: Created `.cowork/review/R-20260620-01-post-i18n-followups.md` with four triaged follow-up issues carrying the confirmed user choices.
+
+### Verification Log
+- 2026-06-20: Each I-06 decision item has an explicit user choice recorded.
+- 2026-06-20: Follow-up work was split into a new review file; no follow-up implementation plan was generated, so the "plan requires corresponding review issue and User Choices" condition is not triggered yet.
