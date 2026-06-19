@@ -164,6 +164,7 @@ test('runButton starts a code cell whose toolbar and output are sibling elements
     runId: 'run-1',
     code: 'print("hello")',
     packages: ['numpy'],
+    pyodideBaseURL: 'vendor/pyodide/v0.26.4/full/',
   }]);
 });
 

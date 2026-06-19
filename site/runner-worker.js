@@ -3,16 +3,28 @@
   var pyodide = null;
   var loading = null;
   var currentRunId = null;
+  var runtimeBaseURL = null;
+  var DEFAULT_PYODIDE_BASE_URL = 'vendor/pyodide/v0.26.4/full/';
 
   function post(type, payload) {
     self.postMessage(Object.assign({ type: type }, payload || {}));
   }
 
-  function loadRuntime(packages) {
+  function withTrailingSlash(value) {
+    return String(value || '').replace(/\/?$/, '/');
+  }
+
+  function loadRuntime(packages, requestedBaseURL) {
+    var nextBaseURL = withTrailingSlash(requestedBaseURL || DEFAULT_PYODIDE_BASE_URL);
+    if (runtimeBaseURL && runtimeBaseURL !== nextBaseURL) {
+      throw new Error('Pyodide is already loaded from ' + runtimeBaseURL);
+    }
     if (!loading) {
+      runtimeBaseURL = nextBaseURL;
       loading = (async function () {
-        importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js');
+        importScripts(runtimeBaseURL + 'pyodide.js');
         pyodide = await loadPyodide({
+          indexURL: runtimeBaseURL,
           stdout: function (text) { post('stdout', { runId: currentRunId, text: String(text) + '\n' }); },
           stderr: function (text) { post('stderr', { runId: currentRunId, text: String(text) + '\n' }); }
         });
@@ -31,7 +43,7 @@
     (async function () {
       try {
         post('status', { runId: msg.runId, status: 'loading' });
-        await loadRuntime(msg.packages || []);
+        await loadRuntime(msg.packages || [], msg.pyodideBaseURL);
         post('status', { runId: msg.runId, status: 'running' });
         currentRunId = msg.runId;
         var result = await pyodide.runPythonAsync(String(msg.code || ''));

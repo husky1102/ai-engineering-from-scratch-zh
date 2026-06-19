@@ -11,6 +11,9 @@ test('contentType covers site assets', () => {
   assert.equal(contentType('style.css'), 'text/css; charset=utf-8');
   assert.equal(contentType('data.json'), 'application/json; charset=utf-8');
   assert.equal(contentType('mascot.png'), 'image/png');
+  assert.equal(contentType('pyodide.asm.wasm'), 'application/wasm');
+  assert.equal(contentType('python_stdlib.zip'), 'application/zip');
+  assert.equal(contentType('numpy.whl'), 'application/zip');
 });
 
 test('findFreePort returns a usable port at or above preferred port', async () => {

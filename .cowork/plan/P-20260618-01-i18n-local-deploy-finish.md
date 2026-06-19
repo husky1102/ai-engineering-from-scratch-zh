@@ -1,13 +1,13 @@
 # 汉化与本地部署收尾计划
 
-Status: proposed
+Status: approved
 Review: ../review/R-20260618-01-i18n-local-deploy-finish.md
 Created: 2026-06-18
-Approved: pending
+Approved: 2026-06-19 by user instruction: "按 plan 执行"
 
 ## Issue I-01: Pyodide 本地自托管
 Priority: high
-Status: proposed
+Status: done
 
 ### Review Problem
 当前站点可以本地构建和浏览中文内容，但浏览器内 Python 运行器仍依赖 jsdelivr CDN 加载 Pyodide，无法达到完全离线部署目标；用户已要求先把该收尾任务整理为 proposed 计划。
@@ -35,6 +35,12 @@ Status: proposed
 - Pyodide 与 wheel 体积较大，提交 vendor 文件或仅提供下载脚本需要用户确认。
 - 运行器路径变更可能影响非本地部署方式，需要保留可配置回退。
 - 完全离线验证依赖浏览器网络面板或等价证据，执行时应记录 fresh evidence。
+
+### Findings Log
+- 2026-06-19: `lesson.html` currently does not load `runner-pyodide.js`; existing tests assert that browser code runner UI is absent. I-01 therefore removes the stale CDN dependency in the runner files and validates via a temporary same-origin smoke page instead of a production lesson click.
+
+### Progress Log
+- 2026-06-19: Downloaded Pyodide v0.26.4 core and numpy wheel into ignored `site/vendor/pyodide/v0.26.4/full/` for local validation. Browser smoke verified `print(2 + 3)` and `numpy` both output `5`.
 
 ## Issue I-02: 本地化剩余课程标题
 Priority: high

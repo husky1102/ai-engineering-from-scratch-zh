@@ -7,13 +7,15 @@ Created: 2026-06-18
 ## Issue I-01: Pyodide 本地自托管
 Priority: high
 Kind: enhancement
-Status: planned
+Status: done
 
 ### Feedback
 当前站点其余资源已经可以本地构建与浏览，但 `site/runner-pyodide.js` 仍从 jsdelivr CDN 拉取 Pyodide，浏览器内运行 Python 需要联网，不满足完全离线目标。
 
 ### Notes
 原盘点给出的目标是新增 vendor 脚本、将 Pyodide 路径改为本地可配置、确保构建/部署纳入本地产物，并用断网运行课内代码作为验收。
+
+2026-06-19: 已完成本地 Pyodide self-hosting 收尾：runner 默认使用 `site/vendor/pyodide/v0.26.4/full/`，vendor runtime 通过脚本下载并由 `.gitignore` 排除，CLI 静态服务器补齐 `.wasm`/`.zip`/`.whl` MIME。当前 production `lesson.html` 不加载 runner，浏览器验证改用同源临时 smoke 页完成。
 
 ### User Choices
 用户要求先将 `.cowork/plan/` 下的收尾计划整理为 doIt 规范形式。本次仅创建 proposed 计划，不执行 Pyodide 改造。

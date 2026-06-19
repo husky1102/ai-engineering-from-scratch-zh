@@ -5,6 +5,7 @@
   var pending = Object.create(null);
   var enabledRecord = null;
   var delegatedEventsReady = false;
+  var DEFAULT_PYODIDE_BASE_URL = 'vendor/pyodide/v0.26.4/full/';
 
   function text(key) {
     var dict = (window.AIFSI18N && window.AIFSI18N.fallback && window.AIFSI18N.fallback[document.documentElement.lang]) || {};
@@ -22,6 +23,15 @@
         .catch(function () { return null; });
     }
     return manifestPromise;
+  }
+
+  function withTrailingSlash(value) {
+    return String(value || '').replace(/\/?$/, '/');
+  }
+
+  function pyodideBaseURL() {
+    var config = window.AIFSPyodideRunnerConfig || {};
+    return withTrailingSlash(config.pyodideBaseURL || config.pyodideBaseUrl || DEFAULT_PYODIDE_BASE_URL);
   }
 
   function getWorker() {
@@ -121,7 +131,8 @@
       type: 'run',
       runId: id,
       code: code,
-      packages: enabledRecord.packages || []
+      packages: enabledRecord.packages || [],
+      pyodideBaseURL: pyodideBaseURL()
     });
   }
 
