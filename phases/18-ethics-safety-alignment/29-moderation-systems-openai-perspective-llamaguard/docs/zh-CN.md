@@ -1,4 +1,4 @@
-# Moderation Systems——OpenAI、Perspective、Llama Guard
+# 内容审核系统：OpenAI、Perspective、Llama Guard
 
 > Production moderation systems 把第 12-16 课定义的 safety policies 操作化。OpenAI Moderation API：`omni-moderation-latest`（2024）基于 GPT-4o，一次调用即可分类 text + images；在 multilingual test set 上比上一版好 42%；response schema 返回 13 个 category booleans——harassment、harassment/threatening、hate、hate/threatening、illicit、illicit/violent、self-harm、self-harm/intent、self-harm/instructions、sexual、sexual/minors、violence、violence/graphic；对大多数开发者免费。Layered patterns：Input moderation（pre-generation）、Output moderation（post-generation）、Custom moderation（domain rules）。Async parallel calls 隐藏 latency；flag 时返回 placeholder responses。Llama Guard 3/4（第 16 课）：14 个 MLCommons hazards、Code Interpreter Abuse、8 种语言（v3）、multi-image（v4）。Perspective API（Google Jigsaw）：早于 LLM-as-moderator 浪潮的 toxicity scoring；主要是 single-dimension toxicity，带 severe-toxicity/insult/profanity variants；content-moderation research 的 baseline。Deprecations：Azure Content Moderator 于 2024 年 2 月 deprecated，2027 年 2 月 retired，由 Azure AI Content Safety 替代。
 
@@ -58,7 +58,7 @@ OpenAI 与 Llama Guard taxonomies 有重叠，但也有分歧。OpenAI 把 “il
 
 这三层按设计是顺序的：input moderation 必须在 generation 前完成，output moderation 在 generation 后运行。Parallelism 发生在一层内部——对同一段 text 并发运行多个 classifiers（例如 OpenAI Moderation + Llama Guard + Perspective），可以隐藏单个 classifier 的 latency。作为可选优化，在 input moderation 完成且 token-1 streaming 延迟时，可以显示 placeholder response（“one moment, checking...”）。Flag behaviour 可配置：refuse、sanitize、escalate to human review。
 
-### Failure modes
+### 失效模式
 
 - **Input only。** 抓不到 output hallucinations（第 12-14 课 encoding attacks 会完全绕过 input classifiers）。
 - **Output only。** 允许任何 input 到达模型；增加 cost；把 internal reasoning 暴露给 attacker。

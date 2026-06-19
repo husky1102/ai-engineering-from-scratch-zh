@@ -75,7 +75,7 @@ End-to-end models 需要更多 data 和 compute，但跳过了 multi-stage pipel
 
 对 forms，使用 **Key-Value extraction** models（visually-rich documents 用 Donut，plain scans 用 LayoutLMv3）。它们接收 image + detected text + positions，并预测 structured key-value pairs。
 
-### Evaluation metrics
+### 评估指标
 
 - **Character Error Rate (CER)**——Levenshtein distance / reference length。越低越好。Production target：干净 scans 上 < 2%。
 - **Word Error Rate (WER)**——同样指标，但 word level。

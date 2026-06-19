@@ -1,4 +1,4 @@
-# Vision Transformers（ViT）
+# 视觉 Transformer（ViT）
 
 > 把图像切成 patches，把每个 patch 当成一个词，运行标准 transformer。不要回头。
 
@@ -24,7 +24,7 @@
 
 ## 核心概念
 
-### Pipeline
+### 管线
 
 ```mermaid
 flowchart LR

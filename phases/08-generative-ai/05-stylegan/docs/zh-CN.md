@@ -1,4 +1,4 @@
-# StyleGAN
+# StyleGAN 风格生成
 
 > 大多数 generators 会把 `z` 同时搅进每一层。StyleGAN 把它拆开：先把 `z` map 到中间的 `w`，再通过 AdaIN 在每个 resolution level *inject* `w`。这一个变化解开了 latent space，并让 photorealistic faces 连续七年成为已解决问题。
 
@@ -82,7 +82,7 @@ def add_noise(x, sigma, rng):
 
 Sigma per-channel 是 learnable 的。
 
-## Pitfalls
+## 常见陷阱
 
 - **Droplet artifacts.** StyleGAN 1 因为 AdaIN 把 mean 置零，会在 feature maps 中产生 blobby droplet。StyleGAN 2 的 weight demodulation 通过缩放 convolution weights 修复它。
 - **Texture sticking.** StyleGAN 1 和 2 的 textures 跟随 pixel coordinates，而不是 object coordinates（interpolating 时可见）。StyleGAN 3 的 alias-free convolutions 用 windowed sinc filters 修复了这个问题。

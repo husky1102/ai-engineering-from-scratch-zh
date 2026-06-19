@@ -1,4 +1,4 @@
-# MCP Security II：OAuth 2.1、Resource Indicators、Incremental Scopes
+# MCP 安全 II：OAuth 2.1、资源指示符与增量作用域
 
 > 远程 MCP 服务器需要授权，而不只是认证。2025-11-25 spec 与 OAuth 2.1 + PKCE + resource indicators（RFC 8707）+ protected-resource metadata（RFC 9728）对齐。SEP-835 增加了 incremental scope consent，并通过 403 WWW-Authenticate 执行 step-up authorization。本课把 step-up flow 实现为状态机，让你看清每一次跳转。
 

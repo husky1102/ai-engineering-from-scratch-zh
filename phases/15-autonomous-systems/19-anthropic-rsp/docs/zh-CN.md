@@ -1,4 +1,4 @@
-# Anthropic Responsible Scaling Policy v3.0
+# Anthropic 负责任扩展政策 v3.0
 
 > RSP v3.0 于 2026 年 2 月 24 日生效，取代 2023 policy。Two-tier mitigation：Anthropic 将单方面执行的内容 vs framed 为 industry-wide recommendation 的内容（包括 RAND SL-4 security standards）。新增 Frontier Safety Roadmaps 和 Risk Reports，把它们作为 standing documents，而不是一次性交付物。移除了 2023 pause commitment。引入 AI R&D-4 threshold：一旦跨过，Anthropic 必须发布 affirmative case，识别 misalignment risks 和 mitigations。Claude Opus 4.6 没有跨过它。Anthropic 在 v3.0 announcement 中表示 “confidently ruling this out is becoming difficult.” SaferAI 将 2023 RSP 评为 2.2；他们把 v3.0 降级到 1.9，使 Anthropic 与 OpenAI 和 DeepMind 一起落入 “weak” RSP category。Qualitative thresholds 取代了 2023 quantitative commitments；移除 pause clause 是最尖锐的退步。
 

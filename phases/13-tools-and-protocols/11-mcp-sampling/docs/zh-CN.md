@@ -1,4 +1,4 @@
-# MCP Sampling — Server-Requested LLM Completions and Agent Loops
+# MCP Sampling：服务器请求的 LLM 补全与 Agent 循环
 
 > 大多数 MCP servers 都是笨执行器：接收 arguments、运行 code、返回 content。Sampling 让 server 反转方向：它请求 client 的 LLM 做决策。这使 server-hosted agent loops 成为可能，而且 server 不需要拥有任何 model credentials。SEP-1577 在 2025-11-25 合并，把 tools 加入 sampling requests，让 loop 可以包含更深层 reasoning。Drift-risk note：SEP-1577 的 tool-in-sampling 形状在 2026 Q1 仍是 experimental，SDK APIs 仍在稳定中。
 

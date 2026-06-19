@@ -1,4 +1,4 @@
-# Visual Autoregressive Modeling (VAR)：Next-Scale Prediction
+# 视觉自回归建模（VAR）：Next-Scale Prediction
 
 > Diffusion models 在时间上迭代 sample（denoising steps）。VAR 在尺度上迭代 sample——它先预测 1x1 token，再预测 2x2，再预测 4x4，直到最终 resolution，每个 scale 都 condition on 前一个 scale。2024 年论文显示，VAR 在 image generation 上匹配 GPT-style scaling laws，并在相同 compute budget 下超过 DiT。本课构建核心机制。
 

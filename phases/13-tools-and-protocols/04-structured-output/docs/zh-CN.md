@@ -1,4 +1,4 @@
-# Structured Output：JSON Schema、Pydantic、Zod、Constrained Decoding
+# 结构化输出：JSON Schema、Pydantic、Zod 与约束解码
 
 > “好好请求模型返回 JSON”即使在 frontier models 上也会有 5 到 15% 的失败率。Structured outputs 用 constrained decoding 关闭这个缺口：模型被字面上阻止发出违反 schema 的 token。OpenAI strict mode、Anthropic schema-typed tool use、Gemini 的 `responseSchema`、Pydantic AI 的 `output_type`、Zod 的 `.parse` 是同一想法的五种 surface forms。本课构建 schema validator 和 strict-mode contract，学习者会在每个生产 extraction pipeline 中使用它们。
 

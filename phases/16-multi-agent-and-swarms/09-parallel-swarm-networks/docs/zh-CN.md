@@ -1,4 +1,4 @@
-# Parallel / Swarm / Networked Architectures
+# 并行、群体与网络化架构
 
 > 与 supervisor 对照：没有 central decider。Agents 读取 shared event bus，异步领取 work，并把 results 写回。LangGraph 明确支持用于 decentralized、dynamic environments 的 “Swarm Architecture”。Matrix（arXiv:2511.21686）把 control flow 和 data flow 都表示为通过 distributed queues 传递的 serialized messages，以消除 orchestrator bottleneck。Tradeoff 是显式的：用 determinism 和 traceability 换 scalability。Swarm 适合有许多 independent sub-problems 的 tasks；它不适合需要 single coherent plan 的 tasks。
 

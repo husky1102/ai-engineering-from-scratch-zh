@@ -1,4 +1,4 @@
-# Structured Outputs：JSON、Schema Validation、Constrained Decoding
+# 结构化输出：JSON、Schema 校验与约束解码
 
 > 你的 LLM 返回的是字符串。你的应用需要的是 JSON。这个差距导致崩溃的生产系统，比任何模型幻觉都多。Structured output 是自然语言与 typed data 之间的桥。做对了，你的 LLM 就会变成可靠 API。做错了，你就会在凌晨 3 点用 regex 解析 free-text。
 

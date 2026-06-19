@@ -1,4 +1,4 @@
-# Capstone 04——Multimodal Document QA（Vision-First PDF、Tables、Charts）
+# 综合项目 04：多模态文档问答（视觉优先 PDF、表格与图表）
 
 > 2026 年 document-QA frontier 已从 OCR-then-text 转向 vision-first late interaction。ColPali、ColQwen2.5 和 ColQwen3-omni 把每个 PDF page 当作 image，用 multi-vector late interaction 嵌入，并让 query 直接 attend to patches。在 financial 10-Ks、scientific papers 和 handwritten notes 上，这种模式大幅超过 OCR-first。端到端构建这个 pipeline，在 10k pages 上运行，并发布与 OCR-then-text 的 side-by-side 对比。
 

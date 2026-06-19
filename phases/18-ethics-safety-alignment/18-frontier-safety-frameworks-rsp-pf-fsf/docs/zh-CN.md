@@ -1,4 +1,4 @@
-# Frontier Safety Frameworks — RSP、PF、FSF
+# 前沿安全框架：RSP、PF、FSF
 
 > 三个主要实验室框架定义了 2026 年 frontier capability 的行业治理。Anthropic Responsible Scaling Policy v3.0（2026 年 2 月）引入分层 AI Safety Levels（ASL-1 到 ASL-5+），以 biosafety levels 为模型，并在 2025 年 5 月对 CBRN-relevant models 激活 ASL-3。OpenAI Preparedness Framework v2（2025 年 4 月）定义了 tracked capabilities 的五项 criteria，并将 Capabilities Reports 与 Safeguards Reports 分离。DeepMind Frontier Safety Framework v3.0（2025 年 9 月）引入 Critical Capability Levels，包括新的 Harmful Manipulation CCL。三者现在都包含 competitor-adjustment clauses，允许在 peer labs 没有 comparable safeguards 也发布时进行 deferral。跨实验室 alignment 仍是结构性的，而不是术语性的：“Capability Thresholds”、“High Capability thresholds” 和 “Critical Capability Levels” 表示类似构造。
 

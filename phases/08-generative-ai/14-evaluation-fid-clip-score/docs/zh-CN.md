@@ -1,4 +1,4 @@
-# Evaluation — FID, CLIP Score, Human Preference
+# 生成模型评估：FID、CLIP Score 与人类偏好
 
 > 每个 generative model leaderboard 都会引用 FID、CLIP score，以及来自 human-preference arena 的 win rate。每个数字都有一个能被有心研究者利用的 failure mode。如果你不知道这些 failure modes，就分不清真实改进和刷榜运行。
 
@@ -118,7 +118,7 @@ def elo_update(r_a, r_b, winner, k=32):
     return r_a_new, r_b_new
 ```
 
-## Pitfalls
+## 常见陷阱
 
 - **FID at N=1000.** N<10k 时这个 heuristic 不可靠。报告 low-N FID 的论文是在 gaming。
 - **Comparing FID across resolutions.** Inception 的 299×299 resize 会改变 feature distribution。只在 matched resolution 下比较。

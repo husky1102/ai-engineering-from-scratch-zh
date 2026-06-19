@@ -1,4 +1,4 @@
-# Computer Use：Claude、OpenAI CUA、Gemini
+# Computer Use：Claude、OpenAI CUA 与 Gemini
 
 > 2026 年有三个 production computer-use models。三者都是 vision-based。三者都把 screenshots、DOM text 和 tool outputs 视为 untrusted input。只有直接用户指令才算 permission。Per-step safety services 已成常态。
 

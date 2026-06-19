@@ -1,4 +1,4 @@
-# Capstone 11 — LLM Observability & Eval Dashboard
+# 综合项目 11：LLM 可观测性与评估仪表盘
 
 > Langfuse 转向 open-core。Arize Phoenix 发布了 2026 GenAI semconv mappings。Helicone 和 Braintrust 都加码 per-user cost attribution。Traceloop 的 OpenLLMetry 成为事实上的 SDK instrumentation。生产形态是：ClickHouse 存 traces，Postgres 存 metadata，Next.js 做 UI，以及一小支 eval jobs 队伍（DeepEval、RAGAS、LLM-judge）在 sampled traces 上运行。构建一个 self-hosted 版本，至少从四个 SDK families 摄取数据，并演示在五分钟内捕捉 injected regression。
 

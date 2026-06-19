@@ -1,4 +1,4 @@
-# Async Tasks (SEP-1686) — Call-Now, Fetch-Later for Long-Running Work
+# 异步任务（SEP-1686）：长任务的先调用、后获取
 
 > 真实 agent work 需要数分钟到数小时：CI runs、deep-research synthesis、batch exports。Synchronous tool calls 会断开连接、超时，或阻塞 UI。SEP-1686 在 2025-11-25 合并，加入 Tasks primitive：任何 request 都可以被增强为 task，result 可以稍后 fetch，或通过 state notifications stream。Drift-risk note：Tasks 在 H1 2026 仍是 experimental；SDK surface 仍在围绕 spec 设计。
 

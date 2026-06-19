@@ -1,4 +1,4 @@
-# STaR、V-STaR、Quiet-STaR：Self-Taught Reasoning
+# STaR、V-STaR、Quiet-STaR：自学推理
 
 > 最小可行的 self-improvement loop 位于 rationale 内部。模型生成一条 chain of thought，保留那些落到正确答案上的，再用它们 fine-tune。这就是 STaR。V-STaR 增加 verifier，让 inference-time selection 更好。Quiet-STaR 把 rationale 下推到每个 token。三者都有效。三者都不是魔法：loop 会保留任何碰巧抵达正确答案的捷径。
 

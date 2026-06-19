@@ -1,4 +1,4 @@
-# 3D Generation
+# 3D 生成
 
 > 3D 是 2D-to-3D 杠杆最强的模态。2023 年的突破是 3D Gaussian Splatting。2024-2026 年的生成式推进，是在其上叠加 multi-view diffusion + 3D reconstruction，从单个 prompt 或 photo 生成 objects 和 scenes。
 
@@ -97,7 +97,7 @@ for step in range(steps):
     update(gaussians, gradients, lr)
 ```
 
-## Pitfalls
+## 常见陷阱
 
 - **View inconsistency.** 如果独立生成 4 个 views，且它们对 object structure 的描述不一致，3D fit 会模糊。修复：使用 shared attention 的 multi-view diffusion。
 - **Back-side hallucination.** Single-image → 3D 必须编造看不见的一侧。质量波动很大。

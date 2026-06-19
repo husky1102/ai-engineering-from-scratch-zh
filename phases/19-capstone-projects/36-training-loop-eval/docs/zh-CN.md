@@ -1,4 +1,4 @@
-# Training Loop and Evaluation
+# 训练循环与评估
 
 > 不测量的 loop 会骗人。本课构建驱动 GPT 模型的 training loop：带 weight decay split 的 AdamW、warmup plus cosine learning rate schedule、`calc_loss_batch` helper、在 held out data 上的 `evaluate_model` pass、每 K 步一次的 `generate_and_print_sample` 定性探针，以及一个之后可绘图的 JSONL loss log。同一个骨架可以训练你以后会构建的每一个 decoder LLM。
 

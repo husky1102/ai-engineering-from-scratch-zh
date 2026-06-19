@@ -1,4 +1,4 @@
-# Conditional GANs & Pix2Pix
+# 条件 GAN 与 Pix2Pix
 
 > 2014-2017 年第一个大突破，是控制 GAN 生成什么。附上 label、image 或 sentence。Pix2Pix 做的是 image 版本，在 narrow image-to-image tasks 上，它到现在仍然胜过每个 generic text-to-image model。
 
@@ -77,7 +77,7 @@ for c in [0, 1]:
     assert_near(mean_c, real_mean_for_class_c)
 ```
 
-## Pitfalls
+## 常见陷阱
 
 - **Condition ignored.** G 学会 marginalize，D 不惩罚，因为 condition signal 太弱。修复：更强地 condition D（early layer，而不是只在 late layer），使用 projection discriminator（Miyato & Koyama 2018）。
 - **L1 weight too low.** G 漂移到任意 real-looking outputs，而不是 faithful outputs。对 Pix2Pix-style tasks 从 λ≈100 开始。

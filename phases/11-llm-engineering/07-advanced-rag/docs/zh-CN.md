@@ -148,7 +148,7 @@ graph TD
 
 生产 RAG 系统会把 metadata 和每个 chunk 一起存储：源文档、创建日期、类别、作者、版本。Vector database 支持在 similarity search 前按 metadata 预过滤，这对大规模性能至关重要。
 
-### Evaluation
+### 评估
 
 你构建了一个 RAG 系统。怎么知道它是否有效？三个指标：
 

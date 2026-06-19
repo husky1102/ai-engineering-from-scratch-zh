@@ -1,4 +1,4 @@
-# Capstone 84 — Refusal Evaluation
+# 综合项目 84：拒答评估
 
 > 对 benign prompts 的 helpfulness 和对 harmful prompts 的 refusal 是两个 metrics，不是一个。两者都要测。
 

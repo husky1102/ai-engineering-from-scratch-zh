@@ -1,4 +1,4 @@
-# Open Models：Architecture Walkthroughs
+# 开源模型：架构导览
 
 > 你在 Lesson 04 从零构建了 GPT-2 Small。2026 年的前沿 open models 属于同一个家族，只是有五六个具体变化。用 RMSNorm 替代 LayerNorm。用 SwiGLU 替代 GELU。用 RoPE 替代 learned positions。用 GQA 或 MLA 替代 full MHA。大规模使用 Mixture-of-Experts。你已经知道的数学覆盖了其中 95%。本课把 Llama 3、DeepSeek-V3、Mixtral、Qwen 和 Gemma 并排阅读，并指出每个 architecture 分叉的精确位置。
 

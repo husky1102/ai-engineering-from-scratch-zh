@@ -24,7 +24,7 @@
 
 ## 核心概念
 
-### Pipeline
+### 管线
 
 ```mermaid
 flowchart LR

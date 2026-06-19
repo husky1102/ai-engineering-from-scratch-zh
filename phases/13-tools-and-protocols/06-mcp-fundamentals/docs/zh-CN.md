@@ -1,4 +1,4 @@
-# MCP Fundamentals：Primitives、Lifecycle、JSON-RPC Base
+# MCP 基础：原语、生命周期与 JSON-RPC 基础
 
 > MCP 之前的每个 integration 都是一次性的。Model Context Protocol 最初由 Anthropic 于 2024 年 11 月发布，现在由 Linux Foundation 的 Agentic AI Foundation 维护，它标准化 discovery 和 invocation，使任意 client 都能与任意 server 通信。2025-11-25 spec 命名了六个 primitives（三个 server，三个 client）、一个三阶段 lifecycle，以及 JSON-RPC 2.0 wire format。学会这些，本 phase 的 MCP 章节其余部分就只是阅读。
 

@@ -1,4 +1,4 @@
-# LLM Observability Stack Selection
+# LLM 可观测性技术栈选择
 
 > 2026 年 observability 市场分成两类。Development platforms（LangSmith、Langfuse、Comet Opik）把 monitoring 与 evals、prompt management、session replays 捆在一起。Gateway/instrumentation tools（Helicone、SigNoz、OpenLLMetry、Phoenix）专注 telemetry。Langfuse 是 MIT-licensed core，OSS 平衡感很强（free cloud 每月 50K events）。Phoenix 是 OpenTelemetry-native，采用 Elastic License 2.0，非常适合 drift/RAG visualization，但不是持久 production backend。Arize AX 使用 zero-copy Iceberg/Parquet integration，宣称比 monolithic observability 便宜 100x。LangSmith 在 LangChain/LangGraph 场景领先，$39/user/mo，只有 Enterprise 可 self-host。Helicone 是 proxy-based，15-30 分钟 setup，free 100K req/mo，但 agent traces 深度较弱。常见 production pattern：Gateway（Helicone/Portkey）+ eval platform（Phoenix/TruLens），用 OpenTelemetry 粘合。
 

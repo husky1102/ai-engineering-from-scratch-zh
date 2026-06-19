@@ -1,4 +1,4 @@
-# Audio Transformers — Whisper Architecture
+# 音频 Transformer：Whisper 架构
 
 > 音频是一张“频率随时间变化”的图像。Whisper 是一个吃 mel spectrograms 并吐出文字的 ViT。
 

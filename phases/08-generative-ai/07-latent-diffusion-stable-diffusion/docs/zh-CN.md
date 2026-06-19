@@ -1,4 +1,4 @@
-# Latent Diffusion & Stable Diffusion
+# 潜空间扩散与 Stable Diffusion
 
 > 在 512×512 images 上做 pixel-space diffusion 是一场计算层面的战争罪。Rombach et al.（2022）注意到，生成一张 image 不需要全部 786k dimensions——你需要足够捕捉 semantic structure 的维度，并用一个独立 decoder 处理其余部分。在 VAE 的 latent space 里运行 diffusion。这一个想法就是 Stable Diffusion。
 
@@ -80,7 +80,7 @@ h = h + CrossAttention(Q=h, K=text_embed, V=text_embed)
 
 这是 class-conditional diffusion model 与 Stable Diffusion 之间唯一实质区别。
 
-## Pitfalls
+## 常见陷阱
 
 - **VAE-scale mismatch.** SD 1.x VAE 在 encoding 后应用一个 scaling constant（`scaling_factor ≈ 0.18215`）。忘记它会让 U-Net 在 variance 极端错误的 latents 上训练。每个 checkpoint 都带一个。
 - **Text encoder silently wrong.** SD3 需要 T5-XXL 且 >=128 tokens，fallback 到 CLIP-only 是有损的。始终检查 `use_t5=True`，否则 prompt fidelity 会崩。

@@ -1,4 +1,4 @@
-# GANs — Generator vs Discriminator
+# GAN：生成器与判别器
 
 > Goodfellow 在 2014 年的技巧是完全跳过 density。两个 networks。一个造 fakes。一个抓 fakes。它们互相对抗，直到 fakes 和 real 无法区分。这不该奏效。它也经常不奏效。但当它奏效时，在 narrow domains 里，samples 仍然是 literature 中最 sharp 的。
 
@@ -96,7 +96,7 @@ if step % 200 == 0:
 
 Canonical symptom：两个 real modes 中有一个不再被生成。Discriminator 停止纠正它，因为它再也没被当作 fake 见过。
 
-## Pitfalls
+## 常见陷阱
 
 - **Discriminator too strong.** 把 D 的 learning rate 降低 2-5x，或加入 instance/layer noise。如果 D accuracy 达到 >95%，G 就死了。
 - **Generator memorizes a mode.** 给 D inputs 加 noise，使用 minibatch-discriminator layer，或切换到 WGAN-GP。

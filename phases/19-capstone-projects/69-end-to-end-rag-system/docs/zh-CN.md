@@ -1,4 +1,4 @@
-# End-to-End RAG System
+# 端到端 RAG 系统
 
 > 六课组件。一个 pipeline。一个 eval loop。一个 self-terminating demo。这就是你要发布的系统。
 

@@ -1,4 +1,4 @@
-# Autoencoders & Variational Autoencoders (VAE)
+# 自编码器与变分自编码器（VAE）
 
 > 普通 autoencoder 先压缩再重建。它会记忆。它不会生成。加一个技巧——强制 code 看起来像 Gaussian——你就得到了 sampler。正是 `z = μ + σ·ε` 这个 reparameterization 的单一技巧，让你在 2026 年使用的每个 latent-diffusion 和 flow-matching 图像模型都在输入端带着一个 VAE。
 
@@ -88,7 +88,7 @@ def sample(dec, z_dim, rng):
 
 这就是 generative model。五行。
 
-## Pitfalls
+## 常见陷阱
 
 - **Posterior collapse.** KL term 过于强硬地把 `q(z|x) → N(0, I)`，导致 `z` 不携带关于 `x` 的信息。修复：β-annealing（从 β=0 开始，ramp 到 1）、free bits，或跳过 inactive dimensions 上的 KL。
 - **Blurry samples.** Gaussian decoder likelihood 意味着 MSE reconstruction，而 MSE 对 L2 的 Bayes-optimal 解是 mean——一组 plausible digits 的 mean 就是 fuzzy digit。修复：discrete decoder（VQ-VAE、NVAE），或只把 VAE 当 encoder 并在 latents 上叠 diffusion（Stable Diffusion 就是这么做的）。

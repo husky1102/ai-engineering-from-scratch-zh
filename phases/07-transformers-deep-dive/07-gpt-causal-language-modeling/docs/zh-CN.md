@@ -1,4 +1,4 @@
-# GPT — Causal Language Modeling
+# GPT：因果语言建模
 
 > BERT 能看两边。GPT 只能看过去。三角 mask 是现代 AI 中后果最深远的一行代码。
 

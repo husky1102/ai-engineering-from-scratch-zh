@@ -1,4 +1,4 @@
-# Loading Pretrained Weights
+# 加载预训练权重
 
 > 从零训练一个 1.24 亿参数模型是预算决策；加载一个已发布 checkpoint 则是日常操作。本课会把 pretrained GPT-2 风格 weights 从 safetensors 文件加载到第 35 课的精确架构中，逐块走过 parameter name mapping，并做一次 sanity generation 来证明加载成功。没有网络，没有第三方 loaders，没有不透明魔法。
 

@@ -1,4 +1,4 @@
-# T5、BART — Encoder-Decoder Models
+# T5、BART：编码器-解码器模型
 
 > Encoders 负责理解。Decoders 负责生成。把它们重新合在一起，就得到一个为 input → output 任务而生的模型：translate、summarize、rewrite、transcribe。
 

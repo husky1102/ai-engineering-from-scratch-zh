@@ -1,4 +1,4 @@
-# Few-Shot、Chain-of-Thought、Tree-of-Thought
+# Few-Shot、思维链与思维树
 
 > 告诉模型做什么是 prompting。展示它如何思考才是 engineering。同一个模型、同一个任务、同一批数据，从 78% 到 91% 准确率的差距，不是更好的模型，而是更好的推理策略。
 

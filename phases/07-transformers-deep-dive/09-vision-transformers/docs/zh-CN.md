@@ -1,4 +1,4 @@
-# Vision Transformers (ViT)
+# 视觉 Transformer（ViT）
 
 > 图像是 patch 网格。句子是 token 网格。同一个 transformer 两者都能吃下。
 

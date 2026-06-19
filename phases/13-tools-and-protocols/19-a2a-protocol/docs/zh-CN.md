@@ -1,4 +1,4 @@
-# A2A：Agent-to-Agent Protocol
+# A2A：Agent-to-Agent 协议
 
 > MCP 是 agent-to-tool。A2A（Agent2Agent）是 agent-to-agent：一个开放协议，让基于不同 frameworks 构建、内部不透明的 agents 能够协作。它由 Google 于 2025 年 4 月发布，2025 年 6 月捐赠给 Linux Foundation，2026 年 4 月达到 v1.0，并获得包括 AWS、Cisco、Microsoft、Salesforce、SAP 和 ServiceNow 在内的 150+ 支持者。它吸收了 IBM 的 ACP，并加入 AP2 payments extension。本课讲解 Agent Card、Task lifecycle 和两种 transport bindings。
 

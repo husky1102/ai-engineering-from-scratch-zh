@@ -1,4 +1,4 @@
-# Capstone 83：Prompt Injection Detector
+# 综合项目 83：Prompt Injection 检测器
 
 > Detector 是从 prompt 到 confidence 和 category 的函数。除此之外都只是感觉。
 

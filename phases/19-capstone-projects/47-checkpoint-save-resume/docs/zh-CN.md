@@ -1,4 +1,4 @@
-# Checkpoint Save and Resume
+# 检查点保存与恢复
 
 > 训练中断会杀死运行；checkpoints 让它们继续。原子地保存 model、optimizer、scheduler、loss history、step counter 和 RNG state，这样任何时刻被 kill，磁盘上都留下一个有效文件。
 

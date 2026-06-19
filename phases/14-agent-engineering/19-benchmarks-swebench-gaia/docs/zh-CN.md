@@ -1,4 +1,4 @@
-# Benchmarks：SWE-bench、GAIA、AgentBench
+# 基准测试：SWE-bench、GAIA、AgentBench
 
 > 三个 benchmark 锚定了 2026 年的 agent evaluation。SWE-bench 测试代码补丁能力。GAIA 测试 generalist tool use。AgentBench 测试 multi-environment reasoning。你需要知道它们的组成、contamination story，以及它们不测什么。
 

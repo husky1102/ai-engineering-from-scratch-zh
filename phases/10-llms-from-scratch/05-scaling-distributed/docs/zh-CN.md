@@ -1,4 +1,4 @@
-# Scaling：Distributed Training、FSDP、DeepSpeed
+# 扩展训练：分布式训练、FSDP、DeepSpeed
 
 > 你的 124M model 可以在一张 GPU 上训练。现在试试 7 billion parameters。模型放不进内存。数据在单机上要跑数周。规模起来后，distributed training 不是可选项，而是唯一的前进路径。
 

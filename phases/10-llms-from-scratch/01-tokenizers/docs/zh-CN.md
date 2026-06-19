@@ -1,4 +1,4 @@
-# Tokenizers：BPE、WordPiece、SentencePiece
+# 分词器：BPE、WordPiece、SentencePiece
 
 > 你的 LLM 不读英文。它读整数。tokenizer 决定这些整数承载的是意义，还是浪费。
 

@@ -1,4 +1,4 @@
-# Attention Variants — Sliding Window, Sparse, Differential
+# 注意力变体：滑动窗口、稀疏与差分
 
 > Full attention 是一个圆。每个 token 都看见每个 token，memory 为此买单。四种变体会弯曲这个圆的形状，并收回一半成本。
 

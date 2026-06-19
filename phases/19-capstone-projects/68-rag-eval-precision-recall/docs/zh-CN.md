@@ -1,4 +1,4 @@
-# RAG Evaluation: Precision、Recall、MRR、nDCG、Faithfulness、Answer Relevance
+# RAG 评估：Precision、Recall、MRR、nDCG、Faithfulness 与 Answer Relevance
 
 > 如果你不能同时给 retrieval 和 answer 打分，就不能发布系统。二者不是同一个 metric，同一个 prompt 会在不同轴上失败。
 

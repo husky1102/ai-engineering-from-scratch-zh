@@ -1,4 +1,4 @@
-# LLM Routing Layer：LiteLLM、OpenRouter、Portkey
+# LLM 路由层：LiteLLM、OpenRouter、Portkey
 
 > Provider lock-in 很昂贵。不同 tool-calling workloads 适合不同模型。Routing gateways 提供一个 API surface、retries、failover、cost tracking 和 guardrails。2026 年三种 archetype 占主导：LiteLLM（open-source self-hosted）、OpenRouter（managed SaaS）、Portkey（production-grade，2026 年 3 月开源）。本课命名 decision criteria，并走读一个 stdlib routing gateway。
 

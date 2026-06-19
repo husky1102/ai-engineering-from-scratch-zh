@@ -26,7 +26,7 @@ Phase 13 的所有 primitives 都会出现。这不是玩具，Anthropic（Claud
 
 ## 核心概念
 
-### Architecture
+### 架构
 
 ```text
 [user] -> [client] -> [gateway (OAuth 2.1 + RBAC)] -> [research MCP server]

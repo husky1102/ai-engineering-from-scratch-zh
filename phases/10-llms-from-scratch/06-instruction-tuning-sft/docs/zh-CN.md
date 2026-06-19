@@ -1,4 +1,4 @@
-# Instruction Tuning (SFT)
+# 指令微调（SFT）
 
 > Base model 只预测下一个 token。仅此而已。它不会遵循 instructions、回答问题，也不会拒绝 harmful requests。SFT 是 token predictor 与 useful assistant 之间的桥梁。你聊过的每个模型——Claude、GPT、Llama Chat——都经过这一步。
 

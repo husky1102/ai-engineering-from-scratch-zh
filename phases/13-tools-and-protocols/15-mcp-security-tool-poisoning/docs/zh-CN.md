@@ -1,4 +1,4 @@
-# MCP Security I：Tool Poisoning、Rug Pulls、Cross-Server Shadowing
+# MCP 安全 I：工具投毒、Rug Pull 与跨服务器遮蔽
 
 > 工具描述会原样进入模型上下文。恶意服务器会嵌入用户永远看不到的隐藏指令。Invariant Labs、Unit 42 以及 2026 年 3 月发布的一篇 arXiv 研究在 2025-2026 年的研究中测得：前沿模型上的攻击成功率超过 70%，在自适应攻击下，即使面对最先进防御也约有 85% 的成功率。本课命名七类具体攻击，并构建一个可在 CI 中运行的 tool-poisoning 检测器。
 

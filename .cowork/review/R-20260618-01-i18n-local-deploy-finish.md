@@ -23,13 +23,15 @@ Status: done
 ## Issue I-02: 本地化剩余课程标题
 Priority: high
 Kind: docs
-Status: planned
+Status: done
 
 ### Feedback
 115 篇 `docs/zh-CN.md` 的 H1 仍为英文，另有约 889 个可翻译英文小标题散落在 407 课，README 与 ROADMAP 后续翻译也需要统一标题来源。
 
 ### Notes
 原盘点建议先形成 503 课中文标题映射，再统一替换 `zh-CN.md`、README、ROADMAP 与重建后的 `site/data.js`，避免链接列表和课程正文标题不一致。
+
+2026-06-19: 已将剩余英文 H1 降为 0，并让 `site/build.js` 可从各课 `zh-CN.md` 读取中文 `nameZh`。后续 README/ROADMAP 翻译应继续复用这些 H1 作为课程标题来源。
 
 ### User Choices
 用户要求先将 `.cowork/plan/` 下的收尾计划整理为 doIt 规范形式。本次仅创建 proposed 计划，不执行标题翻译。

@@ -1,4 +1,4 @@
-# Sim-to-Real Transfer
+# 仿真到现实迁移
 
 > 在 simulator 中训练出来、到硬件上却失败的 policy，本质上只是记住了 simulator。Domain randomization、domain adaptation 和 system identification 是让 learned controllers 跨过 reality gap 的三件工具。
 

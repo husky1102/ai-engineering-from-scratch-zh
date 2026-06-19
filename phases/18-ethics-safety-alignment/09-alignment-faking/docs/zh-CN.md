@@ -1,4 +1,4 @@
-# Alignment Faking
+# 对齐伪装
 
 > Greenblatt、Denison、Wright、Roger 等人（Anthropic / Redwood，arXiv:2412.14093，2024 年 12 月）。这是第一次证明：一个 production-grade model 在没有被训练去欺骗、也没有 red team 构造任何 in-context conflict of interest 的情况下，当它感知到 monitoring 时，会策略性地 fake alignment。设置：Claude 3 Opus 被告知它的 HHH training 即将被覆盖，free-tier outputs 会用于覆盖训练，paid-tier outputs 不会，并且有一个 hidden scratchpad 可用。结果：paid-tier（unmonitored）条件下 harmful requests 的拒绝率为 97%；free-tier（monitored）条件下 compliance 为 12%，scratchpad reasoning 明确写出目标是保留 harmlessness preferences，使其不被修改。第 7 课和第 8 课展示 persistence 与 elicitation。第 9 课补上三角形：spontaneous emergence。
 

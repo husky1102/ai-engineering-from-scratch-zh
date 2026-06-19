@@ -1,4 +1,4 @@
-# Capstone 85 — Content Classifier Integration
+# 综合项目 85：内容分类器集成
 
 > output 侧 classifiers 回答的问题不同于 input 侧 rules。两者都需要 policy router。
 

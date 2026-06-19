@@ -32,7 +32,7 @@ Disaggregation 将 prefill 和 decode 拆到单独 pools，并按各自 bottlene
 
 把二者 colocate：你购买同时 optimized for both 的 GPUs。H100 两者都擅长，但不管哪种用法成本相同。scale 下，你希望 prefill pool 用 H100 / compute-heavy；decode pool 用 H200 / memory-heavy，或 aggressive quantization。
 
-### Architecture
+### 架构
 
 ```text
             ┌──────────────┐

@@ -1,4 +1,4 @@
-# Diffusion Models — DDPM from Scratch
+# 扩散模型：从零实现 DDPM
 
 > Ho、Jain、Abbeel（2020）给了这个领域一个戒不掉的 recipe。用一千个小步骤用 noise 摧毁 data。训练一个 neural net 预测 noise。Inference 时反转这个过程。今天，每个 mainstream image、video、3D 和 music model 都跑在这个 loop 上，可能再叠上 flow matching 或 consistency tricks。
 
@@ -115,7 +115,7 @@ Net 需要知道自己正在 denoise 哪个 timestep。两个标准选项：
 
 我们的 toy code 使用 sinusoidal → concat。Production U-Nets 使用 FiLM。
 
-## Pitfalls
+## 常见陷阱
 
 - **Schedule matters a lot.** Linear `β` 是 DDPM default，但 cosine schedule（Nichol & Dhariwal, 2021）在相同 compute 下给出更好的 FID。如果 quality plateau，就切换 schedule。
 - **Timestep embedding is fragile.** 把 raw `t` 当 float 传入对 toy 1-D 有效，但对 images 会失败；始终使用 proper embedding。

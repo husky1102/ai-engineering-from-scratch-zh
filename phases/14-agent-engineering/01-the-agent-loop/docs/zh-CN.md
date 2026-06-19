@@ -1,4 +1,4 @@
-# Agent Loop：Observe、Think、Act
+# Agent 循环：观察、思考、行动
 
 > 2026 年的每个 agent，Claude Code、Cursor、Devin、Operator，都是 2022 年 ReAct loop 的某个变体。Reasoning tokens 与 tool calls 和 observations 交错，直到 stop condition 触发。接触任何 framework 前，先把这个 loop 学透。
 

@@ -1,4 +1,4 @@
-# Hybrid Retrieval with BM25 and Dense Embeddings
+# BM25 与稠密嵌入的混合检索
 
 > Lexical 和 semantic retrieval 会在相反的 query distributions 上失败。带 reciprocal rank fusion 的 hybrid retrieval 不是插值，而是投票，并且这个投票会赢下每类 query。
 

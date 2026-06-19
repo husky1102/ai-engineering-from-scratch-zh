@@ -1,4 +1,4 @@
-# Agent Observability：Langfuse、Phoenix、Opik
+# Agent 可观测性：Langfuse、Phoenix、Opik
 
 > 三个 open-source agent observability platforms 主导 2026 年。Langfuse（MIT）：每月 600 万+ installs，tracing + prompt management + evals + session replay。Arize Phoenix（Elastic 2.0）：deep agent-specific evals、RAG relevancy、OpenInference auto-instrumentation。Comet Opik（Apache 2.0）：automated prompt optimization、guardrails、LLM-judge hallucination detection。
 

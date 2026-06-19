@@ -1,4 +1,4 @@
-# Speculative Decoding — Draft, Verify, Repeat
+# 推测解码：草稿、验证、重复
 
 > Autoregressive decoding 是串行的。每个 token 都要等待前一个 token。Speculative decoding 打破这条链：便宜模型先 draft N 个 tokens，昂贵模型用一次 forward pass 全部 verify。draft 对了的时候，你为 N 次 generation 只付了一次 big forward。
 

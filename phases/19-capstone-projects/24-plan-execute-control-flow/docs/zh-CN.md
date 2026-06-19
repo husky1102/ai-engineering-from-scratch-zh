@@ -1,4 +1,4 @@
-# Plan-Execute Control Flow
+# 规划-执行控制流
 
 > 无法在 failure 后存活的 plan 只是 script。能够 replan 的 script 才是 agent。先构建 replanner。
 

@@ -1,4 +1,4 @@
-# RAG（Retrieval-Augmented Generation）
+# RAG：检索增强生成
 
 > 你的 LLM 知道训练截止日前的一切。它不知道你公司的 docs、你的 codebase，或上周的 meeting notes。RAG 通过检索相关 documents 并把它们塞进 prompt 来解决这个问题。它是生产 AI 中部署最多的模式。如果你只从本课程构建一个东西，请构建 RAG pipeline。
 

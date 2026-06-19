@@ -1,4 +1,4 @@
-# HDF5 Tokenized Corpus
+# HDF5 分词语料库
 
 > 下载后的语料必须落在一种训练器能以线速流式读取的布局里。磁盘上的 JSONL 经不起 16 个 dataloader worker。带可调整大小、chunked integer dataset 的 HDF5 可以。本课把流式 tokenization 写入可调整大小的 HDF5 dataset，跨多个文件做分片写入，在训练时做 memory-mapped 读取，并构建一个用正确 packing 规则产出固定长度序列的 sliding-window dataloader。
 

@@ -44,7 +44,7 @@ Status: done
 
 ## Issue I-02: 本地化剩余课程标题
 Priority: high
-Status: proposed
+Status: done
 
 ### Review Problem
 115 篇 `docs/zh-CN.md` 的 H1 仍为英文，且 README/ROADMAP 也需要使用同一套中文课程标题；如果直接翻译顶层文档，会造成三处标题不一致。
@@ -71,6 +71,14 @@ Status: proposed
 - 误翻专有名词或代码步骤标题会降低教学准确性。
 - 批量替换可能破坏 Markdown 结构，应分阶段扫描和校验。
 - README/ROADMAP 翻译必须复用该标题映射，否则会重新产生标题漂移。
+
+### Progress Log
+- 2026-06-19: Replaced 115 English-only `zh-CN.md` H1 titles with Chinese titles while preserving domain abbreviations. Also translated selected exact recurring headings: `Pitfalls`, `Evaluation`, `Evaluation metrics`, `Failure modes`, `Pipeline`, and `Architecture`.
+
+### Verification Log
+- 2026-06-19: English-only H1 scan returned `0`.
+- 2026-06-19: `python3 scripts/i18n_validate.py` returned `docs 503/503, quiz 338/338, 0 issue(s)`.
+- 2026-06-19: `node site/build.js` completed with 20 phases and 503 lessons; `site/data.js` spot checks found `语义分割：U-Net`, `多智能体强化学习（MARL）：MADDPG、QMIX、MAPPO`, and `综合项目 87：端到端安全门`.
 
 ## Issue I-03: 翻译 ROADMAP.md
 Priority: high

@@ -1,4 +1,4 @@
-# Natural Language Inference：Textual Entailment
+# 自然语言推理：文本蕴含
 
 > "t entails h" 意味着一个读到 t 的人会得出 h 为真的结论。NLI 是预测 entailment / contradiction / neutral 的任务。表面无聊，生产中却很承重。
 
@@ -100,7 +100,7 @@ def is_faithful(answer, context, threshold=0.5):
 
 Stdlib-only toy 见 `code/main.py`：通过 lexical overlap + negation detection 比较 premise 与 hypothesis。它无法与 transformer models 竞争，但展示了任务形状：两个 texts 输入，3-way label 输出，loss = `{entail, contradict, neutral}` 上的 cross-entropy。
 
-## Pitfalls
+## 常见陷阱
 
 - **Hypothesis-only shortcuts。** Models 只看 hypothesis 就能在 SNLI 上以约 60% 预测 label，因为 "not"、"nobody"、"never" 与 contradiction 相关。它是检测 label leakage 的强 baseline。
 - **Lexical overlap heuristic。** Subsequence heuristic（“每个 subsequence 都被 entailed”）能通过 SNLI，但会在 HANS/ANLI 上失败。使用 adversarial benchmarks。

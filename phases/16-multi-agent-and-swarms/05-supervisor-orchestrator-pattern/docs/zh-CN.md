@@ -1,4 +1,4 @@
-# Supervisor / Orchestrator-Worker Pattern
+# 监督者 / 编排器-Worker 模式
 
 > 一个 lead agent 负责规划和委派；specialized workers 在并行 contexts 中执行并回报。这就是 Anthropic Research system 背后的 pattern（Claude Opus 4 作为 lead，Sonnet 4 作为 subagents），在 internal research evals 上相对 single-agent Opus 4 提升 +90.2%。Anthropic 的 engineering post 报告称，BrowseComp 上 80% 的 variance 仅由 token usage 解释——multi-agent 获胜很大程度上是因为每个 subagent 都获得一个新鲜 context window。本课从 primitives 构建 supervisor pattern，并覆盖 production deployments 中到 2026 年仍然重要的 engineering lessons。
 
@@ -58,7 +58,7 @@ Anthropic post 列出了几个到 2026 年仍然相关的 production lessons：
 
 LangGraph 最初发布了一个 `langgraph-supervisor` library，其中有 high-level `create_supervisor` helper。2025 年，LangChain 把推荐方式转为通过 tool-calling 直接实现 supervisor pattern，因为 tool calls 能更好地控制 *supervisor sees what*（context engineering）。这个 library 仍然可用；docs 现在推荐 tool-calling form。
 
-### Failure modes
+### 失效模式
 
 - **Lead hallucinates the plan。** 如果 lead 生成的 sub-questions 没有分解真实问题，workers 会在错误目标上做精确 research。
 - **Workers over-explore。** 没有显式 scope boundaries，workers 会漂移到 assigned sub-question 之外，污染 synthesis step。

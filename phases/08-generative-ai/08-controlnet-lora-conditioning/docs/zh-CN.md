@@ -1,4 +1,4 @@
-# ControlNet, LoRA & Conditioning
+# ControlNet、LoRA 与条件控制
 
 > Text 单独作为 control signal 很笨拙。ControlNet 让你 clone 一个 pretrained diffusion model，并用 depth map、pose skeleton、scribble 或 edge image 去 steer 它。LoRA 让你通过训练 1000 万个 parameters 来 fine-tune 一个 2B-parameter model。两者一起，把 Stable Diffusion 从 toy 变成 2026 年每家 agency 都在交付的 image pipeline。
 
@@ -92,7 +92,7 @@ h = base(x) + gated
 
 Step 0 时 output 与 base 完全相同。Early training 会慢慢更新 `gate`——不会 catastrophic drift。
 
-## Pitfalls
+## 常见陷阱
 
 - **Over-scaling LoRAs.** `α = 2` 或 `α = 3` 是常见的“make it stronger”hack，会产生 over-stylized / broken outputs。保持 `α ≤ 1.5`。
 - **ControlNet weight conflict.** Pose ControlNet 使用 weight 1.0 且 Depth ControlNet 也使用 weight 1.0，通常会 overshoot。Weights 总和 ≈ 1.0 是安全默认值。

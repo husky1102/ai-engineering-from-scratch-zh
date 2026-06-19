@@ -1,4 +1,4 @@
-# DPO：Direct Preference Optimization
+# DPO：直接偏好优化
 
 > RLHF 有效。但它也需要训练三个 models（SFT、reward model、policy），管理 PPO 的不稳定，并调 KL penalty。DPO 问：如果这些都能跳过呢？DPO 直接在 preference pairs 上优化 language model。没有 reward model。没有 PPO。一个 training loop。相同结果。
 

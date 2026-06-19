@@ -132,7 +132,7 @@ for turn, _, speaker in diarization.itertracks(yield_label=True):
 | Anti-spoofing（replay / deepfake detection） | AASIST 或 RawNet2 |
 | Tiny embedded（KWS + enrollment） | Titanet-Small（NeMo） |
 
-## Pitfalls
+## 常见陷阱
 
 - **Channel mismatch。** 在 VoxCeleb（web video）上训练的模型 ≠ phone-call audio。始终在目标 channel 上评估。
 - **Short utterances。** 低于 3 秒 test audio 时，EER 会急剧恶化。

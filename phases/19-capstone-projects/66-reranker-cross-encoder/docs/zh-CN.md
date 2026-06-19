@@ -1,4 +1,4 @@
-# Cross-Encoder Reranker
+# Cross-Encoder 重排序器
 
 > bi-encoder 独立 embed query 和 document。cross-encoder 把它们拼接起来并同时读取二者。cross-encoder 是最聪明的 reader，也是最慢的。把它用作 bi-encoder top-k 之后的第二阶段，它值得这份成本。
 

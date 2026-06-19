@@ -1,4 +1,4 @@
-# Multi-Head Attention
+# 多头注意力
 
 > 一个 attention head 一次学习一种关系。八个 heads 学八种。Heads 近乎免费。多用一些。
 

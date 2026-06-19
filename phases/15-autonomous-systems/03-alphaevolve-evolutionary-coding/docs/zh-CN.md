@@ -1,4 +1,4 @@
-# AlphaEvolve：Evolutionary Coding Agents
+# AlphaEvolve：进化式编码 Agent
 
 > 将 frontier coding model 与 evolutionary loop 和 machine-checkable evaluator 配对。让 loop 运行足够久。它会发现一种 4x4 complex-matrix multiplication procedure，只用 48 次 scalar multiplications，这是 56 年来第一次超过 Strassen 的改进。它也找到了一条 Google-wide Borg scheduling heuristic，在生产中回收约 0.7% 的 cluster compute。architecture 故意很朴素。胜利来自 evaluator 的严谨。
 

@@ -1,4 +1,4 @@
-# Embodied VLAs：RT-2、OpenVLA、π0、GR00T
+# 具身 VLA：RT-2、OpenVLA、π0、GR00T
 
 > 第一次有模型从网站上读菜谱并在厨房机器人上执行，是 RT-2（Google DeepMind，2023 年 7 月）。RT-2 把 action 离散化成 text tokens，把 VLM 在 web data 与 robot-action data 上共同 fine-tune，并证明 web-scale vision-language knowledge 可以迁移到机器人控制。OpenVLA（2024 年 6 月）发布了开放 7B reference。Physical Intelligence 的 π0 系列（2024-2025）加入了 flow-matching action experts。NVIDIA 的 GR00T N1（2025 年 3 月）为大规模 humanoid robots 交付了 dual-system（System 1 / System 2）控制。VLA primitive，也就是 vision-language-action、一个会看、会读、会行动的单一模型，是本阶段理解模型与 Phase 15 autonomous systems 之间的桥梁。
 

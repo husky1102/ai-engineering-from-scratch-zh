@@ -1,4 +1,4 @@
-# Audio Generation
+# 音频生成
 
 > Audio 是 16-48 kHz 的 1-D signal。5 秒 clip 是 80-240k samples。没有 transformer 会直接 attend 这么长的 sequence。2026 年每个生产音频模型的方案相同：neural codec（Encodec、SoundStream、DAC）把 audio 压缩成 50-75 Hz 的 discrete tokens，然后 transformer 或 diffusion model 生成 tokens。
 
@@ -78,7 +78,7 @@ def make_tokens(style, length, vocab_size, rng):
 
 给定 style token 和 starting token，从预测分布中 sample next token。持续 20-40 tokens。
 
-## Pitfalls
+## 常见陷阱
 
 - **Codec quality caps output quality.** 如果 codec 无法忠实表示一种 sound，再好的 generator 也帮不上。DAC 是当前 open best。
 - **RVQ error accumulation.** 每个 RVQ layer 建模前一层 residual。Layer 1 的错误会传播。对高层使用 temperature 0 sampling 有帮助。

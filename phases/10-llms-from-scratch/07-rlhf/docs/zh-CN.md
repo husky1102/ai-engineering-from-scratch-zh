@@ -1,4 +1,4 @@
-# RLHF：Reward Model + PPO
+# RLHF：奖励模型 + PPO
 
 > SFT 教模型遵循 instructions。但它不会教模型哪个 response 更好。两个语法正确、事实准确的答案，在 helpfulness 上可能差别巨大。RLHF 是把 human judgment 编码进模型行为的方法。它让 Claude helpful，让 GPT polite。
 

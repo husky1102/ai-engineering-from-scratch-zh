@@ -1,4 +1,4 @@
-# Edge Inference：Apple Neural Engine、Qualcomm Hexagon、WebGPU/WebLLM、Jetson
+# 边缘推理：Apple Neural Engine、Qualcomm Hexagon、WebGPU/WebLLM、Jetson
 
 > Edge 的核心约束是 memory bandwidth，而不是 compute。Mobile DRAM 约为 50-90 GB/s；datacenter HBM3 超过 2-3 TB/s，差距为 30-50x。Decode 是 memory-bound 的，所以这个差距具有决定性。2026 年，格局分成四类。Apple M4/A18 Neural Engine 峰值 38 TOPS，采用 unified memory（没有 CPU↔NPU copy）。Qualcomm Snapdragon X Elite / 8 Gen 4 Hexagon 达到 45 TOPS。WebGPU + WebLLM 在 M3 Max 上以约 41 tok/s 运行 Llama 3.1 8B (Q4)（约为 native 的 70-80%）；17.6k GitHub stars、OpenAI-compatible API、约 70-75% mobile coverage。NVIDIA Jetson Orin Nano Super (8GB) 可放下 Llama 3.2 3B / Phi-3；AGX Orin 通过 vLLM 以约 40 tok/s 运行 gpt-oss-20b；Jetson T4000（JetPack 7.1）为 AGX Orin 的 2x。TensorRT Edge-LLM 支持 EAGLE-3、NVFP4、chunked prefill，并由 Bosch、ThunderSoft、MediaTek 在 CES 2026 展示。
 

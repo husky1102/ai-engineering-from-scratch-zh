@@ -1,4 +1,4 @@
-# OpenTelemetry GenAI Semantic Conventions
+# OpenTelemetry GenAI 语义约定
 
 > OpenTelemetry 的 GenAI SIG（2024 年 4 月启动）定义了 agent telemetry 的标准 schema。Span names、attributes 和 content-capture rules 跨 vendors 收敛，使 agent traces 在 Datadog、Grafana、Jaeger 和 Honeycomb 中含义一致。
 

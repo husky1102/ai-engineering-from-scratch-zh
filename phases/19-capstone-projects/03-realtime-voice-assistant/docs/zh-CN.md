@@ -1,4 +1,4 @@
-# Capstone 03——Real-Time Voice Assistant（ASR to LLM to TTS）
+# 综合项目 03：实时语音助手（ASR 到 LLM 到 TTS）
 
 > 一个感觉对的 voice agent 需要 end-to-end latency 低于 800ms，知道你什么时候停止说话，能处理 barge-in，并且能在不 stalling 的情况下调用 tool。Retell、Vapi、LiveKit Agents 和 Pipecat 在 2026 年都达到了这条线。它们的形态相同：streaming ASR、turn-detector、streaming LLM、streaming TTS，全部通过 WebRTC 串接，并在每一跳都有 aggressive latency budgets。构建一个，测量 WER、MOS 和 false-cutoff rate，并在 packet loss 下运行它。
 

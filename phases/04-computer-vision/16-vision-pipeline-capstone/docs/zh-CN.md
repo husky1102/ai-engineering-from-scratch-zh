@@ -24,7 +24,7 @@
 
 ## 核心概念
 
-### Pipeline
+### 管线
 
 ```mermaid
 flowchart LR
@@ -77,7 +77,7 @@ PipelineResult(
 
 知道分布，optimization 才会变成有优先级的列表。
 
-### Failure modes
+### 失效模式
 
 - **Empty detections**——返回 empty list，不要 crash。记录日志。
 - **Out-of-bounds boxes**——crop 前 clamp 到 image size。

@@ -1,4 +1,4 @@
-# A2A：Agent-to-Agent Protocol
+# A2A：Agent-to-Agent 协议
 
 > Google 在 2025 年 4 月发布 A2A；到 2026 年 4 月，规范位于 https://a2a-protocol.org/latest/specification/，并已有 150+ 组织支持它。A2A 是 MCP（Lesson 13）的横向补充：MCP 是纵向的（agent ↔ tools），A2A 是 peer-to-peer 的（agent ↔ agent）。它定义 Agent Cards（discovery）、带 artifacts 的 tasks（text、structured data、video）、不透明 task lifecycles 和 auth。生产系统越来越常把 MCP 与 A2A 搭配使用。Google Cloud 在 2025-2026 年期间把 A2A 支持集成进 Vertex AI Agent Builder。
 

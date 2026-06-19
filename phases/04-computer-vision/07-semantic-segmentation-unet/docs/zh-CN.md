@@ -1,4 +1,4 @@
-# Semantic Segmentation — U-Net
+# 语义分割：U-Net
 
 > Segmentation 是在每个 pixel 上做 classification。U-Net 通过配对 downsampling encoder 与 upsampling decoder，并在二者之间连接 skip connections，让这件事真正可行。
 
@@ -116,7 +116,7 @@ L = L_cross_entropy + lambda * L_dice       (lambda ~ 1)
 
 Cross-entropy 在训练早期给出 stable gradients；Dice 让训练尾部专注于真正匹配 mask shape。这个组合是 medical-imaging default，在任何 class-imbalanced dataset 上都很难击败。
 
-### Evaluation metrics
+### 评估指标
 
 - **Pixel accuracy** — 预测正确的 pixel 百分比。便宜。由于与 classification 中 accuracy 相同的原因，它在 imbalanced data 上坏掉。
 - **IoU per class** — 每个 class mask 的 intersection over union；跨 class 平均 = mIoU。

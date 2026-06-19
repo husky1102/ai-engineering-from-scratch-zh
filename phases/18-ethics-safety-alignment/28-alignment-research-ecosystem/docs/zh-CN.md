@@ -1,4 +1,4 @@
-# Alignment Research Ecosystem——MATS、Redwood、Apollo、METR
+# 对齐研究生态：MATS、Redwood、Apollo、METR
 
 > 五个组织定义了 2026 年非实验室 alignment research layer。MATS（ML Alignment & Theory Scholars）：自 2021 年末以来 527+ researchers，180+ papers，10K+ citations，h-index 47；2024 年夏季 cohort 以 501(c)(3) 注册，约 90 scholars 和 40 mentors；2025 年前 alumni 中 80% 从事 safety/security，200+ 在 Anthropic、DeepMind、OpenAI、UK AISI、RAND、Redwood、METR、Apollo。Redwood Research：由 Buck Shlegeris 创立的 applied alignment lab；提出 AI Control（第 10 课）；与 UK AISI 合作 control safety cases。Apollo Research：为 frontier labs 做 pre-deployment scheming evaluations；撰写 In-Context Scheming（第 8 课）和 Towards Safety Cases for AI Scheming。METR（Model Evaluation and Threat Research）：task-based capability evaluations、autonomous-task time-horizon studies；“Common Elements of Frontier AI Safety Policies” 比较实验室框架。Eleos AI Research：model-welfare pre-deployment evaluations（第 19 课）；进行了 Claude Opus 4 welfare assessment。
 

@@ -1,4 +1,4 @@
-# Chunking Strategies, Compared
+# 分块策略对比
 
 > Chunking 决定了你的 retriever 永远能召回什么。边界切错了，下游没有 embedding model、reranker 或 LLM 能修复损伤。
 

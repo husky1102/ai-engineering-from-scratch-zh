@@ -1,4 +1,4 @@
-# Agent Harness Loop Contract
+# Agent Harness 循环契约
 
 > Harness 就是 agent。Model 是 coprocessor。本课冻结 loop contract，让你可以把任何 model 接进来。
 

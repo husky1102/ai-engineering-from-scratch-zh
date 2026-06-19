@@ -1,4 +1,4 @@
-# Build a Transformer from Scratch — The Capstone
+# 从零构建 Transformer：综合项目
 
 > 十三节课。一个模型。不走捷径。
 

@@ -1,4 +1,4 @@
-# Security — Secrets、API Key Rotation、Audit Logs、Guardrails
+# 安全：密钥、API Key 轮换、审计日志与护栏
 
 > 通过 centralized vaults（HashiCorp Vault、AWS Secrets Manager、Azure Key Vault）消除 secret sprawl。绝不要把 credentials 存在 config files、VCS 中的 env files、spreadsheets 里。优先使用 IAM roles，而不是 static keys；CI/CD 使用 OIDC。AI-gateway pattern 是 2026 年的解决方案：apps → gateway → model provider，由 gateway 在 runtime 从 vault 拉取 credentials。在 vault 中 rotate，所有 apps 会在几分钟内拿到新 key —— 不需要 redeploys，也不需要 Slack 里问“谁有新 key”。Rotation policy ≤90 days；每次 commit 都用 TruffleHog / GitGuardian / Gitleaks 扫描。Zero-trust：MFA、SSO、RBAC/ABAC、short-lived tokens、device posture。PII scrubbing 使用 entity recognition 在转发前 mask PHI/PII；consistent tokenization（Mesh approach）将 sensitive values 映射到 stable placeholders，让 LLM 保留 code/relationship semantics。Network egress：LLM services 放在专用 VPC/VNet subnet，只白名单 `api.openai.com`、`api.anthropic.com` 等；阻断其他所有 outbound。2026 年 incident driver：Vercel supply-chain attack，通过 compromised CI/CD credentials 外泄了数千个 customer deployments 的 env vars。
 

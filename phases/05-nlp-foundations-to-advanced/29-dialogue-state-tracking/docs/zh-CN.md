@@ -141,7 +141,7 @@ def is_correction(utterance):
 
 检测到修正时，覆盖最近更新的 slot，而不是追加。没有 LLM 帮助时，这件事很难做对。现代模式是：始终让 LLM 从历史重新生成完整 state，而不是增量更新——这会自然处理修正。
 
-## Pitfalls
+## 常见陷阱
 
 - **完整历史再生成成本。** 每一轮都让 LLM 重新生成 state，总 token 成本是 O(n²)。限制 history 长度，或汇总更早的 turn。
 - **Schema drift。** 事后添加新 slot 会破坏旧训练数据。给 schema 版本化。

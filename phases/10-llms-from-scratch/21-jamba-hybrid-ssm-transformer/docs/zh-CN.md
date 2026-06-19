@@ -1,4 +1,4 @@
-# Jamba — Hybrid SSM-Transformer
+# Jamba：混合 SSM-Transformer
 
 > State space models（SSMs）和 transformers 想要的东西不同。Transformers 通过注意力用二次成本购买质量。SSMs 通过 recurrence 以线性时间推理和常数内存购买速度，但质量落后。AI21 的 Jamba（2024 年 3 月）和 Jamba 1.5（2024 年 8 月）把它们放进同一个模型：每 7 个 Mamba layers 放 1 个 Transformer layer，每隔一个 block 放 MoE，并提供一个能装进单张 80GB GPU 的 256k context window。Mamba-3（ICLR 2026）用 complex-valued state spaces 和 MIMO projections 收紧了 SSM 侧。本课会端到端阅读这两个架构，并解释为什么这个 hybrid recipe 在 pure-SSM 和 pure-Transformer 长上下文尝试都没能活下来的三年扩展中仍然存活。
 

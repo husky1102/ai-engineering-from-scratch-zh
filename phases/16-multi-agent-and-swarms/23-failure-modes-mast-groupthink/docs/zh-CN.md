@@ -1,4 +1,4 @@
-# Failure Modes：MAST、Groupthink、Monoculture、Cascading Errors
+# 失效模式：MAST、群体思维、单一文化与级联错误
 
 > 2026 年的 reference taxonomy 是 **MAST**（Cemri et al., NeurIPS 2025, arXiv:2503.13657），来源于 7 个 state-of-the-art open-source MAS 的 1642 条 execution traces，显示 **41-86.7% failure rate**。三个 root categories：**Specification Problems**（41.77%）：role ambiguity、unclear task definitions；**Coordination Failures**（36.94%）：communication breakdowns、state desync；**Verification Gaps**（21.30%）：missing validation、absent quality checks。**Groupthink** family（arXiv:2508.05687）补充：monoculture collapse（same base model → correlated failures）、conformity bias（agents reinforce each other's errors）、deficient theory of mind、mixed-motive dynamics、cascading reliability failures。Cascading example：retry storms，其中 payment failure 触发 order retries，再触发 inventory retries，然后压垮 inventory service（数秒内 10x load，需要 circuit breakers）。Memory poisoning：一个 agent 的 hallucination 进入 shared memory，下游 agents 把它当 fact；accuracy 逐渐 decay，让 root-cause diagnosis 很痛苦。**STRATUS**（NeurIPS 2025）报告，通过 specialized detection / diagnosis / validation agents，mitigation-success 提升 1.5x。本课把 failure modes 当成 first-class engineering targets。
 

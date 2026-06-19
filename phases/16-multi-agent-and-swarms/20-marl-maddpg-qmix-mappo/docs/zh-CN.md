@@ -1,4 +1,4 @@
-# MARL：MADDPG、QMIX、MAPPO
+# 多智能体强化学习（MARL）：MADDPG、QMIX、MAPPO
 
 > multi-agent coordination 的 reinforcement-learning heritage，在 2026 年仍然影响 LLM-agent systems。**MADDPG**（Lowe et al., NeurIPS 2017, arXiv:1706.02275）引入 Centralized Training, Decentralized Execution（CTDE）：训练期间每个 critic 能看到所有 agents 的 states 和 actions；test time 只运行 local actors。适用于 cooperative、competitive 和 mixed settings。**QMIX**（Rashid et al., ICML 2018, arXiv:1803.11485）是带 monotonic mixing network 的 value-decomposition；per-agent Qs 组合成 joint Q，使 `argmax` 能干净分布式执行，是 StarCraft Multi-Agent Challenge（SMAC）上的 dominant 方法。**MAPPO**（Yu et al., NeurIPS 2022, arXiv:2103.01955）是带 centralized value function 的 PPO；在 particle-world、SMAC、Google Research Football、Hanabi 上 minimal tuning 就 “surprisingly effective”。这些支撑必须 decentrally act 的 agent teams 的 training policies。MAPPO 是 **2026 cooperative-MARL default baseline**。本课从一个小 grid-world toy 构建每种方法，在接触 LLM-agent training 前，把三个 idea 落到肌肉记忆里。
 

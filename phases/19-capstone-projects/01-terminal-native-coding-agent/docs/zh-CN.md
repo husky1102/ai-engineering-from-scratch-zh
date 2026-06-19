@@ -1,4 +1,4 @@
-# Capstone 01——Terminal-Native Coding Agent
+# 综合项目 01：终端原生编码 Agent
 
 > 到 2026 年，coding agent 的形态已经稳定下来：一个 TUI harness、stateful plan、sandboxed tool surface，以及一个 plan、act、observe、recover 的循环。从 50 英尺外看，Claude Code、Cursor 3 和 OpenCode 都长得一样。本 capstone 要求你端到端构建一个——CLI 输入，pull request 输出——并在 SWE-bench Pro 上与 mini-swe-agent 和 Live-SWE-agent 对比。你会学到，难点不是 model call，而是 tool loop、sandbox，以及 50-turn run 的 cost ceiling。
 

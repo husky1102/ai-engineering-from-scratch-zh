@@ -1,4 +1,4 @@
-# Video Generation
+# 视频生成
 
 > 图像是 2-D tensor。视频是 3-D tensor。理论相同；compute 难 10-100x。OpenAI 的 Sora（2024 年 2 月）证明了这条路可行。到 2026 年，Veo 2、Kling 1.5、Runway Gen-3、Pika 2.0 和 WAN 2.2 都能从 text 生产 1080p 视频——open-weights stack（CogVideoX、HunyuanVideo、Mochi-1、WAN 2.2）大约落后 12 个月。
 
@@ -88,7 +88,7 @@ def pos_embed(t, dim):
 
 训练后 sample 一个 video。测量 frame-to-frame delta。如果模型学到了 temporal structure，deltas 会小于独立 sample 每帧。
 
-## Pitfalls
+## 常见陷阱
 
 - **Independent per-frame sampling = flicker.** 如果你对每帧单独运行 image diffusion，输出会闪烁，因为每帧 noise 独立。Video diffusion 通过 attention 或 shared noise 耦合 frames 来修复。
 - **Naive 3D attention = OOM.** 在 10-second 1080p latent 上 full 3D attention 是数千亿次操作。拆成 spatial + temporal。

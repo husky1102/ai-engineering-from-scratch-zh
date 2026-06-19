@@ -1,4 +1,4 @@
-# OpenAI Agents SDK：Handoffs、Guardrails、Tracing
+# OpenAI Agents SDK：交接、护栏与追踪
 
 > OpenAI Agents SDK 是构建在 Responses API 之上的轻量 multi-agent framework。五个 primitives：Agent、Handoff、Guardrail、Session、Tracing。Handoffs 是名为 `transfer_to_<agent>` 的 tools。Guardrails 会在 input 或 output 上触发。Tracing 默认开启。
 

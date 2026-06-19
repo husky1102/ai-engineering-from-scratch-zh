@@ -1,4 +1,4 @@
-# Capstone 86 — Constitutional Rules Engine
+# 综合项目 86：宪法规则引擎
 
 > 一条 rule 是 name、predicate 和 explanation。三者缺一的东西只是 vibe，不是 rule。
 

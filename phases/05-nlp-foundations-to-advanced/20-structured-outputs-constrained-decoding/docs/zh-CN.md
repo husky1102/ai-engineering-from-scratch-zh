@@ -149,7 +149,7 @@ print(response.output_parsed)
 
 Server-side constrained decoding。对支持的 schemas，可靠性与 Outlines 相当。不需要 local model management。会把你锁定到该 vendor。
 
-## Pitfalls
+## 常见陷阱
 
 - **Recursive schemas。** Outlines 将 recursion flatten 到固定深度。Tree-structured outputs（nested comments、AST）需要 XGrammar 或 llguidance（基于 CFG）。
 - **Huge enums。** 10,000-option enum 编译很慢或超时。切换到 retriever：先预测 top-k candidates，再约束到这些 candidates。

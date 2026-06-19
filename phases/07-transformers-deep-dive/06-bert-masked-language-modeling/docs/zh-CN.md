@@ -1,4 +1,4 @@
-# BERT — Masked Language Modeling
+# BERT：掩码语言建模
 
 > GPT 预测下一个词。BERT 预测缺失的词。只差一句话，却塑造了接下来半个十年的所有 embedding 形态。
 

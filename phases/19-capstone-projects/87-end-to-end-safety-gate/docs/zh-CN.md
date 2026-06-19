@@ -1,4 +1,4 @@
-# Capstone 87 — End-to-End Safety Gate
+# 综合项目 87：端到端安全门
 
 > Pre-gen、during-gen、post-gen。三个 checkpoints，一个 verdict，每个 request 一条 audit trail。
 

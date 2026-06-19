@@ -1,4 +1,4 @@
-# Agent Economies、Token Incentives、Reputation
+# Agent 经济、Token 激励与声誉
 
 > Long-horizon autonomous agents（METR 的 1-hour 到 8-hour work-curve）需要 economic agency。正在出现的 **5-layer stack** 是：**DePIN**（physical compute）→ **Identity**（W3C DIDs + reputation capital）→ **Cognition**（RAG + MCP）→ **Settlement**（account abstraction）→ **Governance**（Agentic DAOs）。Production agent-incentive networks 包括 **Bittensor**（TAO subnets reward task-specific models）、**Fetch.ai / ASI Alliance**（ASI-1 Mini LLM + FET token）和 **Gonka**（transformer-based PoW，将 compute 重新分配到 productive AI tasks）。Academic work：AAMAS 2025 的 decentralized LaMAS 使用 **Shapley-value credit attribution** 公平奖励 contributing agents；Google Research “Mechanism design for large language models” 提出带 monotone aggregation 的 **token auctions**，使用 second-price payment。本课构建一个最小 agent marketplace，把 Shapley-value credit attribution 应用到 multi-agent pipeline，并运行 second-price token auction，让 game-theory machinery 具体落地。
 

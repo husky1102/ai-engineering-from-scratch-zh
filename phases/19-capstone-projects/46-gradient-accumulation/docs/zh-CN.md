@@ -1,4 +1,4 @@
-# Gradient Accumulation
+# 梯度累积
 
 > 用你负担不起的 effective batch 训练，一次只跑一个 micro-batch。scale loss，暂缓 optimizer step，让 gradients 堆积起来。
 

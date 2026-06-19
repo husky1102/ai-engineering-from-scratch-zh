@@ -1,4 +1,4 @@
-# Subword Tokenization：BPE、WordPiece、Unigram、SentencePiece
+# 子词分词：BPE、WordPiece、Unigram、SentencePiece
 
 > Word tokenizers 会被未见词卡住。Character tokenizers 会让序列长度膨胀。Subword tokenizers 取中间路线。每个现代 LLM 都运行在其中一种之上。
 

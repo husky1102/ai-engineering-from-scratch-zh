@@ -1,4 +1,4 @@
-# Dual-Use Risk——Cyber、Bio、Chem、Nuclear Uplift
+# 双用途风险：网络、生物、化学与核能力提升
 
 > 2026 年 dual-use 图景，按领域展开。Bio/chem：第 17 课覆盖 WMDP；Anthropic 的 bioweapon-acquisition trial（2.53x uplift）和 OpenAI 2025 年 4 月 Preparedness Framework v2 warning（“on the cusp of meaningfully helping novices create known biological threats”）标志着 inflection point。Cyber（2025 年 11 月 Anthropic report）：Chinese-linked state actors 使用 Claude 的 agentic coding tool 自动化了多达 90% 的 cyberattack campaign，human intervention 只在 4-6 步中需要；OpenAI “trusted access” pilot 为经审查的 security organisations 提供 capability access，用于 defensive dual-use work。Chem/bio execution gap erosion：经典防御是 “information access alone is insufficient”。Vision-enabled frontier models（GPT-5.2、Gemini 3 Pro、Claude Opus 4.5、Grok 4.1）可以观察 wet-lab video 并提供 real-time correction。2025 年 12 月：OpenAI 展示 GPT-5 迭代 wet-lab experiments，通过 AI-driven protocol optimization 达成 79x efficiency improvement。Novice-vs-expert pattern：AI 对 novices 提供更大的 relative uplift，但对 experts 提供更大的 absolute capability。
 

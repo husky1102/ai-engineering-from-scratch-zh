@@ -1,4 +1,4 @@
-# Flow Matching & Rectified Flows
+# Flow Matching 与 Rectified Flow
 
 > Diffusion models 需要 20-50 个 sampling steps，因为它们沿着从 noise 到 data 的弯曲路径行走。Flow matching（Lipman et al., 2023）和 rectified flow（Liu et al., 2022）训练直线路径。路径越直，steps 越少，inference 越快。Stable Diffusion 3、Flux.1 和 AudioCraft 2 都在 2024 年切换到 flow matching。
 
@@ -109,7 +109,7 @@ def sample(net, num_steps):
 
 预期 4-step sampler 已经能匹配 20-step quality——这对 latency 很重要。
 
-## Pitfalls
+## 常见陷阱
 
 - **Time parameterization.** Flow matching 使用 `t ∈ [0, 1]`，其中 `t=0` 是 data、`t=1` 是 noise。DDPM 使用 `t ∈ [0, T]`，其中 `t=0` 是 data、`t=T` 是 noise。方向相同，尺度不同。论文经常弄错。
 - **Schedule choice.** Rectified flow 的 straight line 是 “the” flow-matching schedule，但你可以使用 cosine 或 logit-normal t-sampling（SD3 使用）来获得更好的 scale coverage。

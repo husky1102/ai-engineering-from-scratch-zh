@@ -1,4 +1,4 @@
-# AI Gateways：LiteLLM、Portkey、Kong AI Gateway、Bifrost
+# AI 网关：LiteLLM、Portkey、Kong AI Gateway、Bifrost
 
 > gateway 位于你的 apps 和 model providers 之间。核心 features 是 provider routing、fallback、retries、rate limiting、secret references、observability、guardrails。2026 market split：**LiteLLM** 是 MIT OSS，100+ providers，OpenAI-compatible，但在约 2000 RPS 附近崩溃（published benchmarks 中 8 GB memory、cascading failures）；最适合 Python、<500 RPS、dev/prototyping。**Portkey** 定位 control-plane（guardrails、PII redaction、jailbreak detection、audit trails），2026 年 3 月转为 Apache 2.0 open-source，20-40 ms latency overhead，$49/mo production tier。**Kong AI Gateway** 基于 Kong Gateway：Kong 自己在同 12 CPUs 上的 benchmark 显示，它比 Portkey 快 228%，比 LiteLLM 快 859%；定价 $100/model/month（Plus tier 最多 5 个）；如果你已经在用 Kong，适合 enterprise。**Bifrost**（Maxim AI）：automatic retries with configurable backoff，OpenAI 429 时 fallback to Anthropic。**Cloudflare / Vercel AI Gateways**：managed、zero-ops、basic retry。Data residency 驱动 self-host decision；Portkey 和 Kong 位于中间，提供 OSS + optional managed。
 

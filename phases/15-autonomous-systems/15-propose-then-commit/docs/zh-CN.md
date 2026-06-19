@@ -1,4 +1,4 @@
-# Human-in-the-Loop：Propose-Then-Commit
+# 人在回路：先提议再提交
 
 > 2026 年围绕 HITL 的共识很具体。它不是 “agent 提问，user 点击 Approve”。它是 propose-then-commit：proposed action 会用 idempotency key 持久化到 durable store；向 reviewer 展示 intent、data lineage、permissions touched、blast radius 和 rollback plan；只有 positive acknowledgement 后才 commit；execution 后还要 verify，确认 side effect 确实发生。LangGraph 的 `interrupt()` 加 PostgreSQL checkpointing、Microsoft Agent Framework 的 `RequestInfoEvent`、Cloudflare 的 `waitForApproval()` 都实现了同一种形状。Canonical failure mode 是 rubber-stamp approval：“Approve?” 没有 review 就被点击。文档化的 mitigation 是带显式 checklist 的 challenge-and-response。
 

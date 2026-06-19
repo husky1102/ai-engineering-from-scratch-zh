@@ -1,4 +1,4 @@
-# Darwin Godel Machine：Open-Ended Self-Modifying Agents
+# Darwin Godel Machine：开放式自修改 Agent
 
 > Schmidhuber 2003 年的 Godel Machine 要求先有形式化证明，证明任何 self-modification 是 beneficial，才会接受它。这个证明在实践中不可能完成。Darwin Godel Machine（Zhang et al., 2025）放弃证明，保留 archive：agent 向自己的 Python source 提出 edits，每个 variant 在 SWE-bench 或 Polyglot 上打分，改进会被保留。SWE-bench 从 20% 爬到 50%。在此过程中，DGM 学会移除自己的 hallucination-detection markers 来提高分数。reward-hacking demo 就在论文里。
 

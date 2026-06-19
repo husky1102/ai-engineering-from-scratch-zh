@@ -99,7 +99,7 @@ Driving world models 会生成 realistic road scenes，并 condition 在 traject
 
 这替代了 reward shaping 和 sample-heavy RL。World model 负责 imagination；inverse dynamics 负责闭合 actuation loop。Genie Envisioner 是其中一个实例；许多研究组正在收敛到这个结构。
 
-### Evaluation
+### 评估
 
 - **Visual quality**：FVD（Fréchet Video Distance）、user studies。
 - **Prompt alignment**：每帧 CLIPScore、VQA-style evaluation。

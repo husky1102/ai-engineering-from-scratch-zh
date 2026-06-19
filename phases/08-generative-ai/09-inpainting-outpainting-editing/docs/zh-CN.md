@@ -90,7 +90,7 @@ def inpaint_step(x_t, mask, clean_image, alpha_bars, t, rng):
 
 Outpainting 是 mask 反转后的 inpainting：mask 新的（之前不存在的）canvas，其余部分用原图填充。训练目标完全相同。
 
-## Pitfalls
+## 常见陷阱
 
 - **Seams.** 朴素方法会留下可见边界，因为 gradient info 不能跨 mask 流动。修复：把 mask 膨胀 8-16 pixels，或使用 proper inpainting model。
 - **Mask leakage.** 如果 conditioning image 的 unmasked region 低质量或有噪声，它会污染 mask 内的 generation。先 denoise 或轻微 blur。

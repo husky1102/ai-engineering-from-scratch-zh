@@ -1,4 +1,4 @@
-# Deep Q-Networks (DQN)
+# 深度 Q 网络（DQN）
 
 > 2013 年：Mnih 在 raw pixels 上训练了一个 Q-learning network，在七个 Atari games 上击败了所有 classical RL agents。2015 年：扩展到 49 个 games，发表于 Nature，点燃 deep-RL 时代。DQN 是 Q-learning 加上三个让 function approximation 稳定的 tricks。
 

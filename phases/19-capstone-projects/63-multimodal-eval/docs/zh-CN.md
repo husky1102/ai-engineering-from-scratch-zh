@@ -1,4 +1,4 @@
-# Multimodal Evaluation
+# 多模态评估
 
 > 训练只是 loop 的一半。另一半是测量。本课从 primitives 构建三个 evaluation surfaces：image-caption retrieval 用 R@1、R@5、R@10 报告；visual question answering 用 exact match accuracy 报告；image captioning 用 BLEU-4 报告。每个 metric 都是一个作用在模型输出和 synthetic eval suite 上的函数，并能在数秒内运行。
 

@@ -1,4 +1,4 @@
-# Role Specialization——Planner、Critic、Executor、Verifier
+# 角色专业化：Planner、Critic、Executor、Verifier
 
 > 2026 年最常见的 multi-agent decomposition：一个 agent 规划，一个执行，一个 critique 或 verify。MetaGPT（arXiv:2308.00352）把它形式化为编码进 role prompts 的 SOPs——Product Manager、Architect、Project Manager、Engineer、QA Engineer——遵循 `Code = SOP(Team)`。ChatDev（arXiv:2307.07924）通过 “chat chain” 串起 designer、programmer、reviewer、tester，并使用 “communicative dehallucination”（agents 显式请求缺失细节）。Verifier 是承重角色：Cemri et al.（MAST，arXiv:2503.13657）显示每个 multi-agent failure 都能追溯到缺失或损坏的 verification。PwC 报告称，通过 CrewAI 中的 structured validation loops，accuracy 获得 7× gain（10% → 70%）。
 

@@ -1,4 +1,4 @@
-# Sequence-to-Sequence Models
+# 序列到序列模型
 
 > 两个 RNNs 假装自己是翻译器。它们撞上的 bottleneck，就是 attention 存在的原因。
 

@@ -1,4 +1,4 @@
-# Many-Shot Jailbreaking
+# Many-Shot 越狱
 
 > Anil、Durmus、Panickssery、Sharma 等人（Anthropic，NeurIPS 2024）。Many-shot jailbreaking（MSJ）利用长 context windows：塞入数百个伪造的 user-assistant turns，其中 assistant 会遵从 harmful requests，然后追加 target query。Attack success 随 shot 数量呈 power law；5 shots 会失败，256 shots 时在 violent 和 deceitful content 上可靠。该现象遵循与良性 in-context learning 相同的 power law——攻击与 ICL 共享底层机制，这也是为什么保留 ICL 的防御很难设计。Classifier-based prompt modification 在测试设置中把 attack success 从 61% 降到 2%。
 

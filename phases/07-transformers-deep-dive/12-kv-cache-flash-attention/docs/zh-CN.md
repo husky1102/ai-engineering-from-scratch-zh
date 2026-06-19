@@ -1,4 +1,4 @@
-# KV Cache, Flash Attention & Inference Optimization
+# KV 缓存、Flash Attention 与推理优化
 
 > Training 是并行且 FLOP-bound 的。Inference 是串行且 memory-bound 的。瓶颈不同，技巧也不同。
 

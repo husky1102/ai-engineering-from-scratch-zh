@@ -1,4 +1,4 @@
-# Production Scaling：Queues、Checkpoints、Durability
+# 生产扩展：队列、检查点与持久性
 
 > 将 multi-agent systems 扩展到数千个 concurrent runs，需要 **durable execution**。LangGraph runtime 在每个 super-step 后写一个由 `thread_id` keyed 的 checkpoint（默认 Postgres）；worker crashes 会释放 lease，另一个 worker resume。Agents 可以无限期 sleep，等待 human input。**MegaAgent**（arXiv:2408.09955）运行 per-agent producer-consumer queue，包含三种 states（Idle / Processing / Response）和 two-layer coordination（intra-group chat + inter-group admin chat）。对 LLM streaming 来说，**Fiber/async** 胜过 thread-per-job：threads 99% 时间都在等待 tokens 时 idle，fibers 在 I/O 上 cooperative yield。反方观点：Ashpreet Bedi 的 “Scaling Agentic Software” 主张在 load 证明需要之前，坚持 **FastAPI + Postgres + nothing else**：simple architectures 比预期走得更远。本课构建 durable checkpoint log、带 state transitions 的 per-agent work queue、async-vs-thread demo，并落地务实的 “start simple” rule。
 

@@ -1,4 +1,4 @@
-# Constitutional AI and Self-Improvement
+# 宪法式 AI 与自我改进
 
 > RLHF 需要 humans in the loop。Constitutional AI 用模型自身替代其中大部分人。写一组 principles，让模型根据这些 principles critique 自己的 outputs，并在 critiques 上训练。DeepSeek-R1 在 2025 年把这件事推得更远：让模型生成数百万 reasoning traces，用规则打分，并对结果运行 GRPO。2026 年 frontier model 中大部分 “alignment work” 都是模型自己对齐自己。本课构建这两种 loops。
 

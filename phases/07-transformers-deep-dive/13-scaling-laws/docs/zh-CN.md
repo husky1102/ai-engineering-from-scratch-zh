@@ -1,4 +1,4 @@
-# Scaling Laws
+# 缩放定律
 
 > 2020 年 Kaplan paper 说：模型越大，loss 越低。2022 年 Hoffmann paper 说：你训练得不够。Compute 会进入两个桶：parameters 和 tokens，而怎样切分并不显然。
 

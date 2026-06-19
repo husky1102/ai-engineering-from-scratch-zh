@@ -1,4 +1,4 @@
-# Function Call Dispatcher
+# 函数调用分发器
 
 > Dispatcher 是 harness 为 schema 所承诺的一切付账的地方。Timeouts、retries、dedupe、error mapping。全部集中在一处。
 

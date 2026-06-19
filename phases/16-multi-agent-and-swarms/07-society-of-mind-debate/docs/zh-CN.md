@@ -50,7 +50,7 @@ A-HMAD 和相关 follow-ups 为不同 agents 使用 *different base models*。Ll
 
 Zhuge et al.（“Mindstorms in Natural Language-Based Societies of Mind,” arXiv:2305.17066）把这个想法扩展到 129-member societies。结果：specialization 和 self-organization 随规模涌现，system 在 visual question answering 等 tasks 上超过 single-agent。
 
-### Failure modes
+### 失效模式
 
 - **Sycophancy cascade。** 所有 agents 都服从听起来最 confident 的 agent。Debate 坍缩成最响亮的声音。为 adversarial roles 做 prompting（“one agent must argue the counter-position”）会有帮助。
 - **Topic drift。** 多轮 debates 会偏离 original question。缓解：每一轮重新注入 question。

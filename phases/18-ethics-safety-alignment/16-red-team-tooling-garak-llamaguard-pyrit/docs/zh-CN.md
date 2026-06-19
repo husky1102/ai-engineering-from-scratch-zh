@@ -1,4 +1,4 @@
-# Red-Team Tooling — Garak、Llama Guard、PyRIT
+# 红队工具：Garak、Llama Guard、PyRIT
 
 > 三个 production tools 定义了 2026 年 red-team stack。Llama Guard（Meta）——一个 Llama-3.1-8B classifier，基于 14 个 MLCommons hazard categories fine-tuned；2025 年的 Llama Guard 4 是从 Llama 4 Scout 剪枝而来的 12B natively multimodal classifier。Garak（NVIDIA）——开源 LLM vulnerability scanner，提供针对 hallucination、data leakage、prompt injection、toxicity 和 jailbreaks 的 static、dynamic、adaptive probes。PyRIT（Microsoft）——使用 Crescendo、TAP 和自定义 converter chains 进行 multi-turn red-team campaigns，以实现深度 exploitation。Llama Guard 3 记录在 Meta 的 “Llama 3 Herd of Models”（arXiv:2407.21783）中；Llama Guard 3-1B-INT4 见 arXiv:2411.17713；Garak 的 probe architecture 见 github.com/NVIDIA/garak。这些工具是 2026 年 red-team research（第 12-15 课）与 deployment（第 17 课及以后）之间的 production interface。
 

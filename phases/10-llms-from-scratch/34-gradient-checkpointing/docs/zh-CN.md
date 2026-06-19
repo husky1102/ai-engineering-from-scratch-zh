@@ -1,4 +1,4 @@
-# Gradient Checkpointing and Activation Recomputation
+# 梯度检查点与激活重计算
 
 > Backprop 会保留每个 intermediate activation。在 70B parameters 和 128K context 下，每个 rank 是 3 TB activations。Checkpointing 用 FLOPs 换 memory：不保存，改为 recompute。问题是该丢弃哪些 segments，答案不是“全部丢弃”。
 

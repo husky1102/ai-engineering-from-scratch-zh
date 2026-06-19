@@ -1,4 +1,4 @@
-# MCP Transports — stdio vs Streamable HTTP vs SSE Migration
+# MCP 传输：stdio、Streamable HTTP 与 SSE 迁移
 
 > stdio 只适合本地，离开本机就不适用。Streamable HTTP (2025-03-26) 是 remote standard。旧的 HTTP+SSE transport 已被弃用，并将在 2026 年中移除。选错 transport 会带来一次 migration；选对 transport 则能得到一个可 remote-hostable、具备 session continuity 和 DNS-rebinding protection 的 MCP server。
 

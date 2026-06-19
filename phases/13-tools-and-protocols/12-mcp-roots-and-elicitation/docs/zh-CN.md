@@ -1,4 +1,4 @@
-# Roots and Elicitation — Scoping and Mid-Flight User Input
+# Roots 与 Elicitation：作用域和中途用户输入
 
 > 用户一打开不同项目，hard-coded paths 就会坏掉。用户给得不够具体时，预填 tool arguments 也会坏。Roots 把 server 限定到用户控制的一组 URIs；elicitation 在 tool-call 中途暂停，通过 form 或 URL 向用户请求 structured input。两个 client primitives，分别修复两类常见 MCP failure modes。SEP-1036 (URL-mode elicitation, 2025-11-25) 在 H1 2026 仍是 experimental —— 依赖它之前请检查 SDK versions。
 

@@ -1,4 +1,4 @@
-# Gradient Clipping and Mixed Precision
+# 梯度裁剪与混合精度
 
 > 上一课的 optimizer 和 schedule 假设 gradients 是正常的。它们通常不是。一个坏 batch 就能让 gradient norm 暴涨三个数量级。Mixed-precision training 还会在 loss 侧引入 FP16 overflow，放大这个问题。本课构建生产训练离不开的两条安全带：把 gradient clipping 到配置好的 global L2 norm，以及一个带 autocast 和 GradScaler 的 mixed-precision loop，用来检测 NaN 和 Inf、干净地跳过 step，并记录 scaling factor 供取证。
 
