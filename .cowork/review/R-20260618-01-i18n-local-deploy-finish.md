@@ -39,13 +39,15 @@ Status: done
 ## Issue I-03: 翻译 ROADMAP.md
 Priority: high
 Kind: docs
-Status: planned
+Status: done
 
 ### Feedback
 `ROADMAP.md` 仍为英文，并被 `site/build.js` 解析；翻译时必须保留状态字形、链接、表格结构和阶段解析不变量。
 
 ### Notes
 原盘点给出结构 gate：`✅`=524、`🚧`=1、`⬚`=2、`](`=307、阶段标题 20、表格行 543、H1-H3 标题 21。
+
+2026-06-19: ROADMAP 已汉化，结构 gate 保持不变；`audit_lessons.py` 和 `site/build.js` 通过。课程标题来自 I-02 后的 `zh-CN.md` H1。
 
 ### User Choices
 用户要求先将 `.cowork/plan/` 下的收尾计划整理为 doIt 规范形式。本次仅创建 proposed 计划，不执行 ROADMAP 翻译。

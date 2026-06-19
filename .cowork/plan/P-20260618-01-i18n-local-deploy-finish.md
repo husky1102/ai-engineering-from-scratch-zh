@@ -82,7 +82,7 @@ Status: done
 
 ## Issue I-03: 翻译 ROADMAP.md
 Priority: high
-Status: proposed
+Status: done
 
 ### Review Problem
 `ROADMAP.md` 仍为英文，并被 `site/build.js` 解析；翻译若改变状态字形、表格行或链接结构，会破坏站点进度数据。
@@ -109,6 +109,14 @@ Status: proposed
 - 状态字形或表格管线被误改会破坏站点进度解析。
 - 批量翻译容易让课程标题与正文 H1 不一致，应依赖 Issue I-02 的映射。
 - `audit_lessons.py` 可能包含上游遗留 advisory，执行时需要区分新增问题与既有问题。
+
+### Progress Log
+- 2026-06-19: Translated ROADMAP prose, phase headings, table headers, time units, and lesson/project titles. Lesson titles were sourced from each lesson's `docs/zh-CN.md` H1.
+
+### Verification Log
+- 2026-06-19: Structure counts remained `✅`=524, `🚧`=1, `⬚`=2, `](`=307, phase headers=20, table rows=543, H1-H3=21.
+- 2026-06-19: `python3 scripts/audit_lessons.py` returned 503 lessons checked, 0 issue(s), with 786 pre-existing advisory warning(s).
+- 2026-06-19: `node site/build.js` completed with 20 phases and 503 lessons.
 
 ## Issue I-04: 翻译 README.md
 Priority: high
