@@ -120,7 +120,7 @@ Status: done
 
 ## Issue I-04: 翻译 README.md
 Priority: high
-Status: proposed
+Status: done
 
 ### Review Problem
 `README.md` 仍为英文，是项目门面；它包含 503 行课程链接、徽章和 HTML 横幅，结构漂移会影响计数脚本和站点 URL 推导。
@@ -148,6 +148,16 @@ Status: proposed
 - CI 会在 main 上自动同步 README 计数；翻译必须兼容该脚本。
 - 课程链接文字和 `zh-CN.md` H1 不一致会影响学习者导航体验。
 - HTML 横幅和徽章不应被 Markdown 翻译工具误改。
+
+### Progress Log
+- 2026-06-19: Translated README prose, headings, phase summaries, toolkit/contributing/sponsor/license sections, and parser-compatible table headers. Replaced 503 lesson/project link labels from each linked `docs/zh-CN.md` H1 while preserving all link targets.
+- 2026-06-19: Kept exact English count anchors required by `scripts/check_readme_counts.py` (`503 lessons. 20 phases.`, `This curriculum is the spine...`, `The repo ships 388 skills...`, `MIT-licensed, 503 lessons.`) because the issue scope excludes modifying the README count script.
+
+### Verification Log
+- 2026-06-19: README structure counts remained `lesson_link_rows`=503, `](`=530, `img.shields.io`=6, `<img`=12, separator rows=5, and `lessons-503` present. The plan's `| ---`=56 value was stale; the real pre/post regex count was 5.
+- 2026-06-19: `python3 scripts/check_readme_counts.py` returned `README.md counts match catalog.json totals.`
+- 2026-06-19: `node site/build.js` completed with 20 phases, 503 lessons, and 503 complete lessons.
+- 2026-06-19: `grep -c 'tree/main/phases/' site/data.js` returned `503`; generated `site/data.js` was restored afterward.
 
 ## Issue I-05: 刷新 stale 译文与测验
 Priority: medium

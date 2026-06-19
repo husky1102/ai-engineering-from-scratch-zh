@@ -55,13 +55,17 @@ Status: done
 ## Issue I-04: 翻译 README.md
 Priority: high
 Kind: docs
-Status: planned
+Status: done
 
 ### Feedback
 `README.md` 仍为英文，是项目门面；翻译时必须保留课程链接、徽章、HTML 横幅、锚点、表格结构以及计数脚本可解析性。
 
 ### Notes
 原盘点给出结构 gate：课程链接行 503、全部 `](` 530、shields 徽章 6、`<img` 12、`| ---` 56、包含 `lessons-503`，并要求 `check_readme_counts.py` 与 `site/build.js` 通过。
+
+2026-06-19: README 已汉化主要正文、标题、阶段摘要、工具箱、贡献、赞助和许可章节；503 条课程/项目链接文本来自对应 `docs/zh-CN.md` H1，链接目标保持不变。为兼容现有 `check_readme_counts.py`，保留了少量英文计数锚点。实际 README 表格分隔行基线为 5，不是原盘点中的 56；前后保持 5。
+
+2026-06-19: 验证通过：结构计数为课程链接行 503、全部 `](` 530、shields 6、`<img` 12、separator rows 5、`lessons-503` present；`python3 scripts/check_readme_counts.py` 通过；`node site/build.js` 解析 20 phases / 503 lessons；`grep -c 'tree/main/phases/' site/data.js` 返回 503，随后还原生成的 `site/data.js`。
 
 ### User Choices
 用户要求先将 `.cowork/plan/` 下的收尾计划整理为 doIt 规范形式。本次仅创建 proposed 计划，不执行 README 翻译。
