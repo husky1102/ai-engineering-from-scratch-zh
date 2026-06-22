@@ -42,12 +42,63 @@
 
 ## 保持 fork 更新
 
+如果你维护的是这个中文 fork，推荐把 `origin` 保持为中文仓库，把 `upstream` 指向英文原仓库。同步时先在单独分支上做，确认中文内容、i18n 状态和生成文件边界都干净后再发 PR。
+
 ```bash
 git remote add upstream https://github.com/rohitg00/ai-engineering-from-scratch.git
 
 git fetch upstream
 git merge upstream/main
 ```
+
+### 中文 fork 同步 checklist
+
+1. 开一个同步分支，不要直接在 `main` 上试错：
+
+   ```bash
+   git switch -c sync/upstream-YYYYMMDD
+   git fetch upstream
+   git merge --no-edit upstream/main
+   ```
+
+2. 解决冲突时优先保留中文 fork 的本地化入口；如果冲突涉及课程英文源、README、ROADMAP 或 glossary，逐文件确认链接、状态字形和表格结构没有漂移。
+
+3. 重新检查 i18n 状态：
+
+   ```bash
+   python3 scripts/i18n_inventory.py
+   python3 scripts/i18n_validate.py
+   ```
+
+   如果 inventory 发现 stale 项，只补译源文变化对应的小差异；不要用刷新 manifest 掩盖真实过期内容。
+
+4. 重新检查课程和 README 计数：
+
+   ```bash
+   python3 scripts/audit_lessons.py
+   python3 scripts/check_readme_counts.py
+   ```
+
+   PR 中的 README count drift 是 advisory；`main` 上的 workflow 会自动修复计数。只有当你手动改了 README 结构或课程链接时，才需要在本分支修 README。
+
+5. 如涉及站点解析、README、ROADMAP 或 glossary，运行站点构建做本地验收：
+
+   ```bash
+   node site/build.js
+   ```
+
+   这个命令会重建 `site/data.js`、`site/content/`、`site/sitemap.xml` 和 `site/llms.txt` 等产物。除非当前任务明确要求，否则不要把这些生成文件提交到 PR；`site/data.js` 会在 main 上由 CI 重建。
+
+6. 提交前确认没有误带生成文件或本地状态：
+
+   ```bash
+   git status --short
+   git diff --check
+   ```
+
+   不要提交 `catalog.json`、`site/content/`、`site/sitemap.xml`、`site/llms.txt`、`i18n/manifest.jsonl` 或本地运行时状态。
+
+7. 每个独立阶段单独提交。课程目录变更遵守“一课一提交”；维护文档、同步 checklist、i18n 修复和生成文件处理也应分开提交，方便 review 和回滚。
 
 ## 来源说明
 
