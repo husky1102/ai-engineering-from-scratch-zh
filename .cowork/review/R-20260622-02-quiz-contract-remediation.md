@@ -23,5 +23,12 @@ AGENTS.md 的课程契约要求 `quiz.json` 正好 6 题，但当前仓库有 20
 3. 最后处理 29 套 8 题测验：优先检查 Phase 5 是否有成组历史模板问题，再决定裁题或迁移额外题目。
 4. 每批都必须运行 `python3 scripts/audit_lessons.py`、`python3 scripts/i18n_validate.py`，并抽查被改课程的中英文题目、答案索引和 stage 分布。
 
+2026-06-22 追加复核：338 套英文 quiz 中，顶层 object schema 为 283 套、旧 list schema 为 55 套。非 6 题的模式高度集中：
+- 118 套 5 题：集中在 Phase 00/01/02/03/04/07/10/11/16，典型 stage 分布为 `pre:2, post:3`，缺少 `check` 阶段。
+- 60 套 7 题：集中在 Phase 14/17/19，典型 stage 分布为 `pre:2, check:3, post:2`，比契约多 1 个 `pre`。
+- 29 套 8 题：全部在 Phase 05，典型 stage 分布为 `pre:2, check:3, post:3`，比契约多 1 个 `pre` 和 1 个 `post`。
+
+这说明修复不只是题数问题，还牵涉旧 schema、stage 分布和内容取舍：5 题批次需要新增 `check` 题；7/8 题批次需要决定是裁掉额外题、迁移为练习材料，还是修改课程契约允许更多题。
+
 ### User Choices
 Pending: 需要用户确认是否启动实际 quiz remediation，以及 7/8 题测验采用“裁题到 6 题”“保留内容但调整契约”或“把额外题迁移到练习/扩展材料”的处理原则。
