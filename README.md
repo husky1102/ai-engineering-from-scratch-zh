@@ -109,20 +109,52 @@ flowchart LR
 
 ## 开始学习
 
-三种进入方式，选一种就能开始。
+四种进入方式，选一种就能开始。这个中文 fork 推荐从本地网页读起：
+课程目录、路线图、术语表和课程页都会在浏览器里串起来。
 
 **路线 A — 阅读。** 打开 [aiengineeringfromscratch.com](https://aiengineeringfromscratch.com)
 上的任意已完成课程，或在[目录](#contents)中展开某个阶段。不需要配置环境，也不需要 clone。
 
-**路线 B — clone 后运行。**
+**路线 B — 本地网页（推荐）。** clone 中文 fork 后，先构建站点数据，再启动本地静态站：
 
 ```bash
-git clone https://github.com/rohitg00/ai-engineering-from-scratch.git
-cd ai-engineering-from-scratch
-python phases/01-math-foundations/01-linear-algebra-intuition/code/vectors.py
+git clone https://github.com/husky1102/ai-engineering-from-scratch-zh.git
+cd ai-engineering-from-scratch-zh
+node site/build.js
+node bin/aefs.mjs --rebuild
 ```
 
-**路线 C — 找到你的起点（推荐）。** 智能地跳到合适位置。在 Claude、Cursor、Codex、
+默认会从 `http://127.0.0.1:4173/` 开始寻找可用端口，打印实际地址，并自动打开浏览器。
+只想启动服务、不打开浏览器或新终端时：
+
+```bash
+node bin/aefs.mjs --no-open --no-terminal
+```
+
+如果你想在任意目录运行 `aefs` / `learnAI`，可以先把当前仓库注册为本地课程根目录：
+
+```bash
+npm link
+aefs config set-root "$PWD"
+aefs doctor
+aefs --rebuild
+```
+
+浏览器内运行 Python 示例需要本地 Pyodide 资源。首次离线使用前执行：
+
+```bash
+scripts/vendor_pyodide.sh
+```
+
+该脚本会把 Pyodide v0.26.4 下载到 `site/vendor/pyodide/v0.26.4/full/`；这些大文件不会提交到 git。
+
+**路线 C — 直接运行单课代码。**
+
+```bash
+python3 phases/01-math-foundations/01-linear-algebra-intuition/code/vectors.py
+```
+
+**路线 D — 找到你的起点。** 智能地跳到合适位置。在 Claude、Cursor、Codex、
 OpenClaw、Hermes，或任何已安装课程 skills 的智能体里运行：
 
 ```bash
