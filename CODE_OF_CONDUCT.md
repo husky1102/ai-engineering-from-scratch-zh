@@ -1,30 +1,30 @@
-# Code of Conduct
+# 行为准则
 
-## Our Pledge
+## 我们的承诺
 
-We are committed to making participation in this project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+我们承诺让每个人都能在这个项目中免受骚扰地参与协作，不因年龄、体型、残障、族裔、性别认同与表达、经验水平、教育背景、社会经济地位、国籍、个人外貌、种族、宗教、性身份或性取向而受到区别对待。
 
-## Our Standards
+## 我们的标准
 
-**Positive behavior:**
+**积极行为：**
 
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
+- 使用欢迎且包容的语言
+- 尊重不同观点和经历
+- 优雅地接受建设性批评
+- 关注什么对社区最好
+- 对其他社区成员保持同理心
 
-**Unacceptable behavior:**
+**不可接受的行为：**
 
-- Trolling, insulting/derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information without explicit permission
-- Other conduct which could reasonably be considered inappropriate
+- 挑衅、侮辱/贬损性评论，以及人身或政治攻击
+- 公开或私下骚扰
+- 未经明确许可发布他人的私人信息
+- 其他任何可被合理认定为不适当的行为
 
-## Enforcement
+## 执行
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project maintainer at ghumare64@gmail.com. All complaints will be reviewed and investigated.
+如果遇到辱骂、骚扰或其他不可接受的行为，可以联系项目维护者：ghumare64@gmail.com。所有投诉都会被审阅和调查。
 
-## Attribution
+## 来源说明
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1.
+本行为准则改编自 [Contributor Covenant](https://www.contributor-covenant.org) 2.1 版。

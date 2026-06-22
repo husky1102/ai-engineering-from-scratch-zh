@@ -1,46 +1,46 @@
-# Forking Guide
+# Fork 指南
 
-This course is MIT licensed. You're free to fork it and adapt it for your needs. Here's how to do it well.
+这套课程采用 MIT 许可。你可以自由 fork，并按自己的需要改造。下面是更稳妥的做法。
 
-## For Teams
+## 面向团队
 
-Want to use this as internal training? Fork and customize:
+想把它用作内部培训？Fork 后按团队需要定制：
 
-1. Fork the repository
-2. Remove phases your team doesn't need
-3. Add company-specific examples and data
-4. Add internal tool integrations to the outputs
-5. Keep the attribution — it helps the community grow
+1. Fork 仓库。
+2. 移除团队不需要的阶段。
+3. 加入公司内部示例和数据。
+4. 把内部工具集成到 outputs 中。
+5. 保留来源说明——这有助于社区继续成长。
 
-## For Schools & Universities
+## 面向学校与大学
 
-Want to use this as course material?
+想把它用作课程材料？
 
-1. Fork the repository
-2. Map phases to your semester schedule
-3. Add grading rubrics to exercises
-4. Add your own assignments and exams
-5. Consider contributing improvements back upstream
+1. Fork 仓库。
+2. 把阶段映射到你的学期安排。
+3. 为练习添加评分 rubrics。
+4. 加入自己的作业和考试。
+5. 考虑把改进贡献回 upstream。
 
-## For Bootcamps
+## 面向训练营
 
-Running a paid bootcamp? That's fine under MIT.
+运行付费 bootcamp？MIT 许可允许这样做。
 
-1. Fork and structure for your cohort timeline
-2. Add video content, live sessions, mentorship
-3. The code and docs are yours to build on
-4. Consider sponsoring the project or contributing back
+1. Fork 并按 cohort 时间线重新组织。
+2. 添加视频内容、直播课程和导师支持。
+3. 代码和文档都可以在此基础上继续构建。
+4. 考虑赞助项目或贡献改进。
 
-## For Other Languages
+## 面向其他编程语言
 
-Want to teach this curriculum in a different programming language?
+想用另一门编程语言教授这套课程？
 
-1. Fork the repository
-2. Re-implement code examples in your language
-3. Keep the lesson structure and documentation
-4. Submit a PR to link your fork from the main README
+1. Fork 仓库。
+2. 用你的语言重新实现代码示例。
+3. 保持课程结构和文档结构。
+4. 提交 PR，把你的 fork 链接加入主 README。
 
-## Keeping Your Fork Updated
+## 保持 fork 更新
 
 ```bash
 git remote add upstream https://github.com/rohitg00/ai-engineering-from-scratch.git
@@ -49,11 +49,11 @@ git fetch upstream
 git merge upstream/main
 ```
 
-## Attribution
+## 来源说明
 
-Not required by MIT, but appreciated:
+MIT 许可不强制要求署名，但我们很感谢你保留来源：
 
-```
+```text
 Based on AI Engineering from Scratch
 https://github.com/rohitg00/ai-engineering-from-scratch
 ```

@@ -1,10 +1,10 @@
-<!-- Thanks for contributing. Fill out what applies. Delete sections that don't. -->
+<!-- 感谢贡献。填写适用部分，删除不适用的章节。 -->
 
-## What this PR does
+## 这个 PR 做了什么
 
-<!-- One-sentence summary. -->
+<!-- 一句话总结。 -->
 
-## Kind of change
+## 变更类型
 
 - [ ] New lesson
 - [ ] Fix to an existing lesson
@@ -24,8 +24,8 @@
 
 ## Phase / lesson
 
-<!-- e.g. Phase 5 · 03-tokenizers -->
+<!-- 例如 Phase 5 · 03-tokenizers -->
 
-## Notes for reviewer
+## 给 reviewer 的说明
 
-<!-- Anything surprising, any deviations from the template, open questions. -->
+<!-- 任何意外情况、与模板不同之处或待讨论问题。 -->

@@ -1,26 +1,26 @@
-# Lesson Template
+# 课程模板
 
-Use this template when creating a new lesson. Copy the folder structure and fill in the content.
+创建新课程时使用这个模板。复制目录结构，然后填入内容。
 
-## Folder Structure
+## 目录结构
 
-```
+```text
 NN-lesson-name/
 ├── code/
-│   ├── main.py            (primary implementation)
-│   ├── main.ts            (TypeScript version, if applicable)
-│   ├── main.rs            (Rust version, if applicable)
-│   └── main.jl            (Julia version, if applicable)
+│   ├── main.py            （主实现）
+│   ├── main.ts            （TypeScript 版本，如适用）
+│   ├── main.rs            （Rust 版本，如适用）
+│   └── main.jl            （Julia 版本，如适用）
 ├── notebook/
-│   └── lesson.ipynb       (Jupyter notebook for experimentation)
+│   └── lesson.ipynb       （用于实验的 Jupyter notebook）
 ├── docs/
-│   └── en.md              (lesson documentation)
+│   └── en.md              （课程文档）
 └── outputs/
-    ├── prompt-*.md         (prompts produced by this lesson)
-    └── skill-*.md          (skills produced by this lesson)
+    ├── prompt-*.md        （本课产出的 prompts）
+    └── skill-*.md         （本课产出的 skills）
 ```
 
-## Documentation Format (docs/en.md)
+## 文档格式（docs/en.md）
 
 ```markdown
 # [Lesson Title]
@@ -93,16 +93,16 @@ Include it here and save it in the outputs/ folder.]
 - [Resource 2](url) — [why it's worth reading]
 ```
 
-## Code File Guidelines
+## 代码文件准则
 
-- Code must run without errors
-- No comments — code should be self-explanatory
-- Use the language that fits best for the topic
-- Include a `requirements.txt` or equivalent if there are dependencies
-- Start simple, build up complexity
-- Every function and class should have a clear purpose
+- 代码必须无错误运行。
+- 不写注释——代码应自解释。
+- 使用最适合主题的语言。
+- 如果有依赖，包含 `requirements.txt` 或等价文件。
+- 从最简单版本开始，再逐步增加复杂度。
+- 每个函数和类都应有清晰目的。
 
-## Output File Format
+## 产物文件格式
 
 ### Prompts
 

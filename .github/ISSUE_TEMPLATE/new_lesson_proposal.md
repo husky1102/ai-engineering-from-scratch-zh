@@ -5,26 +5,26 @@ title: "[lesson] Phase NN · "
 labels: new-lesson
 ---
 
-## Lesson
+## 课程
 
-- Phase: <!-- e.g. Phase 5 (NLP) -->
-- Proposed number: <!-- e.g. 03 (lessons are numbered within a phase) -->
+- Phase: <!-- 例如 Phase 5 (NLP) -->
+- Proposed number: <!-- 例如 03（课程在阶段内编号） -->
 - Working title:
 - Type: Build | Learn
 - Languages: <!-- Python, TypeScript, Rust, Julia -->
-- Estimated time: <!-- e.g. ~75 min -->
+- Estimated time: <!-- 例如 ~75 min -->
 
-## Why it belongs
+## 为什么它应该在这里
 
-<!-- Two or three sentences. What can't a learner do without this lesson? Why here in the sequence? -->
+<!-- 两三句话说明：没有这节课，学习者做不到什么？为什么它应该放在这个顺序位置？ -->
 
-## Prerequisites
+## 前置要求
 
-<!-- Which prior lessons does this depend on? -->
+<!-- 依赖哪些先前课程？ -->
 
-## What the learner ships
+## 学习者会交付什么
 
-<!-- Every lesson produces a reusable artifact. Which one? -->
+<!-- 每节课都会产出一个可复用 artifact。是哪一种？ -->
 
 - [ ] Prompt
 - [ ] Skill
@@ -32,15 +32,15 @@ labels: new-lesson
 - [ ] MCP server
 - [ ] Tool / script
 
-## Outline
+## 大纲
 
-1. **The Problem** — what pain does this solve?
-2. **The Concept** — core mental model, no code yet
-3. **Build It** — from-scratch implementation plan
-4. **Use It** — which framework / library to show after
-5. **Ship It** — the artifact to produce
-6. **Exercises** — 3 proposed
+1. **The Problem** — 解决什么痛点？
+2. **The Concept** — 核心心智模型，先不写代码
+3. **Build It** — 从零实现计划
+4. **Use It** — 之后展示哪个 framework / library
+5. **Ship It** — 要产出的 artifact
+6. **Exercises** — 3 个提议练习
 
-## Open questions
+## 待讨论问题
 
-<!-- Anything you want input on before starting. -->
+<!-- 开始写之前，希望获得哪些意见？ -->
