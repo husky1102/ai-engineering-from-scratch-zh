@@ -1,13 +1,13 @@
 # 测验题数契约修复路径
 
-Status: new
+Status: done
 Source: human
 Created: 2026-06-22
 
 ## Issue I-01: 为 207 套非 6 题测验制定修复批次
 Priority: medium
 Kind: docs
-Status: new
+Status: done
 
 ### Feedback
 AGENTS.md 的课程契约要求 `quiz.json` 正好 6 题，但当前仓库有 207 套英文测验不是 6 题。此前用户选择是保持当前 i18n 收尾不直接补题或裁题，并单独建立后续处理路径。
@@ -31,4 +31,10 @@ AGENTS.md 的课程契约要求 `quiz.json` 正好 6 题，但当前仓库有 20
 这说明修复不只是题数问题，还牵涉旧 schema、stage 分布和内容取舍：5 题批次需要新增 `check` 题；7/8 题批次需要决定是裁掉额外题、迁移为练习材料，还是修改课程契约允许更多题。
 
 ### User Choices
-Pending: 需要用户确认是否启动实际 quiz remediation，以及 7/8 题测验采用“裁题到 6 题”“保留内容但调整契约”或“把额外题迁移到练习/扩展材料”的处理原则。
+2026-06-22: User chose option B. Because this project is mainly a Chinese localization fork, do not create extra remediation work by adding, deleting, or rewriting the 207 existing non-6-question quizzes. Keep existing quiz content and update the contributor-facing contract/policy so the canonical 6-question shape applies to new or deliberately revised lessons, while existing upstream-compatible quiz count drift remains advisory rather than blocking.
+
+### Plan
+2026-06-22: Planned in `../plan/P-20260622-02-quiz-contract-policy.md` as a narrow documentation/policy update. The plan must not change any `quiz.json` or `quiz.zh-CN.json` content.
+
+### Result
+2026-06-22: 已执行 B 方案：保留 207 套既有非 6 题测验内容，不新增、不裁剪、不重写 quiz；更新 `AGENTS.md` 与 README 贡献检查说明，把 6 题结构定义为新增或主动重做测验时的 canonical target，并说明既有题数/stage drift 当前作为 advisory warning 暴露。

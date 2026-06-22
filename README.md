@@ -1151,9 +1151,10 @@ python3 scripts/audit_lessons.py --phase 14  # 单个阶段
 python3 scripts/audit_lessons.py --json      # CI 友好输出
 ```
 
-只要任一规则失败，退出码就会非零。规则（L001-L010）会验证目录形状、`docs/en.md` 是否存在及其 H1、
+只要任一阻断规则失败，退出码就会非零。规则（L001-L010）会验证目录形状、`docs/en.md` 是否存在及其 H1、
 `code/` 是否非空、`quiz.json` schema（拒绝曾导致 issue #102 的旧式 `q/choices/answer` key），
-以及课程文档中的相对链接。
+以及课程文档中的相对链接。测验题数和阶段分布漂移会以 advisory warning 暴露；这个中文 fork 保留既有上游兼容测验，
+新增课程或主动重做测验时再按 6 题 canonical 结构收敛。
 
 ```text
 ░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒░░░▒▒▒

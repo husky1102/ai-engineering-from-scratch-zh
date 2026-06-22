@@ -20,7 +20,7 @@ phases/
     NN-lesson-slug/
       docs/en.md              # lesson explainer
       code/                   # implementation + tests
-      quiz.json               # 6 questions
+      quiz.json               # canonical 6-question shape for new/reworked lessons
       outputs/                # reusable artifact (skill / prompt / agent / MCP server)
 README.md                     # public face; lesson counts auto-synced
 ROADMAP.md                    # phase/lesson status
@@ -97,7 +97,7 @@ The `**Languages:**` field must match the languages with a `main.*` file in `cod
 }
 ```
 
-Exactly 6 questions: 1 pre + 3 check + 2 post. `correct` is zero-indexed. The site renderer only understands this shape — legacy `q/choices/answer` schemas crash silently.
+For new lessons and lessons whose quizzes are deliberately reworked, target exactly 6 questions: 1 pre + 3 check + 2 post. `correct` is zero-indexed. Existing upstream-compatible quizzes may temporarily have 5, 7, or 8 questions; `scripts/audit_lessons.py` reports that drift as advisory `A006`/`A007` warnings so the Chinese fork can stay focused on localization instead of bulk quiz rewrites. The site renderer only understands the canonical key shape — legacy `q/choices/answer` schemas crash silently and remain blocking.
 
 ### code/
 
