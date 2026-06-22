@@ -1,13 +1,13 @@
 # i18n 收尾后续计划
 
-Status: approved
+Status: executing
 Review: ../review/R-20260620-01-post-i18n-followups.md
 Created: 2026-06-22
 Approved: 2026-06-22 by user reply: "同意"
 
 ## Issue I-01: 测验题数契约漂移
 Priority: medium
-Status: approved
+Status: done
 
 ### Review Problem
 AGENTS.md 要求每个 `quiz.json` 正好 6 题，但当前 338 套测验中有 207 套不是 6 题。用户选择是保持当前收尾不直接补/裁题，并为这批漂移单独建立处理路径，避免在无范围确认时大规模改写测验内容。
@@ -34,6 +34,18 @@ AGENTS.md 要求每个 `quiz.json` 正好 6 题，但当前 338 套测验中有 
 - 直接修 207 套 quiz 会改变课程内容和中英文同步范围，必须留到后续明确批准。
 - 如果上游后续同步改变 quiz 数量，盘点结果会过期，需要在执行时重新统计。
 
+### Findings Log
+- 2026-06-22: 只读统计确认 338 套 quiz 中有 207 套非 6 题，分布为 5 题 118 套、7 题 60 套、8 题 29 套；英文与中文 quiz 题数不一致项为 0。
+- 2026-06-22: `scripts/audit_lessons.py` 将 6 题契约作为 `A006` advisory warning；默认 audit 0 blocking issue，严格模式才会因 warnings 失败。
+- 2026-06-22: `scripts/i18n_validate.py` 校验中英文题数一致性，不校验必须 6 题；当前 i18n 校验 0 issue。
+
+### Progress Log
+- 2026-06-22: Created follow-up review `../review/R-20260622-02-quiz-contract-remediation.md` for the actual quiz remediation decision boundary. No quiz content was changed.
+
+### Verification Log
+- 2026-06-22: Quiz count script returned `total_quizzes=338`, `question_count_distribution=5:118, 6:131, 7:60, 8:29`, `non_6_total=207`, and `en_zh_count_mismatches=0`.
+- 2026-06-22: `python3 scripts/audit_lessons.py` returned `503 lesson(s) checked, 0 issue(s), 786 advisory warning(s)` with `A006: 207`.
+- 2026-06-22: `python3 scripts/i18n_validate.py` returned `docs 503/503, quiz 338/338, 0 issue(s)`.
 ## Issue I-02: 公开维护文档汉化
 Priority: medium
 Status: approved

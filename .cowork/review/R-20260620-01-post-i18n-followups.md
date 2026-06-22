@@ -7,7 +7,7 @@ Created: 2026-06-20
 ## Issue I-01: 测验题数契约漂移
 Priority: medium
 Kind: docs
-Status: planned
+Status: done
 
 ### Feedback
 AGENTS.md 要求每个 `quiz.json` 正好 6 题，但当前中英文测验中有 207 套不符合 6 题契约。需要单独处理，不能混在本次 i18n/local deploy 收尾中扩大范围。
@@ -20,6 +20,9 @@ AGENTS.md 要求每个 `quiz.json` 正好 6 题，但当前中英文测验中有
 
 ### Plan
 2026-06-22: Planned in `../plan/P-20260622-01-post-i18n-followups.md` as an inventory-and-remediation-design slice. The plan does not rewrite quiz content.
+
+### Result
+2026-06-22: 只读盘点完成，并创建后续 review `R-20260622-02-quiz-contract-remediation.md`。当前 issue 未修改任何 quiz 内容。
 
 ## Issue I-02: 公开维护文档汉化
 Priority: medium
