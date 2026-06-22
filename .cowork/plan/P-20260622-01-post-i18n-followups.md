@@ -1,6 +1,6 @@
 # i18n 收尾后续计划
 
-Status: executing
+Status: done
 Review: ../review/R-20260620-01-post-i18n-followups.md
 Created: 2026-06-22
 Approved: 2026-06-22 by user reply: "同意"
@@ -132,7 +132,7 @@ Status: done
 - 2026-06-22: Manual grep confirmed the checklist says not to submit `site/data.js`, `catalog.json`, `site/content/`, `site/sitemap.xml`, `site/llms.txt`, or `i18n/manifest.jsonl`.
 ## Issue I-04: .cowork 版本管理策略
 Priority: low
-Status: approved
+Status: done
 
 ### Review Problem
 `.cowork/` 同时包含可复用的 durable plan/review 记录和本地运行时状态。用户选择是跟踪 durable plan/review，忽略 `current.md`、`.doit/`、history/session scratch 等本地状态。
@@ -159,3 +159,19 @@ Status: approved
 ### Risks
 - 本机 `.git/info/exclude` 已可能包含 `/.cowork/`，会影响 `git status` 显示但不代表仓库级规则；执行时要区分本地状态和可提交规则。
 - 忽略规则写得过宽会让后续 durable review/plan 难以提交。
+
+### Findings Log
+- 2026-06-22: `git ls-files .cowork` shows only durable plan/review Markdown files are tracked; `.cowork/current.md` and `.cowork/.doit/*` remain local runtime state.
+- 2026-06-22: Local `git check-ignore -v .cowork/current.md .cowork/.doit/index.json .cowork/plan/P-keep.md .cowork/review/R-keep.md` is affected by `.git/info/exclude:9:/.cowork/`, so it matches the whole `.cowork/` tree as a machine-local rule rather than repository policy.
+- 2026-06-22: Isolated temporary-repo validation using only this repo's `.gitignore` matched `.cowork/current.md` and `.cowork/.doit/index.json`, and did not match `.cowork/plan/P-keep.md` or `.cowork/review/R-keep.md`.
+
+### Progress Log
+- 2026-06-22: Added targeted `.gitignore` rules for `.cowork/current.md`, `.cowork/.doit/`, `.cowork/history/`, `.cowork/externalQA/`, and `.cowork/knowledge/` while leaving `.cowork/plan/` and `.cowork/review/` trackable.
+- 2026-06-22: Added `CONTRIBUTING.md` guidance explaining which doIt queue files are durable review/plan records, which are local runtime or scratch state, and when to use `git add -f` if a local exclude hides new durable records.
+
+### Verification Log
+- 2026-06-22: `git diff --check` returned no whitespace errors.
+- 2026-06-22: `python3 scripts/check_readme_counts.py` returned `README.md counts match catalog.json totals.`
+- 2026-06-22: `python3 scripts/audit_lessons.py` returned `503 lesson(s) checked, 0 issue(s), 786 advisory warning(s)`.
+- 2026-06-22: `python3 /Users/lolita/.codex/skills/doit-queue-auditor/scripts/queue_auditor.py --root .` returned `Errors: 0`, `Warnings: 0`.
+- 2026-06-22: Temporary-repo ignore check returned only `.gitignore:70:.cowork/current.md` and `.gitignore:71:.cowork/.doit/`, confirming repository ignore rules do not hide `.cowork/plan/` or `.cowork/review/`.

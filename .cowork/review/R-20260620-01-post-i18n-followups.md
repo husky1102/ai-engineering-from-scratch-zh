@@ -67,7 +67,7 @@ Status: done
 ## Issue I-04: .cowork 版本管理策略
 Priority: low
 Kind: docs
-Status: planned
+Status: done
 
 ### Feedback
 `.cowork/` 当前同时包含 durable plan/review 文件和本地执行状态文件，需要明确哪些应进入 git，哪些应保持本地队列，避免误提交运行时状态或丢失可复用决策记录。
@@ -80,3 +80,6 @@ Status: planned
 
 ### Plan
 2026-06-22: Planned in `../plan/P-20260622-01-post-i18n-followups.md` to add targeted repo ignore rules and documentation without ignoring durable `.cowork/plan` or `.cowork/review` records.
+
+### Result
+2026-06-22: 已在 `.gitignore` 精确忽略 `.cowork/current.md`、`.cowork/.doit/`、`.cowork/history/`、`.cowork/externalQA/`、`.cowork/knowledge/`，并在 `CONTRIBUTING.md` 说明 durable doIt review/plan 与本地 runtime state 的区别。隔离临时仓库验证确认仓库级规则不会忽略 `.cowork/plan/` 或 `.cowork/review/`；本机 `.git/info/exclude` 对整个 `.cowork/` 的命中已记录为本地状态。

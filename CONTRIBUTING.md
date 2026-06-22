@@ -140,6 +140,17 @@ tags: [agents, loops]
 4. 确认所有代码都能运行。
 5. 提交 pull request，并写清楚描述。
 
+## doIt 队列文件
+
+这个中文 fork 会把部分 doIt 记录放在 `.cowork/` 下。`review/` 与 `plan/` 里的 Markdown 是可复用决策记录，可以随相关工作提交；`current.md`、`.doit/`、`history/`、`externalQA/` 和 `knowledge/` 是本地运行时状态或临时材料，不应进入 PR。
+
+如果你的本机 `.git/info/exclude` 忽略了整个 `/.cowork/`，新增 durable review/plan 时需要显式暂存：
+
+```bash
+git add -f .cowork/review/R-YYYYMMDD-NN-topic.md
+git add -f .cowork/plan/P-YYYYMMDD-NN-topic.md
+```
+
 ## 行为准则
 
 见 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)。保持友善、乐于帮助，并提出建设性意见。
